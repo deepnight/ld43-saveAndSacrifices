@@ -9,7 +9,7 @@ class Entity {
 	public var game(get,never) : Game; inline function get_game() return Game.ME;
 	// public var hero(get,never) : en.Hero; inline function get_hero() return Game.ME.hero;
 	public var level(get,never) : Level; inline function get_level() return Game.ME.level;
-	// public var fx(get,never) : Fx; inline function get_fx() return Game.ME.fx;
+	public var fx(get,never) : Fx; inline function get_fx() return Game.ME.fx;
 	public var destroyed(default,null) = false;
 	public var cd : mt.Cooldown;
 	public var tmod : Float;
@@ -58,7 +58,7 @@ class Entity {
         setPosCase(x,y);
 
         spr = new HSprite();
-        Game.ME.root.add(spr, Const.DP_MAIN);
+        Game.ME.scroller.add(spr, Const.DP_MAIN);
         var g = new h2d.Graphics(spr);
         g.beginFill(0xff0000);
         g.drawRect(0,0,radius,hei);

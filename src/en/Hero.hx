@@ -41,7 +41,7 @@ class Hero extends Entity {
     override function postUpdate() {
         super.postUpdate();
         spr.alpha = active ? 1 : 0.5;
-        if( isLiftingSomeone() )
+        if( isLiftingSomeone() || level.hasColl(cx,cy) )
             spr.scaleX*=1.2;
         else
             spr.scaleY*=1.2;
@@ -70,9 +70,16 @@ class Hero extends Entity {
             else
                 horizontalControl*=Math.pow(0.99,tmod);
 
+            // Walk
             if( !grabbing ) {
-                if( ca.leftDown() ) dx-=0.020*tmod * horizontalControl;
-                if( ca.rightDown() ) dx+=0.020*tmod * horizontalControl;
+                if( ca.leftDown() ) {
+                    dx-=0.020*tmod * horizontalControl;
+                    dir = -1;
+                }
+                if( ca.rightDown() ) {
+                    dx+=0.020*tmod * horizontalControl;
+                    dir = 1;
+                }
             }
 
             // Ledge grabbing & other traversal helpers
@@ -134,6 +141,9 @@ class Hero extends Entity {
             // Braking
             if( !ca.leftDown() && !ca.rightDown() )
                 dx*=Math.pow(0.7,tmod);
+
+            if( ca.bDown() )
+                game.fx.markerCase(cx,cy);
         }
     }
 }

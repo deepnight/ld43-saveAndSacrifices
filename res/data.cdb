@@ -58,13 +58,6 @@
 					"markers": [
 						{
 							"x": 6,
-							"y": 7,
-							"marker": "Hero1",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 6,
 							"y": 8,
 							"marker": "Hero2",
 							"width": 1,
@@ -74,6 +67,13 @@
 							"x": 6,
 							"y": 9,
 							"marker": "Hero3",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 10,
+							"y": 9,
+							"marker": "Hero1",
 							"width": 1,
 							"height": 1
 						}

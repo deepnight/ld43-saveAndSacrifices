@@ -11,6 +11,7 @@ class Game extends mt.Process {
 	public var hero2 : en.Hero;
 	public var hero3 : en.Hero;
 	public var level : Level;
+	public var fx : Fx;
 	public var scroller : h2d.Layers;
 
 	public function new() {
@@ -22,6 +23,7 @@ class Game extends mt.Process {
 		scroller = new h2d.Layers();
 		root.add(scroller, Const.DP_MAIN);
 
+		fx = new Fx();
 		level = new Level(Test);
 
 		var pt = level.getMarker(Hero1);

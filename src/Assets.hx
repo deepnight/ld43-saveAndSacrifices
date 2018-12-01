@@ -4,7 +4,7 @@ import mt.deepnight.Sfx;
 class Assets {
 	// public static var SFX = Sfx.importDirectory("sfx");
 	// public static var MUS = Sfx.importDirectory("music");
-	// public static var tiles : SpriteLib;
+	public static var gameElements : SpriteLib;
 	public static var levelTiles : h2d.Tile;
 	public static var font : h2d.Font;
 
@@ -24,7 +24,6 @@ class Assets {
 		// Sfx.toggleMuteGroup(1);
 		#end
 
-		// tiles = mt.heaps.slib.assets.Atlas.load("tiles.atlas");
-		// tiles.defineAnim("heroAimShoot","0(10), 1(10)");
+		gameElements = mt.heaps.slib.assets.Atlas.load("gameElements.atlas");
 	}
 }
