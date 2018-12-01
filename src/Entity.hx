@@ -38,7 +38,7 @@ class Entity {
 
     public var spr : HSprite;
 
-	public var onGround(get,never) : Bool; inline function get_onGround() return true; //level.hasColl(cx,cy+1) && yr>=1 && dy==0;
+	public var onGround(get,never) : Bool; inline function get_onGround() return level.hasColl(cx,cy+1) && yr>=1 && dy==0;
 
 	public var footX(get,never) : Float; inline function get_footX() return (cx+xr)*Const.GRID;
 	public var footY(get,never) : Float; inline function get_footY() return (cy+yr)*Const.GRID;
@@ -89,9 +89,14 @@ class Entity {
         ALL.remove(this);
     }
 
-    function onLand() {}
-    function onTouchCeiling() {}
-    function onTouchWall(wdir:Int) {}
+    function onLand() {
+        dy = 0;
+    }
+    function onTouchCeiling() {
+    }
+
+    function onTouchWall(wdir:Int) {
+    }
 
     public function preUpdate(tmod:Float) {
         this.tmod = tmod;
@@ -141,7 +146,7 @@ class Entity {
 				if( yr>1 && level.hasColl(cx,cy+1) ) {
 					yr = 1;
 					onLand();
-					//steps = 0;
+					steps = 0;
 				}
 				if( yr<0.3 && level.hasColl(cx,cy-1) ) {
 					yr = 0.3;

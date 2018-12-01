@@ -15,6 +15,7 @@ class Game extends mt.Process {
 		ca = Main.ME.controller.createAccess("game");
 		createRootInLayers(Main.ME.root, Const.DP_BG);
 
+		level = new Level();
 		new en.Hero();
 	}
 
