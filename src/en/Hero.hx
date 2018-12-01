@@ -22,17 +22,42 @@ class Hero extends Entity {
         active = true;
     }
 
+    override function onLand() {
+        super.onLand();
+        cd.setS("jumpLock",Const.INFINITE);
+    }
+
+    override function postUpdate() {
+        super.postUpdate();
+        spr.alpha = active ? 1 : 0.5;
+    }
+
     override function update() {
         super.update();
 
         if( active ) {
             if( ca.leftDown() ) dx-=0.03*tmod;
             if( ca.rightDown() ) dx+=0.03*tmod;
-            if( !cd.has("jumpLock") && ( onGround || cd.has("onGroundRecently") ) && ca.aDown() ) {
-                cd.unset("onGroundRecently");
-                dy = -0.6;
-                cd.setS("jumpLock",Const.INFINITE);
+
+            // Double jump
+            if( ca.aPressed() && !onGround && !cd.has("onGroundRecently") && !cd.has("doubleJumpLock") ) {
+                dy = -0.5;
+                cd.setS("doubleJumpLock", Const.INFINITE);
             }
+            if( onGround )
+                cd.unset("doubleJumpLock");
+
+            // Jump
+            if( ca.aDown() )
+                if( !cd.has("jumpLock") && ( onGround || cd.has("onGroundRecently") ) ) {
+                    dy = -0.3;
+                    cd.unset("onGroundRecently");
+                    cd.setS("extendJump", 0.15);
+                }
+                else if( cd.has("extendJump") ) {
+                    dy-=0.037;
+                }
+
             if( !ca.aDown() )
                 cd.unset("jumpLock");
         }

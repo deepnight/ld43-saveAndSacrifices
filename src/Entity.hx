@@ -52,7 +52,6 @@ class Entity {
 		cd = new mt.Cooldown(Const.FPS);
 
         setPosCase(x,y);
-        trace(this);
 
         spr = new HSprite();
         Game.ME.root.add(spr, Const.DP_MAIN);
@@ -102,6 +101,7 @@ class Entity {
 
     public function preUpdate(tmod:Float) {
         this.tmod = tmod;
+		cd.update(tmod);
     }
     public function postUpdate() {
         spr.x = (cx+xr)*Const.GRID;
@@ -140,7 +140,7 @@ class Entity {
 			dy += gravity*tmod;
 
 		if( onGround )
-			cd.setS("onGroundRecently",0.1);
+			cd.setS("onGroundRecently",0.06);
 
 		// Y
 		var steps = MLib.ceil( MLib.fabs(dy*tmod) );

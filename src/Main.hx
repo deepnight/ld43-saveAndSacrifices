@@ -36,9 +36,7 @@ class Main extends mt.Process {
 
             delayer.addS("cdb", function() {
             	Data.load( hxd.Res.data.entry.getBytes().toString() );
-                if( Game.ME!=null )
-                    Game.ME.destroy();
-                new Game();
+				startGame();
             	if( Game.ME!=null )
                     Game.ME.onCdbReload();
             }, 0.33);
@@ -63,7 +61,13 @@ class Main extends mt.Process {
 		controller.bind(SELECT, Key.R);
 
 		// Start
-        new Game();
+        startGame();
+	}
+
+	public function startGame() {
+		if( Game.ME!=null )
+			Game.ME.destroy();
+		new Game();
 	}
 
 	override public function onResize() {

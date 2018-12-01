@@ -1,6 +1,7 @@
 import mt.Process;
 import mt.MLib;
 import mt.deepnight.CdbHelper;
+import hxd.Key;
 
 class Game extends mt.Process {
 	public static var ME : Game;
@@ -9,12 +10,16 @@ class Game extends mt.Process {
 	public var hero1 : en.Hero;
 	public var hero2 : en.Hero;
 	public var level : Level;
+	public var scroller : h2d.Layers;
 
 	public function new() {
 		super(Main.ME);
 		ME = this;
 		ca = Main.ME.controller.createAccess("game");
 		createRootInLayers(Main.ME.root, Const.DP_BG);
+
+		scroller = new h2d.Layers();
+		root.add(scroller, Const.DP_MAIN);
 
 		level = new Level(Test);
 
@@ -57,6 +62,8 @@ class Game extends mt.Process {
 			else
 				hero1.activate();
 		}
+		if( ca.selectPressed() )
+			Main.ME.startGame();
 	}
 }
 
