@@ -5,6 +5,7 @@ class Hero extends Entity {
 
     var ca(get,never) : mt.heaps.Controller.ControllerAccess; inline function get_ca() return Game.ME.ca;
     public var active = false;
+    var horizontalControl = 1.0;
 
     public function new(x,y) {
         super(x,y);
@@ -49,8 +50,13 @@ class Hero extends Entity {
         super.update();
 
         if( active ) {
-            if( ca.leftDown() ) dx-=0.020*tmod;
-            if( ca.rightDown() ) dx+=0.020*tmod;
+            if( onGround )
+                horizontalControl = 1;
+            else
+                horizontalControl*=Math.pow(0.99,tmod);
+
+            if( ca.leftDown() ) dx-=0.020*tmod * horizontalControl;
+            if( ca.rightDown() ) dx+=0.020*tmod * horizontalControl;
 
             // Double jump
             if( ca.aPressed() && !onGround && !cd.has("onGroundRecently") && !cd.has("doubleJumpLock") && !isLiftingSomeone() ) {
