@@ -1,6 +1,6 @@
 class Const {
 	public static var FPS = 60;
-	public static var AUTO_SCALE_TARGET_HEIGHT = -1; // -1 to disable auto-scaling
+	public static var AUTO_SCALE_TARGET_HEIGHT = 240; // -1 to disable auto-scaling
 	public static var SCALE = 3.0; // ignored if auto-scaling
 	public static var GRID = 16;
 
