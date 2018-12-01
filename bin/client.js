@@ -15,6 +15,7 @@ Assets.init = function() {
 	}
 	Assets.initDone = true;
 	Assets.font = hxd_Res.get_loader().loadCache("minecraftiaOutline.fnt",hxd_res_BitmapFont).toFont();
+	Assets.levelTiles = hxd_Res.get_loader().loadCache("levelTiles.png",hxd_res_Image).toTile();
 	mt_deepnight_Sfx.setGroupVolume(0,1);
 	mt_deepnight_Sfx.setGroupVolume(1,0.5);
 };
@@ -179,6 +180,41 @@ Boot.prototype = $extend(hxd_App.prototype,{
 	}
 	,__class__: Boot
 });
+var CPoint = function(x,y) {
+	this.cy = 0;
+	this.cx = 0;
+	this.cx = x;
+	this.cy = y;
+};
+$hxClasses["CPoint"] = CPoint;
+CPoint.__name__ = "CPoint";
+CPoint.prototype = {
+	get_centerX: function() {
+		return (this.cx + 0.5) * Const.GRID;
+	}
+	,get_centerY: function() {
+		return (this.cy + 0.5) * Const.GRID;
+	}
+	,get_footX: function() {
+		return (this.cx + 0.5) * Const.GRID;
+	}
+	,get_footY: function() {
+		return (this.cy + 1) * Const.GRID;
+	}
+	,set: function(x,y) {
+		this.cx = x;
+		this.cy = y;
+	}
+	,distEnt: function(e) {
+		var ax = e.cx + e.xr;
+		var ay = e.cy + e.yr;
+		var bx = this.cx + 0.5;
+		var by = this.cy + 0.5;
+		return Math.sqrt((ax - bx) * (ax - bx) + (ay - by) * (ay - by));
+	}
+	,__class__: CPoint
+	,__properties__: {get_footY:"get_footY",get_footX:"get_footX",get_centerY:"get_centerY",get_centerX:"get_centerX"}
+};
 var h2d_Object = function(parent) {
 	this.alpha = 1.;
 	this.matA = 1;
@@ -1707,103 +1743,106 @@ Const.__properties__ = {get_NEXT_UNIQ:"get_NEXT_UNIQ"};
 Const.get_NEXT_UNIQ = function() {
 	return Const._uniq++;
 };
-var _$Data_TestKind_$Impl_$ = {};
-$hxClasses["_Data.TestKind_Impl_"] = _$Data_TestKind_$Impl_$;
-_$Data_TestKind_$Impl_$.__name__ = "_Data.TestKind_Impl_";
-_$Data_TestKind_$Impl_$.toString = function(this1) {
+var _$Data_RoomKind_$Impl_$ = {};
+$hxClasses["_Data.RoomKind_Impl_"] = _$Data_RoomKind_$Impl_$;
+_$Data_RoomKind_$Impl_$.__name__ = "_Data.RoomKind_Impl_";
+_$Data_RoomKind_$Impl_$.toString = function(this1) {
 	return this1;
 };
-var _$Data_Test_$Impl_$ = {};
-$hxClasses["_Data.Test_Impl_"] = _$Data_Test_$Impl_$;
-_$Data_Test_$Impl_$.__name__ = "_Data.Test_Impl_";
-_$Data_Test_$Impl_$.__properties__ = {get_id:"get_id"};
-_$Data_Test_$Impl_$.get_id = function(this1) {
+var _$Data_Room_$Impl_$ = {};
+$hxClasses["_Data.Room_Impl_"] = _$Data_Room_$Impl_$;
+_$Data_Room_$Impl_$.__name__ = "_Data.Room_Impl_";
+_$Data_Room_$Impl_$.__properties__ = {get_markers:"get_markers",get_layers:"get_layers",get_collisions:"get_collisions",get_tileProps:"get_tileProps",get_props:"get_props",get_height:"get_height",get_width:"get_width",get_id:"get_id"};
+_$Data_Room_$Impl_$.get_id = function(this1) {
 	return this1.id;
 };
-var _$Data_LevelKind_$Impl_$ = {};
-$hxClasses["_Data.LevelKind_Impl_"] = _$Data_LevelKind_$Impl_$;
-_$Data_LevelKind_$Impl_$.__name__ = "_Data.LevelKind_Impl_";
-_$Data_LevelKind_$Impl_$.toString = function(this1) {
-	return this1;
-};
-var _$Data_Level_$Impl_$ = {};
-$hxClasses["_Data.Level_Impl_"] = _$Data_Level_$Impl_$;
-_$Data_Level_$Impl_$.__name__ = "_Data.Level_Impl_";
-_$Data_Level_$Impl_$.__properties__ = {get_markers:"get_markers",get_layers:"get_layers",get_tileProps:"get_tileProps",get_props:"get_props",get_height:"get_height",get_width:"get_width",get_id:"get_id"};
-_$Data_Level_$Impl_$.get_id = function(this1) {
-	return this1.id;
-};
-_$Data_Level_$Impl_$.get_width = function(this1) {
+_$Data_Room_$Impl_$.get_width = function(this1) {
 	return this1.width;
 };
-_$Data_Level_$Impl_$.get_height = function(this1) {
+_$Data_Room_$Impl_$.get_height = function(this1) {
 	return this1.height;
 };
-_$Data_Level_$Impl_$.get_props = function(this1) {
+_$Data_Room_$Impl_$.get_props = function(this1) {
 	return this1.props;
 };
-_$Data_Level_$Impl_$.get_tileProps = function(this1) {
+_$Data_Room_$Impl_$.get_tileProps = function(this1) {
 	return this1.tileProps;
 };
-_$Data_Level_$Impl_$.get_layers = function(this1) {
+_$Data_Room_$Impl_$.get_collisions = function(this1) {
+	return this1.collisions;
+};
+_$Data_Room_$Impl_$.get_layers = function(this1) {
 	return this1.layers;
 };
-_$Data_Level_$Impl_$.get_markers = function(this1) {
+_$Data_Room_$Impl_$.get_markers = function(this1) {
 	return this1.markers;
 };
-var _$Data_Level_$layers_$Impl_$ = {};
-$hxClasses["_Data.Level_layers_Impl_"] = _$Data_Level_$layers_$Impl_$;
-_$Data_Level_$layers_$Impl_$.__name__ = "_Data.Level_layers_Impl_";
-_$Data_Level_$layers_$Impl_$.__properties__ = {get_data:"get_data",get_name:"get_name"};
-_$Data_Level_$layers_$Impl_$.get_name = function(this1) {
+var _$Data_Room_$layers_$Impl_$ = {};
+$hxClasses["_Data.Room_layers_Impl_"] = _$Data_Room_$layers_$Impl_$;
+_$Data_Room_$layers_$Impl_$.__name__ = "_Data.Room_layers_Impl_";
+_$Data_Room_$layers_$Impl_$.__properties__ = {get_data:"get_data",get_name:"get_name"};
+_$Data_Room_$layers_$Impl_$.get_name = function(this1) {
 	return this1.name;
 };
-_$Data_Level_$layers_$Impl_$.get_data = function(this1) {
+_$Data_Room_$layers_$Impl_$.get_data = function(this1) {
 	return this1.data;
 };
-var _$Data_MarkersKind_$Impl_$ = {};
-$hxClasses["_Data.MarkersKind_Impl_"] = _$Data_MarkersKind_$Impl_$;
-_$Data_MarkersKind_$Impl_$.__name__ = "_Data.MarkersKind_Impl_";
-_$Data_MarkersKind_$Impl_$.toString = function(this1) {
+var _$Data_MarkerKind_$Impl_$ = {};
+$hxClasses["_Data.MarkerKind_Impl_"] = _$Data_MarkerKind_$Impl_$;
+_$Data_MarkerKind_$Impl_$.__name__ = "_Data.MarkerKind_Impl_";
+_$Data_MarkerKind_$Impl_$.toString = function(this1) {
 	return this1;
 };
-var _$Data_Markers_$Impl_$ = {};
-$hxClasses["_Data.Markers_Impl_"] = _$Data_Markers_$Impl_$;
-_$Data_Markers_$Impl_$.__name__ = "_Data.Markers_Impl_";
-_$Data_Markers_$Impl_$.__properties__ = {get_id:"get_id",get_icon:"get_icon",get_color:"get_color"};
-_$Data_Markers_$Impl_$.get_color = function(this1) {
+var _$Data_Marker_$Impl_$ = {};
+$hxClasses["_Data.Marker_Impl_"] = _$Data_Marker_$Impl_$;
+_$Data_Marker_$Impl_$.__name__ = "_Data.Marker_Impl_";
+_$Data_Marker_$Impl_$.__properties__ = {get_id:"get_id",get_color:"get_color"};
+_$Data_Marker_$Impl_$.get_color = function(this1) {
 	return this1.color;
 };
-_$Data_Markers_$Impl_$.get_icon = function(this1) {
-	return this1.icon;
-};
-_$Data_Markers_$Impl_$.get_id = function(this1) {
+_$Data_Marker_$Impl_$.get_id = function(this1) {
 	return this1.id;
 };
-var _$Data_Level_$markers_$Impl_$ = {};
-$hxClasses["_Data.Level_markers_Impl_"] = _$Data_Level_$markers_$Impl_$;
-_$Data_Level_$markers_$Impl_$.__name__ = "_Data.Level_markers_Impl_";
-_$Data_Level_$markers_$Impl_$.__properties__ = {get_height:"get_height",get_width:"get_width",get_y:"get_y",get_x:"get_x",get_markerId:"get_markerId",get_marker:"get_marker"};
-_$Data_Level_$markers_$Impl_$.get_marker = function(this1) {
+var _$Data_Room_$markers_$Impl_$ = {};
+$hxClasses["_Data.Room_markers_Impl_"] = _$Data_Room_$markers_$Impl_$;
+_$Data_Room_$markers_$Impl_$.__name__ = "_Data.Room_markers_Impl_";
+_$Data_Room_$markers_$Impl_$.__properties__ = {get_height:"get_height",get_width:"get_width",get_y:"get_y",get_x:"get_x",get_markerId:"get_markerId",get_marker:"get_marker"};
+_$Data_Room_$markers_$Impl_$.get_marker = function(this1) {
 	if(this1.marker == null) {
 		return null;
 	} else {
-		return Data.markers.resolve(this1.marker);
+		return Data.marker.resolve(this1.marker);
 	}
 };
-_$Data_Level_$markers_$Impl_$.get_markerId = function(this1) {
+_$Data_Room_$markers_$Impl_$.get_markerId = function(this1) {
 	return this1.marker;
 };
-_$Data_Level_$markers_$Impl_$.get_x = function(this1) {
+_$Data_Room_$markers_$Impl_$.get_x = function(this1) {
 	return this1.x;
 };
-_$Data_Level_$markers_$Impl_$.get_y = function(this1) {
+_$Data_Room_$markers_$Impl_$.get_y = function(this1) {
 	return this1.y;
 };
-_$Data_Level_$markers_$Impl_$.get_width = function(this1) {
+_$Data_Room_$markers_$Impl_$.get_width = function(this1) {
 	return this1.width;
 };
-_$Data_Level_$markers_$Impl_$.get_height = function(this1) {
+_$Data_Room_$markers_$Impl_$.get_height = function(this1) {
+	return this1.height;
+};
+var _$Data_Room_$collisions_$Impl_$ = {};
+$hxClasses["_Data.Room_collisions_Impl_"] = _$Data_Room_$collisions_$Impl_$;
+_$Data_Room_$collisions_$Impl_$.__name__ = "_Data.Room_collisions_Impl_";
+_$Data_Room_$collisions_$Impl_$.__properties__ = {get_height:"get_height",get_width:"get_width",get_y:"get_y",get_x:"get_x"};
+_$Data_Room_$collisions_$Impl_$.get_x = function(this1) {
+	return this1.x;
+};
+_$Data_Room_$collisions_$Impl_$.get_y = function(this1) {
+	return this1.y;
+};
+_$Data_Room_$collisions_$Impl_$.get_width = function(this1) {
+	return this1.width;
+};
+_$Data_Room_$collisions_$Impl_$.get_height = function(this1) {
 	return this1.height;
 };
 var Data = function() { };
@@ -1818,9 +1857,8 @@ Data.applyLang = function(xml,onMissing) {
 };
 Data.load = function(content) {
 	Data.root = cdb_Parser.parse(content);
-	Data.test = new cdb_IndexId(Data.root,"test");
-	Data.level = new cdb_IndexId(Data.root,"level");
-	Data.markers = new cdb_IndexId(Data.root,"markers");
+	Data.room = new cdb_IndexId(Data.root,"room");
+	Data.marker = new cdb_IndexId(Data.root,"marker");
 };
 var DateTools = function() { };
 $hxClasses["DateTools"] = DateTools;
@@ -1998,6 +2036,224 @@ EReg.prototype = {
 		return buf_b;
 	}
 	,__class__: EReg
+};
+var Entity = function(x,y) {
+	this.sprScaleY = 1.0;
+	this.sprScaleX = 1.0;
+	this.lastHitDir = 0;
+	this.isAffectBySlowMo = true;
+	this.hasColl = true;
+	this.dir = 1;
+	this.radius = Const.GRID * 0.5;
+	this.hei = Const.GRID;
+	this.weight = 1.;
+	this.hasGravity = true;
+	this.gravity = 0.03;
+	this.frict = 0.82;
+	this.dy = 0.;
+	this.dx = 0.;
+	this.yr = 1.0;
+	this.xr = 0.5;
+	this.cy = 0;
+	this.cx = 0;
+	this.destroyed = false;
+	this.uid = Const._uniq++;
+	Entity.ALL.push(this);
+	this.cd = new mt_Cooldown(Const.FPS);
+	this.setPosCase(x,y);
+	this.spr = new mt_heaps_slib_HSprite();
+	Game.ME.root.addChildAt(this.spr,Const.DP_MAIN);
+	var g = new h2d_Graphics(this.spr);
+	g.beginFill(16711680);
+	g.drawRect(0,0,this.radius,this.hei);
+	g.posChanged = true;
+	g.x = -this.radius * 0.5;
+	g.posChanged = true;
+	g.y = -this.hei;
+};
+$hxClasses["Entity"] = Entity;
+Entity.__name__ = "Entity";
+Entity.prototype = {
+	get_game: function() {
+		return Game.ME;
+	}
+	,get_level: function() {
+		return Game.ME.level;
+	}
+	,get_onGround: function() {
+		if(Game.ME.level.hasColl(this.cx,this.cy + 1) && this.yr >= 1) {
+			return this.dy == 0;
+		} else {
+			return false;
+		}
+	}
+	,get_footX: function() {
+		return (this.cx + this.xr) * Const.GRID;
+	}
+	,get_footY: function() {
+		return (this.cy + this.yr) * Const.GRID;
+	}
+	,get_centerX: function() {
+		return (this.cx + this.xr) * Const.GRID;
+	}
+	,get_centerY: function() {
+		return (this.cy + this.yr) * Const.GRID - this.radius;
+	}
+	,set_dir: function(v) {
+		return this.dir = v > 0 ? 1 : v < 0 ? -1 : this.dir;
+	}
+	,setPosCase: function(x,y) {
+		this.cx = x;
+		this.cy = y;
+		this.xr = 0.5;
+		this.yr = 1;
+	}
+	,setPosPixel: function(x,y) {
+		this.cx = x / Const.GRID | 0;
+		this.cy = y / Const.GRID | 0;
+		this.xr = (x - this.cx * Const.GRID) / Const.GRID;
+		this.yr = (y - this.cy * Const.GRID) / Const.GRID;
+	}
+	,destroy: function() {
+		if(!this.destroyed) {
+			this.destroyed = true;
+			Entity.GC.push(this);
+		}
+	}
+	,dispose: function() {
+		HxOverrides.remove(Entity.ALL,this);
+	}
+	,onLand: function() {
+		this.dy = 0;
+	}
+	,onTouchCeiling: function() {
+	}
+	,onTouchWall: function(wdir) {
+	}
+	,preUpdate: function(tmod) {
+		this.tmod = tmod;
+		this.cd.update(tmod);
+	}
+	,postUpdate: function() {
+		var _this = this.spr;
+		_this.posChanged = true;
+		_this.x = (this.cx + this.xr) * Const.GRID;
+		var _this1 = this.spr;
+		_this1.posChanged = true;
+		_this1.y = (this.cy + this.yr) * Const.GRID;
+		var _this2 = this.spr;
+		_this2.posChanged = true;
+		_this2.scaleX = this.dir * this.sprScaleX;
+		var _this3 = this.spr;
+		_this3.posChanged = true;
+		_this3.scaleY = this.sprScaleY;
+	}
+	,update: function() {
+		var x = this.dx * this.tmod;
+		var x1 = x < 0 ? -x : x;
+		var steps;
+		if(x1 > .0) {
+			var t = x1 + .5 | 0;
+			steps = t < x1 ? t + 1 : t;
+		} else if(x1 < .0) {
+			var t1 = x1 - .5 | 0;
+			steps = t1 < x1 ? t1 + 1 : t1;
+		} else {
+			steps = 0;
+		}
+		var step = this.dx * this.tmod / steps;
+		while(steps > 0) {
+			this.xr += step;
+			if(this.hasColl) {
+				if(this.xr > 0.7 && Game.ME.level.hasColl(this.cx + 1,this.cy)) {
+					this.xr = 0.7;
+					this.onTouchWall(1);
+					steps = 0;
+				}
+				if(this.xr < 0.3 && Game.ME.level.hasColl(this.cx - 1,this.cy)) {
+					this.xr = 0.3;
+					this.onTouchWall(-1);
+					steps = 0;
+				}
+			}
+			while(this.xr > 1) {
+				this.xr--;
+				this.cx++;
+			}
+			while(this.xr < 0) {
+				this.xr++;
+				this.cx--;
+			}
+			--steps;
+		}
+		this.dx *= Math.pow(this.frict,this.tmod);
+		if(!(Game.ME.level.hasColl(this.cx,this.cy + 1) && this.yr >= 1 && this.dy == 0) && this.hasGravity) {
+			this.dy += this.gravity * this.tmod;
+		}
+		if(Game.ME.level.hasColl(this.cx,this.cy + 1) && this.yr >= 1 && this.dy == 0) {
+			var _this = this.cd;
+			var frames = 0.06 * this.cd.baseFps;
+			frames = Math.floor(frames * 1000) / 1000;
+			var cur = _this._getCdObject(4194304);
+			if(!(cur != null && frames < cur.frames && false)) {
+				if(frames <= 0) {
+					if(cur != null) {
+						HxOverrides.remove(_this.cdList,cur);
+						cur.frames = 0;
+						cur.cb = null;
+						_this.fastCheck.remove(cur.k);
+					}
+				} else {
+					_this.fastCheck.h[4194304] = true;
+					if(cur != null) {
+						cur.frames = frames;
+					} else {
+						_this.cdList.push(new mt__$Cooldown_CdInst(4194304,frames));
+					}
+				}
+			}
+		}
+		var x2 = this.dy * this.tmod;
+		var x3 = x2 < 0 ? -x2 : x2;
+		var steps1;
+		if(x3 > .0) {
+			var t2 = x3 + .5 | 0;
+			steps1 = t2 < x3 ? t2 + 1 : t2;
+		} else if(x3 < .0) {
+			var t3 = x3 - .5 | 0;
+			steps1 = t3 < x3 ? t3 + 1 : t3;
+		} else {
+			steps1 = 0;
+		}
+		var step1 = this.dy * this.tmod / steps1;
+		while(steps1 > 0) {
+			this.yr += step1;
+			if(this.hasColl) {
+				if(this.yr > 1 && Game.ME.level.hasColl(this.cx,this.cy + 1)) {
+					this.yr = 1;
+					this.onLand();
+					steps1 = 0;
+				}
+				if(this.yr < 0.3 && Game.ME.level.hasColl(this.cx,this.cy - 1)) {
+					this.yr = 0.3;
+					this.onTouchCeiling();
+					steps1 = 0;
+				}
+			}
+			while(this.yr > 1) {
+				this.yr--;
+				this.cy++;
+			}
+			while(this.yr < 0) {
+				this.yr++;
+				this.cy--;
+			}
+			--steps1;
+		}
+		this.dy *= Math.pow(this.frict,this.tmod);
+	}
+	,__class__: Entity
+	,__properties__: {get_centerY:"get_centerY",get_centerX:"get_centerX",get_footY:"get_footY",get_footX:"get_footX",get_onGround:"get_onGround",set_dir:"set_dir",get_level:"get_level",get_game:"get_game"}
 };
 var mt_Process = function(parent) {
 	this.init();
@@ -2433,6 +2689,20 @@ var Game = function() {
 	Game.ME = this;
 	this.ca = Main.ME.controller.createAccess("game");
 	this.createRootInLayers(Main.ME.root,Const.DP_BG);
+	this.scroller = new h2d_Layers();
+	this.root.addChildAt(this.scroller,Const.DP_MAIN);
+	this.level = new Level("Test");
+	var pt = this.level.getMarker("Hero1");
+	if(pt == null) {
+		pt = new CPoint(0,0);
+	}
+	this.hero1 = new en_Hero(pt.cx,pt.cy);
+	this.hero1.activate();
+	var pt1 = this.level.getMarker("Hero2");
+	if(pt1 == null) {
+		pt1 = new CPoint(0,0);
+	}
+	this.hero2 = new en_Hero(pt1.cx,pt1.cy);
 };
 $hxClasses["Game"] = Game;
 Game.__name__ = "Game";
@@ -2440,8 +2710,105 @@ Game.__super__ = mt_Process;
 Game.prototype = $extend(mt_Process.prototype,{
 	onCdbReload: function() {
 	}
+	,gc: function() {
+		if(Entity.GC == null) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = Entity.GC;
+		while(_g < _g1.length) {
+			var e = _g1[_g];
+			++_g;
+			e.dispose();
+		}
+		Entity.GC = [];
+	}
 	,update: function() {
 		mt_Process.prototype.update.call(this);
+		var _g = 0;
+		var _g1 = Entity.ALL;
+		while(_g < _g1.length) {
+			var e = _g1[_g];
+			++_g;
+			if(!e.destroyed) {
+				e.preUpdate(this.dt);
+			}
+		}
+		var _g2 = 0;
+		var _g3 = Entity.ALL;
+		while(_g2 < _g3.length) {
+			var e1 = _g3[_g2];
+			++_g2;
+			if(!e1.destroyed) {
+				e1.update();
+			}
+		}
+		var _g4 = 0;
+		var _g5 = Entity.ALL;
+		while(_g4 < _g5.length) {
+			var e2 = _g5[_g4];
+			++_g4;
+			if(!e2.destroyed) {
+				e2.postUpdate();
+			}
+		}
+		this.gc();
+		var _this = this.ca;
+		var k = 2;
+		var tmp;
+		if(!(_this.manualLock || _this.parent.isLocked || _this.parent.exclusiveId != null && _this.parent.exclusiveId != _this.id || new Date().getTime() / 1000 < _this.parent.suspendTimer)) {
+			var tmp1;
+			var tmp2;
+			var k1 = _this.parent.primary.h[k];
+			if(!(k1 != null && !(_this.manualLock || _this.parent.isLocked || _this.parent.exclusiveId != null && _this.parent.exclusiveId != _this.id || new Date().getTime() / 1000 < _this.parent.suspendTimer) && hxd_Key.isPressed(k1))) {
+				var k2 = _this.parent.secondary.h[k];
+				tmp2 = k2 != null && !(_this.manualLock || _this.parent.isLocked || _this.parent.exclusiveId != null && _this.parent.exclusiveId != _this.id || new Date().getTime() / 1000 < _this.parent.suspendTimer) && hxd_Key.isPressed(k2);
+			} else {
+				tmp2 = true;
+			}
+			if(!tmp2) {
+				var k3 = _this.parent.third.h[k];
+				tmp1 = k3 != null && !(_this.manualLock || _this.parent.isLocked || _this.parent.exclusiveId != null && _this.parent.exclusiveId != _this.id || new Date().getTime() / 1000 < _this.parent.suspendTimer) && hxd_Key.isPressed(k3);
+			} else {
+				tmp1 = true;
+			}
+			tmp = tmp1 || _this.parent.gc.isPressed(k);
+		} else {
+			tmp = false;
+		}
+		if(tmp) {
+			if(this.hero1.active) {
+				this.hero2.activate();
+			} else {
+				this.hero1.activate();
+			}
+		}
+		var _this1 = this.ca;
+		var k4 = 4;
+		var tmp3;
+		if(!(_this1.manualLock || _this1.parent.isLocked || _this1.parent.exclusiveId != null && _this1.parent.exclusiveId != _this1.id || new Date().getTime() / 1000 < _this1.parent.suspendTimer)) {
+			var tmp4;
+			var tmp5;
+			var k5 = _this1.parent.primary.h[k4];
+			if(!(k5 != null && !(_this1.manualLock || _this1.parent.isLocked || _this1.parent.exclusiveId != null && _this1.parent.exclusiveId != _this1.id || new Date().getTime() / 1000 < _this1.parent.suspendTimer) && hxd_Key.isPressed(k5))) {
+				var k6 = _this1.parent.secondary.h[k4];
+				tmp5 = k6 != null && !(_this1.manualLock || _this1.parent.isLocked || _this1.parent.exclusiveId != null && _this1.parent.exclusiveId != _this1.id || new Date().getTime() / 1000 < _this1.parent.suspendTimer) && hxd_Key.isPressed(k6);
+			} else {
+				tmp5 = true;
+			}
+			if(!tmp5) {
+				var k7 = _this1.parent.third.h[k4];
+				tmp4 = k7 != null && !(_this1.manualLock || _this1.parent.isLocked || _this1.parent.exclusiveId != null && _this1.parent.exclusiveId != _this1.id || new Date().getTime() / 1000 < _this1.parent.suspendTimer) && hxd_Key.isPressed(k7);
+			} else {
+				tmp4 = true;
+			}
+			tmp3 = tmp4 || _this1.parent.gc.isPressed(k4);
+		} else {
+			tmp3 = false;
+		}
+		if(tmp3) {
+			Main.ME.startGame();
+		}
 	}
 	,__class__: Game
 });
@@ -2546,20 +2913,120 @@ Lang.init = function(lid) {
 Lang.untranslated = function(str) {
 	return str;
 };
+var Level = function(id) {
+	mt_Process.call(this,Game.ME);
+	this.createRootInLayers(Game.ME.scroller,Const.DP_BG);
+	this.lid = id;
+	var _this = Data.room.byId;
+	var key = this.lid;
+	this.infos = __map_reserved[key] != null ? _this.getReserved(key) : _this.h[key];
+	this.collMap = new haxe_ds_IntMap();
+	var _g = 0;
+	var _g1 = this.infos.collisions;
+	while(_g < _g1.length) {
+		var m = _g1[_g];
+		++_g;
+		var _g2 = m.x;
+		var _g11 = m.x + m.width;
+		while(_g2 < _g11) {
+			var x = _g2++;
+			var _g3 = m.y;
+			var _g12 = m.y + m.height;
+			while(_g3 < _g12) {
+				var y = _g3++;
+				this.setColl(x,y,true);
+			}
+		}
+	}
+	this.render();
+};
+$hxClasses["Level"] = Level;
+Level.__name__ = "Level";
+Level.__super__ = mt_Process;
+Level.prototype = $extend(mt_Process.prototype,{
+	get_wid: function() {
+		return this.infos.width;
+	}
+	,get_hei: function() {
+		return this.infos.height;
+	}
+	,render: function() {
+		this.root.removeChildren();
+		var _g = 0;
+		var _g1 = this.infos.layers;
+		while(_g < _g1.length) {
+			var l = _g1[_g];
+			++_g;
+			var tileSet = cdb__$Types_LevelPropsAccess_$Impl_$.getTileset(this.infos.props,Data.room,l.data.file);
+			var tg = new h2d_TileGroup(Assets.levelTiles,this.root);
+			var _g2 = 0;
+			var _g11 = mt_deepnight_CdbHelper.getLayerTiles(l.data,Assets.levelTiles,this.infos.width,tileSet);
+			while(_g2 < _g11.length) {
+				var t = _g11[_g2];
+				++_g2;
+				tg.content.add(t.x,t.y,tg.curColor.x,tg.curColor.y,tg.curColor.z,tg.curColor.w,t.t);
+			}
+		}
+	}
+	,isValid: function(cx,cy) {
+		if(cx >= 0 && cx < this.infos.width && cy >= 0) {
+			return cy < this.infos.height;
+		} else {
+			return false;
+		}
+	}
+	,coordId: function(x,y) {
+		return x + y * this.infos.width;
+	}
+	,hasColl: function(x,y) {
+		if(!this.isValid(x,y)) {
+			return true;
+		} else {
+			var this1 = this.collMap;
+			var key = this.coordId(x,y);
+			return this1.h[key];
+		}
+	}
+	,setColl: function(x,y,v) {
+		var this1 = this.collMap;
+		var key = this.coordId(x,y);
+		this1.h[key] = v;
+	}
+	,getMarker: function(id) {
+		var _g = 0;
+		var _g1 = this.infos.markers;
+		while(_g < _g1.length) {
+			var m = _g1[_g];
+			++_g;
+			if(m.marker == id) {
+				return new CPoint(m.x,m.y);
+			}
+		}
+		return null;
+	}
+	,getMarkers: function(id) {
+		var a = [];
+		var _g = 0;
+		var _g1 = this.infos.markers;
+		while(_g < _g1.length) {
+			var m = _g1[_g];
+			++_g;
+			if(m.marker == id) {
+				a.push(new CPoint(m.x,m.y));
+			}
+		}
+		return a;
+	}
+	,__class__: Level
+	,__properties__: $extend(mt_Process.prototype.__properties__,{get_hei:"get_hei",get_wid:"get_wid"})
+});
 var Main = function(s) {
 	mt_Process.call(this);
 	Main.ME = this;
 	this.createRoot(s);
-	var _this = this.root;
-	var _g = _this;
-	_g.posChanged = true;
-	_g.scaleX *= 6;
-	var _g1 = _this;
-	_g1.posChanged = true;
-	_g1.scaleY *= 6;
 	this.root.set_filter(new h2d_filter_ColorMatrix());
 	h3d_Engine.CURRENT.backgroundColor = -16777216;
-	hxd_Res.set_loader(new hxd_res_Loader(new hxd_fs_EmbedFileSystem(haxe_Unserializer.run("oy22:minecraftiaOutline.pngty22:minecraftiaOutline.fntty8:data.cdbtg"))));
+	hxd_Res.set_loader(new hxd_res_Loader(new hxd_fs_EmbedFileSystem(haxe_Unserializer.run("oy22:minecraftiaOutline.pngty14:levelTiles.pngty22:minecraftiaOutline.fntty8:data.cdbtg"))));
 	Lang.init("en");
 	Assets.init();
 	Data.load(hxd_Res.get_loader().loadCache("data.cdb",hxd_res_Resource).entry.getText());
@@ -2571,13 +3038,19 @@ var Main = function(s) {
 	this.controller.bind(0,38,90,87);
 	this.controller.bind(1,40,83,27);
 	this.controller.bind(4,82);
-	new Game();
+	this.startGame();
 };
 $hxClasses["Main"] = Main;
 Main.__name__ = "Main";
 Main.__super__ = mt_Process;
 Main.prototype = $extend(mt_Process.prototype,{
-	onResize: function() {
+	startGame: function() {
+		if(Game.ME != null) {
+			Game.ME.destroyed = true;
+		}
+		new Game();
+	}
+	,onResize: function() {
 		mt_Process.prototype.onResize.call(this);
 		if(Const.AUTO_SCALE_TARGET_HEIGHT > 0) {
 			var x = (mt_Process.CUSTOM_STAGE_HEIGHT > 0 ? mt_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) / Const.AUTO_SCALE_TARGET_HEIGHT;
@@ -2589,13 +3062,13 @@ Main.prototype = $extend(mt_Process.prototype,{
 				tmp = x == i ? i : i - 1;
 			}
 			Const.SCALE = tmp;
-			var _this = this.root;
-			var v = Const.SCALE;
-			_this.posChanged = true;
-			_this.scaleX = v;
-			_this.posChanged = true;
-			_this.scaleY = v;
 		}
+		var _this = this.root;
+		var v = Const.SCALE;
+		_this.posChanged = true;
+		_this.scaleX = v;
+		_this.posChanged = true;
+		_this.scaleY = v;
 	}
 	,update: function() {
 		mt_Process.prototype.update.call(this);
@@ -2702,6 +3175,17 @@ Reflect.deleteField = function(o,field) {
 	}
 	delete(o[field]);
 	return true;
+};
+Reflect.copy = function(o) {
+	var o2 = { };
+	var _g = 0;
+	var _g1 = Reflect.fields(o);
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		o2[f] = Reflect.field(o,f);
+	}
+	return o2;
 };
 var Std = function() { };
 $hxClasses["Std"] = Std;
@@ -6533,6 +7017,307 @@ cdb_IndexId.prototype = $extend(cdb_Index.prototype,{
 	}
 	,__class__: cdb_IndexId
 });
+var en_Hero = function(x,y) {
+	this.active = false;
+	Entity.call(this,x,y);
+	en_Hero.ALL.push(this);
+};
+$hxClasses["en.Hero"] = en_Hero;
+en_Hero.__name__ = "en.Hero";
+en_Hero.__super__ = Entity;
+en_Hero.prototype = $extend(Entity.prototype,{
+	get_ca: function() {
+		return Game.ME.ca;
+	}
+	,dispose: function() {
+		Entity.prototype.dispose.call(this);
+		HxOverrides.remove(en_Hero.ALL,this);
+	}
+	,activate: function() {
+		var _g = 0;
+		var _g1 = en_Hero.ALL;
+		while(_g < _g1.length) {
+			var e = _g1[_g];
+			++_g;
+			e.active = false;
+		}
+		this.active = true;
+	}
+	,onLand: function() {
+		Entity.prototype.onLand.call(this);
+		var _this = this.cd;
+		var frames = Const.INFINITE * this.cd.baseFps;
+		frames = Math.floor(frames * 1000) / 1000;
+		var cur = _this._getCdObject(0);
+		if(!(cur != null && frames < cur.frames && false)) {
+			if(frames <= 0) {
+				if(cur != null) {
+					HxOverrides.remove(_this.cdList,cur);
+					cur.frames = 0;
+					cur.cb = null;
+					_this.fastCheck.remove(cur.k);
+				}
+			} else {
+				_this.fastCheck.h[0] = true;
+				if(cur != null) {
+					cur.frames = frames;
+				} else {
+					_this.cdList.push(new mt__$Cooldown_CdInst(0,frames));
+				}
+			}
+		}
+	}
+	,postUpdate: function() {
+		Entity.prototype.postUpdate.call(this);
+		this.spr.alpha = this.active ? 1 : 0.5;
+	}
+	,update: function() {
+		Entity.prototype.update.call(this);
+		if(this.active) {
+			var _this = Game.ME.ca;
+			var k = 17;
+			var tmp;
+			if(!(_this.manualLock || _this.parent.isLocked || _this.parent.exclusiveId != null && _this.parent.exclusiveId != _this.id || new Date().getTime() / 1000 < _this.parent.suspendTimer)) {
+				var tmp1;
+				var tmp2;
+				var k1 = _this.parent.primary.h[k];
+				if(!(k1 != null && !(_this.manualLock || _this.parent.isLocked || _this.parent.exclusiveId != null && _this.parent.exclusiveId != _this.id || new Date().getTime() / 1000 < _this.parent.suspendTimer) && hxd_Key.isDown(k1))) {
+					var k2 = _this.parent.secondary.h[k];
+					tmp2 = k2 != null && !(_this.manualLock || _this.parent.isLocked || _this.parent.exclusiveId != null && _this.parent.exclusiveId != _this.id || new Date().getTime() / 1000 < _this.parent.suspendTimer) && hxd_Key.isDown(k2);
+				} else {
+					tmp2 = true;
+				}
+				if(!tmp2) {
+					var k3 = _this.parent.third.h[k];
+					tmp1 = k3 != null && !(_this.manualLock || _this.parent.isLocked || _this.parent.exclusiveId != null && _this.parent.exclusiveId != _this.id || new Date().getTime() / 1000 < _this.parent.suspendTimer) && hxd_Key.isDown(k3);
+				} else {
+					tmp1 = true;
+				}
+				if(!tmp1) {
+					var _this1 = _this.parent.gc;
+					tmp = _this1.device != null && _this1.toggles[k] > 0;
+				} else {
+					tmp = true;
+				}
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				this.dx -= 0.03 * this.tmod;
+			}
+			var _this2 = Game.ME.ca;
+			var k4 = 18;
+			var tmp3;
+			if(!(_this2.manualLock || _this2.parent.isLocked || _this2.parent.exclusiveId != null && _this2.parent.exclusiveId != _this2.id || new Date().getTime() / 1000 < _this2.parent.suspendTimer)) {
+				var tmp4;
+				var tmp5;
+				var k5 = _this2.parent.primary.h[k4];
+				if(!(k5 != null && !(_this2.manualLock || _this2.parent.isLocked || _this2.parent.exclusiveId != null && _this2.parent.exclusiveId != _this2.id || new Date().getTime() / 1000 < _this2.parent.suspendTimer) && hxd_Key.isDown(k5))) {
+					var k6 = _this2.parent.secondary.h[k4];
+					tmp5 = k6 != null && !(_this2.manualLock || _this2.parent.isLocked || _this2.parent.exclusiveId != null && _this2.parent.exclusiveId != _this2.id || new Date().getTime() / 1000 < _this2.parent.suspendTimer) && hxd_Key.isDown(k6);
+				} else {
+					tmp5 = true;
+				}
+				if(!tmp5) {
+					var k7 = _this2.parent.third.h[k4];
+					tmp4 = k7 != null && !(_this2.manualLock || _this2.parent.isLocked || _this2.parent.exclusiveId != null && _this2.parent.exclusiveId != _this2.id || new Date().getTime() / 1000 < _this2.parent.suspendTimer) && hxd_Key.isDown(k7);
+				} else {
+					tmp4 = true;
+				}
+				if(!tmp4) {
+					var _this3 = _this2.parent.gc;
+					tmp3 = _this3.device != null && _this3.toggles[k4] > 0;
+				} else {
+					tmp3 = true;
+				}
+			} else {
+				tmp3 = false;
+			}
+			if(tmp3) {
+				this.dx += 0.03 * this.tmod;
+			}
+			var _this4 = Game.ME.ca;
+			var k8 = 0;
+			var tmp6;
+			if(!(_this4.manualLock || _this4.parent.isLocked || _this4.parent.exclusiveId != null && _this4.parent.exclusiveId != _this4.id || new Date().getTime() / 1000 < _this4.parent.suspendTimer)) {
+				var tmp7;
+				var tmp8;
+				var k9 = _this4.parent.primary.h[k8];
+				if(!(k9 != null && !(_this4.manualLock || _this4.parent.isLocked || _this4.parent.exclusiveId != null && _this4.parent.exclusiveId != _this4.id || new Date().getTime() / 1000 < _this4.parent.suspendTimer) && hxd_Key.isPressed(k9))) {
+					var k10 = _this4.parent.secondary.h[k8];
+					tmp8 = k10 != null && !(_this4.manualLock || _this4.parent.isLocked || _this4.parent.exclusiveId != null && _this4.parent.exclusiveId != _this4.id || new Date().getTime() / 1000 < _this4.parent.suspendTimer) && hxd_Key.isPressed(k10);
+				} else {
+					tmp8 = true;
+				}
+				if(!tmp8) {
+					var k11 = _this4.parent.third.h[k8];
+					tmp7 = k11 != null && !(_this4.manualLock || _this4.parent.isLocked || _this4.parent.exclusiveId != null && _this4.parent.exclusiveId != _this4.id || new Date().getTime() / 1000 < _this4.parent.suspendTimer) && hxd_Key.isPressed(k11);
+				} else {
+					tmp7 = true;
+				}
+				tmp6 = tmp7 || _this4.parent.gc.isPressed(k8);
+			} else {
+				tmp6 = false;
+			}
+			if(tmp6 && !(Game.ME.level.hasColl(this.cx,this.cy + 1) && this.yr >= 1 && this.dy == 0) && !this.cd.fastCheck.h.hasOwnProperty(4194304) && !this.cd.fastCheck.h.hasOwnProperty(8388608)) {
+				this.dy = -0.5;
+				var _this5 = this.cd;
+				var frames = Const.INFINITE * this.cd.baseFps;
+				frames = Math.floor(frames * 1000) / 1000;
+				var cur = _this5._getCdObject(8388608);
+				if(!(cur != null && frames < cur.frames && false)) {
+					if(frames <= 0) {
+						if(cur != null) {
+							HxOverrides.remove(_this5.cdList,cur);
+							cur.frames = 0;
+							cur.cb = null;
+							_this5.fastCheck.remove(cur.k);
+						}
+					} else {
+						_this5.fastCheck.h[8388608] = true;
+						if(cur != null) {
+							cur.frames = frames;
+						} else {
+							_this5.cdList.push(new mt__$Cooldown_CdInst(8388608,frames));
+						}
+					}
+				}
+			}
+			if(Game.ME.level.hasColl(this.cx,this.cy + 1) && this.yr >= 1 && this.dy == 0) {
+				var _this6 = this.cd;
+				var _g = 0;
+				var _g1 = _this6.cdList;
+				while(_g < _g1.length) {
+					var cd = _g1[_g];
+					++_g;
+					if(cd.k == 8388608) {
+						HxOverrides.remove(_this6.cdList,cd);
+						cd.frames = 0;
+						cd.cb = null;
+						_this6.fastCheck.remove(cd.k);
+						break;
+					}
+				}
+			}
+			var _this7 = Game.ME.ca;
+			var k12 = 0;
+			var tmp9;
+			if(!(_this7.manualLock || _this7.parent.isLocked || _this7.parent.exclusiveId != null && _this7.parent.exclusiveId != _this7.id || new Date().getTime() / 1000 < _this7.parent.suspendTimer)) {
+				var tmp10;
+				var tmp11;
+				var k13 = _this7.parent.primary.h[k12];
+				if(!(k13 != null && !(_this7.manualLock || _this7.parent.isLocked || _this7.parent.exclusiveId != null && _this7.parent.exclusiveId != _this7.id || new Date().getTime() / 1000 < _this7.parent.suspendTimer) && hxd_Key.isDown(k13))) {
+					var k14 = _this7.parent.secondary.h[k12];
+					tmp11 = k14 != null && !(_this7.manualLock || _this7.parent.isLocked || _this7.parent.exclusiveId != null && _this7.parent.exclusiveId != _this7.id || new Date().getTime() / 1000 < _this7.parent.suspendTimer) && hxd_Key.isDown(k14);
+				} else {
+					tmp11 = true;
+				}
+				if(!tmp11) {
+					var k15 = _this7.parent.third.h[k12];
+					tmp10 = k15 != null && !(_this7.manualLock || _this7.parent.isLocked || _this7.parent.exclusiveId != null && _this7.parent.exclusiveId != _this7.id || new Date().getTime() / 1000 < _this7.parent.suspendTimer) && hxd_Key.isDown(k15);
+				} else {
+					tmp10 = true;
+				}
+				if(!tmp10) {
+					var _this8 = _this7.parent.gc;
+					tmp9 = _this8.device != null && _this8.toggles[k12] > 0;
+				} else {
+					tmp9 = true;
+				}
+			} else {
+				tmp9 = false;
+			}
+			if(tmp9) {
+				if(!this.cd.fastCheck.h.hasOwnProperty(0) && (Game.ME.level.hasColl(this.cx,this.cy + 1) && this.yr >= 1 && this.dy == 0 || this.cd.fastCheck.h.hasOwnProperty(4194304))) {
+					this.dy = -0.3;
+					var _this9 = this.cd;
+					var _g2 = 0;
+					var _g11 = _this9.cdList;
+					while(_g2 < _g11.length) {
+						var cd1 = _g11[_g2];
+						++_g2;
+						if(cd1.k == 4194304) {
+							HxOverrides.remove(_this9.cdList,cd1);
+							cd1.frames = 0;
+							cd1.cb = null;
+							_this9.fastCheck.remove(cd1.k);
+							break;
+						}
+					}
+					var _this10 = this.cd;
+					var frames1 = 0.15 * this.cd.baseFps;
+					frames1 = Math.floor(frames1 * 1000) / 1000;
+					var cur1 = _this10._getCdObject(12582912);
+					if(!(cur1 != null && frames1 < cur1.frames && false)) {
+						if(frames1 <= 0) {
+							if(cur1 != null) {
+								HxOverrides.remove(_this10.cdList,cur1);
+								cur1.frames = 0;
+								cur1.cb = null;
+								_this10.fastCheck.remove(cur1.k);
+							}
+						} else {
+							_this10.fastCheck.h[12582912] = true;
+							if(cur1 != null) {
+								cur1.frames = frames1;
+							} else {
+								_this10.cdList.push(new mt__$Cooldown_CdInst(12582912,frames1));
+							}
+						}
+					}
+				} else if(this.cd.fastCheck.h.hasOwnProperty(12582912)) {
+					this.dy -= 0.037;
+				}
+			}
+			var _this11 = Game.ME.ca;
+			var k16 = 0;
+			var tmp12;
+			if(!(_this11.manualLock || _this11.parent.isLocked || _this11.parent.exclusiveId != null && _this11.parent.exclusiveId != _this11.id || new Date().getTime() / 1000 < _this11.parent.suspendTimer)) {
+				var tmp13;
+				var tmp14;
+				var k17 = _this11.parent.primary.h[k16];
+				if(!(k17 != null && !(_this11.manualLock || _this11.parent.isLocked || _this11.parent.exclusiveId != null && _this11.parent.exclusiveId != _this11.id || new Date().getTime() / 1000 < _this11.parent.suspendTimer) && hxd_Key.isDown(k17))) {
+					var k18 = _this11.parent.secondary.h[k16];
+					tmp14 = k18 != null && !(_this11.manualLock || _this11.parent.isLocked || _this11.parent.exclusiveId != null && _this11.parent.exclusiveId != _this11.id || new Date().getTime() / 1000 < _this11.parent.suspendTimer) && hxd_Key.isDown(k18);
+				} else {
+					tmp14 = true;
+				}
+				if(!tmp14) {
+					var k19 = _this11.parent.third.h[k16];
+					tmp13 = k19 != null && !(_this11.manualLock || _this11.parent.isLocked || _this11.parent.exclusiveId != null && _this11.parent.exclusiveId != _this11.id || new Date().getTime() / 1000 < _this11.parent.suspendTimer) && hxd_Key.isDown(k19);
+				} else {
+					tmp13 = true;
+				}
+				if(!tmp13) {
+					var _this12 = _this11.parent.gc;
+					tmp12 = _this12.device != null && _this12.toggles[k16] > 0;
+				} else {
+					tmp12 = true;
+				}
+			} else {
+				tmp12 = false;
+			}
+			if(!tmp12) {
+				var _this13 = this.cd;
+				var _g3 = 0;
+				var _g12 = _this13.cdList;
+				while(_g3 < _g12.length) {
+					var cd2 = _g12[_g3];
+					++_g3;
+					if(cd2.k == 0) {
+						HxOverrides.remove(_this13.cdList,cd2);
+						cd2.frames = 0;
+						cd2.cb = null;
+						_this13.fastCheck.remove(cd2.k);
+						break;
+					}
+				}
+			}
+		}
+	}
+	,__class__: en_Hero
+	,__properties__: $extend(Entity.prototype.__properties__,{get_ca:"get_ca"})
+});
 var format_gif_Block = $hxEnums["format.gif.Block"] = { __ename__ : true, __constructs__ : ["BFrame","BExtension","BEOF"]
 	,BFrame: ($_=function(frame) { return {_hx_index:0,frame:frame,__enum__:"format.gif.Block",toString:$estr}; },$_.__params__ = ["frame"],$_)
 	,BExtension: ($_=function(extension) { return {_hx_index:1,extension:extension,__enum__:"format.gif.Block",toString:$estr}; },$_.__params__ = ["extension"],$_)
@@ -9839,6 +10624,1644 @@ h2d_Font.prototype = {
 	}
 	,__class__: h2d_Font
 };
+var h2d__$Graphics_GPoint = function(x,y,r,g,b,a) {
+	this.x = x;
+	this.y = y;
+	this.r = r;
+	this.g = g;
+	this.b = b;
+	this.a = a;
+};
+$hxClasses["h2d._Graphics.GPoint"] = h2d__$Graphics_GPoint;
+h2d__$Graphics_GPoint.__name__ = "h2d._Graphics.GPoint";
+h2d__$Graphics_GPoint.prototype = {
+	__class__: h2d__$Graphics_GPoint
+};
+var hxd_impl__$Serializable_NoSerializeSupport = function() { };
+$hxClasses["hxd.impl._Serializable.NoSerializeSupport"] = hxd_impl__$Serializable_NoSerializeSupport;
+hxd_impl__$Serializable_NoSerializeSupport.__name__ = "hxd.impl._Serializable.NoSerializeSupport";
+var h3d_prim_Primitive = function() { };
+$hxClasses["h3d.prim.Primitive"] = h3d_prim_Primitive;
+h3d_prim_Primitive.__name__ = "h3d.prim.Primitive";
+h3d_prim_Primitive.__interfaces__ = [hxd_impl__$Serializable_NoSerializeSupport];
+h3d_prim_Primitive.prototype = {
+	triCount: function() {
+		if(this.indexes != null) {
+			return this.indexes.count / 3 | 0;
+		} else if(this.buffer == null) {
+			return 0;
+		} else {
+			return this.buffer.totalVertices() / 3 | 0;
+		}
+	}
+	,vertexCount: function() {
+		return 0;
+	}
+	,getCollider: function() {
+		throw new js__$Boot_HaxeError("not implemented for " + Std.string(this));
+	}
+	,getBounds: function() {
+		throw new js__$Boot_HaxeError("not implemented for " + Std.string(this));
+	}
+	,alloc: function(engine) {
+		throw new js__$Boot_HaxeError("not implemented");
+	}
+	,selectMaterial: function(material) {
+	}
+	,buildNormalsDisplay: function() {
+		throw new js__$Boot_HaxeError("not implemented for " + Std.string(this));
+	}
+	,render: function(engine) {
+		if(this.buffer == null || this.buffer.isDisposed()) {
+			this.alloc(engine);
+		}
+		if(this.indexes == null) {
+			if((this.buffer.flags & 1 << h3d_BufferFlag.Quads._hx_index) != 0) {
+				engine.renderBuffer(this.buffer,engine.mem.quadIndexes,2,0,-1);
+			} else {
+				engine.renderBuffer(this.buffer,engine.mem.triIndexes,3,0,-1);
+			}
+		} else {
+			engine.renderIndexed(this.buffer,this.indexes);
+		}
+	}
+	,dispose: function() {
+		if(this.buffer != null) {
+			this.buffer.dispose();
+			this.buffer = null;
+		}
+		if(this.indexes != null) {
+			this.indexes.dispose();
+			this.indexes = null;
+		}
+	}
+	,toString: function() {
+		var c = js_Boot.getClass(this);
+		return c.__name__.split(".").pop();
+	}
+	,customSerialize: function(ctx) {
+		throw new js__$Boot_HaxeError("Cannot serialize " + this.toString());
+	}
+	,customUnserialize: function(ctx) {
+		throw new js__$Boot_HaxeError("customUnserialize not implemented on " + this.toString());
+	}
+	,__class__: h3d_prim_Primitive
+};
+var h2d__$Graphics_GraphicsContent = function() {
+	this.buffers = [];
+};
+$hxClasses["h2d._Graphics.GraphicsContent"] = h2d__$Graphics_GraphicsContent;
+h2d__$Graphics_GraphicsContent.__name__ = "h2d._Graphics.GraphicsContent";
+h2d__$Graphics_GraphicsContent.__super__ = h3d_prim_Primitive;
+h2d__$Graphics_GraphicsContent.prototype = $extend(h3d_prim_Primitive.prototype,{
+	addIndex: function(i) {
+		this.index.push(i);
+	}
+	,add: function(x,y,u,v,r,g,b,a) {
+		var this1 = this.tmp;
+		if(this1.pos == this1.array.length) {
+			var newSize = this1.array.length << 1;
+			if(newSize < 128) {
+				newSize = 128;
+			}
+			var newArray = new Float32Array(newSize);
+			newArray.set(this1.array);
+			this1.array = newArray;
+		}
+		this1.array[this1.pos++] = x;
+		var this2 = this.tmp;
+		if(this2.pos == this2.array.length) {
+			var newSize1 = this2.array.length << 1;
+			if(newSize1 < 128) {
+				newSize1 = 128;
+			}
+			var newArray1 = new Float32Array(newSize1);
+			newArray1.set(this2.array);
+			this2.array = newArray1;
+		}
+		this2.array[this2.pos++] = y;
+		var this3 = this.tmp;
+		if(this3.pos == this3.array.length) {
+			var newSize2 = this3.array.length << 1;
+			if(newSize2 < 128) {
+				newSize2 = 128;
+			}
+			var newArray2 = new Float32Array(newSize2);
+			newArray2.set(this3.array);
+			this3.array = newArray2;
+		}
+		this3.array[this3.pos++] = u;
+		var this4 = this.tmp;
+		if(this4.pos == this4.array.length) {
+			var newSize3 = this4.array.length << 1;
+			if(newSize3 < 128) {
+				newSize3 = 128;
+			}
+			var newArray3 = new Float32Array(newSize3);
+			newArray3.set(this4.array);
+			this4.array = newArray3;
+		}
+		this4.array[this4.pos++] = v;
+		var this5 = this.tmp;
+		if(this5.pos == this5.array.length) {
+			var newSize4 = this5.array.length << 1;
+			if(newSize4 < 128) {
+				newSize4 = 128;
+			}
+			var newArray4 = new Float32Array(newSize4);
+			newArray4.set(this5.array);
+			this5.array = newArray4;
+		}
+		this5.array[this5.pos++] = r;
+		var this6 = this.tmp;
+		if(this6.pos == this6.array.length) {
+			var newSize5 = this6.array.length << 1;
+			if(newSize5 < 128) {
+				newSize5 = 128;
+			}
+			var newArray5 = new Float32Array(newSize5);
+			newArray5.set(this6.array);
+			this6.array = newArray5;
+		}
+		this6.array[this6.pos++] = g;
+		var this7 = this.tmp;
+		if(this7.pos == this7.array.length) {
+			var newSize6 = this7.array.length << 1;
+			if(newSize6 < 128) {
+				newSize6 = 128;
+			}
+			var newArray6 = new Float32Array(newSize6);
+			newArray6.set(this7.array);
+			this7.array = newArray6;
+		}
+		this7.array[this7.pos++] = b;
+		var this8 = this.tmp;
+		if(this8.pos == this8.array.length) {
+			var newSize7 = this8.array.length << 1;
+			if(newSize7 < 128) {
+				newSize7 = 128;
+			}
+			var newArray7 = new Float32Array(newSize7);
+			newArray7.set(this8.array);
+			this8.array = newArray7;
+		}
+		this8.array[this8.pos++] = a;
+	}
+	,next: function() {
+		var nvect = this.tmp.pos >> 3;
+		if(nvect < 32768) {
+			return false;
+		}
+		this.buffers.push({ buf : this.tmp, idx : this.index, vbuf : null, ibuf : null});
+		var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+		this.tmp = this1;
+		var this2 = new Array(0);
+		this.index = this2;
+		h3d_prim_Primitive.prototype.dispose.call(this);
+		return true;
+	}
+	,alloc: function(engine) {
+		if(this.index.length <= 0) {
+			return;
+		}
+		this.buffer = h3d_Buffer.ofFloats(this.tmp,8,[h3d_BufferFlag.RawFormat]);
+		this.indexes = h3d_Indexes.alloc(this.index);
+		var _g = 0;
+		var _g1 = this.buffers;
+		while(_g < _g1.length) {
+			var b = _g1[_g];
+			++_g;
+			if(b.vbuf == null || b.vbuf.isDisposed()) {
+				b.vbuf = h3d_Buffer.ofFloats(b.buf,8,[h3d_BufferFlag.RawFormat]);
+			}
+			if(b.ibuf == null || b.ibuf.isDisposed()) {
+				b.ibuf = h3d_Indexes.alloc(b.idx);
+			}
+		}
+	}
+	,render: function(engine) {
+		if(this.index.length <= 0) {
+			return;
+		}
+		if(this.buffer == null || this.buffer.isDisposed()) {
+			this.alloc(h3d_Engine.CURRENT);
+		}
+		var _g = 0;
+		var _g1 = this.buffers;
+		while(_g < _g1.length) {
+			var b = _g1[_g];
+			++_g;
+			engine.renderIndexed(b.vbuf,b.ibuf);
+		}
+		h3d_prim_Primitive.prototype.render.call(this,engine);
+	}
+	,flush: function() {
+		if(this.buffer == null || this.buffer.isDisposed()) {
+			this.alloc(h3d_Engine.CURRENT);
+		}
+	}
+	,dispose: function() {
+		var _g = 0;
+		var _g1 = this.buffers;
+		while(_g < _g1.length) {
+			var b = _g1[_g];
+			++_g;
+			if(b.vbuf != null) {
+				b.vbuf.dispose();
+			}
+			if(b.ibuf != null) {
+				b.ibuf.dispose();
+			}
+			b.vbuf = null;
+			b.ibuf = null;
+		}
+		h3d_prim_Primitive.prototype.dispose.call(this);
+	}
+	,clear: function() {
+		this.dispose();
+		var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+		this.tmp = this1;
+		var this2 = new Array(0);
+		this.index = this2;
+		this.buffers = [];
+	}
+	,__class__: h2d__$Graphics_GraphicsContent
+});
+var h2d_Graphics = function(parent) {
+	this.bevel = 0.25;
+	this.my = 0.;
+	this.mx = 0.;
+	this.md = 1.;
+	this.mc = 0.;
+	this.mb = 0.;
+	this.ma = 1.;
+	h2d_Drawable.call(this,parent);
+	this.content = new h2d__$Graphics_GraphicsContent();
+	this.tile = h2d_Tile.fromColor(16777215);
+	this.clear();
+};
+$hxClasses["h2d.Graphics"] = h2d_Graphics;
+h2d_Graphics.__name__ = "h2d.Graphics";
+h2d_Graphics.__super__ = h2d_Drawable;
+h2d_Graphics.prototype = $extend(h2d_Drawable.prototype,{
+	onRemove: function() {
+		h2d_Drawable.prototype.onRemove.call(this);
+		this.clear();
+	}
+	,clear: function() {
+		this.content.clear();
+		this.tmpPoints = [];
+		this.pindex = 0;
+		this.lineSize = 0;
+		this.xMin = Infinity;
+		this.yMin = Infinity;
+		this.yMax = -Infinity;
+		this.xMax = -Infinity;
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		if(this.tile != null) {
+			this.addBounds(relativeTo,out,this.xMin,this.yMin,this.xMax - this.xMin,this.yMax - this.yMin);
+		}
+	}
+	,isConvex: function(points) {
+		var first = true;
+		var sign = false;
+		var _g = 0;
+		var _g1 = points.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var p1 = points[i];
+			var p2 = points[(i + 1) % points.length];
+			var p3 = points[(i + 2) % points.length];
+			var s = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) > 0;
+			if(first) {
+				first = false;
+				sign = s;
+			} else if(sign != s) {
+				return false;
+			}
+		}
+		return true;
+	}
+	,flushLine: function(start) {
+		var pts = this.tmpPoints;
+		var last = pts.length - 1;
+		var prev = pts[last];
+		var p = pts[0];
+		var closed = p.x == prev.x && p.y == prev.y;
+		var count = pts.length;
+		if(!closed) {
+			var prevLast = pts[last - 1];
+			if(prevLast == null) {
+				prevLast = p;
+			}
+			pts.push(new h2d__$Graphics_GPoint(prev.x * 2 - prevLast.x,prev.y * 2 - prevLast.y,0,0,0,0));
+			var pNext = pts[1];
+			if(pNext == null) {
+				pNext = p;
+			}
+			prev = new h2d__$Graphics_GPoint(p.x * 2 - pNext.x,p.y * 2 - pNext.y,0,0,0,0);
+		} else if(p != prev) {
+			--count;
+			--last;
+			prev = pts[last];
+		}
+		var _g = 0;
+		var _g1 = count;
+		while(_g < _g1) {
+			var i = _g++;
+			var next = pts[(i + 1) % pts.length];
+			var nx1 = prev.y - p.y;
+			var ny1 = p.x - prev.x;
+			var ns1 = 1. / Math.sqrt(nx1 * nx1 + ny1 * ny1);
+			var nx2 = p.y - next.y;
+			var ny2 = next.x - p.x;
+			var ns2 = 1. / Math.sqrt(nx2 * nx2 + ny2 * ny2);
+			var nx = nx1 * ns1 + nx2 * ns2;
+			var ny = ny1 * ns1 + ny2 * ns2;
+			var ns = 1. / Math.sqrt(nx * nx + ny * ny);
+			nx *= ns;
+			ny *= ns;
+			var size = nx * nx1 * ns1 + ny * ny1 * ns1;
+			if(size < 0.1) {
+				size = 0.1;
+			}
+			var d = this.lineSize * 0.5 / size;
+			nx *= d;
+			ny *= d;
+			if(size > this.bevel) {
+				var _this = this.content;
+				var x = p.x + nx;
+				var y = p.y + ny;
+				var r = p.r;
+				var g = p.g;
+				var b = p.b;
+				var a = p.a;
+				var this1 = _this.tmp;
+				if(this1.pos == this1.array.length) {
+					var newSize = this1.array.length << 1;
+					if(newSize < 128) {
+						newSize = 128;
+					}
+					var newArray = new Float32Array(newSize);
+					newArray.set(this1.array);
+					this1.array = newArray;
+				}
+				this1.array[this1.pos++] = x;
+				var this2 = _this.tmp;
+				if(this2.pos == this2.array.length) {
+					var newSize1 = this2.array.length << 1;
+					if(newSize1 < 128) {
+						newSize1 = 128;
+					}
+					var newArray1 = new Float32Array(newSize1);
+					newArray1.set(this2.array);
+					this2.array = newArray1;
+				}
+				this2.array[this2.pos++] = y;
+				var this3 = _this.tmp;
+				if(this3.pos == this3.array.length) {
+					var newSize2 = this3.array.length << 1;
+					if(newSize2 < 128) {
+						newSize2 = 128;
+					}
+					var newArray2 = new Float32Array(newSize2);
+					newArray2.set(this3.array);
+					this3.array = newArray2;
+				}
+				this3.array[this3.pos++] = 0;
+				var this4 = _this.tmp;
+				if(this4.pos == this4.array.length) {
+					var newSize3 = this4.array.length << 1;
+					if(newSize3 < 128) {
+						newSize3 = 128;
+					}
+					var newArray3 = new Float32Array(newSize3);
+					newArray3.set(this4.array);
+					this4.array = newArray3;
+				}
+				this4.array[this4.pos++] = 0;
+				var this5 = _this.tmp;
+				if(this5.pos == this5.array.length) {
+					var newSize4 = this5.array.length << 1;
+					if(newSize4 < 128) {
+						newSize4 = 128;
+					}
+					var newArray4 = new Float32Array(newSize4);
+					newArray4.set(this5.array);
+					this5.array = newArray4;
+				}
+				this5.array[this5.pos++] = r;
+				var this6 = _this.tmp;
+				if(this6.pos == this6.array.length) {
+					var newSize5 = this6.array.length << 1;
+					if(newSize5 < 128) {
+						newSize5 = 128;
+					}
+					var newArray5 = new Float32Array(newSize5);
+					newArray5.set(this6.array);
+					this6.array = newArray5;
+				}
+				this6.array[this6.pos++] = g;
+				var this7 = _this.tmp;
+				if(this7.pos == this7.array.length) {
+					var newSize6 = this7.array.length << 1;
+					if(newSize6 < 128) {
+						newSize6 = 128;
+					}
+					var newArray6 = new Float32Array(newSize6);
+					newArray6.set(this7.array);
+					this7.array = newArray6;
+				}
+				this7.array[this7.pos++] = b;
+				var this8 = _this.tmp;
+				if(this8.pos == this8.array.length) {
+					var newSize7 = this8.array.length << 1;
+					if(newSize7 < 128) {
+						newSize7 = 128;
+					}
+					var newArray7 = new Float32Array(newSize7);
+					newArray7.set(this8.array);
+					this8.array = newArray7;
+				}
+				this8.array[this8.pos++] = a;
+				var _this1 = this.content;
+				var x1 = p.x - nx;
+				var y1 = p.y - ny;
+				var r1 = p.r;
+				var g1 = p.g;
+				var b1 = p.b;
+				var a1 = p.a;
+				var this9 = _this1.tmp;
+				if(this9.pos == this9.array.length) {
+					var newSize8 = this9.array.length << 1;
+					if(newSize8 < 128) {
+						newSize8 = 128;
+					}
+					var newArray8 = new Float32Array(newSize8);
+					newArray8.set(this9.array);
+					this9.array = newArray8;
+				}
+				this9.array[this9.pos++] = x1;
+				var this10 = _this1.tmp;
+				if(this10.pos == this10.array.length) {
+					var newSize9 = this10.array.length << 1;
+					if(newSize9 < 128) {
+						newSize9 = 128;
+					}
+					var newArray9 = new Float32Array(newSize9);
+					newArray9.set(this10.array);
+					this10.array = newArray9;
+				}
+				this10.array[this10.pos++] = y1;
+				var this11 = _this1.tmp;
+				if(this11.pos == this11.array.length) {
+					var newSize10 = this11.array.length << 1;
+					if(newSize10 < 128) {
+						newSize10 = 128;
+					}
+					var newArray10 = new Float32Array(newSize10);
+					newArray10.set(this11.array);
+					this11.array = newArray10;
+				}
+				this11.array[this11.pos++] = 0;
+				var this12 = _this1.tmp;
+				if(this12.pos == this12.array.length) {
+					var newSize11 = this12.array.length << 1;
+					if(newSize11 < 128) {
+						newSize11 = 128;
+					}
+					var newArray11 = new Float32Array(newSize11);
+					newArray11.set(this12.array);
+					this12.array = newArray11;
+				}
+				this12.array[this12.pos++] = 0;
+				var this13 = _this1.tmp;
+				if(this13.pos == this13.array.length) {
+					var newSize12 = this13.array.length << 1;
+					if(newSize12 < 128) {
+						newSize12 = 128;
+					}
+					var newArray12 = new Float32Array(newSize12);
+					newArray12.set(this13.array);
+					this13.array = newArray12;
+				}
+				this13.array[this13.pos++] = r1;
+				var this14 = _this1.tmp;
+				if(this14.pos == this14.array.length) {
+					var newSize13 = this14.array.length << 1;
+					if(newSize13 < 128) {
+						newSize13 = 128;
+					}
+					var newArray13 = new Float32Array(newSize13);
+					newArray13.set(this14.array);
+					this14.array = newArray13;
+				}
+				this14.array[this14.pos++] = g1;
+				var this15 = _this1.tmp;
+				if(this15.pos == this15.array.length) {
+					var newSize14 = this15.array.length << 1;
+					if(newSize14 < 128) {
+						newSize14 = 128;
+					}
+					var newArray14 = new Float32Array(newSize14);
+					newArray14.set(this15.array);
+					this15.array = newArray14;
+				}
+				this15.array[this15.pos++] = b1;
+				var this16 = _this1.tmp;
+				if(this16.pos == this16.array.length) {
+					var newSize15 = this16.array.length << 1;
+					if(newSize15 < 128) {
+						newSize15 = 128;
+					}
+					var newArray15 = new Float32Array(newSize15);
+					newArray15.set(this16.array);
+					this16.array = newArray15;
+				}
+				this16.array[this16.pos++] = a1;
+				var pnext = i == last ? start : this.pindex + 2;
+				if(i < count - 1 || closed) {
+					this.content.index.push(this.pindex);
+					this.content.index.push(this.pindex + 1);
+					this.content.index.push(pnext);
+					this.content.index.push(this.pindex + 1);
+					this.content.index.push(pnext);
+					this.content.index.push(pnext + 1);
+				}
+				this.pindex += 2;
+			} else {
+				var n0x = next.x - p.x;
+				var n0y = next.y - p.y;
+				var sign = n0x * nx + n0y * ny;
+				var nnx = -ny;
+				var nny = nx;
+				var size1 = nnx * nx1 * ns1 + nny * ny1 * ns1;
+				var d1 = this.lineSize * 0.5 / size1;
+				nnx *= d1;
+				nny *= d1;
+				var pnext1 = i == last ? start : this.pindex + 3;
+				if(sign > 0) {
+					var _this2 = this.content;
+					var x2 = p.x + nx;
+					var y2 = p.y + ny;
+					var r2 = p.r;
+					var g2 = p.g;
+					var b2 = p.b;
+					var a2 = p.a;
+					var this17 = _this2.tmp;
+					if(this17.pos == this17.array.length) {
+						var newSize16 = this17.array.length << 1;
+						if(newSize16 < 128) {
+							newSize16 = 128;
+						}
+						var newArray16 = new Float32Array(newSize16);
+						newArray16.set(this17.array);
+						this17.array = newArray16;
+					}
+					this17.array[this17.pos++] = x2;
+					var this18 = _this2.tmp;
+					if(this18.pos == this18.array.length) {
+						var newSize17 = this18.array.length << 1;
+						if(newSize17 < 128) {
+							newSize17 = 128;
+						}
+						var newArray17 = new Float32Array(newSize17);
+						newArray17.set(this18.array);
+						this18.array = newArray17;
+					}
+					this18.array[this18.pos++] = y2;
+					var this19 = _this2.tmp;
+					if(this19.pos == this19.array.length) {
+						var newSize18 = this19.array.length << 1;
+						if(newSize18 < 128) {
+							newSize18 = 128;
+						}
+						var newArray18 = new Float32Array(newSize18);
+						newArray18.set(this19.array);
+						this19.array = newArray18;
+					}
+					this19.array[this19.pos++] = 0;
+					var this20 = _this2.tmp;
+					if(this20.pos == this20.array.length) {
+						var newSize19 = this20.array.length << 1;
+						if(newSize19 < 128) {
+							newSize19 = 128;
+						}
+						var newArray19 = new Float32Array(newSize19);
+						newArray19.set(this20.array);
+						this20.array = newArray19;
+					}
+					this20.array[this20.pos++] = 0;
+					var this21 = _this2.tmp;
+					if(this21.pos == this21.array.length) {
+						var newSize20 = this21.array.length << 1;
+						if(newSize20 < 128) {
+							newSize20 = 128;
+						}
+						var newArray20 = new Float32Array(newSize20);
+						newArray20.set(this21.array);
+						this21.array = newArray20;
+					}
+					this21.array[this21.pos++] = r2;
+					var this22 = _this2.tmp;
+					if(this22.pos == this22.array.length) {
+						var newSize21 = this22.array.length << 1;
+						if(newSize21 < 128) {
+							newSize21 = 128;
+						}
+						var newArray21 = new Float32Array(newSize21);
+						newArray21.set(this22.array);
+						this22.array = newArray21;
+					}
+					this22.array[this22.pos++] = g2;
+					var this23 = _this2.tmp;
+					if(this23.pos == this23.array.length) {
+						var newSize22 = this23.array.length << 1;
+						if(newSize22 < 128) {
+							newSize22 = 128;
+						}
+						var newArray22 = new Float32Array(newSize22);
+						newArray22.set(this23.array);
+						this23.array = newArray22;
+					}
+					this23.array[this23.pos++] = b2;
+					var this24 = _this2.tmp;
+					if(this24.pos == this24.array.length) {
+						var newSize23 = this24.array.length << 1;
+						if(newSize23 < 128) {
+							newSize23 = 128;
+						}
+						var newArray23 = new Float32Array(newSize23);
+						newArray23.set(this24.array);
+						this24.array = newArray23;
+					}
+					this24.array[this24.pos++] = a2;
+					var _this3 = this.content;
+					var x3 = p.x - nnx;
+					var y3 = p.y - nny;
+					var r3 = p.r;
+					var g3 = p.g;
+					var b3 = p.b;
+					var a3 = p.a;
+					var this25 = _this3.tmp;
+					if(this25.pos == this25.array.length) {
+						var newSize24 = this25.array.length << 1;
+						if(newSize24 < 128) {
+							newSize24 = 128;
+						}
+						var newArray24 = new Float32Array(newSize24);
+						newArray24.set(this25.array);
+						this25.array = newArray24;
+					}
+					this25.array[this25.pos++] = x3;
+					var this26 = _this3.tmp;
+					if(this26.pos == this26.array.length) {
+						var newSize25 = this26.array.length << 1;
+						if(newSize25 < 128) {
+							newSize25 = 128;
+						}
+						var newArray25 = new Float32Array(newSize25);
+						newArray25.set(this26.array);
+						this26.array = newArray25;
+					}
+					this26.array[this26.pos++] = y3;
+					var this27 = _this3.tmp;
+					if(this27.pos == this27.array.length) {
+						var newSize26 = this27.array.length << 1;
+						if(newSize26 < 128) {
+							newSize26 = 128;
+						}
+						var newArray26 = new Float32Array(newSize26);
+						newArray26.set(this27.array);
+						this27.array = newArray26;
+					}
+					this27.array[this27.pos++] = 0;
+					var this28 = _this3.tmp;
+					if(this28.pos == this28.array.length) {
+						var newSize27 = this28.array.length << 1;
+						if(newSize27 < 128) {
+							newSize27 = 128;
+						}
+						var newArray27 = new Float32Array(newSize27);
+						newArray27.set(this28.array);
+						this28.array = newArray27;
+					}
+					this28.array[this28.pos++] = 0;
+					var this29 = _this3.tmp;
+					if(this29.pos == this29.array.length) {
+						var newSize28 = this29.array.length << 1;
+						if(newSize28 < 128) {
+							newSize28 = 128;
+						}
+						var newArray28 = new Float32Array(newSize28);
+						newArray28.set(this29.array);
+						this29.array = newArray28;
+					}
+					this29.array[this29.pos++] = r3;
+					var this30 = _this3.tmp;
+					if(this30.pos == this30.array.length) {
+						var newSize29 = this30.array.length << 1;
+						if(newSize29 < 128) {
+							newSize29 = 128;
+						}
+						var newArray29 = new Float32Array(newSize29);
+						newArray29.set(this30.array);
+						this30.array = newArray29;
+					}
+					this30.array[this30.pos++] = g3;
+					var this31 = _this3.tmp;
+					if(this31.pos == this31.array.length) {
+						var newSize30 = this31.array.length << 1;
+						if(newSize30 < 128) {
+							newSize30 = 128;
+						}
+						var newArray30 = new Float32Array(newSize30);
+						newArray30.set(this31.array);
+						this31.array = newArray30;
+					}
+					this31.array[this31.pos++] = b3;
+					var this32 = _this3.tmp;
+					if(this32.pos == this32.array.length) {
+						var newSize31 = this32.array.length << 1;
+						if(newSize31 < 128) {
+							newSize31 = 128;
+						}
+						var newArray31 = new Float32Array(newSize31);
+						newArray31.set(this32.array);
+						this32.array = newArray31;
+					}
+					this32.array[this32.pos++] = a3;
+					var _this4 = this.content;
+					var x4 = p.x + nnx;
+					var y4 = p.y + nny;
+					var r4 = p.r;
+					var g4 = p.g;
+					var b4 = p.b;
+					var a4 = p.a;
+					var this33 = _this4.tmp;
+					if(this33.pos == this33.array.length) {
+						var newSize32 = this33.array.length << 1;
+						if(newSize32 < 128) {
+							newSize32 = 128;
+						}
+						var newArray32 = new Float32Array(newSize32);
+						newArray32.set(this33.array);
+						this33.array = newArray32;
+					}
+					this33.array[this33.pos++] = x4;
+					var this34 = _this4.tmp;
+					if(this34.pos == this34.array.length) {
+						var newSize33 = this34.array.length << 1;
+						if(newSize33 < 128) {
+							newSize33 = 128;
+						}
+						var newArray33 = new Float32Array(newSize33);
+						newArray33.set(this34.array);
+						this34.array = newArray33;
+					}
+					this34.array[this34.pos++] = y4;
+					var this35 = _this4.tmp;
+					if(this35.pos == this35.array.length) {
+						var newSize34 = this35.array.length << 1;
+						if(newSize34 < 128) {
+							newSize34 = 128;
+						}
+						var newArray34 = new Float32Array(newSize34);
+						newArray34.set(this35.array);
+						this35.array = newArray34;
+					}
+					this35.array[this35.pos++] = 0;
+					var this36 = _this4.tmp;
+					if(this36.pos == this36.array.length) {
+						var newSize35 = this36.array.length << 1;
+						if(newSize35 < 128) {
+							newSize35 = 128;
+						}
+						var newArray35 = new Float32Array(newSize35);
+						newArray35.set(this36.array);
+						this36.array = newArray35;
+					}
+					this36.array[this36.pos++] = 0;
+					var this37 = _this4.tmp;
+					if(this37.pos == this37.array.length) {
+						var newSize36 = this37.array.length << 1;
+						if(newSize36 < 128) {
+							newSize36 = 128;
+						}
+						var newArray36 = new Float32Array(newSize36);
+						newArray36.set(this37.array);
+						this37.array = newArray36;
+					}
+					this37.array[this37.pos++] = r4;
+					var this38 = _this4.tmp;
+					if(this38.pos == this38.array.length) {
+						var newSize37 = this38.array.length << 1;
+						if(newSize37 < 128) {
+							newSize37 = 128;
+						}
+						var newArray37 = new Float32Array(newSize37);
+						newArray37.set(this38.array);
+						this38.array = newArray37;
+					}
+					this38.array[this38.pos++] = g4;
+					var this39 = _this4.tmp;
+					if(this39.pos == this39.array.length) {
+						var newSize38 = this39.array.length << 1;
+						if(newSize38 < 128) {
+							newSize38 = 128;
+						}
+						var newArray38 = new Float32Array(newSize38);
+						newArray38.set(this39.array);
+						this39.array = newArray38;
+					}
+					this39.array[this39.pos++] = b4;
+					var this40 = _this4.tmp;
+					if(this40.pos == this40.array.length) {
+						var newSize39 = this40.array.length << 1;
+						if(newSize39 < 128) {
+							newSize39 = 128;
+						}
+						var newArray39 = new Float32Array(newSize39);
+						newArray39.set(this40.array);
+						this40.array = newArray39;
+					}
+					this40.array[this40.pos++] = a4;
+					this.content.index.push(this.pindex);
+					this.content.index.push(pnext1);
+					this.content.index.push(this.pindex + 2);
+					this.content.index.push(this.pindex + 2);
+					this.content.index.push(pnext1);
+					this.content.index.push(pnext1 + 1);
+				} else {
+					var _this5 = this.content;
+					var x5 = p.x + nnx;
+					var y5 = p.y + nny;
+					var r5 = p.r;
+					var g5 = p.g;
+					var b5 = p.b;
+					var a5 = p.a;
+					var this41 = _this5.tmp;
+					if(this41.pos == this41.array.length) {
+						var newSize40 = this41.array.length << 1;
+						if(newSize40 < 128) {
+							newSize40 = 128;
+						}
+						var newArray40 = new Float32Array(newSize40);
+						newArray40.set(this41.array);
+						this41.array = newArray40;
+					}
+					this41.array[this41.pos++] = x5;
+					var this42 = _this5.tmp;
+					if(this42.pos == this42.array.length) {
+						var newSize41 = this42.array.length << 1;
+						if(newSize41 < 128) {
+							newSize41 = 128;
+						}
+						var newArray41 = new Float32Array(newSize41);
+						newArray41.set(this42.array);
+						this42.array = newArray41;
+					}
+					this42.array[this42.pos++] = y5;
+					var this43 = _this5.tmp;
+					if(this43.pos == this43.array.length) {
+						var newSize42 = this43.array.length << 1;
+						if(newSize42 < 128) {
+							newSize42 = 128;
+						}
+						var newArray42 = new Float32Array(newSize42);
+						newArray42.set(this43.array);
+						this43.array = newArray42;
+					}
+					this43.array[this43.pos++] = 0;
+					var this44 = _this5.tmp;
+					if(this44.pos == this44.array.length) {
+						var newSize43 = this44.array.length << 1;
+						if(newSize43 < 128) {
+							newSize43 = 128;
+						}
+						var newArray43 = new Float32Array(newSize43);
+						newArray43.set(this44.array);
+						this44.array = newArray43;
+					}
+					this44.array[this44.pos++] = 0;
+					var this45 = _this5.tmp;
+					if(this45.pos == this45.array.length) {
+						var newSize44 = this45.array.length << 1;
+						if(newSize44 < 128) {
+							newSize44 = 128;
+						}
+						var newArray44 = new Float32Array(newSize44);
+						newArray44.set(this45.array);
+						this45.array = newArray44;
+					}
+					this45.array[this45.pos++] = r5;
+					var this46 = _this5.tmp;
+					if(this46.pos == this46.array.length) {
+						var newSize45 = this46.array.length << 1;
+						if(newSize45 < 128) {
+							newSize45 = 128;
+						}
+						var newArray45 = new Float32Array(newSize45);
+						newArray45.set(this46.array);
+						this46.array = newArray45;
+					}
+					this46.array[this46.pos++] = g5;
+					var this47 = _this5.tmp;
+					if(this47.pos == this47.array.length) {
+						var newSize46 = this47.array.length << 1;
+						if(newSize46 < 128) {
+							newSize46 = 128;
+						}
+						var newArray46 = new Float32Array(newSize46);
+						newArray46.set(this47.array);
+						this47.array = newArray46;
+					}
+					this47.array[this47.pos++] = b5;
+					var this48 = _this5.tmp;
+					if(this48.pos == this48.array.length) {
+						var newSize47 = this48.array.length << 1;
+						if(newSize47 < 128) {
+							newSize47 = 128;
+						}
+						var newArray47 = new Float32Array(newSize47);
+						newArray47.set(this48.array);
+						this48.array = newArray47;
+					}
+					this48.array[this48.pos++] = a5;
+					var _this6 = this.content;
+					var x6 = p.x - nx;
+					var y6 = p.y - ny;
+					var r6 = p.r;
+					var g6 = p.g;
+					var b6 = p.b;
+					var a6 = p.a;
+					var this49 = _this6.tmp;
+					if(this49.pos == this49.array.length) {
+						var newSize48 = this49.array.length << 1;
+						if(newSize48 < 128) {
+							newSize48 = 128;
+						}
+						var newArray48 = new Float32Array(newSize48);
+						newArray48.set(this49.array);
+						this49.array = newArray48;
+					}
+					this49.array[this49.pos++] = x6;
+					var this50 = _this6.tmp;
+					if(this50.pos == this50.array.length) {
+						var newSize49 = this50.array.length << 1;
+						if(newSize49 < 128) {
+							newSize49 = 128;
+						}
+						var newArray49 = new Float32Array(newSize49);
+						newArray49.set(this50.array);
+						this50.array = newArray49;
+					}
+					this50.array[this50.pos++] = y6;
+					var this51 = _this6.tmp;
+					if(this51.pos == this51.array.length) {
+						var newSize50 = this51.array.length << 1;
+						if(newSize50 < 128) {
+							newSize50 = 128;
+						}
+						var newArray50 = new Float32Array(newSize50);
+						newArray50.set(this51.array);
+						this51.array = newArray50;
+					}
+					this51.array[this51.pos++] = 0;
+					var this52 = _this6.tmp;
+					if(this52.pos == this52.array.length) {
+						var newSize51 = this52.array.length << 1;
+						if(newSize51 < 128) {
+							newSize51 = 128;
+						}
+						var newArray51 = new Float32Array(newSize51);
+						newArray51.set(this52.array);
+						this52.array = newArray51;
+					}
+					this52.array[this52.pos++] = 0;
+					var this53 = _this6.tmp;
+					if(this53.pos == this53.array.length) {
+						var newSize52 = this53.array.length << 1;
+						if(newSize52 < 128) {
+							newSize52 = 128;
+						}
+						var newArray52 = new Float32Array(newSize52);
+						newArray52.set(this53.array);
+						this53.array = newArray52;
+					}
+					this53.array[this53.pos++] = r6;
+					var this54 = _this6.tmp;
+					if(this54.pos == this54.array.length) {
+						var newSize53 = this54.array.length << 1;
+						if(newSize53 < 128) {
+							newSize53 = 128;
+						}
+						var newArray53 = new Float32Array(newSize53);
+						newArray53.set(this54.array);
+						this54.array = newArray53;
+					}
+					this54.array[this54.pos++] = g6;
+					var this55 = _this6.tmp;
+					if(this55.pos == this55.array.length) {
+						var newSize54 = this55.array.length << 1;
+						if(newSize54 < 128) {
+							newSize54 = 128;
+						}
+						var newArray54 = new Float32Array(newSize54);
+						newArray54.set(this55.array);
+						this55.array = newArray54;
+					}
+					this55.array[this55.pos++] = b6;
+					var this56 = _this6.tmp;
+					if(this56.pos == this56.array.length) {
+						var newSize55 = this56.array.length << 1;
+						if(newSize55 < 128) {
+							newSize55 = 128;
+						}
+						var newArray55 = new Float32Array(newSize55);
+						newArray55.set(this56.array);
+						this56.array = newArray55;
+					}
+					this56.array[this56.pos++] = a6;
+					var _this7 = this.content;
+					var x7 = p.x - nnx;
+					var y7 = p.y - nny;
+					var r7 = p.r;
+					var g7 = p.g;
+					var b7 = p.b;
+					var a7 = p.a;
+					var this57 = _this7.tmp;
+					if(this57.pos == this57.array.length) {
+						var newSize56 = this57.array.length << 1;
+						if(newSize56 < 128) {
+							newSize56 = 128;
+						}
+						var newArray56 = new Float32Array(newSize56);
+						newArray56.set(this57.array);
+						this57.array = newArray56;
+					}
+					this57.array[this57.pos++] = x7;
+					var this58 = _this7.tmp;
+					if(this58.pos == this58.array.length) {
+						var newSize57 = this58.array.length << 1;
+						if(newSize57 < 128) {
+							newSize57 = 128;
+						}
+						var newArray57 = new Float32Array(newSize57);
+						newArray57.set(this58.array);
+						this58.array = newArray57;
+					}
+					this58.array[this58.pos++] = y7;
+					var this59 = _this7.tmp;
+					if(this59.pos == this59.array.length) {
+						var newSize58 = this59.array.length << 1;
+						if(newSize58 < 128) {
+							newSize58 = 128;
+						}
+						var newArray58 = new Float32Array(newSize58);
+						newArray58.set(this59.array);
+						this59.array = newArray58;
+					}
+					this59.array[this59.pos++] = 0;
+					var this60 = _this7.tmp;
+					if(this60.pos == this60.array.length) {
+						var newSize59 = this60.array.length << 1;
+						if(newSize59 < 128) {
+							newSize59 = 128;
+						}
+						var newArray59 = new Float32Array(newSize59);
+						newArray59.set(this60.array);
+						this60.array = newArray59;
+					}
+					this60.array[this60.pos++] = 0;
+					var this61 = _this7.tmp;
+					if(this61.pos == this61.array.length) {
+						var newSize60 = this61.array.length << 1;
+						if(newSize60 < 128) {
+							newSize60 = 128;
+						}
+						var newArray60 = new Float32Array(newSize60);
+						newArray60.set(this61.array);
+						this61.array = newArray60;
+					}
+					this61.array[this61.pos++] = r7;
+					var this62 = _this7.tmp;
+					if(this62.pos == this62.array.length) {
+						var newSize61 = this62.array.length << 1;
+						if(newSize61 < 128) {
+							newSize61 = 128;
+						}
+						var newArray61 = new Float32Array(newSize61);
+						newArray61.set(this62.array);
+						this62.array = newArray61;
+					}
+					this62.array[this62.pos++] = g7;
+					var this63 = _this7.tmp;
+					if(this63.pos == this63.array.length) {
+						var newSize62 = this63.array.length << 1;
+						if(newSize62 < 128) {
+							newSize62 = 128;
+						}
+						var newArray62 = new Float32Array(newSize62);
+						newArray62.set(this63.array);
+						this63.array = newArray62;
+					}
+					this63.array[this63.pos++] = b7;
+					var this64 = _this7.tmp;
+					if(this64.pos == this64.array.length) {
+						var newSize63 = this64.array.length << 1;
+						if(newSize63 < 128) {
+							newSize63 = 128;
+						}
+						var newArray63 = new Float32Array(newSize63);
+						newArray63.set(this64.array);
+						this64.array = newArray63;
+					}
+					this64.array[this64.pos++] = a7;
+					this.content.index.push(this.pindex + 1);
+					this.content.index.push(pnext1);
+					this.content.index.push(this.pindex + 2);
+					this.content.index.push(this.pindex + 1);
+					this.content.index.push(pnext1);
+					this.content.index.push(pnext1 + 1);
+				}
+				this.content.index.push(this.pindex);
+				this.content.index.push(this.pindex + 1);
+				this.content.index.push(this.pindex + 2);
+				this.pindex += 3;
+			}
+			prev = p;
+			p = next;
+		}
+	}
+	,flushFill: function(i0) {
+		if(this.tmpPoints.length < 3) {
+			return;
+		}
+		var pts = this.tmpPoints;
+		var p0 = pts[0];
+		var p1 = pts[pts.length - 1];
+		var last = null;
+		var tmp;
+		var f = p0.x - p1.x;
+		if((f < 0 ? -f : f) < 1e-9) {
+			var f1 = p0.y - p1.y;
+			tmp = (f1 < 0 ? -f1 : f1) < 1e-9;
+		} else {
+			tmp = false;
+		}
+		if(tmp) {
+			last = pts.pop();
+		}
+		if(this.isConvex(pts)) {
+			var _g = 1;
+			var _g1 = pts.length - 1;
+			while(_g < _g1) {
+				var i = _g++;
+				this.content.index.push(i0);
+				this.content.index.push(i0 + i);
+				this.content.index.push(i0 + i + 1);
+			}
+		} else {
+			var ear = h2d_Graphics.EARCUT;
+			if(ear == null) {
+				ear = new hxd_earcut_Earcut();
+				h2d_Graphics.EARCUT = ear;
+			}
+			var _g2 = 0;
+			var _g11 = ear.triangulate_h2d__Graphics_GPoint(pts);
+			while(_g2 < _g11.length) {
+				var i1 = _g11[_g2];
+				++_g2;
+				this.content.index.push(i1 + i0);
+			}
+		}
+		if(last != null) {
+			pts.push(last);
+		}
+	}
+	,flush: function() {
+		if(this.tmpPoints.length == 0) {
+			return;
+		}
+		if(this.doFill) {
+			this.flushFill(this.pindex);
+			this.pindex += this.tmpPoints.length;
+			if(this.content.next()) {
+				this.pindex = 0;
+			}
+		}
+		if(this.lineSize > 0) {
+			this.flushLine(this.pindex);
+			if(this.content.next()) {
+				this.pindex = 0;
+			}
+		}
+		this.tmpPoints = [];
+	}
+	,beginFill: function(color,alpha) {
+		if(alpha == null) {
+			alpha = 1.;
+		}
+		if(color == null) {
+			color = 0;
+		}
+		this.flush();
+		this.curA = alpha;
+		this.curR = (color >> 16 & 255) / 255.;
+		this.curG = (color >> 8 & 255) / 255.;
+		this.curB = (color & 255) / 255.;
+		this.doFill = true;
+	}
+	,beginTileFill: function(dx,dy,scaleX,scaleY,tile) {
+		this.beginFill(16777215);
+		if(dx == null) {
+			dx = 0;
+		}
+		if(dy == null) {
+			dy = 0;
+		}
+		if(tile != null) {
+			if(this.tile != null && tile.innerTex != this.tile.innerTex) {
+				var tex = this.tile.innerTex;
+				if(tex.width != 1 || tex.height != 1) {
+					throw new js__$Boot_HaxeError("All tiles must be of the same texture");
+				}
+				this.tile = tile;
+			}
+			if(this.tile == null) {
+				this.tile = tile;
+			}
+		} else {
+			tile = this.tile;
+		}
+		if(tile == null) {
+			throw new js__$Boot_HaxeError("Tile not specified");
+		}
+		if(scaleX == null) {
+			scaleX = 1;
+		}
+		if(scaleY == null) {
+			scaleY = 1;
+		}
+		dx -= tile.x;
+		dy -= tile.y;
+		var tex1 = tile.innerTex;
+		var pixWidth = 1 / tex1.width;
+		var pixHeight = 1 / tex1.height;
+		this.ma = pixWidth / scaleX;
+		this.mb = 0;
+		this.mc = 0;
+		this.md = pixHeight / scaleY;
+		this.mx = -dx * this.ma;
+		this.my = -dy * this.md;
+	}
+	,drawTile: function(x,y,tile) {
+		this.beginTileFill(x,y,null,null,tile);
+		this.drawRect(x,y,tile.width,tile.height);
+		this.endFill();
+	}
+	,lineStyle: function(size,color,alpha) {
+		if(alpha == null) {
+			alpha = 1.;
+		}
+		if(color == null) {
+			color = 0;
+		}
+		if(size == null) {
+			size = 0;
+		}
+		this.flush();
+		this.lineSize = size;
+		this.lineA = alpha;
+		this.lineR = (color >> 16 & 255) / 255.;
+		this.lineG = (color >> 8 & 255) / 255.;
+		this.lineB = (color & 255) / 255.;
+	}
+	,moveTo: function(x,y) {
+		this.flush();
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+	}
+	,endFill: function() {
+		this.flush();
+		this.doFill = false;
+	}
+	,setColor: function(color,alpha) {
+		if(alpha == null) {
+			alpha = 1.;
+		}
+		this.curA = alpha;
+		this.curR = (color >> 16 & 255) / 255.;
+		this.curG = (color >> 8 & 255) / 255.;
+		this.curB = (color & 255) / 255.;
+	}
+	,drawRect: function(x,y,w,h) {
+		this.flush();
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		var x1 = x + w;
+		this.addVertex(x1,y,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y * this.mc + this.mx,x1 * this.mb + y * this.md + this.my);
+		var x2 = x + w;
+		var y1 = y + h;
+		this.addVertex(x2,y1,this.curR,this.curG,this.curB,this.curA,x2 * this.ma + y1 * this.mc + this.mx,x2 * this.mb + y1 * this.md + this.my);
+		var y2 = y + h;
+		this.addVertex(x,y2,this.curR,this.curG,this.curB,this.curA,x * this.ma + y2 * this.mc + this.mx,x * this.mb + y2 * this.md + this.my);
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		this.flush();
+	}
+	,drawRoundedRect: function(x,y,w,h,radius,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		var _gthis = this;
+		if(radius <= 0) {
+			this.drawRect(x,y,w,h);
+			return;
+		}
+		x += radius;
+		y += radius;
+		w -= radius * 2;
+		h -= radius * 2;
+		this.flush();
+		if(nsegments == 0) {
+			var f = radius * 1.5707963267948966 / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = 1.5707963267948966 / (nsegments - 1);
+		var y1 = y - radius;
+		this.addVertex(x,y1,this.curR,this.curG,this.curB,this.curA,x * this.ma + y1 * this.mc + this.mx,x * this.mb + y1 * this.md + this.my);
+		var x1 = x + w;
+		var y2 = y - radius;
+		this.addVertex(x1,y2,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y2 * this.mc + this.mx,x1 * this.mb + y2 * this.md + this.my);
+		var x2 = x + w;
+		var _g = 0;
+		var _g1 = nsegments;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle + 4.71238898038469;
+			var x3 = x2 + Math.cos(a) * radius;
+			var y3 = y + Math.sin(a) * radius;
+			_gthis.addVertex(x3,y3,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x3 * _gthis.ma + y3 * _gthis.mc + _gthis.mx,x3 * _gthis.mb + y3 * _gthis.md + _gthis.my);
+		}
+		var x4 = x + w + radius;
+		var y4 = y + h;
+		this.addVertex(x4,y4,this.curR,this.curG,this.curB,this.curA,x4 * this.ma + y4 * this.mc + this.mx,x4 * this.mb + y4 * this.md + this.my);
+		var x5 = x + w;
+		var y5 = y + h;
+		var _g2 = 0;
+		var _g11 = nsegments;
+		while(_g2 < _g11) {
+			var i1 = _g2++;
+			var a1 = i1 * angle;
+			var x6 = x5 + Math.cos(a1) * radius;
+			var y6 = y5 + Math.sin(a1) * radius;
+			_gthis.addVertex(x6,y6,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x6 * _gthis.ma + y6 * _gthis.mc + _gthis.mx,x6 * _gthis.mb + y6 * _gthis.md + _gthis.my);
+		}
+		var y7 = y + h + radius;
+		this.addVertex(x,y7,this.curR,this.curG,this.curB,this.curA,x * this.ma + y7 * this.mc + this.mx,x * this.mb + y7 * this.md + this.my);
+		var y8 = y + h;
+		var _g3 = 0;
+		var _g12 = nsegments;
+		while(_g3 < _g12) {
+			var i2 = _g3++;
+			var a2 = i2 * angle + 1.5707963267948966;
+			var x7 = x + Math.cos(a2) * radius;
+			var y9 = y8 + Math.sin(a2) * radius;
+			_gthis.addVertex(x7,y9,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x7 * _gthis.ma + y9 * _gthis.mc + _gthis.mx,x7 * _gthis.mb + y9 * _gthis.md + _gthis.my);
+		}
+		var x8 = x - radius;
+		this.addVertex(x8,y,this.curR,this.curG,this.curB,this.curA,x8 * this.ma + y * this.mc + this.mx,x8 * this.mb + y * this.md + this.my);
+		var _g4 = 0;
+		var _g13 = nsegments;
+		while(_g4 < _g13) {
+			var i3 = _g4++;
+			var a3 = i3 * angle + 3.1415926535897931;
+			var x9 = x + Math.cos(a3) * radius;
+			var y10 = y + Math.sin(a3) * radius;
+			_gthis.addVertex(x9,y10,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x9 * _gthis.ma + y10 * _gthis.mc + _gthis.mx,x9 * _gthis.mb + y10 * _gthis.md + _gthis.my);
+		}
+		this.flush();
+	}
+	,drawCircle: function(cx,cy,radius,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		this.flush();
+		if(nsegments == 0) {
+			var f = radius * 3.14 * 2 / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = 6.2831853071795862 / nsegments;
+		var _g = 0;
+		var _g1 = nsegments + 1;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle;
+			var x = cx + Math.cos(a) * radius;
+			var y = cy + Math.sin(a) * radius;
+			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		}
+		this.flush();
+	}
+	,drawEllipse: function(cx,cy,radiusX,radiusY,rotationAngle,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		if(rotationAngle == null) {
+			rotationAngle = 0;
+		}
+		this.flush();
+		if(nsegments == 0) {
+			var f = radiusY * 3.14 * 2 / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = 6.2831853071795862 / nsegments;
+		var x1;
+		var y1;
+		var _g = 0;
+		var _g1 = nsegments + 1;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle;
+			x1 = Math.cos(a) * Math.cos(rotationAngle) * radiusX - Math.sin(a) * Math.sin(rotationAngle) * radiusY;
+			y1 = Math.cos(rotationAngle) * Math.sin(a) * radiusY + Math.cos(a) * Math.sin(rotationAngle) * radiusX;
+			var x = cx + x1;
+			var y = cy + y1;
+			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		}
+		this.flush();
+	}
+	,drawPie: function(cx,cy,radius,angleStart,angleLength,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		if((angleLength < 0 ? -angleLength : angleLength) >= 6.2831853071795862) {
+			this.drawCircle(cx,cy,radius,nsegments);
+			return;
+		}
+		this.flush();
+		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
+		if(nsegments == 0) {
+			var f = radius * angleLength / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = angleLength / (nsegments - 1);
+		var _g = 0;
+		var _g1 = nsegments;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle + angleStart;
+			var x = cx + Math.cos(a) * radius;
+			var y = cy + Math.sin(a) * radius;
+			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		}
+		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
+		this.flush();
+	}
+	,lineTo: function(x,y) {
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+	}
+	,addVertex: function(x,y,r,g,b,a,u,v) {
+		if(v == null) {
+			v = 0.;
+		}
+		if(u == null) {
+			u = 0.;
+		}
+		if(x < this.xMin) {
+			this.xMin = x;
+		}
+		if(y < this.yMin) {
+			this.yMin = y;
+		}
+		if(x > this.xMax) {
+			this.xMax = x;
+		}
+		if(y > this.yMax) {
+			this.yMax = y;
+		}
+		if(this.doFill) {
+			var _this = this.content;
+			var this1 = _this.tmp;
+			if(this1.pos == this1.array.length) {
+				var newSize = this1.array.length << 1;
+				if(newSize < 128) {
+					newSize = 128;
+				}
+				var newArray = new Float32Array(newSize);
+				newArray.set(this1.array);
+				this1.array = newArray;
+			}
+			this1.array[this1.pos++] = x;
+			var this2 = _this.tmp;
+			if(this2.pos == this2.array.length) {
+				var newSize1 = this2.array.length << 1;
+				if(newSize1 < 128) {
+					newSize1 = 128;
+				}
+				var newArray1 = new Float32Array(newSize1);
+				newArray1.set(this2.array);
+				this2.array = newArray1;
+			}
+			this2.array[this2.pos++] = y;
+			var this3 = _this.tmp;
+			if(this3.pos == this3.array.length) {
+				var newSize2 = this3.array.length << 1;
+				if(newSize2 < 128) {
+					newSize2 = 128;
+				}
+				var newArray2 = new Float32Array(newSize2);
+				newArray2.set(this3.array);
+				this3.array = newArray2;
+			}
+			this3.array[this3.pos++] = u;
+			var this4 = _this.tmp;
+			if(this4.pos == this4.array.length) {
+				var newSize3 = this4.array.length << 1;
+				if(newSize3 < 128) {
+					newSize3 = 128;
+				}
+				var newArray3 = new Float32Array(newSize3);
+				newArray3.set(this4.array);
+				this4.array = newArray3;
+			}
+			this4.array[this4.pos++] = v;
+			var this5 = _this.tmp;
+			if(this5.pos == this5.array.length) {
+				var newSize4 = this5.array.length << 1;
+				if(newSize4 < 128) {
+					newSize4 = 128;
+				}
+				var newArray4 = new Float32Array(newSize4);
+				newArray4.set(this5.array);
+				this5.array = newArray4;
+			}
+			this5.array[this5.pos++] = r;
+			var this6 = _this.tmp;
+			if(this6.pos == this6.array.length) {
+				var newSize5 = this6.array.length << 1;
+				if(newSize5 < 128) {
+					newSize5 = 128;
+				}
+				var newArray5 = new Float32Array(newSize5);
+				newArray5.set(this6.array);
+				this6.array = newArray5;
+			}
+			this6.array[this6.pos++] = g;
+			var this7 = _this.tmp;
+			if(this7.pos == this7.array.length) {
+				var newSize6 = this7.array.length << 1;
+				if(newSize6 < 128) {
+					newSize6 = 128;
+				}
+				var newArray6 = new Float32Array(newSize6);
+				newArray6.set(this7.array);
+				this7.array = newArray6;
+			}
+			this7.array[this7.pos++] = b;
+			var this8 = _this.tmp;
+			if(this8.pos == this8.array.length) {
+				var newSize7 = this8.array.length << 1;
+				if(newSize7 < 128) {
+					newSize7 = 128;
+				}
+				var newArray7 = new Float32Array(newSize7);
+				newArray7.set(this8.array);
+				this8.array = newArray7;
+			}
+			this8.array[this8.pos++] = a;
+		}
+		this.tmpPoints.push(new h2d__$Graphics_GPoint(x,y,this.lineR,this.lineG,this.lineB,this.lineA));
+	}
+	,draw: function(ctx) {
+		if(!ctx.beginDrawObject(this,this.tile.innerTex)) {
+			return;
+		}
+		this.content.render(ctx.engine);
+	}
+	,sync: function(ctx) {
+		h2d_Drawable.prototype.sync.call(this,ctx);
+		this.flush();
+		var _this = this.content;
+		if(_this.buffer == null || _this.buffer.isDisposed()) {
+			_this.alloc(h3d_Engine.CURRENT);
+		}
+	}
+	,__class__: h2d_Graphics
+});
 var h2d_Text = function(font,parent) {
 	this.realMaxWidth = -1;
 	this.constraintWidth = -1;
@@ -12588,6 +15011,348 @@ h2d_Scene.prototype = $extend(h2d_Layers.prototype,{
 	,__class__: h2d_Scene
 	,__properties__: $extend(h2d_Layers.prototype.__properties__,{set_renderer:"set_renderer",get_renderer:"get_renderer",set_defaultSmooth:"set_defaultSmooth",get_defaultSmooth:"get_defaultSmooth",set_zoom:"set_zoom",get_mouseY:"get_mouseY",get_mouseX:"get_mouseX"})
 });
+var h2d__$SpriteBatch_ElementsIterator = function(e) {
+	this.e = e;
+};
+$hxClasses["h2d._SpriteBatch.ElementsIterator"] = h2d__$SpriteBatch_ElementsIterator;
+h2d__$SpriteBatch_ElementsIterator.__name__ = "h2d._SpriteBatch.ElementsIterator";
+h2d__$SpriteBatch_ElementsIterator.prototype = {
+	hasNext: function() {
+		return this.e != null;
+	}
+	,next: function() {
+		var n = this.e;
+		this.e = this.e.next;
+		return n;
+	}
+	,__class__: h2d__$SpriteBatch_ElementsIterator
+};
+var h2d_BatchElement = function(t) {
+	this.x = 0;
+	this.y = 0;
+	this.r = 1;
+	this.g = 1;
+	this.b = 1;
+	this.a = 1;
+	this.rotation = 0;
+	this.scaleX = this.scaleY = 1;
+	this.visible = true;
+	this.t = t;
+};
+$hxClasses["h2d.BatchElement"] = h2d_BatchElement;
+h2d_BatchElement.__name__ = "h2d.BatchElement";
+h2d_BatchElement.prototype = {
+	set_scale: function(v) {
+		return this.scaleX = this.scaleY = v;
+	}
+	,get_alpha: function() {
+		return this.a;
+	}
+	,set_alpha: function(v) {
+		return this.a = v;
+	}
+	,update: function(et) {
+		return true;
+	}
+	,remove: function() {
+		if(this.batch != null) {
+			this.batch["delete"](this);
+		}
+	}
+	,__class__: h2d_BatchElement
+	,__properties__: {set_alpha:"set_alpha",get_alpha:"get_alpha",set_scale:"set_scale"}
+};
+var h2d_BasicElement = function(t) {
+	this.gravity = 0.;
+	this.friction = 1.;
+	this.vy = 0.;
+	this.vx = 0.;
+	h2d_BatchElement.call(this,t);
+};
+$hxClasses["h2d.BasicElement"] = h2d_BasicElement;
+h2d_BasicElement.__name__ = "h2d.BasicElement";
+h2d_BasicElement.__super__ = h2d_BatchElement;
+h2d_BasicElement.prototype = $extend(h2d_BatchElement.prototype,{
+	update: function(dt) {
+		this.vy += this.gravity * dt;
+		this.x += this.vx * dt;
+		this.y += this.vy * dt;
+		if(this.friction != 1) {
+			var p = Math.pow(this.friction,dt * 60);
+			this.vx *= p;
+			this.vy *= p;
+		}
+		return true;
+	}
+	,__class__: h2d_BasicElement
+});
+var h2d_SpriteBatch = function(t,parent) {
+	h2d_Drawable.call(this,parent);
+	this.tile = t;
+};
+$hxClasses["h2d.SpriteBatch"] = h2d_SpriteBatch;
+h2d_SpriteBatch.__name__ = "h2d.SpriteBatch";
+h2d_SpriteBatch.__super__ = h2d_Drawable;
+h2d_SpriteBatch.prototype = $extend(h2d_Drawable.prototype,{
+	add: function(e,before) {
+		if(before == null) {
+			before = false;
+		}
+		e.batch = this;
+		if(this.first == null) {
+			this.first = this.last = e;
+			e.prev = e.next = null;
+		} else if(before) {
+			e.prev = null;
+			e.next = this.first;
+			this.first.prev = e;
+			this.first = e;
+		} else {
+			this.last.next = e;
+			e.prev = this.last;
+			e.next = null;
+			this.last = e;
+		}
+		return e;
+	}
+	,clear: function() {
+		this.first = this.last = null;
+		this.flush();
+	}
+	,alloc: function(t) {
+		return this.add(new h2d_BatchElement(t));
+	}
+	,'delete': function(e) {
+		if(e.prev == null) {
+			if(this.first == e) {
+				this.first = e.next;
+			}
+		} else {
+			e.prev.next = e.next;
+		}
+		if(e.next == null) {
+			if(this.last == e) {
+				this.last = e.prev;
+			}
+		} else {
+			e.next.prev = e.prev;
+		}
+		e.batch = null;
+	}
+	,sync: function(ctx) {
+		h2d_Drawable.prototype.sync.call(this,ctx);
+		if(this.hasUpdate) {
+			var e = this.first;
+			while(e != null) {
+				if(!e.update(ctx.elapsedTime)) {
+					e.remove();
+				}
+				e = e.next;
+			}
+		}
+		this.flush();
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		var e = this.first;
+		while(e != null) {
+			var t = e.t;
+			if(this.hasRotationScale) {
+				var ca = Math.cos(e.rotation);
+				var sa = Math.sin(e.rotation);
+				var hx = t.width;
+				var hy = t.height;
+				var px = t.dx * e.scaleX;
+				var py = t.dy * e.scaleY;
+				var x = px * ca - py * sa + e.x;
+				var y = py * ca + px * sa + e.y;
+				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
+				var px1 = (t.dx + hx) * e.scaleX;
+				var py1 = t.dy * e.scaleY;
+				x = px1 * ca - py1 * sa + e.x;
+				y = py1 * ca + px1 * sa + e.y;
+				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
+				var px2 = t.dx * e.scaleX;
+				var py2 = (t.dy + hy) * e.scaleY;
+				x = px2 * ca - py2 * sa + e.x;
+				y = py2 * ca + px2 * sa + e.y;
+				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
+				var px3 = (t.dx + hx) * e.scaleX;
+				var py3 = (t.dy + hy) * e.scaleY;
+				x = px3 * ca - py3 * sa + e.x;
+				y = py3 * ca + px3 * sa + e.y;
+				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
+			} else {
+				this.addBounds(relativeTo,out,e.x + t.dx,e.y + t.dy,t.width,t.height);
+			}
+			e = e.next;
+		}
+	}
+	,flush: function() {
+		if(this.first == null) {
+			this.bufferVertices = 0;
+			return;
+		}
+		if(this.tmpBuf == null) {
+			var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+			this.tmpBuf = this1;
+		}
+		var pos = 0;
+		var e = this.first;
+		var tmp = this.tmpBuf;
+		while(e != null) {
+			if(!e.visible) {
+				e = e.next;
+				continue;
+			}
+			var t = e.t;
+			var _g = tmp.pos;
+			var _g1 = pos + 32;
+			while(_g < _g1) {
+				var i = _g++;
+				if(tmp.pos == tmp.array.length) {
+					var newSize = tmp.array.length << 1;
+					if(newSize < 128) {
+						newSize = 128;
+					}
+					var newArray = new Float32Array(newSize);
+					newArray.set(tmp.array);
+					tmp.array = newArray;
+				}
+				tmp.array[tmp.pos++] = 0.;
+			}
+			var r = e.r;
+			var g = e.g;
+			var b = e.b;
+			var a = e.a;
+			var u = t.u;
+			var v = t.v;
+			var u2 = t.u2;
+			var v2 = t.v2;
+			if(this.hasRotationScale) {
+				var ca = Math.cos(e.rotation);
+				var sa = Math.sin(e.rotation);
+				var hx = t.width;
+				var hy = t.height;
+				var px = t.dx * e.scaleX;
+				var py = t.dy * e.scaleY;
+				tmp.array[pos++] = px * ca - py * sa + e.x;
+				tmp.array[pos++] = py * ca + px * sa + e.y;
+				tmp.array[pos++] = u;
+				tmp.array[pos++] = v;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				var px1 = (t.dx + hx) * e.scaleX;
+				var py1 = t.dy * e.scaleY;
+				tmp.array[pos++] = px1 * ca - py1 * sa + e.x;
+				tmp.array[pos++] = py1 * ca + px1 * sa + e.y;
+				tmp.array[pos++] = u2;
+				tmp.array[pos++] = v;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				var px2 = t.dx * e.scaleX;
+				var py2 = (t.dy + hy) * e.scaleY;
+				tmp.array[pos++] = px2 * ca - py2 * sa + e.x;
+				tmp.array[pos++] = py2 * ca + px2 * sa + e.y;
+				tmp.array[pos++] = u;
+				tmp.array[pos++] = v2;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				var px3 = (t.dx + hx) * e.scaleX;
+				var py3 = (t.dy + hy) * e.scaleY;
+				tmp.array[pos++] = px3 * ca - py3 * sa + e.x;
+				tmp.array[pos++] = py3 * ca + px3 * sa + e.y;
+				tmp.array[pos++] = u2;
+				tmp.array[pos++] = v2;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+			} else {
+				var sx = e.x + t.dx;
+				var sy = e.y + t.dy;
+				tmp.array[pos++] = sx;
+				tmp.array[pos++] = sy;
+				tmp.array[pos++] = u;
+				tmp.array[pos++] = v;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				tmp.array[pos++] = sx + t.width + 0.1;
+				tmp.array[pos++] = sy;
+				tmp.array[pos++] = u2;
+				tmp.array[pos++] = v;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				tmp.array[pos++] = sx;
+				tmp.array[pos++] = sy + t.height + 0.1;
+				tmp.array[pos++] = u;
+				tmp.array[pos++] = v2;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				tmp.array[pos++] = sx + t.width + 0.1;
+				tmp.array[pos++] = sy + t.height + 0.1;
+				tmp.array[pos++] = u2;
+				tmp.array[pos++] = v2;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+			}
+			e = e.next;
+		}
+		this.bufferVertices = pos >> 3;
+		if(this.buffer != null && !this.buffer.isDisposed()) {
+			if(this.buffer.vertices >= this.bufferVertices) {
+				this.buffer.uploadVector(this.tmpBuf,0,this.bufferVertices);
+				return;
+			}
+			this.buffer.dispose();
+			this.buffer = null;
+		}
+		if(this.bufferVertices > 0) {
+			this.buffer = h3d_Buffer.ofSubFloats(this.tmpBuf,8,this.bufferVertices,[h3d_BufferFlag.Dynamic,h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat]);
+		}
+	}
+	,draw: function(ctx) {
+		this.drawWith(ctx,this);
+	}
+	,drawWith: function(ctx,obj) {
+		if(this.first == null || this.buffer == null || this.buffer.isDisposed() || this.bufferVertices == 0) {
+			return;
+		}
+		if(!ctx.beginDrawObject(obj,this.tile.innerTex)) {
+			return;
+		}
+		var _this = ctx.engine;
+		_this.renderBuffer(this.buffer,_this.mem.quadIndexes,2,0,this.bufferVertices >> 1);
+	}
+	,isEmpty: function() {
+		return this.first == null;
+	}
+	,getElements: function() {
+		return new h2d__$SpriteBatch_ElementsIterator(this.first);
+	}
+	,onRemove: function() {
+		h2d_Drawable.prototype.onRemove.call(this);
+		if(this.buffer != null) {
+			this.buffer.dispose();
+			this.buffer = null;
+		}
+	}
+	,__class__: h2d_SpriteBatch
+});
 var h2d_Align = $hxEnums["h2d.Align"] = { __ename__ : true, __constructs__ : ["Left","Right","Center","MultilineRight","MultilineCenter"]
 	,Left: {_hx_index:0,__enum__:"h2d.Align",toString:$estr}
 	,Right: {_hx_index:1,__enum__:"h2d.Align",toString:$estr}
@@ -13371,76 +16136,6 @@ h2d_Tile.prototype = {
 		this.innerTex.uploadBitmap(bmp);
 	}
 	,__class__: h2d_Tile
-};
-var hxd_impl__$Serializable_NoSerializeSupport = function() { };
-$hxClasses["hxd.impl._Serializable.NoSerializeSupport"] = hxd_impl__$Serializable_NoSerializeSupport;
-hxd_impl__$Serializable_NoSerializeSupport.__name__ = "hxd.impl._Serializable.NoSerializeSupport";
-var h3d_prim_Primitive = function() { };
-$hxClasses["h3d.prim.Primitive"] = h3d_prim_Primitive;
-h3d_prim_Primitive.__name__ = "h3d.prim.Primitive";
-h3d_prim_Primitive.__interfaces__ = [hxd_impl__$Serializable_NoSerializeSupport];
-h3d_prim_Primitive.prototype = {
-	triCount: function() {
-		if(this.indexes != null) {
-			return this.indexes.count / 3 | 0;
-		} else if(this.buffer == null) {
-			return 0;
-		} else {
-			return this.buffer.totalVertices() / 3 | 0;
-		}
-	}
-	,vertexCount: function() {
-		return 0;
-	}
-	,getCollider: function() {
-		throw new js__$Boot_HaxeError("not implemented for " + Std.string(this));
-	}
-	,getBounds: function() {
-		throw new js__$Boot_HaxeError("not implemented for " + Std.string(this));
-	}
-	,alloc: function(engine) {
-		throw new js__$Boot_HaxeError("not implemented");
-	}
-	,selectMaterial: function(material) {
-	}
-	,buildNormalsDisplay: function() {
-		throw new js__$Boot_HaxeError("not implemented for " + Std.string(this));
-	}
-	,render: function(engine) {
-		if(this.buffer == null || this.buffer.isDisposed()) {
-			this.alloc(engine);
-		}
-		if(this.indexes == null) {
-			if((this.buffer.flags & 1 << h3d_BufferFlag.Quads._hx_index) != 0) {
-				engine.renderBuffer(this.buffer,engine.mem.quadIndexes,2,0,-1);
-			} else {
-				engine.renderBuffer(this.buffer,engine.mem.triIndexes,3,0,-1);
-			}
-		} else {
-			engine.renderIndexed(this.buffer,this.indexes);
-		}
-	}
-	,dispose: function() {
-		if(this.buffer != null) {
-			this.buffer.dispose();
-			this.buffer = null;
-		}
-		if(this.indexes != null) {
-			this.indexes.dispose();
-			this.indexes = null;
-		}
-	}
-	,toString: function() {
-		var c = js_Boot.getClass(this);
-		return c.__name__.split(".").pop();
-	}
-	,customSerialize: function(ctx) {
-		throw new js__$Boot_HaxeError("Cannot serialize " + this.toString());
-	}
-	,customUnserialize: function(ctx) {
-		throw new js__$Boot_HaxeError("customUnserialize not implemented on " + this.toString());
-	}
-	,__class__: h3d_prim_Primitive
 };
 var h2d__$TileGroup_TileLayerContent = function() {
 	this.clear();
@@ -47314,6 +50009,1055 @@ hxd_System.get_allowTimeout = function() {
 hxd_System.set_allowTimeout = function(b) {
 	return false;
 };
+var hxd_earcut_EarNode = function() {
+};
+$hxClasses["hxd.earcut.EarNode"] = hxd_earcut_EarNode;
+hxd_earcut_EarNode.__name__ = "hxd.earcut.EarNode";
+hxd_earcut_EarNode.prototype = {
+	__class__: hxd_earcut_EarNode
+};
+var hxd_earcut_Earcut = function() {
+};
+$hxClasses["hxd.earcut.Earcut"] = hxd_earcut_Earcut;
+hxd_earcut_Earcut.__name__ = "hxd.earcut.Earcut";
+hxd_earcut_Earcut.prototype = {
+	triangulate_h2d__Graphics_GPoint: function(points,holes) {
+		var hasHoles = holes != null && holes.length > 0;
+		var outerLen = hasHoles ? holes[0] : points.length;
+		if(outerLen < 3) {
+			return [];
+		}
+		var root = this.setLinkedList_triangulate_T(points,0,outerLen,true);
+		if(holes != null) {
+			root = this.eliminateHoles_triangulate_T(points,holes,root);
+		}
+		return this.triangulateNode(root,points.length > 80);
+	}
+	,eliminateHoles_triangulate_T: function(points,holes,root) {
+		var queue = [];
+		var _g = 0;
+		var _g1 = holes.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var s = holes[i];
+			var e = i == holes.length - 1 ? points.length : holes[i + 1];
+			var node = this.setLinkedList_eliminateHoles_T(points,s,e,false);
+			if(node == node.next) {
+				node.steiner = true;
+			}
+			queue.push(this.getLeftmost(node));
+		}
+		queue.sort($bind(this,this.compareX));
+		var _g2 = 0;
+		while(_g2 < queue.length) {
+			var q = queue[_g2];
+			++_g2;
+			this.eliminateHole(q,root);
+			root = this.filterPoints(root,root.next);
+		}
+		return root;
+	}
+	,setLinkedList_eliminateHoles_T: function(points,start,end,clockwise) {
+		var sum = 0.;
+		var j = end - 1;
+		var _g = start;
+		var _g1 = end;
+		while(_g < _g1) {
+			var i = _g++;
+			sum += (points[j].x - points[i].x) * (points[i].y + points[j].y);
+			j = i;
+		}
+		var n = this.cache;
+		if(n == null) {
+			n = new hxd_earcut_EarNode();
+			n.allocNext = this.allocated;
+			this.allocated = n;
+		} else {
+			this.cache = n.next;
+		}
+		n.i = -1;
+		n.z = -1;
+		n.x = 0;
+		n.y = 0;
+		n.next = null;
+		n.prev = null;
+		n.steiner = false;
+		n.prevZ = null;
+		n.nextZ = null;
+		var node = n;
+		var first = node;
+		if(clockwise == sum > 0) {
+			var _g2 = start;
+			var _g3 = end;
+			while(_g2 < _g3) {
+				var i1 = _g2++;
+				var p = points[i1];
+				var x = p.x;
+				var y = p.y;
+				var n1 = this.cache;
+				if(n1 == null) {
+					n1 = new hxd_earcut_EarNode();
+					n1.allocNext = this.allocated;
+					this.allocated = n1;
+				} else {
+					this.cache = n1.next;
+				}
+				n1.i = i1;
+				n1.z = -1;
+				n1.x = x;
+				n1.y = y;
+				n1.next = null;
+				n1.prev = node;
+				n1.steiner = false;
+				n1.prevZ = null;
+				n1.nextZ = null;
+				if(node != null) {
+					node.next = n1;
+				}
+				node = n1;
+			}
+		} else {
+			var i2 = end - 1;
+			while(i2 >= start) {
+				var p1 = points[i2];
+				var x1 = p1.x;
+				var y1 = p1.y;
+				var n2 = this.cache;
+				if(n2 == null) {
+					n2 = new hxd_earcut_EarNode();
+					n2.allocNext = this.allocated;
+					this.allocated = n2;
+				} else {
+					this.cache = n2.next;
+				}
+				n2.i = i2;
+				n2.z = -1;
+				n2.x = x1;
+				n2.y = y1;
+				n2.next = null;
+				n2.prev = node;
+				n2.steiner = false;
+				n2.prevZ = null;
+				n2.nextZ = null;
+				if(node != null) {
+					node.next = n2;
+				}
+				node = n2;
+				--i2;
+			}
+		}
+		node.next = first.next;
+		node.next.prev = node;
+		return node;
+	}
+	,setLinkedList_triangulate_T: function(points,start,end,clockwise) {
+		var sum = 0.;
+		var j = end - 1;
+		var _g = start;
+		var _g1 = end;
+		while(_g < _g1) {
+			var i = _g++;
+			sum += (points[j].x - points[i].x) * (points[i].y + points[j].y);
+			j = i;
+		}
+		var n = this.cache;
+		if(n == null) {
+			n = new hxd_earcut_EarNode();
+			n.allocNext = this.allocated;
+			this.allocated = n;
+		} else {
+			this.cache = n.next;
+		}
+		n.i = -1;
+		n.z = -1;
+		n.x = 0;
+		n.y = 0;
+		n.next = null;
+		n.prev = null;
+		n.steiner = false;
+		n.prevZ = null;
+		n.nextZ = null;
+		var node = n;
+		var first = node;
+		if(clockwise == sum > 0) {
+			var _g2 = start;
+			var _g3 = end;
+			while(_g2 < _g3) {
+				var i1 = _g2++;
+				var p = points[i1];
+				var x = p.x;
+				var y = p.y;
+				var n1 = this.cache;
+				if(n1 == null) {
+					n1 = new hxd_earcut_EarNode();
+					n1.allocNext = this.allocated;
+					this.allocated = n1;
+				} else {
+					this.cache = n1.next;
+				}
+				n1.i = i1;
+				n1.z = -1;
+				n1.x = x;
+				n1.y = y;
+				n1.next = null;
+				n1.prev = node;
+				n1.steiner = false;
+				n1.prevZ = null;
+				n1.nextZ = null;
+				if(node != null) {
+					node.next = n1;
+				}
+				node = n1;
+			}
+		} else {
+			var i2 = end - 1;
+			while(i2 >= start) {
+				var p1 = points[i2];
+				var x1 = p1.x;
+				var y1 = p1.y;
+				var n2 = this.cache;
+				if(n2 == null) {
+					n2 = new hxd_earcut_EarNode();
+					n2.allocNext = this.allocated;
+					this.allocated = n2;
+				} else {
+					this.cache = n2.next;
+				}
+				n2.i = i2;
+				n2.z = -1;
+				n2.x = x1;
+				n2.y = y1;
+				n2.next = null;
+				n2.prev = node;
+				n2.steiner = false;
+				n2.prevZ = null;
+				n2.nextZ = null;
+				if(node != null) {
+					node.next = n2;
+				}
+				node = n2;
+				--i2;
+			}
+		}
+		node.next = first.next;
+		node.next.prev = node;
+		return node;
+	}
+	,triangulateNode: function(root,useZOrder) {
+		this.triangles = [];
+		root = this.filterPoints(root);
+		if(useZOrder && root != null) {
+			var maxX = root.x;
+			this.minX = maxX;
+			var maxY = root.y;
+			this.minY = maxY;
+			var p = root.next;
+			while(p != root) {
+				var x = p.x;
+				var y = p.y;
+				if(x < this.minX) {
+					this.minX = x;
+				}
+				if(y < this.minY) {
+					this.minY = y;
+				}
+				if(x > maxX) {
+					maxX = x;
+				}
+				if(y > maxY) {
+					maxY = y;
+				}
+				p = p.next;
+			}
+			var a = maxX - this.minX;
+			var b = maxY - this.minY;
+			this.size = a < b ? b : a;
+			this.hasSize = true;
+		} else {
+			this.hasSize = false;
+		}
+		this.earcutLinked(root);
+		var result = this.triangles;
+		this.triangles = null;
+		var n = this.allocated;
+		if(this.cache != null) {
+			while(n != this.cache) n = n.allocNext;
+			n = n.allocNext;
+		}
+		while(n != null) {
+			n.next = this.cache;
+			this.cache = n;
+			n = n.allocNext;
+		}
+		return result;
+	}
+	,eliminateHole: function(hole,root) {
+		root = this.findHoleBridge(hole,root);
+		if(root != null) {
+			var b = this.splitPolygon(root,hole);
+			this.filterPoints(b,b.next);
+		}
+	}
+	,findHoleBridge: function(hole,root) {
+		var p = root;
+		var hx = hole.x;
+		var hy = hole.y;
+		var qx = -Infinity;
+		var m = null;
+		while(true) {
+			if(hy <= p.y && hy >= p.next.y) {
+				var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
+				if(x <= hx && x > qx) {
+					qx = x;
+					m = p.x < p.next.x ? p : p.next;
+				}
+			}
+			p = p.next;
+			if(!(p != root)) {
+				break;
+			}
+		}
+		if(m == null) {
+			return null;
+		}
+		var stop = m;
+		var tanMin = Infinity;
+		var tan;
+		p = m.next;
+		while(p != stop) {
+			var tmp;
+			if(hx >= p.x && p.x >= m.x) {
+				var ax = hy < m.y ? hx : qx;
+				var bx = m.x;
+				var by = m.y;
+				var cx = hy < m.y ? qx : hx;
+				var px = p.x;
+				var py = p.y;
+				tmp = (cx - px) * (hy - py) - (ax - px) * (hy - py) >= 0 && (ax - px) * (by - py) - (bx - px) * (hy - py) >= 0 && (bx - px) * (hy - py) - (cx - px) * (by - py) >= 0;
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				var f = hy - p.y;
+				tan = (f < 0 ? -f : f) / (hx - p.x);
+				var tmp1;
+				if(tan < tanMin || tan == tanMin && p.x > m.x) {
+					var p1 = p.prev;
+					var r = p.next;
+					if((p.y - p1.y) * (r.x - p.x) - (p.x - p1.x) * (r.y - p.y) < 0) {
+						var r1 = p.next;
+						if((hole.y - p.y) * (r1.x - hole.x) - (hole.x - p.x) * (r1.y - hole.y) >= 0) {
+							var q = p.prev;
+							tmp1 = (q.y - p.y) * (hole.x - q.x) - (q.x - p.x) * (hole.y - q.y) >= 0;
+						} else {
+							tmp1 = false;
+						}
+					} else {
+						var r2 = p.prev;
+						if(!((hole.y - p.y) * (r2.x - hole.x) - (hole.x - p.x) * (r2.y - hole.y) < 0)) {
+							var q1 = p.next;
+							tmp1 = (q1.y - p.y) * (hole.x - q1.x) - (q1.x - p.x) * (hole.y - q1.y) < 0;
+						} else {
+							tmp1 = true;
+						}
+					}
+				} else {
+					tmp1 = false;
+				}
+				if(tmp1) {
+					m = p;
+					tanMin = tan;
+				}
+			}
+			p = p.next;
+		}
+		return m;
+	}
+	,getLeftmost: function(node) {
+		var p = node;
+		var leftmost = node;
+		while(true) {
+			if(p.x < leftmost.x) {
+				leftmost = p;
+			}
+			p = p.next;
+			if(!(p != node)) {
+				break;
+			}
+		}
+		return leftmost;
+	}
+	,compareX: function(a,b) {
+		if(a.x - b.x > 0) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+	,equals: function(p1,p2) {
+		if(p1.x == p2.x) {
+			return p1.y == p2.y;
+		} else {
+			return false;
+		}
+	}
+	,area: function(p,q,r) {
+		return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+	}
+	,intersects: function(p1,q1,p2,q2) {
+		if((q1.y - p1.y) * (p2.x - q1.x) - (q1.x - p1.x) * (p2.y - q1.y) > 0 != (q1.y - p1.y) * (q2.x - q1.x) - (q1.x - p1.x) * (q2.y - q1.y) > 0) {
+			return (q2.y - p2.y) * (p1.x - q2.x) - (q2.x - p2.x) * (p1.y - q2.y) > 0 != (q2.y - p2.y) * (q1.x - q2.x) - (q2.x - p2.x) * (q1.y - q2.y) > 0;
+		} else {
+			return false;
+		}
+	}
+	,locallyInside: function(a,b) {
+		var p = a.prev;
+		var r = a.next;
+		if((a.y - p.y) * (r.x - a.x) - (a.x - p.x) * (r.y - a.y) < 0) {
+			var r1 = a.next;
+			if((b.y - a.y) * (r1.x - b.x) - (b.x - a.x) * (r1.y - b.y) >= 0) {
+				var q = a.prev;
+				return (q.y - a.y) * (b.x - q.x) - (q.x - a.x) * (b.y - q.y) >= 0;
+			} else {
+				return false;
+			}
+		} else {
+			var r2 = a.prev;
+			if(!((b.y - a.y) * (r2.x - b.x) - (b.x - a.x) * (r2.y - b.y) < 0)) {
+				var q1 = a.next;
+				return (q1.y - a.y) * (b.x - q1.x) - (q1.x - a.x) * (b.y - q1.y) < 0;
+			} else {
+				return true;
+			}
+		}
+	}
+	,filterPoints: function(start,end) {
+		if(start == null) {
+			return start;
+		}
+		if(end == null) {
+			end = start;
+		}
+		var p = start;
+		var again;
+		while(true) {
+			again = false;
+			var tmp;
+			if(!p.steiner) {
+				var p2 = p.next;
+				if(!(p.x == p2.x && p.y == p2.y)) {
+					var p1 = p.prev;
+					var r = p.next;
+					tmp = (p.y - p1.y) * (r.x - p.x) - (p.x - p1.x) * (r.y - p.y) == 0;
+				} else {
+					tmp = true;
+				}
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				p.next.prev = p.prev;
+				p.prev.next = p.next;
+				if(p.prevZ != null) {
+					p.prevZ.nextZ = p.nextZ;
+				}
+				if(p.nextZ != null) {
+					p.nextZ.prevZ = p.prevZ;
+				}
+				end = p.prev;
+				p = end;
+				if(p == p.next) {
+					return null;
+				}
+				again = true;
+			} else {
+				p = p.next;
+			}
+			if(!(again || p != end)) {
+				break;
+			}
+		}
+		return end;
+	}
+	,removeNode: function(p) {
+		p.next.prev = p.prev;
+		p.prev.next = p.next;
+		if(p.prevZ != null) {
+			p.prevZ.nextZ = p.nextZ;
+		}
+		if(p.nextZ != null) {
+			p.nextZ.prevZ = p.prevZ;
+		}
+	}
+	,allocNode: function(i,x,y,last) {
+		var n = this.cache;
+		if(n == null) {
+			n = new hxd_earcut_EarNode();
+			n.allocNext = this.allocated;
+			this.allocated = n;
+		} else {
+			this.cache = n.next;
+		}
+		n.i = i;
+		n.z = -1;
+		n.x = x;
+		n.y = y;
+		n.next = null;
+		n.prev = last;
+		n.steiner = false;
+		n.prevZ = null;
+		n.nextZ = null;
+		if(last != null) {
+			last.next = n;
+		}
+		return n;
+	}
+	,earcutLinked: function(ear,pass) {
+		if(pass == null) {
+			pass = 0;
+		}
+		if(ear == null) {
+			return;
+		}
+		if(pass == 0 && this.hasSize) {
+			this.indexCurve(ear);
+		}
+		var stop = ear;
+		var prev;
+		var next;
+		while(ear.prev != ear.next) {
+			prev = ear.prev;
+			next = ear.next;
+			if(this.hasSize ? this.isEarHashed(ear) : this.isEar(ear)) {
+				this.triangles.push(prev.i);
+				this.triangles.push(ear.i);
+				this.triangles.push(next.i);
+				ear.next.prev = ear.prev;
+				ear.prev.next = ear.next;
+				if(ear.prevZ != null) {
+					ear.prevZ.nextZ = ear.nextZ;
+				}
+				if(ear.nextZ != null) {
+					ear.nextZ.prevZ = ear.prevZ;
+				}
+				ear = next.next;
+				stop = next.next;
+				continue;
+			}
+			ear = next;
+			if(ear == stop) {
+				switch(pass) {
+				case 0:
+					this.earcutLinked(this.filterPoints(ear),1);
+					break;
+				case 1:
+					ear = this.cureLocalIntersections(ear);
+					this.earcutLinked(ear,2);
+					break;
+				case 2:
+					this.splitEarcut(ear);
+					break;
+				}
+				break;
+			}
+		}
+	}
+	,isEar: function(ear) {
+		var a = ear.prev;
+		var b = ear;
+		var c = ear.next;
+		if((b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y) >= 0) {
+			return false;
+		}
+		var p = ear.next.next;
+		while(p != ear.prev) {
+			var tmp;
+			var ax = a.x;
+			var ay = a.y;
+			var bx = b.x;
+			var by = b.y;
+			var cx = c.x;
+			var cy = c.y;
+			var px = p.x;
+			var py = p.y;
+			if((cx - px) * (ay - py) - (ax - px) * (cy - py) >= 0 && (ax - px) * (by - py) - (bx - px) * (ay - py) >= 0 && (bx - px) * (cy - py) - (cx - px) * (by - py) >= 0) {
+				var p1 = p.prev;
+				var r = p.next;
+				tmp = (p.y - p1.y) * (r.x - p.x) - (p.x - p1.x) * (r.y - p.y) >= 0;
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				return false;
+			}
+			p = p.next;
+		}
+		return true;
+	}
+	,isEarHashed: function(ear) {
+		var a = ear.prev;
+		var b = ear;
+		var c = ear.next;
+		if((b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y) >= 0) {
+			return false;
+		}
+		var minTX = a.x < b.x ? a.x < c.x ? a.x : c.x : b.x < c.x ? b.x : c.x;
+		var minTY = a.y < b.y ? a.y < c.y ? a.y : c.y : b.y < c.y ? b.y : c.y;
+		var maxTX = a.x > b.x ? a.x > c.x ? a.x : c.x : b.x > c.x ? b.x : c.x;
+		var maxTY = a.y > b.y ? a.y > c.y ? a.y : c.y : b.y > c.y ? b.y : c.y;
+		var x = 32767 * (minTX - this.minX) / this.size | 0;
+		var y = 32767 * (minTY - this.minY) / this.size | 0;
+		x = (x | x << 8) & 16711935;
+		x = (x | x << 4) & 252645135;
+		x = (x | x << 2) & 858993459;
+		x = (x | x << 1) & 1431655765;
+		y = (y | y << 8) & 16711935;
+		y = (y | y << 4) & 252645135;
+		y = (y | y << 2) & 858993459;
+		y = (y | y << 1) & 1431655765;
+		var minZ = x | y << 1;
+		var x1 = 32767 * (maxTX - this.minX) / this.size | 0;
+		var y1 = 32767 * (maxTY - this.minY) / this.size | 0;
+		x1 = (x1 | x1 << 8) & 16711935;
+		x1 = (x1 | x1 << 4) & 252645135;
+		x1 = (x1 | x1 << 2) & 858993459;
+		x1 = (x1 | x1 << 1) & 1431655765;
+		y1 = (y1 | y1 << 8) & 16711935;
+		y1 = (y1 | y1 << 4) & 252645135;
+		y1 = (y1 | y1 << 2) & 858993459;
+		y1 = (y1 | y1 << 1) & 1431655765;
+		var maxZ = x1 | y1 << 1;
+		var p = ear.nextZ;
+		while(p != null && p.z <= maxZ) {
+			var tmp;
+			var tmp1;
+			if(p != ear.prev && p != ear.next) {
+				var ax = a.x;
+				var ay = a.y;
+				var bx = b.x;
+				var by = b.y;
+				var cx = c.x;
+				var cy = c.y;
+				var px = p.x;
+				var py = p.y;
+				tmp1 = (cx - px) * (ay - py) - (ax - px) * (cy - py) >= 0 && (ax - px) * (by - py) - (bx - px) * (ay - py) >= 0 && (bx - px) * (cy - py) - (cx - px) * (by - py) >= 0;
+			} else {
+				tmp1 = false;
+			}
+			if(tmp1) {
+				var p1 = p.prev;
+				var r = p.next;
+				tmp = (p.y - p1.y) * (r.x - p.x) - (p.x - p1.x) * (r.y - p.y) >= 0;
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				return false;
+			}
+			p = p.nextZ;
+		}
+		p = ear.prevZ;
+		while(p != null && p.z >= minZ) {
+			var tmp2;
+			var tmp3;
+			if(p != ear.prev && p != ear.next) {
+				var ax1 = a.x;
+				var ay1 = a.y;
+				var bx1 = b.x;
+				var by1 = b.y;
+				var cx1 = c.x;
+				var cy1 = c.y;
+				var px1 = p.x;
+				var py1 = p.y;
+				tmp3 = (cx1 - px1) * (ay1 - py1) - (ax1 - px1) * (cy1 - py1) >= 0 && (ax1 - px1) * (by1 - py1) - (bx1 - px1) * (ay1 - py1) >= 0 && (bx1 - px1) * (cy1 - py1) - (cx1 - px1) * (by1 - py1) >= 0;
+			} else {
+				tmp3 = false;
+			}
+			if(tmp3) {
+				var p2 = p.prev;
+				var r1 = p.next;
+				tmp2 = (p.y - p2.y) * (r1.x - p.x) - (p.x - p2.x) * (r1.y - p.y) >= 0;
+			} else {
+				tmp2 = false;
+			}
+			if(tmp2) {
+				return false;
+			}
+			p = p.prevZ;
+		}
+		return true;
+	}
+	,cureLocalIntersections: function(start) {
+		var p = start;
+		while(true) {
+			var a = p.prev;
+			var b = p.next.next;
+			var tmp;
+			var tmp1;
+			var p2 = p.next;
+			if((p.y - a.y) * (p2.x - p.x) - (p.x - a.x) * (p2.y - p.y) > 0 != (p.y - a.y) * (b.x - p.x) - (p.x - a.x) * (b.y - p.y) > 0 && (b.y - p2.y) * (a.x - b.x) - (b.x - p2.x) * (a.y - b.y) > 0 != (b.y - p2.y) * (p.x - b.x) - (b.x - p2.x) * (p.y - b.y) > 0) {
+				var p1 = a.prev;
+				var r = a.next;
+				if((a.y - p1.y) * (r.x - a.x) - (a.x - p1.x) * (r.y - a.y) < 0) {
+					var r1 = a.next;
+					if((b.y - a.y) * (r1.x - b.x) - (b.x - a.x) * (r1.y - b.y) >= 0) {
+						var q = a.prev;
+						tmp1 = (q.y - a.y) * (b.x - q.x) - (q.x - a.x) * (b.y - q.y) >= 0;
+					} else {
+						tmp1 = false;
+					}
+				} else {
+					var r2 = a.prev;
+					if(!((b.y - a.y) * (r2.x - b.x) - (b.x - a.x) * (r2.y - b.y) < 0)) {
+						var q1 = a.next;
+						tmp1 = (q1.y - a.y) * (b.x - q1.x) - (q1.x - a.x) * (b.y - q1.y) < 0;
+					} else {
+						tmp1 = true;
+					}
+				}
+			} else {
+				tmp1 = false;
+			}
+			if(tmp1) {
+				var p3 = b.prev;
+				var r3 = b.next;
+				if((b.y - p3.y) * (r3.x - b.x) - (b.x - p3.x) * (r3.y - b.y) < 0) {
+					var r4 = b.next;
+					if((a.y - b.y) * (r4.x - a.x) - (a.x - b.x) * (r4.y - a.y) >= 0) {
+						var q2 = b.prev;
+						tmp = (q2.y - b.y) * (a.x - q2.x) - (q2.x - b.x) * (a.y - q2.y) >= 0;
+					} else {
+						tmp = false;
+					}
+				} else {
+					var r5 = b.prev;
+					if(!((a.y - b.y) * (r5.x - a.x) - (a.x - b.x) * (r5.y - a.y) < 0)) {
+						var q3 = b.next;
+						tmp = (q3.y - b.y) * (a.x - q3.x) - (q3.x - b.x) * (a.y - q3.y) < 0;
+					} else {
+						tmp = true;
+					}
+				}
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				this.triangles.push(a.i);
+				this.triangles.push(p.i);
+				this.triangles.push(b.i);
+				p.next.prev = p.prev;
+				p.prev.next = p.next;
+				if(p.prevZ != null) {
+					p.prevZ.nextZ = p.nextZ;
+				}
+				if(p.nextZ != null) {
+					p.nextZ.prevZ = p.prevZ;
+				}
+				var p4 = p.next;
+				p4.next.prev = p4.prev;
+				p4.prev.next = p4.next;
+				if(p4.prevZ != null) {
+					p4.prevZ.nextZ = p4.nextZ;
+				}
+				if(p4.nextZ != null) {
+					p4.nextZ.prevZ = p4.prevZ;
+				}
+				start = b;
+				p = start;
+			}
+			p = p.next;
+			if(!(p != start)) {
+				break;
+			}
+		}
+		return p;
+	}
+	,splitEarcut: function(start) {
+		var a = start;
+		while(true) {
+			var b = a.next.next;
+			while(b != a.prev) {
+				if(a.i != b.i && this.isValidDiagonal(a,b)) {
+					var c = this.splitPolygon(a,b);
+					a = this.filterPoints(a,a.next);
+					c = this.filterPoints(c,c.next);
+					this.earcutLinked(a);
+					this.earcutLinked(c);
+					return;
+				}
+				b = b.next;
+			}
+			a = a.next;
+			if(!(a != start)) {
+				break;
+			}
+		}
+	}
+	,splitPolygon: function(a,b) {
+		var i = a.i;
+		var x = a.x;
+		var y = a.y;
+		var n = this.cache;
+		if(n == null) {
+			n = new hxd_earcut_EarNode();
+			n.allocNext = this.allocated;
+			this.allocated = n;
+		} else {
+			this.cache = n.next;
+		}
+		n.i = i;
+		n.z = -1;
+		n.x = x;
+		n.y = y;
+		n.next = null;
+		n.prev = null;
+		n.steiner = false;
+		n.prevZ = null;
+		n.nextZ = null;
+		var a2 = n;
+		var i1 = b.i;
+		var x1 = b.x;
+		var y1 = b.y;
+		var n1 = this.cache;
+		if(n1 == null) {
+			n1 = new hxd_earcut_EarNode();
+			n1.allocNext = this.allocated;
+			this.allocated = n1;
+		} else {
+			this.cache = n1.next;
+		}
+		n1.i = i1;
+		n1.z = -1;
+		n1.x = x1;
+		n1.y = y1;
+		n1.next = null;
+		n1.prev = null;
+		n1.steiner = false;
+		n1.prevZ = null;
+		n1.nextZ = null;
+		var b2 = n1;
+		var an = a.next;
+		var bp = b.prev;
+		a.next = b;
+		b.prev = a;
+		a2.next = an;
+		an.prev = a2;
+		b2.next = a2;
+		a2.prev = b2;
+		bp.next = b2;
+		b2.prev = bp;
+		return b2;
+	}
+	,pointInTriangle: function(ax,ay,bx,by,cx,cy,px,py) {
+		if((cx - px) * (ay - py) - (ax - px) * (cy - py) >= 0 && (ax - px) * (by - py) - (bx - px) * (ay - py) >= 0) {
+			return (bx - px) * (cy - py) - (cx - px) * (by - py) >= 0;
+		} else {
+			return false;
+		}
+	}
+	,isValidDiagonal: function(a,b) {
+		if(!(a.x == b.x && a.y == b.y)) {
+			var tmp;
+			var tmp1;
+			if(a.next.i != b.i && a.prev.i != b.i && !this.intersectsPolygon(a,b)) {
+				var p = a.prev;
+				var r = a.next;
+				if((a.y - p.y) * (r.x - a.x) - (a.x - p.x) * (r.y - a.y) < 0) {
+					var r1 = a.next;
+					if((b.y - a.y) * (r1.x - b.x) - (b.x - a.x) * (r1.y - b.y) >= 0) {
+						var q = a.prev;
+						tmp1 = (q.y - a.y) * (b.x - q.x) - (q.x - a.x) * (b.y - q.y) >= 0;
+					} else {
+						tmp1 = false;
+					}
+				} else {
+					var r2 = a.prev;
+					if(!((b.y - a.y) * (r2.x - b.x) - (b.x - a.x) * (r2.y - b.y) < 0)) {
+						var q1 = a.next;
+						tmp1 = (q1.y - a.y) * (b.x - q1.x) - (q1.x - a.x) * (b.y - q1.y) < 0;
+					} else {
+						tmp1 = true;
+					}
+				}
+			} else {
+				tmp1 = false;
+			}
+			if(tmp1) {
+				var p1 = b.prev;
+				var r3 = b.next;
+				if((b.y - p1.y) * (r3.x - b.x) - (b.x - p1.x) * (r3.y - b.y) < 0) {
+					var r4 = b.next;
+					if((a.y - b.y) * (r4.x - a.x) - (a.x - b.x) * (r4.y - a.y) >= 0) {
+						var q2 = b.prev;
+						tmp = (q2.y - b.y) * (a.x - q2.x) - (q2.x - b.x) * (a.y - q2.y) >= 0;
+					} else {
+						tmp = false;
+					}
+				} else {
+					var r5 = b.prev;
+					if(!((a.y - b.y) * (r5.x - a.x) - (a.x - b.x) * (r5.y - a.y) < 0)) {
+						var q3 = b.next;
+						tmp = (q3.y - b.y) * (a.x - q3.x) - (q3.x - b.x) * (a.y - q3.y) < 0;
+					} else {
+						tmp = true;
+					}
+				}
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				return this.middleInside(a,b);
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+	,middleInside: function(a,b) {
+		var p = a;
+		var inside = false;
+		var px = (a.x + b.x) / 2;
+		var py = (a.y + b.y) / 2;
+		while(true) {
+			if(p.y > py != p.next.y > py && px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x) {
+				inside = !inside;
+			}
+			p = p.next;
+			if(!(p != a)) {
+				break;
+			}
+		}
+		return inside;
+	}
+	,intersectsPolygon: function(a,b) {
+		var p = a;
+		while(true) {
+			var tmp;
+			if(p.i != a.i && p.next.i != a.i && p.i != b.i && p.next.i != b.i) {
+				var q1 = p.next;
+				tmp = (q1.y - p.y) * (a.x - q1.x) - (q1.x - p.x) * (a.y - q1.y) > 0 != (q1.y - p.y) * (b.x - q1.x) - (q1.x - p.x) * (b.y - q1.y) > 0 && (b.y - a.y) * (p.x - b.x) - (b.x - a.x) * (p.y - b.y) > 0 != (b.y - a.y) * (q1.x - b.x) - (b.x - a.x) * (q1.y - b.y) > 0;
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				return true;
+			}
+			p = p.next;
+			if(!(p != a)) {
+				break;
+			}
+		}
+		return false;
+	}
+	,zOrder: function(px,py) {
+		var x = 32767 * (px - this.minX) / this.size | 0;
+		var y = 32767 * (py - this.minY) / this.size | 0;
+		x = (x | x << 8) & 16711935;
+		x = (x | x << 4) & 252645135;
+		x = (x | x << 2) & 858993459;
+		x = (x | x << 1) & 1431655765;
+		y = (y | y << 8) & 16711935;
+		y = (y | y << 4) & 252645135;
+		y = (y | y << 2) & 858993459;
+		y = (y | y << 1) & 1431655765;
+		return x | y << 1;
+	}
+	,indexCurve: function(start) {
+		var p = start;
+		while(true) {
+			if(p.z < 0) {
+				var x = 32767 * (p.x - this.minX) / this.size | 0;
+				var y = 32767 * (p.y - this.minY) / this.size | 0;
+				x = (x | x << 8) & 16711935;
+				x = (x | x << 4) & 252645135;
+				x = (x | x << 2) & 858993459;
+				x = (x | x << 1) & 1431655765;
+				y = (y | y << 8) & 16711935;
+				y = (y | y << 4) & 252645135;
+				y = (y | y << 2) & 858993459;
+				y = (y | y << 1) & 1431655765;
+				p.z = x | y << 1;
+			}
+			p.prevZ = p.prev;
+			p.nextZ = p.next;
+			p = p.next;
+			if(!(p != start)) {
+				break;
+			}
+		}
+		p.prevZ.nextZ = null;
+		p.prevZ = null;
+		this.sortLinked(p);
+	}
+	,sortLinked: function(list) {
+		var p;
+		var q;
+		var e;
+		var tail;
+		var numMerges;
+		var pSize;
+		var qSize;
+		var inSize = 1;
+		while(true) {
+			p = list;
+			list = null;
+			tail = null;
+			numMerges = 0;
+			while(p != null) {
+				++numMerges;
+				q = p;
+				pSize = 0;
+				var _g = 0;
+				var _g1 = inSize;
+				while(_g < _g1) {
+					var i = _g++;
+					++pSize;
+					q = q.nextZ;
+					if(q == null) {
+						break;
+					}
+				}
+				qSize = inSize;
+				while(pSize > 0 || qSize > 0 && q != null) {
+					if(pSize == 0) {
+						e = q;
+						q = q.nextZ;
+						--qSize;
+					} else if(qSize == 0 || q == null) {
+						e = p;
+						p = p.nextZ;
+						--pSize;
+					} else if(p.z <= q.z) {
+						e = p;
+						p = p.nextZ;
+						--pSize;
+					} else {
+						e = q;
+						q = q.nextZ;
+						--qSize;
+					}
+					if(tail != null) {
+						tail.nextZ = e;
+					} else {
+						list = e;
+					}
+					e.prevZ = tail;
+					tail = e;
+				}
+				p = q;
+			}
+			tail.nextZ = null;
+			inSize *= 2;
+			if(!(numMerges > 1)) {
+				break;
+			}
+		}
+		return list;
+	}
+	,__class__: hxd_earcut_Earcut
+};
 var hxd_fmt_bfnt_FontParser = function() { };
 $hxClasses["hxd.fmt.bfnt.FontParser"] = hxd_fmt_bfnt_FontParser;
 hxd_fmt_bfnt_FontParser.__name__ = "hxd.fmt.bfnt.FontParser";
@@ -50442,6 +54186,80 @@ hxd_impl__$UncheckedBytes_UncheckedBytes_$Impl_$.set = function(this1,i,v) {
 hxd_impl__$UncheckedBytes_UncheckedBytes_$Impl_$.fromBytes = function(b) {
 	var this1 = b.b;
 	return this1;
+};
+var hxd_poly2tri_Edge = function(p1,p2) {
+	if(p1 == null || p2 == null) {
+		throw new js__$Boot_HaxeError("Edge::new p1 or p2 is null");
+	}
+	var swap = false;
+	if(p1.y > p2.y) {
+		swap = true;
+	} else if(p1.y == p2.y) {
+		if(p1.x == p2.x) {
+			throw new js__$Boot_HaxeError("Edge::repeat points " + Std.string(p1));
+		}
+		swap = p1.x > p2.x;
+	}
+	if(swap) {
+		this.q = p1;
+		this.p = p2;
+	} else {
+		this.p = p1;
+		this.q = p2;
+	}
+	this.q.get_edge_list().push(this);
+};
+$hxClasses["hxd.poly2tri.Edge"] = hxd_poly2tri_Edge;
+hxd_poly2tri_Edge.__name__ = "hxd.poly2tri.Edge";
+hxd_poly2tri_Edge.prototype = {
+	toString: function() {
+		return "Edge(" + Std.string(this.p) + ", " + Std.string(this.q) + ")";
+	}
+	,__class__: hxd_poly2tri_Edge
+};
+var hxd_poly2tri_Point = function(x,y) {
+	this.x = x;
+	this.y = y;
+	this.id = hxd_poly2tri_Point.C_ID;
+	hxd_poly2tri_Point.C_ID++;
+};
+$hxClasses["hxd.poly2tri.Point"] = hxd_poly2tri_Point;
+hxd_poly2tri_Point.__name__ = "hxd.poly2tri.Point";
+hxd_poly2tri_Point.sortPoints = function(points) {
+	points.sort(hxd_poly2tri_Point.cmpPoints);
+};
+hxd_poly2tri_Point.cmpPoints = function(l,r) {
+	var ret = l.y - r.y;
+	if(ret == 0) {
+		ret = l.x - r.x;
+	}
+	if(ret < 0) {
+		return -1;
+	}
+	if(ret > 0) {
+		return 1;
+	}
+	return 0;
+};
+hxd_poly2tri_Point.prototype = {
+	get_edge_list: function() {
+		if(this.edge_list == null) {
+			this.edge_list = [];
+		}
+		return this.edge_list;
+	}
+	,equals: function(that) {
+		if(this.x == that.x) {
+			return this.y == that.y;
+		} else {
+			return false;
+		}
+	}
+	,toString: function() {
+		return "Point(" + this.x + ", " + this.y + ")";
+	}
+	,__class__: hxd_poly2tri_Point
+	,__properties__: {get_edge_list:"get_edge_list"}
 };
 var hxd_prefab_Context = function() {
 	this.isRef = false;
@@ -65764,6 +69582,1937 @@ mt_deepnight_CdbHelper.idxToX = function(id,wid) {
 mt_deepnight_CdbHelper.idxToY = function(id,wid) {
 	return id / wid | 0;
 };
+var mt_deepnight_Color = function() { };
+$hxClasses["mt.deepnight.Color"] = mt_deepnight_Color;
+mt_deepnight_Color.__name__ = "mt.deepnight.Color";
+mt_deepnight_Color.hexToRgb = function(hex) {
+	if(hex == null) {
+		throw new js__$Boot_HaxeError("hexToColor with null");
+	}
+	if(hex.indexOf("#") == 0) {
+		hex = HxOverrides.substr(hex,1,999);
+	}
+	return { r : Std.parseInt("0x" + HxOverrides.substr(hex,0,2)), g : Std.parseInt("0x" + HxOverrides.substr(hex,2,2)), b : Std.parseInt("0x" + HxOverrides.substr(hex,4,2))};
+};
+mt_deepnight_Color.hexToInt = function(hex) {
+	return Std.parseInt("0x" + HxOverrides.substr(hex,1,999));
+};
+mt_deepnight_Color.hexToInta = function(hex) {
+	return Std.parseInt("0xff" + HxOverrides.substr(hex,1,999));
+};
+mt_deepnight_Color.rgbToInt = function(c) {
+	return c.r << 16 | c.g << 8 | c.b;
+};
+mt_deepnight_Color.rgbToHex = function(c) {
+	var h = StringTools.hex(c.r << 16 | c.g << 8 | c.b);
+	while(h.length < 6) h = "0" + h;
+	return "#" + h;
+};
+mt_deepnight_Color.rgbToHsl = function(c) {
+	var r = c.r / 255;
+	var g = c.g / 255;
+	var b = c.b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl = { h : 0., s : 0., l : 0.};
+	hsl.l = max;
+	if(delta != 0) {
+		hsl.s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl.h = db - dg;
+		} else if(g == max) {
+			hsl.h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl.h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl.h < 0) {
+			hsl.h++;
+		}
+		if(hsl.h > 1) {
+			hsl.h--;
+		}
+	}
+	return hsl;
+};
+mt_deepnight_Color.hslToRgb = function(hsl) {
+	var c = { r : 0, g : 0, b : 0};
+	var r = 0.;
+	var g = 0.;
+	var b = 0.;
+	if(hsl.s == 0) {
+		c.r = c.g = c.b = Math.round(hsl.l * 255);
+	} else {
+		var h = hsl.h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl.l * (1 - hsl.s);
+		var c2 = hsl.l * (1 - hsl.s * (h - i));
+		var c3 = hsl.l * (1 - hsl.s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r = hsl.l;
+			g = c3;
+			b = c1;
+		} else if(i == 1) {
+			r = c2;
+			g = hsl.l;
+			b = c1;
+		} else if(i == 2) {
+			r = c1;
+			g = hsl.l;
+			b = c3;
+		} else if(i == 3) {
+			r = c1;
+			g = c2;
+			b = hsl.l;
+		} else if(i == 4) {
+			r = c3;
+			g = c1;
+			b = hsl.l;
+		} else {
+			r = hsl.l;
+			g = c1;
+			b = c2;
+		}
+		c.r = Math.round(r * 255);
+		c.g = Math.round(g * 255);
+		c.b = Math.round(b * 255);
+	}
+	return c;
+};
+mt_deepnight_Color.rgbToMatrix = function(c) {
+	var matrix = [];
+	matrix = matrix.concat([c.r / 255,0,0,0,0]);
+	matrix = matrix.concat([0,c.g / 255,0,0,0]);
+	matrix = matrix.concat([0,0,c.b / 255,0,0]);
+	matrix = matrix.concat([0,0,0,1.0,0]);
+	return matrix;
+};
+mt_deepnight_Color.intToHex = function(c,leadingZeros) {
+	if(leadingZeros == null) {
+		leadingZeros = 6;
+	}
+	var h = StringTools.hex(c);
+	while(h.length < leadingZeros) h = "0" + h;
+	return "#" + h;
+};
+mt_deepnight_Color.intToRgb = function(c) {
+	return { r : c >> 16, g : c >> 8 & 255, b : c & 255};
+};
+mt_deepnight_Color.intToVector = function(c) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	return new h3d_Vector(c_r / 255,c_g / 255,c_b / 255);
+};
+mt_deepnight_Color.setVector = function(v,c) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	v.x = c_r / 255;
+	v.y = c_g / 255;
+	v.z = c_b / 255;
+};
+mt_deepnight_Color.intToRgba = function(c) {
+	return { a : c >>> 24, r : c >> 16 & 255, g : c >> 8 & 255, b : c & 255};
+};
+mt_deepnight_Color.intToHsl = function(c) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	var r = c_r / 255;
+	var g = c_g / 255;
+	var b = c_b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl = { h : 0., s : 0., l : 0.};
+	hsl.l = max;
+	if(delta != 0) {
+		hsl.s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl.h = db - dg;
+		} else if(g == max) {
+			hsl.h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl.h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl.h < 0) {
+			hsl.h++;
+		}
+		if(hsl.h > 1) {
+			hsl.h--;
+		}
+	}
+	return hsl;
+};
+mt_deepnight_Color.hslToInt = function(c) {
+	var c_r = 0;
+	var c_g = 0;
+	var c_b = 0;
+	var r = 0.;
+	var g = 0.;
+	var b = 0.;
+	if(c.s == 0) {
+		c_b = Math.round(c.l * 255);
+		c_g = c_b;
+		c_r = c_g;
+	} else {
+		var h = c.h * 6;
+		var i = Math.floor(h);
+		var c1 = c.l * (1 - c.s);
+		var c2 = c.l * (1 - c.s * (h - i));
+		var c3 = c.l * (1 - c.s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r = c.l;
+			g = c3;
+			b = c1;
+		} else if(i == 1) {
+			r = c2;
+			g = c.l;
+			b = c1;
+		} else if(i == 2) {
+			r = c1;
+			g = c.l;
+			b = c3;
+		} else if(i == 3) {
+			r = c1;
+			g = c2;
+			b = c.l;
+		} else if(i == 4) {
+			r = c3;
+			g = c1;
+			b = c.l;
+		} else {
+			r = c.l;
+			g = c1;
+			b = c2;
+		}
+		c_r = Math.round(r * 255);
+		c_g = Math.round(g * 255);
+		c_b = Math.round(b * 255);
+	}
+	return c_r << 16 | c_g << 8 | c_b;
+};
+mt_deepnight_Color.rgbaToInt = function(c) {
+	return c.a << 24 | c.r << 16 | c.g << 8 | c.b;
+};
+mt_deepnight_Color.rgbaToRgb = function(c) {
+	return { r : c.r, g : c.g, b : c.b};
+};
+mt_deepnight_Color.multiply = function(c,f) {
+	return { r : c.r * f | 0, g : c.g * f | 0, b : c.b * f | 0};
+};
+mt_deepnight_Color.saturation = function(c,delta) {
+	var r = c.r / 255;
+	var g = c.g / 255;
+	var b = c.b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta1 = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta1 != 0) {
+		hsl_s = delta1 / max;
+		var dr = ((max - r) / 6 + delta1 / 2) / delta1;
+		var dg = ((max - g) / 6 + delta1 / 2) / delta1;
+		var db = ((max - b) / 6 + delta1 / 2) / delta1;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	hsl_s += delta;
+	if(hsl_s > 1) {
+		hsl_s = 1;
+	}
+	if(hsl_s < 0) {
+		hsl_s = 0;
+	}
+	var c1 = { r : 0, g : 0, b : 0};
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c1.r = c1.g = c1.b = Math.round(hsl_l * 255);
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c11 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c11;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c11;
+		} else if(i == 2) {
+			r1 = c11;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c11;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c11;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c11;
+			b1 = c2;
+		}
+		c1.r = Math.round(r1 * 255);
+		c1.g = Math.round(g1 * 255);
+		c1.b = Math.round(b1 * 255);
+	}
+	return c1;
+};
+mt_deepnight_Color.saturationInt = function(c,delta) {
+	var c1 = mt_deepnight_Color.saturation({ r : c >> 16, g : c >> 8 & 255, b : c & 255},delta);
+	return c1.r << 16 | c1.g << 8 | c1.b;
+};
+mt_deepnight_Color.clampBrightness = function(c,minLum,maxLum) {
+	var r = c.r / 255;
+	var g = c.g / 255;
+	var b = c.b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	if(hsl_l > maxLum) {
+		hsl_l = maxLum;
+		var c1 = { r : 0, g : 0, b : 0};
+		var r1 = 0.;
+		var g1 = 0.;
+		var b1 = 0.;
+		if(hsl_s == 0) {
+			c1.r = c1.g = c1.b = Math.round(hsl_l * 255);
+		} else {
+			var h = hsl_h * 6;
+			var i = Math.floor(h);
+			var c11 = hsl_l * (1 - hsl_s);
+			var c2 = hsl_l * (1 - hsl_s * (h - i));
+			var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+			if(i == 0 || i == 6) {
+				r1 = hsl_l;
+				g1 = c3;
+				b1 = c11;
+			} else if(i == 1) {
+				r1 = c2;
+				g1 = hsl_l;
+				b1 = c11;
+			} else if(i == 2) {
+				r1 = c11;
+				g1 = hsl_l;
+				b1 = c3;
+			} else if(i == 3) {
+				r1 = c11;
+				g1 = c2;
+				b1 = hsl_l;
+			} else if(i == 4) {
+				r1 = c3;
+				g1 = c11;
+				b1 = hsl_l;
+			} else {
+				r1 = hsl_l;
+				g1 = c11;
+				b1 = c2;
+			}
+			c1.r = Math.round(r1 * 255);
+			c1.g = Math.round(g1 * 255);
+			c1.b = Math.round(b1 * 255);
+		}
+		return c1;
+	} else if(hsl_l < minLum) {
+		hsl_l = minLum;
+		var c4 = { r : 0, g : 0, b : 0};
+		var r2 = 0.;
+		var g2 = 0.;
+		var b2 = 0.;
+		if(hsl_s == 0) {
+			c4.r = c4.g = c4.b = Math.round(hsl_l * 255);
+		} else {
+			var h1 = hsl_h * 6;
+			var i1 = Math.floor(h1);
+			var c12 = hsl_l * (1 - hsl_s);
+			var c21 = hsl_l * (1 - hsl_s * (h1 - i1));
+			var c31 = hsl_l * (1 - hsl_s * (1 - (h1 - i1)));
+			if(i1 == 0 || i1 == 6) {
+				r2 = hsl_l;
+				g2 = c31;
+				b2 = c12;
+			} else if(i1 == 1) {
+				r2 = c21;
+				g2 = hsl_l;
+				b2 = c12;
+			} else if(i1 == 2) {
+				r2 = c12;
+				g2 = hsl_l;
+				b2 = c31;
+			} else if(i1 == 3) {
+				r2 = c12;
+				g2 = c21;
+				b2 = hsl_l;
+			} else if(i1 == 4) {
+				r2 = c31;
+				g2 = c12;
+				b2 = hsl_l;
+			} else {
+				r2 = hsl_l;
+				g2 = c12;
+				b2 = c21;
+			}
+			c4.r = Math.round(r2 * 255);
+			c4.g = Math.round(g2 * 255);
+			c4.b = Math.round(b2 * 255);
+		}
+		return c4;
+	} else {
+		return c;
+	}
+};
+mt_deepnight_Color.clampBrightnessInt = function(cint,minLum,maxLum) {
+	var c_r = cint >> 16;
+	var c_g = cint >> 8 & 255;
+	var c_b = cint & 255;
+	var r = c_r / 255;
+	var g = c_g / 255;
+	var b = c_b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	if(hsl_l > maxLum) {
+		hsl_l = maxLum;
+		var c_r1 = 0;
+		var c_g1 = 0;
+		var c_b1 = 0;
+		var r1 = 0.;
+		var g1 = 0.;
+		var b1 = 0.;
+		if(hsl_s == 0) {
+			c_b1 = Math.round(hsl_l * 255);
+			c_g1 = c_b1;
+			c_r1 = c_g1;
+		} else {
+			var h = hsl_h * 6;
+			var i = Math.floor(h);
+			var c1 = hsl_l * (1 - hsl_s);
+			var c2 = hsl_l * (1 - hsl_s * (h - i));
+			var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+			if(i == 0 || i == 6) {
+				r1 = hsl_l;
+				g1 = c3;
+				b1 = c1;
+			} else if(i == 1) {
+				r1 = c2;
+				g1 = hsl_l;
+				b1 = c1;
+			} else if(i == 2) {
+				r1 = c1;
+				g1 = hsl_l;
+				b1 = c3;
+			} else if(i == 3) {
+				r1 = c1;
+				g1 = c2;
+				b1 = hsl_l;
+			} else if(i == 4) {
+				r1 = c3;
+				g1 = c1;
+				b1 = hsl_l;
+			} else {
+				r1 = hsl_l;
+				g1 = c1;
+				b1 = c2;
+			}
+			c_r1 = Math.round(r1 * 255);
+			c_g1 = Math.round(g1 * 255);
+			c_b1 = Math.round(b1 * 255);
+		}
+		return c_r1 << 16 | c_g1 << 8 | c_b1;
+	} else if(hsl_l < minLum) {
+		hsl_l = minLum;
+		var c_r2 = 0;
+		var c_g2 = 0;
+		var c_b2 = 0;
+		var r2 = 0.;
+		var g2 = 0.;
+		var b2 = 0.;
+		if(hsl_s == 0) {
+			c_b2 = Math.round(hsl_l * 255);
+			c_g2 = c_b2;
+			c_r2 = c_g2;
+		} else {
+			var h1 = hsl_h * 6;
+			var i1 = Math.floor(h1);
+			var c11 = hsl_l * (1 - hsl_s);
+			var c21 = hsl_l * (1 - hsl_s * (h1 - i1));
+			var c31 = hsl_l * (1 - hsl_s * (1 - (h1 - i1)));
+			if(i1 == 0 || i1 == 6) {
+				r2 = hsl_l;
+				g2 = c31;
+				b2 = c11;
+			} else if(i1 == 1) {
+				r2 = c21;
+				g2 = hsl_l;
+				b2 = c11;
+			} else if(i1 == 2) {
+				r2 = c11;
+				g2 = hsl_l;
+				b2 = c31;
+			} else if(i1 == 3) {
+				r2 = c11;
+				g2 = c21;
+				b2 = hsl_l;
+			} else if(i1 == 4) {
+				r2 = c31;
+				g2 = c11;
+				b2 = hsl_l;
+			} else {
+				r2 = hsl_l;
+				g2 = c11;
+				b2 = c21;
+			}
+			c_r2 = Math.round(r2 * 255);
+			c_g2 = Math.round(g2 * 255);
+			c_b2 = Math.round(b2 * 255);
+		}
+		return c_r2 << 16 | c_g2 << 8 | c_b2;
+	} else {
+		return cint;
+	}
+};
+mt_deepnight_Color.cap = function(c,sat,lum) {
+	var r = c.r / 255;
+	var g = c.g / 255;
+	var b = c.b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	if(hsl_s > sat) {
+		hsl_s = sat;
+	}
+	if(hsl_l > lum) {
+		hsl_l = lum;
+	}
+	var c1 = { r : 0, g : 0, b : 0};
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c1.r = c1.g = c1.b = Math.round(hsl_l * 255);
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c11 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c11;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c11;
+		} else if(i == 2) {
+			r1 = c11;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c11;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c11;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c11;
+			b1 = c2;
+		}
+		c1.r = Math.round(r1 * 255);
+		c1.g = Math.round(g1 * 255);
+		c1.b = Math.round(b1 * 255);
+	}
+	return c1;
+};
+mt_deepnight_Color.capInt = function(c,sat,lum) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	var r = c_r / 255;
+	var g = c_g / 255;
+	var b = c_b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	if(hsl_s > sat) {
+		hsl_s = sat;
+	}
+	if(hsl_l > lum) {
+		hsl_l = lum;
+	}
+	var c_r1 = 0;
+	var c_g1 = 0;
+	var c_b1 = 0;
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c_b1 = Math.round(hsl_l * 255);
+		c_g1 = c_b1;
+		c_r1 = c_g1;
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c1;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c1;
+		} else if(i == 2) {
+			r1 = c1;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c1;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c1;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c1;
+			b1 = c2;
+		}
+		c_r1 = Math.round(r1 * 255);
+		c_g1 = Math.round(g1 * 255);
+		c_b1 = Math.round(b1 * 255);
+	}
+	return c_r1 << 16 | c_g1 << 8 | c_b1;
+};
+mt_deepnight_Color.hue = function(c,f) {
+	var r = c.r / 255;
+	var g = c.g / 255;
+	var b = c.b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	hsl_h += f;
+	if(hsl_h > 1) {
+		hsl_h = 1;
+	}
+	if(hsl_h < 0) {
+		hsl_h = 0;
+	}
+	var c1 = { r : 0, g : 0, b : 0};
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c1.r = c1.g = c1.b = Math.round(hsl_l * 255);
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c11 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c11;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c11;
+		} else if(i == 2) {
+			r1 = c11;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c11;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c11;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c11;
+			b1 = c2;
+		}
+		c1.r = Math.round(r1 * 255);
+		c1.g = Math.round(g1 * 255);
+		c1.b = Math.round(b1 * 255);
+	}
+	return c1;
+};
+mt_deepnight_Color.hueInt = function(c,f) {
+	var c1 = mt_deepnight_Color.hue({ r : c >> 16, g : c >> 8 & 255, b : c & 255},f);
+	return c1.r << 16 | c1.g << 8 | c1.b;
+};
+mt_deepnight_Color.change = function(cint,lum,sat) {
+	var c_r = cint >> 16;
+	var c_g = cint >> 8 & 255;
+	var c_b = cint & 255;
+	var r = c_r / 255;
+	var g = c_g / 255;
+	var b = c_b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	if(lum != null) {
+		hsl_l = lum;
+	}
+	if(sat != null) {
+		hsl_s = sat;
+	}
+	var c_r1 = 0;
+	var c_g1 = 0;
+	var c_b1 = 0;
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c_b1 = Math.round(hsl_l * 255);
+		c_g1 = c_b1;
+		c_r1 = c_g1;
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c1;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c1;
+		} else if(i == 2) {
+			r1 = c1;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c1;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c1;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c1;
+			b1 = c2;
+		}
+		c_r1 = Math.round(r1 * 255);
+		c_g1 = Math.round(g1 * 255);
+		c_b1 = Math.round(b1 * 255);
+	}
+	return c_r1 << 16 | c_g1 << 8 | c_b1;
+};
+mt_deepnight_Color.brightnessInt = function(cint,delta) {
+	var c = mt_deepnight_Color.brightness({ r : cint >> 16, g : cint >> 8 & 255, b : cint & 255},delta);
+	return c.r << 16 | c.g << 8 | c.b;
+};
+mt_deepnight_Color.brightness = function(c,delta) {
+	var r = c.r / 255;
+	var g = c.g / 255;
+	var b = c.b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta1 = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta1 != 0) {
+		hsl_s = delta1 / max;
+		var dr = ((max - r) / 6 + delta1 / 2) / delta1;
+		var dg = ((max - g) / 6 + delta1 / 2) / delta1;
+		var db = ((max - b) / 6 + delta1 / 2) / delta1;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	if(delta < 0) {
+		hsl_l += delta;
+		if(hsl_l < 0) {
+			hsl_l = 0;
+		}
+	} else {
+		var d = 1 - hsl_l;
+		if(d > delta) {
+			hsl_l += delta;
+		} else {
+			hsl_l = 1;
+			hsl_s -= delta - d;
+			if(hsl_s < 0) {
+				hsl_s = 0;
+			}
+		}
+	}
+	var c1 = { r : 0, g : 0, b : 0};
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c1.r = c1.g = c1.b = Math.round(hsl_l * 255);
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c11 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c11;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c11;
+		} else if(i == 2) {
+			r1 = c11;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c11;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c11;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c11;
+			b1 = c2;
+		}
+		c1.r = Math.round(r1 * 255);
+		c1.g = Math.round(g1 * 255);
+		c1.b = Math.round(b1 * 255);
+	}
+	return c1;
+};
+mt_deepnight_Color.desaturate = function(c,ratio) {
+	var gray = 0.3 * c.r + 0.59 * c.g + 0.11 * c.b;
+	return { r : gray * ratio + c.r * (1 - ratio) | 0, g : gray * ratio + c.g * (1 - ratio) | 0, b : gray * ratio + c.b * (1 - ratio) | 0};
+};
+mt_deepnight_Color.desaturateInt = function(c,ratio) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	var gray = 0.3 * c_r + 0.59 * c_g + 0.11 * c_b;
+	var c_r1 = gray * ratio + c_r * (1 - ratio) | 0;
+	var c_g1 = gray * ratio + c_g * (1 - ratio) | 0;
+	var c_b1 = gray * ratio + c_b * (1 - ratio) | 0;
+	return c_r1 << 16 | c_g1 << 8 | c_b1;
+};
+mt_deepnight_Color.getAlpha = function(c) {
+	return c >>> 24;
+};
+mt_deepnight_Color.getAlphaF = function(c) {
+	return (c >>> 24) / 255.0;
+};
+mt_deepnight_Color.removeAlpha = function(col32) {
+	return col32 & 16777215;
+};
+mt_deepnight_Color.addAlphaF = function(c,a) {
+	if(a == null) {
+		a = 1.0;
+	}
+	return (a * 255 | 0) << 24 | c;
+};
+mt_deepnight_Color.addAlphaI = function(c,a) {
+	if(a == null) {
+		a = 255;
+	}
+	return a << 24 | c;
+};
+mt_deepnight_Color.randomColor = function(hue,sat,lum) {
+	if(lum == null) {
+		lum = 1.0;
+	}
+	if(sat == null) {
+		sat = 1.0;
+	}
+	var hsl = { h : hue, s : sat, l : lum};
+	var c_r = 0;
+	var c_g = 0;
+	var c_b = 0;
+	var r = 0.;
+	var g = 0.;
+	var b = 0.;
+	if(hsl.s == 0) {
+		c_b = Math.round(hsl.l * 255);
+		c_g = c_b;
+		c_r = c_g;
+	} else {
+		var h = hsl.h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl.l * (1 - hsl.s);
+		var c2 = hsl.l * (1 - hsl.s * (h - i));
+		var c3 = hsl.l * (1 - hsl.s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r = hsl.l;
+			g = c3;
+			b = c1;
+		} else if(i == 1) {
+			r = c2;
+			g = hsl.l;
+			b = c1;
+		} else if(i == 2) {
+			r = c1;
+			g = hsl.l;
+			b = c3;
+		} else if(i == 3) {
+			r = c1;
+			g = c2;
+			b = hsl.l;
+		} else if(i == 4) {
+			r = c3;
+			g = c1;
+			b = hsl.l;
+		} else {
+			r = hsl.l;
+			g = c1;
+			b = c2;
+		}
+		c_r = Math.round(r * 255);
+		c_g = Math.round(g * 255);
+		c_b = Math.round(b * 255);
+	}
+	return c_r << 16 | c_g << 8 | c_b;
+};
+mt_deepnight_Color.fromString = function(k) {
+	var csum = 0;
+	var _g = 0;
+	var _g1 = k.length;
+	while(_g < _g1) {
+		var i = _g++;
+		csum += HxOverrides.cca(k,i);
+	}
+	var hsl_h = csum % 1000 / 1000;
+	var hsl_s = 0.5 + 0.5 * (csum % 637) / 637;
+	var hsl_l = 0.6 + 0.4 * (csum % 1221) / 1221;
+	var c_r = 0;
+	var c_g = 0;
+	var c_b = 0;
+	var r = 0.;
+	var g = 0.;
+	var b = 0.;
+	if(hsl_s == 0) {
+		c_b = Math.round(hsl_l * 255);
+		c_g = c_b;
+		c_r = c_g;
+	} else {
+		var h = hsl_h * 6;
+		var i1 = Math.floor(h);
+		var c1 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i1));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i1)));
+		if(i1 == 0 || i1 == 6) {
+			r = hsl_l;
+			g = c3;
+			b = c1;
+		} else if(i1 == 1) {
+			r = c2;
+			g = hsl_l;
+			b = c1;
+		} else if(i1 == 2) {
+			r = c1;
+			g = hsl_l;
+			b = c3;
+		} else if(i1 == 3) {
+			r = c1;
+			g = c2;
+			b = hsl_l;
+		} else if(i1 == 4) {
+			r = c3;
+			g = c1;
+			b = hsl_l;
+		} else {
+			r = hsl_l;
+			g = c1;
+			b = c2;
+		}
+		c_r = Math.round(r * 255);
+		c_g = Math.round(g * 255);
+		c_b = Math.round(b * 255);
+	}
+	return c_r << 16 | c_g << 8 | c_b;
+};
+mt_deepnight_Color.makeColorHsl = function(hue,saturation,luminosity) {
+	if(luminosity == null) {
+		luminosity = 1.0;
+	}
+	if(saturation == null) {
+		saturation = 1.0;
+	}
+	var hsl = { h : hue, s : saturation, l : luminosity};
+	var c_r = 0;
+	var c_g = 0;
+	var c_b = 0;
+	var r = 0.;
+	var g = 0.;
+	var b = 0.;
+	if(hsl.s == 0) {
+		c_b = Math.round(hsl.l * 255);
+		c_g = c_b;
+		c_r = c_g;
+	} else {
+		var h = hsl.h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl.l * (1 - hsl.s);
+		var c2 = hsl.l * (1 - hsl.s * (h - i));
+		var c3 = hsl.l * (1 - hsl.s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r = hsl.l;
+			g = c3;
+			b = c1;
+		} else if(i == 1) {
+			r = c2;
+			g = hsl.l;
+			b = c1;
+		} else if(i == 2) {
+			r = c1;
+			g = hsl.l;
+			b = c3;
+		} else if(i == 3) {
+			r = c1;
+			g = c2;
+			b = hsl.l;
+		} else if(i == 4) {
+			r = c3;
+			g = c1;
+			b = hsl.l;
+		} else {
+			r = hsl.l;
+			g = c1;
+			b = c2;
+		}
+		c_r = Math.round(r * 255);
+		c_g = Math.round(g * 255);
+		c_b = Math.round(b * 255);
+	}
+	return c_r << 16 | c_g << 8 | c_b;
+};
+mt_deepnight_Color.makeColor = function(r,g,b,a) {
+	if(a == null) {
+		a = 1.0;
+	}
+	var c_r = r * 255 | 0;
+	var c_g = g * 255 | 0;
+	var c_b = b * 255 | 0;
+	var c_a = a * 255 | 0;
+	return c_a << 24 | c_r << 16 | c_g << 8 | c_b;
+};
+mt_deepnight_Color.getRgbRatio = function(cint,crgb) {
+	var c = cint != null ? { r : cint >> 16, g : cint >> 8 & 255, b : cint & 255} : crgb;
+	var max = c.b > c.g && c.b > c.r ? c.b : c.g > c.r && c.g > c.b ? c.g : c.r;
+	return { r : c.r / max, g : c.g / max, b : c.b / max};
+};
+mt_deepnight_Color.getLuminosityPerception = function(c) {
+	return Math.sqrt(0.241 * (c.r * c.r) + 0.691 * (c.g * c.g) + 0.068 * (c.b * c.b));
+};
+mt_deepnight_Color.autoContrast = function(c,dark,light) {
+	if(light == null) {
+		light = 16777215;
+	}
+	if(dark == null) {
+		dark = 0;
+	}
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	if(Math.sqrt(0.241 * (c_r * c_r) + 0.691 * (c_g * c_g) + 0.068 * (c_b * c_b)) >= 125) {
+		return dark;
+	} else {
+		return light;
+	}
+};
+mt_deepnight_Color.getLuminosity = function(c,cint) {
+	if(c != null) {
+		var r = c.r / 255;
+		var g = c.g / 255;
+		var b = c.b / 255;
+		var min = r <= g && r <= b ? r : g <= b ? g : b;
+		var max = r >= g && r >= b ? r : g >= b ? g : b;
+		var delta = max - min;
+		var hsl_h = 0.;
+		var hsl_s = 0.;
+		var hsl_l = 0.;
+		hsl_l = max;
+		if(delta != 0) {
+			hsl_s = delta / max;
+			var dr = ((max - r) / 6 + delta / 2) / delta;
+			var dg = ((max - g) / 6 + delta / 2) / delta;
+			var db = ((max - b) / 6 + delta / 2) / delta;
+			if(r == max) {
+				hsl_h = db - dg;
+			} else if(g == max) {
+				hsl_h = 0.33333333333333331 + dr - db;
+			} else if(b == max) {
+				hsl_h = 0.66666666666666663 + dg - dr;
+			}
+			if(hsl_h < 0) {
+				++hsl_h;
+			}
+			if(hsl_h > 1) {
+				--hsl_h;
+			}
+		}
+		return hsl_l;
+	} else {
+		var c_r = cint >> 16;
+		var c_g = cint >> 8 & 255;
+		var c_b = cint & 255;
+		var r1 = c_r / 255;
+		var g1 = c_g / 255;
+		var b1 = c_b / 255;
+		var min1 = r1 <= g1 && r1 <= b1 ? r1 : g1 <= b1 ? g1 : b1;
+		var max1 = r1 >= g1 && r1 >= b1 ? r1 : g1 >= b1 ? g1 : b1;
+		var delta1 = max1 - min1;
+		var hsl_h1 = 0.;
+		var hsl_s1 = 0.;
+		var hsl_l1 = 0.;
+		hsl_l1 = max1;
+		if(delta1 != 0) {
+			hsl_s1 = delta1 / max1;
+			var dr1 = ((max1 - r1) / 6 + delta1 / 2) / delta1;
+			var dg1 = ((max1 - g1) / 6 + delta1 / 2) / delta1;
+			var db1 = ((max1 - b1) / 6 + delta1 / 2) / delta1;
+			if(r1 == max1) {
+				hsl_h1 = db1 - dg1;
+			} else if(g1 == max1) {
+				hsl_h1 = 0.33333333333333331 + dr1 - db1;
+			} else if(b1 == max1) {
+				hsl_h1 = 0.66666666666666663 + dg1 - dr1;
+			}
+			if(hsl_h1 < 0) {
+				++hsl_h1;
+			}
+			if(hsl_h1 > 1) {
+				--hsl_h1;
+			}
+		}
+		return hsl_l1;
+	}
+};
+mt_deepnight_Color.setLuminosity = function(c,lum) {
+	var r = c.r / 255;
+	var g = c.g / 255;
+	var b = c.b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	hsl_l = lum;
+	var c1 = { r : 0, g : 0, b : 0};
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c1.r = c1.g = c1.b = Math.round(hsl_l * 255);
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c11 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c11;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c11;
+		} else if(i == 2) {
+			r1 = c11;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c11;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c11;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c11;
+			b1 = c2;
+		}
+		c1.r = Math.round(r1 * 255);
+		c1.g = Math.round(g1 * 255);
+		c1.b = Math.round(b1 * 255);
+	}
+	return c1;
+};
+mt_deepnight_Color.setSL = function(c,sat,lum) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	var r = c_r / 255;
+	var g = c_g / 255;
+	var b = c_b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	hsl_s = sat;
+	hsl_l = lum;
+	var c_r1 = 0;
+	var c_g1 = 0;
+	var c_b1 = 0;
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c_b1 = Math.round(hsl_l * 255);
+		c_g1 = c_b1;
+		c_r1 = c_g1;
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c1;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c1;
+		} else if(i == 2) {
+			r1 = c1;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c1;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c1;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c1;
+			b1 = c2;
+		}
+		c_r1 = Math.round(r1 * 255);
+		c_g1 = Math.round(g1 * 255);
+		c_b1 = Math.round(b1 * 255);
+	}
+	return c_r1 << 16 | c_g1 << 8 | c_b1;
+};
+mt_deepnight_Color.changeHslInt = function(c,lum,sat) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	var r = c_r / 255;
+	var g = c_g / 255;
+	var b = c_b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	hsl_l = lum;
+	hsl_s = sat;
+	var c_r1 = 0;
+	var c_g1 = 0;
+	var c_b1 = 0;
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c_b1 = Math.round(hsl_l * 255);
+		c_g1 = c_b1;
+		c_r1 = c_g1;
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c1;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c1;
+		} else if(i == 2) {
+			r1 = c1;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c1;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c1;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c1;
+			b1 = c2;
+		}
+		c_r1 = Math.round(r1 * 255);
+		c_g1 = Math.round(g1 * 255);
+		c_b1 = Math.round(b1 * 255);
+	}
+	return c_r1 << 16 | c_g1 << 8 | c_b1;
+};
+mt_deepnight_Color.addHslInt = function(c,hDelta,sDelta,lDelta) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	var r = c_r / 255;
+	var g = c_g / 255;
+	var b = c_b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	hsl_h += hDelta;
+	hsl_s += sDelta;
+	hsl_l += lDelta;
+	var c_r1 = 0;
+	var c_g1 = 0;
+	var c_b1 = 0;
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c_b1 = Math.round(hsl_l * 255);
+		c_g1 = c_b1;
+		c_r1 = c_g1;
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c1;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c1;
+		} else if(i == 2) {
+			r1 = c1;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c1;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c1;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c1;
+			b1 = c2;
+		}
+		c_r1 = Math.round(r1 * 255);
+		c_g1 = Math.round(g1 * 255);
+		c_b1 = Math.round(b1 * 255);
+	}
+	return c_r1 << 16 | c_g1 << 8 | c_b1;
+};
+mt_deepnight_Color.setLuminosityInt = function(c,lum) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	var r = c_r / 255;
+	var g = c_g / 255;
+	var b = c_b / 255;
+	var min = r <= g && r <= b ? r : g <= b ? g : b;
+	var max = r >= g && r >= b ? r : g >= b ? g : b;
+	var delta = max - min;
+	var hsl_h = 0.;
+	var hsl_s = 0.;
+	var hsl_l = 0.;
+	hsl_l = max;
+	if(delta != 0) {
+		hsl_s = delta / max;
+		var dr = ((max - r) / 6 + delta / 2) / delta;
+		var dg = ((max - g) / 6 + delta / 2) / delta;
+		var db = ((max - b) / 6 + delta / 2) / delta;
+		if(r == max) {
+			hsl_h = db - dg;
+		} else if(g == max) {
+			hsl_h = 0.33333333333333331 + dr - db;
+		} else if(b == max) {
+			hsl_h = 0.66666666666666663 + dg - dr;
+		}
+		if(hsl_h < 0) {
+			++hsl_h;
+		}
+		if(hsl_h > 1) {
+			--hsl_h;
+		}
+	}
+	hsl_l = lum;
+	var c_r1 = 0;
+	var c_g1 = 0;
+	var c_b1 = 0;
+	var r1 = 0.;
+	var g1 = 0.;
+	var b1 = 0.;
+	if(hsl_s == 0) {
+		c_b1 = Math.round(hsl_l * 255);
+		c_g1 = c_b1;
+		c_r1 = c_g1;
+	} else {
+		var h = hsl_h * 6;
+		var i = Math.floor(h);
+		var c1 = hsl_l * (1 - hsl_s);
+		var c2 = hsl_l * (1 - hsl_s * (h - i));
+		var c3 = hsl_l * (1 - hsl_s * (1 - (h - i)));
+		if(i == 0 || i == 6) {
+			r1 = hsl_l;
+			g1 = c3;
+			b1 = c1;
+		} else if(i == 1) {
+			r1 = c2;
+			g1 = hsl_l;
+			b1 = c1;
+		} else if(i == 2) {
+			r1 = c1;
+			g1 = hsl_l;
+			b1 = c3;
+		} else if(i == 3) {
+			r1 = c1;
+			g1 = c2;
+			b1 = hsl_l;
+		} else if(i == 4) {
+			r1 = c3;
+			g1 = c1;
+			b1 = hsl_l;
+		} else {
+			r1 = hsl_l;
+			g1 = c1;
+			b1 = c2;
+		}
+		c_r1 = Math.round(r1 * 255);
+		c_g1 = Math.round(g1 * 255);
+		c_b1 = Math.round(b1 * 255);
+	}
+	return c_r1 << 16 | c_g1 << 8 | c_b1;
+};
+mt_deepnight_Color.offsetColor = function(c,delta) {
+	var y = c.r + delta;
+	var y1 = 255 < y ? 255 : y;
+	var y2 = c.g + delta;
+	var y3 = 255 < y2 ? 255 : y2;
+	var y4 = c.b + delta;
+	var y5 = 255 < y4 ? 255 : y4;
+	return { r : (0 > y1 ? 0 : y1) | 0, g : (0 > y3 ? 0 : y3) | 0, b : (0 > y5 ? 0 : y5) | 0};
+};
+mt_deepnight_Color.offsetColorRgba = function(c,delta) {
+	var y = c.r + delta;
+	var y1 = 255 < y ? 255 : y;
+	var y2 = c.g + delta;
+	var y3 = 255 < y2 ? 255 : y2;
+	var y4 = c.b + delta;
+	var y5 = 255 < y4 ? 255 : y4;
+	return { r : (0 > y1 ? 0 : y1) | 0, g : (0 > y3 ? 0 : y3) | 0, b : (0 > y5 ? 0 : y5) | 0, a : c.a};
+};
+mt_deepnight_Color.offsetColorInt = function(c,delta) {
+	var c_r = c >> 16;
+	var c_g = c >> 8 & 255;
+	var c_b = c & 255;
+	var y = c_r + delta;
+	var y1 = 255 < y ? 255 : y;
+	var c_r1 = (0 > y1 ? 0 : y1) | 0;
+	var y2 = c_g + delta;
+	var y3 = 255 < y2 ? 255 : y2;
+	var c_g1 = (0 > y3 ? 0 : y3) | 0;
+	var y4 = c_b + delta;
+	var y5 = 255 < y4 ? 255 : y4;
+	var c_b1 = (0 > y5 ? 0 : y5) | 0;
+	return c_r1 << 16 | c_g1 << 8 | c_b1;
+};
+mt_deepnight_Color.interpolatePal = function(from,to,ratio) {
+	var result = [];
+	var _g = 0;
+	var _g1 = from.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var from1 = from[i];
+		var to1 = to[i];
+		var ratio1 = ratio;
+		ratio1 = ratio1 < 0 ? 0 : ratio1 > 1 ? 1 : ratio1;
+		result[i] = { r : from1.r + (to1.r - from1.r) * ratio1 | 0, g : from1.g + (to1.g - from1.g) * ratio1 | 0, b : from1.b + (to1.b - from1.b) * ratio1 | 0};
+	}
+	return result;
+};
+mt_deepnight_Color.interpolate = function(from,to,ratio) {
+	ratio = ratio < 0 ? 0 : ratio > 1 ? 1 : ratio;
+	return { r : from.r + (to.r - from.r) * ratio | 0, g : from.g + (to.g - from.g) * ratio | 0, b : from.b + (to.b - from.b) * ratio | 0};
+};
+mt_deepnight_Color.interpolateInt = function(from,to,ratio) {
+	var a = _$UInt_UInt_$Impl_$.toFloat(from >>> 16);
+	var x = a + (_$UInt_UInt_$Impl_$.toFloat(to >>> 16) - a) * ratio;
+	var a1 = _$UInt_UInt_$Impl_$.toFloat(from >>> 8 & 255);
+	var x1 = a1 + (_$UInt_UInt_$Impl_$.toFloat(to >>> 8 & 255) - a1) * ratio;
+	var a2 = _$UInt_UInt_$Impl_$.toFloat(from & 255);
+	var x2 = a2 + (_$UInt_UInt_$Impl_$.toFloat(to & 255) - a2) * ratio;
+	return ((x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0) << 16 | ((x1 > 0 ? x1 + .5 : x1 < 0 ? x1 - .5 : 0) | 0) << 8 | ((x2 > 0 ? x2 + .5 : x2 < 0 ? x2 - .5 : 0) | 0);
+};
+mt_deepnight_Color.mix = function(from,to,ratio) {
+	switch(Type["typeof"](from)._hx_index) {
+	case 1:
+		var from1 = from;
+		var to1 = to;
+		var a = _$UInt_UInt_$Impl_$.toFloat(from1 >>> 16);
+		var x = a + (_$UInt_UInt_$Impl_$.toFloat(to1 >>> 16) - a) * ratio;
+		var a1 = _$UInt_UInt_$Impl_$.toFloat(from1 >>> 8 & 255);
+		var x1 = a1 + (_$UInt_UInt_$Impl_$.toFloat(to1 >>> 8 & 255) - a1) * ratio;
+		var a2 = _$UInt_UInt_$Impl_$.toFloat(from1 & 255);
+		var x2 = a2 + (_$UInt_UInt_$Impl_$.toFloat(to1 & 255) - a2) * ratio;
+		return ((x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0) << 16 | ((x1 > 0 ? x1 + .5 : x1 < 0 ? x1 - .5 : 0) | 0) << 8 | ((x2 > 0 ? x2 + .5 : x2 < 0 ? x2 - .5 : 0) | 0);
+	case 4:
+		var from2 = from;
+		var to2 = to;
+		var ratio1 = ratio;
+		ratio1 = ratio1 < 0 ? 0 : ratio1 > 1 ? 1 : ratio1;
+		return { r : from2.r + (to2.r - from2.r) * ratio1 | 0, g : from2.g + (to2.g - from2.g) * ratio1 | 0, b : from2.b + (to2.b - from2.b) * ratio1 | 0};
+	default:
+		throw new js__$Boot_HaxeError("error");
+	}
+};
+mt_deepnight_Color.average = function(a) {
+	if(a.length == 0) {
+		return 0;
+	}
+	var c = a[0];
+	var _g = 1;
+	var _g1 = a.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var to = a[i];
+		var a1 = _$UInt_UInt_$Impl_$.toFloat(c >>> 16);
+		var x = a1 + (_$UInt_UInt_$Impl_$.toFloat(to >>> 16) - a1) * 0.5;
+		var a2 = _$UInt_UInt_$Impl_$.toFloat(c >>> 8 & 255);
+		var x1 = a2 + (_$UInt_UInt_$Impl_$.toFloat(to >>> 8 & 255) - a2) * 0.5;
+		var a3 = _$UInt_UInt_$Impl_$.toFloat(c & 255);
+		var x2 = a3 + (_$UInt_UInt_$Impl_$.toFloat(to & 255) - a3) * 0.5;
+		c = ((x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0) << 16 | ((x1 > 0 ? x1 + .5 : x1 < 0 ? x1 - .5 : 0) | 0) << 8 | ((x2 > 0 ? x2 + .5 : x2 < 0 ? x2 - .5 : 0) | 0);
+	}
+	return c;
+};
+mt_deepnight_Color.interpolateIntArray = function(colors,ratio) {
+	if(colors.length < 2) {
+		throw new js__$Boot_HaxeError("Need 2 colors or more!");
+	}
+	ratio = ratio < 0 ? 0 : ratio > 1 ? 1 : ratio;
+	var idx = ratio * (colors.length - 1) | 0;
+	var segLen = 1 / (colors.length - 1);
+	var subRatio = (ratio - segLen * idx) / segLen;
+	var c = colors[idx];
+	var from_r = c >> 16;
+	var from_g = c >> 8 & 255;
+	var from_b = c & 255;
+	var c1 = colors[idx + 1];
+	var to_r = c1 >> 16;
+	var to_g = c1 >> 8 & 255;
+	var to_b = c1 & 255;
+	var ratio1 = subRatio;
+	ratio1 = ratio1 < 0 ? 0 : ratio1 > 1 ? 1 : ratio1;
+	var c_r = from_r + (to_r - from_r) * ratio1 | 0;
+	var c_g = from_g + (to_g - from_g) * ratio1 | 0;
+	var c_b = from_b + (to_b - from_b) * ratio1 | 0;
+	return c_r << 16 | c_g << 8 | c_b;
+};
+mt_deepnight_Color.darken = function(c,ratio) {
+	var from_r = c >> 16;
+	var from_g = c >> 8 & 255;
+	var from_b = c & 255;
+	var to = mt_deepnight_Color.BLACK;
+	var ratio1 = ratio;
+	ratio1 = ratio1 < 0 ? 0 : ratio1 > 1 ? 1 : ratio1;
+	var c_r = from_r + (to.r - from_r) * ratio1 | 0;
+	var c_g = from_g + (to.g - from_g) * ratio1 | 0;
+	var c_b = from_b + (to.b - from_b) * ratio1 | 0;
+	return c_r << 16 | c_g << 8 | c_b;
+};
+mt_deepnight_Color.lighten = function(c,ratio) {
+	var from_r = c >> 16;
+	var from_g = c >> 8 & 255;
+	var from_b = c & 255;
+	var to = mt_deepnight_Color.WHITE;
+	var ratio1 = ratio;
+	ratio1 = ratio1 < 0 ? 0 : ratio1 > 1 ? 1 : ratio1;
+	var c_r = from_r + (to.r - from_r) * ratio1 | 0;
+	var c_g = from_g + (to.g - from_g) * ratio1 | 0;
+	var c_b = from_b + (to.b - from_b) * ratio1 | 0;
+	return c_r << 16 | c_g << 8 | c_b;
+};
+mt_deepnight_Color.getPaletteAverage = function(pal) {
+	if(pal.length < 0) {
+		return Reflect.copy(mt_deepnight_Color.BLACK);
+	}
+	var c_r = 0;
+	var c_g = 0;
+	var c_b = 0;
+	var _g = 0;
+	while(_g < pal.length) {
+		var p = pal[_g];
+		++_g;
+		c_r += p.r;
+		c_g += p.g;
+		c_b += p.b;
+	}
+	return { r : c_r / pal.length | 0, g : c_g / pal.length | 0, b : c_b / pal.length | 0};
+};
+mt_deepnight_Color.interpolateR = function(from,to,r) {
+	var a = _$UInt_UInt_$Impl_$.toFloat(from >>> 16);
+	var x = a + (_$UInt_UInt_$Impl_$.toFloat(to >>> 16) - a) * r;
+	return (x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0;
+};
+mt_deepnight_Color.interpolateG = function(from,to,r) {
+	var a = _$UInt_UInt_$Impl_$.toFloat(from >>> 8 & 255);
+	var x = a + (_$UInt_UInt_$Impl_$.toFloat(to >>> 8 & 255) - a) * r;
+	return (x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0;
+};
+mt_deepnight_Color.interpolateB = function(from,to,r) {
+	var a = _$UInt_UInt_$Impl_$.toFloat(from & 255);
+	var x = a + (_$UInt_UInt_$Impl_$.toFloat(to & 255) - a) * r;
+	return (x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0;
+};
+mt_deepnight_Color.applyH2dContrast = function(e,ratio) {
+	var m = 1 + ratio * 1.5;
+	var o = -0.25 * ratio;
+	e.set_colorMatrix(h3d_Matrix.L([m,0,0,0,0,m,0,0,0,0,m,0,0,0,0,1]));
+	e.set_colorAdd(new h3d_Vector(o,o,o,0));
+};
+mt_deepnight_Color.uncolorizeBatchElement = function(e) {
+	e.r = e.g = e.b = 1;
+};
+mt_deepnight_Color.colorizeBatchElement = function(e,c,ratio) {
+	if(ratio == null) {
+		ratio = 1.0;
+	}
+	var a = _$UInt_UInt_$Impl_$.toFloat(16777215 >>> 16);
+	var x = a + (_$UInt_UInt_$Impl_$.toFloat(c >>> 16) - a) * ratio;
+	e.r = ((x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0) / 255;
+	var a1 = _$UInt_UInt_$Impl_$.toFloat(16777215 >>> 8 & 255);
+	var x1 = a1 + (_$UInt_UInt_$Impl_$.toFloat(c >>> 8 & 255) - a1) * ratio;
+	e.g = ((x1 > 0 ? x1 + .5 : x1 < 0 ? x1 - .5 : 0) | 0) / 255;
+	var a2 = _$UInt_UInt_$Impl_$.toFloat(16777215 & 255);
+	var x2 = a2 + (_$UInt_UInt_$Impl_$.toFloat(c & 255) - a2) * ratio;
+	e.b = ((x2 > 0 ? x2 + .5 : x2 < 0 ? x2 - .5 : 0) | 0) / 255;
+};
+mt_deepnight_Color.getColorizeMatrixH2d = function(col,ratioNewColor,ratioOldColor) {
+	if(ratioNewColor == null) {
+		ratioNewColor = 1.0;
+	}
+	if(ratioOldColor == null) {
+		ratioOldColor = 1 - ratioNewColor;
+	}
+	var rgb_r = col >> 16;
+	var rgb_g = col >> 8 & 255;
+	var rgb_b = col & 255;
+	var r = ratioNewColor * rgb_r / 255;
+	var g = ratioNewColor * rgb_g / 255;
+	var b = ratioNewColor * rgb_b / 255;
+	var m = [ratioOldColor + r,g,b,0,r,ratioOldColor + g,b,0,r,g,ratioOldColor + b,0,0,0,0,1];
+	return h3d_Matrix.L(m);
+};
+mt_deepnight_Color.interpolateArrays = function(ary1,ary2,t) {
+	var result = [];
+	var _g = 0;
+	var _g1 = ary1.length;
+	while(_g < _g1) {
+		var i = _g++;
+		result[i] = ary1[i] + (ary2[i] - ary1[i]) * t;
+	}
+	return result;
+};
 var mt_deepnight_Day = $hxEnums["mt.deepnight.Day"] = { __ename__ : true, __constructs__ : ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
 	,Sunday: {_hx_index:0,__enum__:"mt.deepnight.Day",toString:$estr}
 	,Monday: {_hx_index:1,__enum__:"mt.deepnight.Day",toString:$estr}
@@ -68559,6 +74308,3340 @@ mt_heaps_GamePad.prototype = {
 	}
 	,__class__: mt_heaps_GamePad
 };
+var mt_heaps_slib__$AnimManager_AnimInstance = function(s,g) {
+	this.reverse = false;
+	this.speed = 1.0;
+	this.stopOnLastFrame = false;
+	this.killAfterPlay = false;
+	this.isStateAnim = false;
+	this.paused = false;
+	this.playDuration = -1.;
+	this.plays = 1;
+	this.curFrameCpt = 0.0;
+	this.animCursor = 0;
+	this.frames = [];
+	this.spr = s;
+	this.group = g;
+	var _this = this.spr.lib;
+	var k = this.group;
+	var tmp;
+	var tmp1;
+	if(k != null) {
+		var _this1 = _this.groups;
+		tmp1 = __map_reserved[k] != null ? _this1.existsReserved(k) : _this1.h.hasOwnProperty(k);
+	} else {
+		tmp1 = false;
+	}
+	if(tmp1) {
+		var _this2 = _this.groups;
+		tmp = (__map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k]).frames.length > 0;
+	} else {
+		tmp = false;
+	}
+	if(!tmp) {
+		throw new js__$Boot_HaxeError("unknown group " + this.group);
+	}
+	var _this3 = this.spr.lib;
+	var k1 = this.group;
+	var tmp2;
+	if(k1 == null) {
+		tmp2 = _this3.currentGroup;
+	} else {
+		var _this4 = _this3.groups;
+		tmp2 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+	}
+	this.frames = tmp2.anim;
+};
+$hxClasses["mt.heaps.slib._AnimManager.AnimInstance"] = mt_heaps_slib__$AnimManager_AnimInstance;
+mt_heaps_slib__$AnimManager_AnimInstance.__name__ = "mt.heaps.slib._AnimManager.AnimInstance";
+mt_heaps_slib__$AnimManager_AnimInstance.prototype = {
+	overLastFrame: function() {
+		return this.animCursor >= this.frames.length;
+	}
+	,applyFrame: function() {
+		var f = this.frames[this.reverse ? this.frames.length - 1 - this.animCursor : this.animCursor];
+		if(this.spr.get_anim().onEnterFrame != null && this.lastFrame != f) {
+			this.spr.get_anim().onEnterFrame(f);
+		}
+		if(this.spr.groupName != this.group) {
+			this.spr.set(null,this.group,f);
+		} else if(this.spr.frame != f) {
+			this.spr.setFrame(f);
+		}
+		this.lastFrame = f;
+	}
+	,onEnd: function() {
+	}
+	,onEachLoop: function() {
+	}
+	,__class__: mt_heaps_slib__$AnimManager_AnimInstance
+};
+var mt_heaps_slib__$AnimManager_StateAnim = function(g,cb) {
+	this.group = g;
+	this.priority = 0;
+	this.cond = cb;
+	this.spd = 1.0;
+};
+$hxClasses["mt.heaps.slib._AnimManager.StateAnim"] = mt_heaps_slib__$AnimManager_StateAnim;
+mt_heaps_slib__$AnimManager_StateAnim.__name__ = "mt.heaps.slib._AnimManager.StateAnim";
+mt_heaps_slib__$AnimManager_StateAnim.prototype = {
+	__class__: mt_heaps_slib__$AnimManager_StateAnim
+};
+var mt_heaps_slib__$AnimManager_Transition = function(f,t,a,cb) {
+	this.from = f;
+	this.to = t;
+	this.anim = a;
+	this.cond = cb;
+	this.spd = 1.0;
+	this.reverse = false;
+};
+$hxClasses["mt.heaps.slib._AnimManager.Transition"] = mt_heaps_slib__$AnimManager_Transition;
+mt_heaps_slib__$AnimManager_Transition.__name__ = "mt.heaps.slib._AnimManager.Transition";
+mt_heaps_slib__$AnimManager_Transition.prototype = {
+	__class__: mt_heaps_slib__$AnimManager_Transition
+};
+var mt_heaps_slib_AnimManager = function(spr) {
+	this.S_STAR = "*";
+	this.suspendF = 0.;
+	this.suspended = false;
+	this.destroyed = false;
+	this.needUpdates = false;
+	this.genSpeed = 1.0;
+	this.transitions = [];
+	this.stateAnims = [];
+	this.stack = [];
+	this.spr = spr;
+};
+$hxClasses["mt.heaps.slib.AnimManager"] = mt_heaps_slib_AnimManager;
+mt_heaps_slib_AnimManager.__name__ = "mt.heaps.slib.AnimManager";
+mt_heaps_slib_AnimManager.prototype = {
+	getCurrentAnim: function() {
+		return this.stack[0];
+	}
+	,getDurationF: function() {
+		if(!(!this.destroyed && this.stack.length > 0)) {
+			return 0;
+		} else {
+			var _this = this.spr.lib;
+			var k = this.stack[0].group;
+			var tmp;
+			if(k == null) {
+				tmp = _this.currentGroup;
+			} else {
+				var _this1 = _this.groups;
+				tmp = __map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k];
+			}
+			return tmp.anim.length / this.genSpeed / this.stack[0].speed;
+		}
+	}
+	,getPlayRatio: function() {
+		if(!(!this.destroyed && this.stack.length > 0) && this.spr.frame == this.spr.totalFrames() - 1) {
+			return 1;
+		} else if(!(!this.destroyed && this.stack.length > 0)) {
+			return 0;
+		} else {
+			return this.stack[0].animCursor / this.stack[0].frames.length;
+		}
+	}
+	,setPlayRatio: function(r) {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[0].animCursor = r * (this.stack[0].frames.length - 1) | 0;
+			var _this = this.stack[0];
+			var f = _this.frames[_this.reverse ? _this.frames.length - 1 - _this.animCursor : _this.animCursor];
+			if(_this.spr.get_anim().onEnterFrame != null && _this.lastFrame != f) {
+				_this.spr.get_anim().onEnterFrame(f);
+			}
+			if(_this.spr.groupName != _this.group) {
+				_this.spr.set(null,_this.group,f);
+			} else if(_this.spr.frame != f) {
+				_this.spr.setFrame(f);
+			}
+			_this.lastFrame = f;
+		}
+		return this;
+	}
+	,getDurationS: function(fps) {
+		return this.getDurationF() / fps;
+	}
+	,getLastAnim: function() {
+		return this.stack[this.stack.length - 1];
+	}
+	,startUpdates: function() {
+		this.needUpdates = true;
+	}
+	,stopUpdates: function() {
+		this.needUpdates = false;
+	}
+	,destroy: function() {
+		this.destroyed = true;
+		this.stopWithoutStateAnims();
+		this.needUpdates = false;
+		this.stateAnims = null;
+		this.stack = null;
+		this.spr = null;
+	}
+	,hasAnim: function() {
+		if(!this.destroyed) {
+			return this.stack.length > 0;
+		} else {
+			return false;
+		}
+	}
+	,isPlaying: function(group) {
+		if(!this.destroyed && this.stack.length > 0) {
+			return this.stack[0].group == group;
+		} else {
+			return false;
+		}
+	}
+	,isAnimFirstFrame: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			return this.stack[0].animCursor == 0;
+		} else {
+			return false;
+		}
+	}
+	,isAnimLastFrame: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			return this.stack[0].animCursor >= this.stack[0].frames.length - 1;
+		} else {
+			return false;
+		}
+	}
+	,isStoppedOnLastFrame: function(id) {
+		if(!(!this.destroyed && this.stack.length > 0) && (id == null || this.spr.groupName == id)) {
+			return this.spr.frame == this.spr.totalFrames() - 1;
+		} else {
+			return false;
+		}
+	}
+	,getAnimCursor: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			return this.stack[0].animCursor;
+		} else {
+			return 0;
+		}
+	}
+	,getAnimId: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			return this.stack[0].group;
+		} else {
+			return null;
+		}
+	}
+	,chain: function(id,plays) {
+		if(plays == null) {
+			plays = 1;
+		}
+		this.play(id,plays,true);
+		return this;
+	}
+	,chainCustomSequence: function(id,from,to) {
+		this.playCustomSequence(id,from,to,true);
+		return this;
+	}
+	,chainLoop: function(id) {
+		this.play(id,99999,true);
+		return this;
+	}
+	,chainFor: function(id,durationFrames) {
+		this.play(id,99999,true);
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].playDuration = durationFrames;
+		}
+		return this;
+	}
+	,playForF: function(group,dframes) {
+		if(dframes > 0) {
+			this.play(group).loop();
+			if(!this.destroyed && this.stack.length > 0) {
+				this.stack[this.stack.length - 1].playDuration = dframes;
+			}
+		}
+		return this;
+	}
+	,playAndLoop: function(k) {
+		return this.play(k).loop();
+	}
+	,playCustomSequence: function(group,from,to,queueAnim) {
+		if(queueAnim == null) {
+			queueAnim = false;
+		}
+		var _this = this.spr.lib;
+		var g;
+		if(group == null) {
+			g = _this.currentGroup;
+		} else {
+			var _this1 = _this.groups;
+			g = __map_reserved[group] != null ? _this1.getReserved(group) : _this1.h[group];
+		}
+		if(g == null) {
+			return this;
+		}
+		if(!queueAnim && (!this.destroyed && this.stack.length > 0)) {
+			this.stopWithoutStateAnims();
+		}
+		var a = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,group);
+		this.stack.push(a);
+		a.reverse = from > to;
+		a.frames = [];
+		if(from > to) {
+			var tmp = from;
+			from = to;
+			to = tmp;
+		}
+		var _g = from;
+		var _g1 = to + 1;
+		while(_g < _g1) {
+			var f = _g++;
+			a.frames.push(f);
+		}
+		this.needUpdates = true;
+		if(!queueAnim) {
+			var t = this.getTransition(this.spr.groupName,this.stack[0].group);
+			if(t != null) {
+				var _this2 = this.spr.lib;
+				var k = t.anim;
+				var exists;
+				var exists1;
+				if(k != null) {
+					var _this3 = _this2.groups;
+					exists1 = __map_reserved[k] != null ? _this3.existsReserved(k) : _this3.h.hasOwnProperty(k);
+				} else {
+					exists1 = false;
+				}
+				if(exists1) {
+					var _this4 = _this2.groups;
+					exists = (__map_reserved[k] != null ? _this4.getReserved(k) : _this4.h[k]).frames.length > 0;
+				} else {
+					exists = false;
+				}
+				if(exists) {
+					var a1 = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,t.anim);
+					this.stack.splice(0,0,a1);
+					a1.speed = t.spd;
+					a1.reverse = t.reverse;
+				}
+			}
+			var _this5 = this.stack[0];
+			var f1 = _this5.frames[_this5.reverse ? _this5.frames.length - 1 - _this5.animCursor : _this5.animCursor];
+			if(_this5.spr.get_anim().onEnterFrame != null && _this5.lastFrame != f1) {
+				_this5.spr.get_anim().onEnterFrame(f1);
+			}
+			if(_this5.spr.groupName != _this5.group) {
+				_this5.spr.set(null,_this5.group,f1);
+			} else if(_this5.spr.frame != f1) {
+				_this5.spr.setFrame(f1);
+			}
+			_this5.lastFrame = f1;
+		}
+		return this;
+	}
+	,play: function(group,plays,queueAnim) {
+		if(queueAnim == null) {
+			queueAnim = false;
+		}
+		if(plays == null) {
+			plays = 1;
+		}
+		var _this = this.spr.lib;
+		var g;
+		if(group == null) {
+			g = _this.currentGroup;
+		} else {
+			var _this1 = _this.groups;
+			g = __map_reserved[group] != null ? _this1.getReserved(group) : _this1.h[group];
+		}
+		if(g == null) {
+			return this;
+		}
+		if(g.anim == null || g.anim.length == 0) {
+			return this;
+		}
+		if(!queueAnim && (!this.destroyed && this.stack.length > 0)) {
+			this.stopWithoutStateAnims();
+		}
+		var a = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,group);
+		this.stack.push(a);
+		a.plays = plays;
+		this.needUpdates = true;
+		if(!queueAnim) {
+			var t = this.getTransition(this.spr.groupName,this.stack[0].group);
+			if(t != null) {
+				var _this2 = this.spr.lib;
+				var k = t.anim;
+				var exists;
+				var exists1;
+				if(k != null) {
+					var _this3 = _this2.groups;
+					exists1 = __map_reserved[k] != null ? _this3.existsReserved(k) : _this3.h.hasOwnProperty(k);
+				} else {
+					exists1 = false;
+				}
+				if(exists1) {
+					var _this4 = _this2.groups;
+					exists = (__map_reserved[k] != null ? _this4.getReserved(k) : _this4.h[k]).frames.length > 0;
+				} else {
+					exists = false;
+				}
+				if(exists) {
+					var a1 = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,t.anim);
+					this.stack.splice(0,0,a1);
+					a1.speed = t.spd;
+					a1.reverse = t.reverse;
+				}
+			}
+			var _this5 = this.stack[0];
+			var f = _this5.frames[_this5.reverse ? _this5.frames.length - 1 - _this5.animCursor : _this5.animCursor];
+			if(_this5.spr.get_anim().onEnterFrame != null && _this5.lastFrame != f) {
+				_this5.spr.get_anim().onEnterFrame(f);
+			}
+			if(_this5.spr.groupName != _this5.group) {
+				_this5.spr.set(null,_this5.group,f);
+			} else if(_this5.spr.frame != f) {
+				_this5.spr.setFrame(f);
+			}
+			_this5.lastFrame = f;
+		}
+		return this;
+	}
+	,playOverlap: function(g,spd) {
+		if(spd == null) {
+			spd = 1.0;
+		}
+		var _this = this.spr.lib;
+		var tmp;
+		var tmp1;
+		if(g != null) {
+			var _this1 = _this.groups;
+			tmp1 = __map_reserved[g] != null ? _this1.existsReserved(g) : _this1.h.hasOwnProperty(g);
+		} else {
+			tmp1 = false;
+		}
+		if(tmp1) {
+			var _this2 = _this.groups;
+			tmp = (__map_reserved[g] != null ? _this2.getReserved(g) : _this2.h[g]).frames.length > 0;
+		} else {
+			tmp = false;
+		}
+		if(!tmp) {
+			return;
+		}
+		this.overlap = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,g);
+		this.overlap.speed = spd;
+		var _this3 = this.overlap;
+		var f = _this3.frames[_this3.reverse ? _this3.frames.length - 1 - _this3.animCursor : _this3.animCursor];
+		if(_this3.spr.get_anim().onEnterFrame != null && _this3.lastFrame != f) {
+			_this3.spr.get_anim().onEnterFrame(f);
+		}
+		if(_this3.spr.groupName != _this3.group) {
+			_this3.spr.set(null,_this3.group,f);
+		} else if(_this3.spr.frame != f) {
+			_this3.spr.setFrame(f);
+		}
+		_this3.lastFrame = f;
+		this.needUpdates = true;
+	}
+	,clearOverlapAnim: function() {
+		this.overlap = null;
+	}
+	,hasOverlapAnim: function() {
+		return this.overlap != null;
+	}
+	,loop: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].plays = 999999;
+		}
+		return this;
+	}
+	,cancelLoop: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].plays = 0;
+		}
+		return this;
+	}
+	,stopOnLastFrame: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].stopOnLastFrame = true;
+		}
+		return this;
+	}
+	,reverse: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].reverse = true;
+			if(this.stack[this.stack.length - 1] == this.stack[0]) {
+				var _this = this.stack[0];
+				var f = _this.frames[_this.reverse ? _this.frames.length - 1 - _this.animCursor : _this.animCursor];
+				if(_this.spr.get_anim().onEnterFrame != null && _this.lastFrame != f) {
+					_this.spr.get_anim().onEnterFrame(f);
+				}
+				if(_this.spr.groupName != _this.group) {
+					_this.spr.set(null,_this.group,f);
+				} else if(_this.spr.frame != f) {
+					_this.spr.setFrame(f);
+				}
+				_this.lastFrame = f;
+			}
+		}
+		return this;
+	}
+	,killAfterPlay: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].killAfterPlay = true;
+		}
+		return this;
+	}
+	,onEnd: function(cb) {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].onEnd = cb;
+		}
+		return this;
+	}
+	,onEachLoop: function(cb) {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].onEachLoop = cb;
+		}
+		return this;
+	}
+	,unsync: function() {
+		if(!(!this.destroyed && this.stack.length > 0)) {
+			return this;
+		}
+		var a = this.stack[0];
+		var key = a.group;
+		var _this = mt_heaps_slib_AnimManager.UNSYNC;
+		if(!(__map_reserved[key] != null ? _this.existsReserved(key) : _this.h.hasOwnProperty(key))) {
+			var key1 = a.group;
+			var _this1 = mt_heaps_slib_AnimManager.UNSYNC;
+			if(__map_reserved[key1] != null) {
+				_this1.setReserved(key1,1);
+			} else {
+				_this1.h[key1] = 1;
+			}
+		} else {
+			var this1 = mt_heaps_slib_AnimManager.UNSYNC;
+			var key2 = a.group;
+			var key3 = a.group;
+			var _this2 = mt_heaps_slib_AnimManager.UNSYNC;
+			var value = (__map_reserved[key3] != null ? _this2.getReserved(key3) : _this2.h[key3]) + 1;
+			var _this3 = this1;
+			if(__map_reserved[key2] != null) {
+				_this3.setReserved(key2,value);
+			} else {
+				_this3.h[key2] = value;
+			}
+		}
+		var x = a.frames.length / 3;
+		var offset;
+		if(x > .0) {
+			var t = x + .5 | 0;
+			offset = t < x ? t + 1 : t;
+		} else if(x < .0) {
+			var t1 = x - .5 | 0;
+			offset = t1 < x ? t1 + 1 : t1;
+		} else {
+			offset = 0;
+		}
+		var key4 = a.group;
+		var _this4 = mt_heaps_slib_AnimManager.UNSYNC;
+		a.animCursor = (offset * (__map_reserved[key4] != null ? _this4.getReserved(key4) : _this4.h[key4]) + Std.random(100)) % a.frames.length;
+		return this;
+	}
+	,pauseCurrentAnim: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[0].paused = true;
+		}
+	}
+	,resumeCurrentAnim: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[0].paused = false;
+		}
+	}
+	,stopWithStateAnims: function() {
+		this.stack = [];
+		this.applyStateAnims();
+	}
+	,stopWithoutStateAnims: function(k,frame) {
+		this.stack = [];
+		if(k != null) {
+			this.spr.set(null,k,frame != null ? frame : 0);
+		} else if(frame != null) {
+			this.spr.setFrame(frame);
+		}
+	}
+	,suspend: function() {
+		this.suspended = true;
+		this.suspendF = 9999;
+	}
+	,unsuspend: function() {
+		this.suspended = false;
+		this.suspendF = 0;
+	}
+	,suspendForF: function(durationFrame) {
+		this.suspendF = durationFrame + 1;
+	}
+	,getGlobalSpeed: function() {
+		return this.genSpeed;
+	}
+	,setGlobalSpeed: function(s) {
+		this.genSpeed = s;
+		return this;
+	}
+	,setSpeed: function(s) {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].speed = s;
+		}
+		return this;
+	}
+	,initCurrentAnim: function() {
+		var t = this.getTransition(this.spr.groupName,this.stack[0].group);
+		if(t != null) {
+			var _this = this.spr.lib;
+			var k = t.anim;
+			var exists;
+			var exists1;
+			if(k != null) {
+				var _this1 = _this.groups;
+				exists1 = __map_reserved[k] != null ? _this1.existsReserved(k) : _this1.h.hasOwnProperty(k);
+			} else {
+				exists1 = false;
+			}
+			if(exists1) {
+				var _this2 = _this.groups;
+				exists = (__map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k]).frames.length > 0;
+			} else {
+				exists = false;
+			}
+			if(exists) {
+				var a = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,t.anim);
+				this.stack.splice(0,0,a);
+				a.speed = t.spd;
+				a.reverse = t.reverse;
+			}
+		}
+		var _this3 = this.stack[0];
+		var f = _this3.frames[_this3.reverse ? _this3.frames.length - 1 - _this3.animCursor : _this3.animCursor];
+		if(_this3.spr.get_anim().onEnterFrame != null && _this3.lastFrame != f) {
+			_this3.spr.get_anim().onEnterFrame(f);
+		}
+		if(_this3.spr.groupName != _this3.group) {
+			_this3.spr.set(null,_this3.group,f);
+		} else if(_this3.spr.frame != f) {
+			_this3.spr.setFrame(f);
+		}
+		_this3.lastFrame = f;
+	}
+	,registerTransitions: function(from,tos,animId,spd,reverse) {
+		if(reverse == null) {
+			reverse = false;
+		}
+		if(spd == null) {
+			spd = 1.0;
+		}
+		var _g = 0;
+		while(_g < tos.length) {
+			var to = tos[_g];
+			++_g;
+			this.registerTransition(from,to,animId,spd,reverse);
+		}
+	}
+	,alwaysTrue: function() {
+		return true;
+	}
+	,registerTransition: function(from,to,animId,spd,reverse,cond) {
+		if(reverse == null) {
+			reverse = false;
+		}
+		if(spd == null) {
+			spd = 1.0;
+		}
+		var _g = 0;
+		var _g1 = this.transitions;
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			if(t.from == from && t.to == to) {
+				t.anim = animId;
+				t.spd = spd;
+				return;
+			}
+		}
+		var t1 = new mt_heaps_slib__$AnimManager_Transition(from,to,animId,cond == null ? $bind(this,this.alwaysTrue) : cond);
+		t1.spd = spd;
+		t1.reverse = reverse;
+		this.transitions.push(t1);
+	}
+	,getTransition: function(from,to) {
+		var _g = 0;
+		var _g1 = this.transitions;
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			if((t.from == this.S_STAR || t.from == from) && (t.to == this.S_STAR || t.to == to) && t.cond()) {
+				return t;
+			}
+		}
+		return null;
+	}
+	,registerStateAnim: function(group,priority,spd,condition) {
+		if(spd == null) {
+			spd = 1.0;
+		}
+		if(condition == null) {
+			condition = function() {
+				return true;
+			};
+		}
+		this.removeStateAnim(group,priority);
+		var s = new mt_heaps_slib__$AnimManager_StateAnim(group,condition);
+		s.priority = priority;
+		s.spd = spd;
+		this.stateAnims.push(s);
+		this.stateAnims.sort(function(a,b) {
+			return -Reflect.compare(a.priority,b.priority);
+		});
+		this.applyStateAnims();
+	}
+	,setStateAnimSpeed: function(group,spd) {
+		var _g = 0;
+		var _g1 = this.stateAnims;
+		while(_g < _g1.length) {
+			var s = _g1[_g];
+			++_g;
+			if(s.group == group) {
+				s.spd = spd;
+				if(!this.destroyed && this.stack.length > 0 && this.stack[0].group == group) {
+					this.stack[0].speed = spd;
+				}
+			}
+		}
+	}
+	,removeStateAnim: function(group,priority) {
+		var i = 0;
+		while(i < this.stateAnims.length) if(this.stateAnims[i].group == group && this.stateAnims[i].priority == priority) {
+			this.stateAnims.splice(i,1);
+		} else {
+			++i;
+		}
+	}
+	,removeAllStateAnims: function() {
+		this.stateAnims = [];
+	}
+	,applyStateAnims: function() {
+		if(!this.destroyed && this.stack.length > 0 && !this.stack[0].isStateAnim) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.stateAnims;
+		while(_g < _g1.length) {
+			var sa = _g1[_g];
+			++_g;
+			if(sa.cond()) {
+				if(!this.destroyed && this.stack.length > 0 && this.stack[0].group == sa.group) {
+					break;
+				}
+				var _this = this.play(sa.group).loop();
+				if(!_this.destroyed && _this.stack.length > 0) {
+					_this.stack[_this.stack.length - 1].speed = sa.spd;
+				}
+				if(!this.destroyed && this.stack.length > 0) {
+					this.stack[this.stack.length - 1].isStateAnim = true;
+				}
+				break;
+			}
+		}
+	}
+	,toString: function() {
+		return "AnimManager(" + Std.string(this.spr) + ")" + (!this.destroyed && this.stack.length > 0 ? "Playing(stack=" + this.stack.length + ")" : "NoAnim");
+	}
+	,update: function(dt) {
+		if(this.needUpdates) {
+			this._update(dt);
+		}
+	}
+	,_update: function(dt) {
+		if(this.suspended) {
+			this.suspendF -= dt;
+			if(this.suspendF <= 0) {
+				this.unsuspend();
+			}
+			return;
+		}
+		this.applyStateAnims();
+		var a = this.stack[0];
+		if(a != null && !a.paused) {
+			a.curFrameCpt += dt * this.genSpeed * a.speed;
+			if(a.playDuration > 0) {
+				a.playDuration -= dt;
+				if(a.playDuration <= 0) {
+					a.plays = 0;
+					a.animCursor = a.frames.length;
+					a.curFrameCpt = 1;
+				}
+			}
+			while(a.curFrameCpt > 1) {
+				a.curFrameCpt--;
+				a.animCursor++;
+				if(a.animCursor < a.frames.length) {
+					var f = a.frames[a.reverse ? a.frames.length - 1 - a.animCursor : a.animCursor];
+					if(a.spr.get_anim().onEnterFrame != null && a.lastFrame != f) {
+						a.spr.get_anim().onEnterFrame(f);
+					}
+					if(a.spr.groupName != a.group) {
+						a.spr.set(null,a.group,f);
+					} else if(a.spr.frame != f) {
+						a.spr.setFrame(f);
+					}
+					a.lastFrame = f;
+					continue;
+				}
+				a.animCursor = 0;
+				a.plays--;
+				if(a.plays > 0 || a.playDuration > 0) {
+					a.onEachLoop();
+					a = this.stack[0];
+					var f1 = a.frames[a.reverse ? a.frames.length - 1 - a.animCursor : a.animCursor];
+					if(a.spr.get_anim().onEnterFrame != null && a.lastFrame != f1) {
+						a.spr.get_anim().onEnterFrame(f1);
+					}
+					if(a.spr.groupName != a.group) {
+						a.spr.set(null,a.group,f1);
+					} else if(a.spr.frame != f1) {
+						a.spr.setFrame(f1);
+					}
+					a.lastFrame = f1;
+					continue;
+				}
+				if(a.stopOnLastFrame) {
+					this.stopWithoutStateAnims();
+				}
+				a.onEnd();
+				if(a.killAfterPlay) {
+					this.spr.remove();
+					break;
+				}
+				if(!this.destroyed && this.stack.length > 0) {
+					this.stack.shift();
+					if(this.stack.length == 0) {
+						this.stopWithStateAnims();
+					} else {
+						var t = this.getTransition(this.spr.groupName,this.stack[0].group);
+						if(t != null) {
+							var _this = this.spr.lib;
+							var k = t.anim;
+							var exists;
+							var exists1;
+							if(k != null) {
+								var _this1 = _this.groups;
+								exists1 = __map_reserved[k] != null ? _this1.existsReserved(k) : _this1.h.hasOwnProperty(k);
+							} else {
+								exists1 = false;
+							}
+							if(exists1) {
+								var _this2 = _this.groups;
+								exists = (__map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k]).frames.length > 0;
+							} else {
+								exists = false;
+							}
+							if(exists) {
+								var a1 = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,t.anim);
+								this.stack.splice(0,0,a1);
+								a1.speed = t.spd;
+								a1.reverse = t.reverse;
+							}
+						}
+						var _this3 = this.stack[0];
+						var f2 = _this3.frames[_this3.reverse ? _this3.frames.length - 1 - _this3.animCursor : _this3.animCursor];
+						if(_this3.spr.get_anim().onEnterFrame != null && _this3.lastFrame != f2) {
+							_this3.spr.get_anim().onEnterFrame(f2);
+						}
+						if(_this3.spr.groupName != _this3.group) {
+							_this3.spr.set(null,_this3.group,f2);
+						} else if(_this3.spr.frame != f2) {
+							_this3.spr.setFrame(f2);
+						}
+						_this3.lastFrame = f2;
+					}
+					a = this.stack[0];
+				}
+				if(!(!this.destroyed && this.stack.length > 0)) {
+					break;
+				}
+			}
+		}
+		if(this.overlap != null && !this.spr.destroyed) {
+			this.overlap.curFrameCpt += dt * this.genSpeed * this.overlap.speed;
+			while(this.overlap.curFrameCpt > 1) {
+				this.overlap.curFrameCpt--;
+				this.overlap.animCursor++;
+				var _this4 = this.overlap;
+				if(_this4.animCursor >= _this4.frames.length) {
+					this.overlap = null;
+					if(this.stack[0] != null) {
+						var _this5 = this.stack[0];
+						var f3 = _this5.frames[_this5.reverse ? _this5.frames.length - 1 - _this5.animCursor : _this5.animCursor];
+						if(_this5.spr.get_anim().onEnterFrame != null && _this5.lastFrame != f3) {
+							_this5.spr.get_anim().onEnterFrame(f3);
+						}
+						if(_this5.spr.groupName != _this5.group) {
+							_this5.spr.set(null,_this5.group,f3);
+						} else if(_this5.spr.frame != f3) {
+							_this5.spr.setFrame(f3);
+						}
+						_this5.lastFrame = f3;
+					}
+					break;
+				}
+			}
+			if(this.overlap != null) {
+				var _this6 = this.overlap;
+				var f4 = _this6.frames[_this6.reverse ? _this6.frames.length - 1 - _this6.animCursor : _this6.animCursor];
+				if(_this6.spr.get_anim().onEnterFrame != null && _this6.lastFrame != f4) {
+					_this6.spr.get_anim().onEnterFrame(f4);
+				}
+				if(_this6.spr.groupName != _this6.group) {
+					_this6.spr.set(null,_this6.group,f4);
+				} else if(_this6.spr.frame != f4) {
+					_this6.spr.setFrame(f4);
+				}
+				_this6.lastFrame = f4;
+			}
+		}
+		if(!this.destroyed && !(!this.destroyed && this.stack.length > 0) && this.overlap == null) {
+			this.needUpdates = false;
+		}
+	}
+	,__class__: mt_heaps_slib_AnimManager
+};
+var mt_heaps_slib_SpriteInterface = function() { };
+$hxClasses["mt.heaps.slib.SpriteInterface"] = mt_heaps_slib_SpriteInterface;
+mt_heaps_slib_SpriteInterface.__name__ = "mt.heaps.slib.SpriteInterface";
+mt_heaps_slib_SpriteInterface.prototype = {
+	__class__: mt_heaps_slib_SpriteInterface
+	,__properties__: {get_anim:"get_anim",get_animAllocated:"get_animAllocated"}
+};
+var mt_heaps_slib_HSprite = function(l,g,f,parent) {
+	if(f == null) {
+		f = 0;
+	}
+	h2d_Drawable.call(this,parent);
+	this.destroyed = false;
+	this.pivot = new mt_heaps_slib_SpritePivot();
+	this.lastPage = -1;
+	if(l != null) {
+		if(l != null) {
+			if(l.pages == null || l.pages.length == 0) {
+				throw new js__$Boot_HaxeError("sprite sheet has no backing texture, please generate one");
+			}
+			if(g == null) {
+				this.groupName = null;
+				this.group = null;
+				this.frameData = null;
+			}
+			if(this.allocated && this.lib != null) {
+				this.lib.removeChild(this);
+			}
+			this.lib = l;
+			if(this.allocated) {
+				this.lib.addChild(this);
+			}
+			if(this.pivot.isUndefined) {
+				var _this = this.pivot;
+				_this.centerFactorX = this.lib.defaultCenterX;
+				_this.centerFactorY = this.lib.defaultCenterY;
+				_this.usingFactor = true;
+				_this.isUndefined = false;
+			}
+		}
+		if(g != null && g != this.groupName) {
+			this.groupName = g;
+		}
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var _this1 = this.lib;
+			var k = this.groupName;
+			var tmp;
+			if(k == null) {
+				tmp = _this1.currentGroup;
+			} else {
+				var _this2 = _this1.groups;
+				tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+			}
+			this.group = tmp;
+			var _this3 = this.lib;
+			var k1 = this.groupName;
+			var g1;
+			if(k1 == null) {
+				g1 = _this3.currentGroup;
+			} else {
+				var _this4 = _this3.groups;
+				g1 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+			}
+			this.frameData = g1 == null ? null : g1.frames[f];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + f + ")");
+			}
+			if(this.rawTile == null) {
+				this.rawTile = this.lib.pages[this.frameData.page].clone();
+			} else {
+				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
+			}
+			this.lastPage = this.frameData.page;
+			this.setFrame(f);
+		} else {
+			this.setEmptyTexture();
+		}
+	} else {
+		this.setEmptyTexture();
+	}
+};
+$hxClasses["mt.heaps.slib.HSprite"] = mt_heaps_slib_HSprite;
+mt_heaps_slib_HSprite.__name__ = "mt.heaps.slib.HSprite";
+mt_heaps_slib_HSprite.__interfaces__ = [mt_heaps_slib_SpriteInterface];
+mt_heaps_slib_HSprite.__super__ = h2d_Drawable;
+mt_heaps_slib_HSprite.prototype = $extend(h2d_Drawable.prototype,{
+	toString: function() {
+		return "HSprite_" + this.groupName + "[" + this.frame + "]";
+	}
+	,get_anim: function() {
+		if(this._animManager == null) {
+			this._animManager = new mt_heaps_slib_AnimManager(this);
+			if(this.onAnimManAlloc != null) {
+				this.onAnimManAlloc(this._animManager);
+			}
+		}
+		return this._animManager;
+	}
+	,get_animAllocated: function() {
+		return this._animManager != null;
+	}
+	,disposeAnimManager: function() {
+		if(this._animManager != null) {
+			this._animManager.destroy();
+			this._animManager = null;
+		}
+	}
+	,setPos: function(x,y) {
+		this.posChanged = true;
+		this.x = x;
+		this.posChanged = true;
+		this.y = y;
+	}
+	,setTexture: function(t) {
+		this.rawTile = h2d_Tile.fromTexture(t);
+	}
+	,setEmptyTexture: function() {
+		this.rawTile = h2d_Tile.fromColor(8453888,4,4);
+	}
+	,set: function(l,g,frame,stopAllAnims) {
+		if(stopAllAnims == null) {
+			stopAllAnims = false;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		if(l != null) {
+			if(l.pages == null || l.pages.length == 0) {
+				throw new js__$Boot_HaxeError("sprite sheet has no backing texture, please generate one");
+			}
+			if(g == null) {
+				this.groupName = null;
+				this.group = null;
+				this.frameData = null;
+			}
+			if(this.allocated && this.lib != null) {
+				this.lib.removeChild(this);
+			}
+			this.lib = l;
+			if(this.allocated) {
+				this.lib.addChild(this);
+			}
+			if(this.pivot.isUndefined) {
+				var _this = this.pivot;
+				_this.centerFactorX = this.lib.defaultCenterX;
+				_this.centerFactorY = this.lib.defaultCenterY;
+				_this.usingFactor = true;
+				_this.isUndefined = false;
+			}
+		}
+		if(g != null && g != this.groupName) {
+			this.groupName = g;
+		}
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			if(stopAllAnims && this._animManager != null) {
+				if(this._animManager == null) {
+					this._animManager = new mt_heaps_slib_AnimManager(this);
+					if(this.onAnimManAlloc != null) {
+						this.onAnimManAlloc(this._animManager);
+					}
+				}
+				this._animManager.stopWithoutStateAnims();
+			}
+			var _this1 = this.lib;
+			var k = this.groupName;
+			var tmp;
+			if(k == null) {
+				tmp = _this1.currentGroup;
+			} else {
+				var _this2 = _this1.groups;
+				tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+			}
+			this.group = tmp;
+			var _this3 = this.lib;
+			var k1 = this.groupName;
+			var g1;
+			if(k1 == null) {
+				g1 = _this3.currentGroup;
+			} else {
+				var _this4 = _this3.groups;
+				g1 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+			}
+			this.frameData = g1 == null ? null : g1.frames[frame];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + frame + ")");
+			}
+			if(this.rawTile == null) {
+				this.rawTile = this.lib.pages[this.frameData.page].clone();
+			} else {
+				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
+			}
+			this.lastPage = this.frameData.page;
+			this.setFrame(frame);
+		} else {
+			this.setEmptyTexture();
+		}
+	}
+	,setRandom: function(l,g,rndFunc) {
+		var _this = this.lib;
+		var frame;
+		var frame1;
+		if(g != null) {
+			var _this1 = _this.groups;
+			frame1 = __map_reserved[g] != null ? _this1.existsReserved(g) : _this1.h.hasOwnProperty(g);
+		} else {
+			frame1 = false;
+		}
+		if(frame1) {
+			var _this2 = _this.groups;
+			frame = (__map_reserved[g] != null ? _this2.getReserved(g) : _this2.h[g]).frames.length > 0;
+		} else {
+			frame = false;
+		}
+		if(!frame) {
+			throw new js__$Boot_HaxeError("Unknown group " + g);
+		}
+		var frame2;
+		if(g == null) {
+			frame2 = _this.currentGroup;
+		} else {
+			var _this3 = _this.groups;
+			frame2 = __map_reserved[g] != null ? _this3.getReserved(g) : _this3.h[g];
+		}
+		var frame3 = (rndFunc == null ? Std.random : rndFunc)(frame2.frames.length);
+		if(l != null) {
+			if(l.pages == null || l.pages.length == 0) {
+				throw new js__$Boot_HaxeError("sprite sheet has no backing texture, please generate one");
+			}
+			if(g == null) {
+				this.groupName = null;
+				this.group = null;
+				this.frameData = null;
+			}
+			if(this.allocated && this.lib != null) {
+				this.lib.removeChild(this);
+			}
+			this.lib = l;
+			if(this.allocated) {
+				this.lib.addChild(this);
+			}
+			if(this.pivot.isUndefined) {
+				var _this4 = this.pivot;
+				_this4.centerFactorX = this.lib.defaultCenterX;
+				_this4.centerFactorY = this.lib.defaultCenterY;
+				_this4.usingFactor = true;
+				_this4.isUndefined = false;
+			}
+		}
+		if(g != null && g != this.groupName) {
+			this.groupName = g;
+		}
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var _this5 = this.lib;
+			var k = this.groupName;
+			var tmp;
+			if(k == null) {
+				tmp = _this5.currentGroup;
+			} else {
+				var _this6 = _this5.groups;
+				tmp = __map_reserved[k] != null ? _this6.getReserved(k) : _this6.h[k];
+			}
+			this.group = tmp;
+			var _this7 = this.lib;
+			var k1 = this.groupName;
+			var g1;
+			if(k1 == null) {
+				g1 = _this7.currentGroup;
+			} else {
+				var _this8 = _this7.groups;
+				g1 = __map_reserved[k1] != null ? _this8.getReserved(k1) : _this8.h[k1];
+			}
+			this.frameData = g1 == null ? null : g1.frames[frame3];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + frame3 + ")");
+			}
+			if(this.rawTile == null) {
+				this.rawTile = this.lib.pages[this.frameData.page].clone();
+			} else {
+				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
+			}
+			this.lastPage = this.frameData.page;
+			this.setFrame(frame3);
+		} else {
+			this.setEmptyTexture();
+		}
+	}
+	,setRandomFrame: function(rndFunc) {
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var g = this.groupName;
+			var rndFunc1 = rndFunc == null ? Std.random : rndFunc;
+			var _this = this.lib;
+			var frame;
+			var frame1;
+			if(g != null) {
+				var _this1 = _this.groups;
+				frame1 = __map_reserved[g] != null ? _this1.existsReserved(g) : _this1.h.hasOwnProperty(g);
+			} else {
+				frame1 = false;
+			}
+			if(frame1) {
+				var _this2 = _this.groups;
+				frame = (__map_reserved[g] != null ? _this2.getReserved(g) : _this2.h[g]).frames.length > 0;
+			} else {
+				frame = false;
+			}
+			if(!frame) {
+				throw new js__$Boot_HaxeError("Unknown group " + g);
+			}
+			var frame2;
+			if(g == null) {
+				frame2 = _this.currentGroup;
+			} else {
+				var _this3 = _this.groups;
+				frame2 = __map_reserved[g] != null ? _this3.getReserved(g) : _this3.h[g];
+			}
+			var frame3 = (rndFunc1 == null ? Std.random : rndFunc1)(frame2.frames.length);
+			if(g != null && g != this.groupName) {
+				this.groupName = g;
+			}
+			if(!this.destroyed && this.lib != null && this.groupName != null) {
+				var _this4 = this.lib;
+				var k = this.groupName;
+				var tmp;
+				if(k == null) {
+					tmp = _this4.currentGroup;
+				} else {
+					var _this5 = _this4.groups;
+					tmp = __map_reserved[k] != null ? _this5.getReserved(k) : _this5.h[k];
+				}
+				this.group = tmp;
+				var _this6 = this.lib;
+				var k1 = this.groupName;
+				var g1;
+				if(k1 == null) {
+					g1 = _this6.currentGroup;
+				} else {
+					var _this7 = _this6.groups;
+					g1 = __map_reserved[k1] != null ? _this7.getReserved(k1) : _this7.h[k1];
+				}
+				this.frameData = g1 == null ? null : g1.frames[frame3];
+				if(this.frameData == null) {
+					throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + frame3 + ")");
+				}
+				if(this.rawTile == null) {
+					this.rawTile = this.lib.pages[this.frameData.page].clone();
+				} else {
+					this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
+				}
+				this.lastPage = this.frameData.page;
+				this.setFrame(frame3);
+			} else {
+				this.setEmptyTexture();
+			}
+		}
+	}
+	,isGroup: function(k) {
+		return this.groupName == k;
+	}
+	,is: function(k,f) {
+		if(f == null) {
+			f = -1;
+		}
+		if(this.groupName == k) {
+			if(f >= 0) {
+				return this.frame == f;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+	,isReady: function() {
+		if(!this.destroyed && this.lib != null) {
+			return this.groupName != null;
+		} else {
+			return false;
+		}
+	}
+	,setFrame: function(f) {
+		var old = this.frame;
+		this.frame = f;
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var prev = this.frameData;
+			var _this = this.lib;
+			var k = this.groupName;
+			var frame = this.frame;
+			var g;
+			if(k == null) {
+				g = _this.currentGroup;
+			} else {
+				var _this1 = _this.groups;
+				g = __map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k];
+			}
+			this.frameData = g == null ? null : g.frames[frame];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + this.frame + ")");
+			}
+			if(this.lastFrame != this.frameData.page) {
+				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
+				this.lastPage = this.frameData.page;
+			}
+			if(this.onFrameChange != null) {
+				this.onFrameChange();
+			}
+		}
+	}
+	,fitToBox: function(w,h,useFrameDataRealSize) {
+		if(useFrameDataRealSize == null) {
+			useFrameDataRealSize = false;
+		}
+		if(useFrameDataRealSize) {
+			var x = w / this.frameData.realWid;
+			var y = (h == null ? w : h) / this.frameData.realHei;
+			var v = x < y ? x : y;
+			this.posChanged = true;
+			this.scaleX = v;
+			this.posChanged = true;
+			this.scaleY = v;
+		} else {
+			if(!this.destroyed && this.lib != null && this.groupName != null) {
+				var fd = this.frameData;
+				this.rawTile.setPosition(fd.x,fd.y);
+				this.rawTile.setSize(fd.wid,fd.hei);
+				var _this = this.pivot;
+				if(!_this.isUndefined && !_this.usingFactor) {
+					this.rawTile.dx = -(this.pivot.coordX + fd.realX | 0);
+					this.rawTile.dy = -(this.pivot.coordY + fd.realY | 0);
+				} else {
+					var _this1 = this.pivot;
+					if(!_this1.isUndefined && _this1.usingFactor) {
+						this.rawTile.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
+						this.rawTile.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
+					}
+				}
+			} else {
+				var _this2 = this.pivot;
+				if(!_this2.isUndefined && !_this2.usingFactor) {
+					this.rawTile.dx = -(this.pivot.coordX | 0);
+					this.rawTile.dy = -(this.pivot.coordY | 0);
+				} else {
+					var _this3 = this.pivot;
+					if(!_this3.isUndefined && _this3.usingFactor) {
+						this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+						this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+					}
+				}
+			}
+			var x1 = w / this.rawTile.width;
+			if(!this.destroyed && this.lib != null && this.groupName != null) {
+				var fd1 = this.frameData;
+				this.rawTile.setPosition(fd1.x,fd1.y);
+				this.rawTile.setSize(fd1.wid,fd1.hei);
+				var _this4 = this.pivot;
+				if(!_this4.isUndefined && !_this4.usingFactor) {
+					this.rawTile.dx = -(this.pivot.coordX + fd1.realX | 0);
+					this.rawTile.dy = -(this.pivot.coordY + fd1.realY | 0);
+				} else {
+					var _this5 = this.pivot;
+					if(!_this5.isUndefined && _this5.usingFactor) {
+						this.rawTile.dx = -(fd1.realWid * this.pivot.centerFactorX + fd1.realX | 0);
+						this.rawTile.dy = -(fd1.realHei * this.pivot.centerFactorY + fd1.realY | 0);
+					}
+				}
+			} else {
+				var _this6 = this.pivot;
+				if(!_this6.isUndefined && !_this6.usingFactor) {
+					this.rawTile.dx = -(this.pivot.coordX | 0);
+					this.rawTile.dy = -(this.pivot.coordY | 0);
+				} else {
+					var _this7 = this.pivot;
+					if(!_this7.isUndefined && _this7.usingFactor) {
+						this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+						this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+					}
+				}
+			}
+			var y1 = (h == null ? w : h) / this.rawTile.height;
+			var v1 = x1 < y1 ? x1 : y1;
+			this.posChanged = true;
+			this.scaleX = v1;
+			this.posChanged = true;
+			this.scaleY = v1;
+		}
+	}
+	,setPivotCoord: function(x,y) {
+		var _this = this.pivot;
+		_this.coordX = x;
+		_this.coordY = y;
+		_this.usingFactor = false;
+		_this.isUndefined = false;
+	}
+	,setCenterRatio: function(xRatio,yRatio) {
+		var _this = this.pivot;
+		_this.centerFactorX = xRatio;
+		_this.centerFactorY = yRatio;
+		_this.usingFactor = true;
+		_this.isUndefined = false;
+	}
+	,totalFrames: function() {
+		return this.group.frames.length;
+	}
+	,colorize: function(col,alpha) {
+		if(alpha == null) {
+			alpha = 1.0;
+		}
+		var _this = this.color;
+		var c = (alpha * 255 | 0) << 24 | col;
+		_this.x = (c >> 16 & 255) / 255;
+		_this.y = (c >> 8 & 255) / 255;
+		_this.z = (c & 255) / 255;
+		_this.w = (c >>> 24) / 255;
+	}
+	,uncolorize: function() {
+		var _this = this.color;
+		_this.x = 1;
+		_this.y = 1;
+		_this.z = 1;
+		_this.w = 1;
+	}
+	,onAdd: function() {
+		h2d_Drawable.prototype.onAdd.call(this);
+		if(this.lib != null) {
+			this.lib.addChild(this);
+		}
+	}
+	,onRemove: function() {
+		h2d_Drawable.prototype.onRemove.call(this);
+		if(!this.destroyed) {
+			this.destroyed = true;
+			if(this.lib != null) {
+				this.lib.removeChild(this);
+			}
+			if(this._animManager != null) {
+				this._animManager.destroy();
+				this._animManager = null;
+			}
+		}
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd = this.frameData;
+			this.rawTile.setPosition(fd.x,fd.y);
+			this.rawTile.setSize(fd.wid,fd.hei);
+			var _this = this.pivot;
+			if(!_this.isUndefined && !_this.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd.realY | 0);
+			} else {
+				var _this1 = this.pivot;
+				if(!_this1.isUndefined && _this1.usingFactor) {
+					this.rawTile.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
+					this.rawTile.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
+				}
+			}
+		} else {
+			var _this2 = this.pivot;
+			if(!_this2.isUndefined && !_this2.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this3 = this.pivot;
+				if(!_this3.isUndefined && _this3.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		var tmp = this.rawTile.dx;
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd1 = this.frameData;
+			this.rawTile.setPosition(fd1.x,fd1.y);
+			this.rawTile.setSize(fd1.wid,fd1.hei);
+			var _this4 = this.pivot;
+			if(!_this4.isUndefined && !_this4.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd1.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd1.realY | 0);
+			} else {
+				var _this5 = this.pivot;
+				if(!_this5.isUndefined && _this5.usingFactor) {
+					this.rawTile.dx = -(fd1.realWid * this.pivot.centerFactorX + fd1.realX | 0);
+					this.rawTile.dy = -(fd1.realHei * this.pivot.centerFactorY + fd1.realY | 0);
+				}
+			}
+		} else {
+			var _this6 = this.pivot;
+			if(!_this6.isUndefined && !_this6.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this7 = this.pivot;
+				if(!_this7.isUndefined && _this7.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		var tmp1 = this.rawTile.dy;
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd2 = this.frameData;
+			this.rawTile.setPosition(fd2.x,fd2.y);
+			this.rawTile.setSize(fd2.wid,fd2.hei);
+			var _this8 = this.pivot;
+			if(!_this8.isUndefined && !_this8.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd2.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd2.realY | 0);
+			} else {
+				var _this9 = this.pivot;
+				if(!_this9.isUndefined && _this9.usingFactor) {
+					this.rawTile.dx = -(fd2.realWid * this.pivot.centerFactorX + fd2.realX | 0);
+					this.rawTile.dy = -(fd2.realHei * this.pivot.centerFactorY + fd2.realY | 0);
+				}
+			}
+		} else {
+			var _this10 = this.pivot;
+			if(!_this10.isUndefined && !_this10.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this11 = this.pivot;
+				if(!_this11.isUndefined && _this11.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		var tmp2 = this.rawTile.width;
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd3 = this.frameData;
+			this.rawTile.setPosition(fd3.x,fd3.y);
+			this.rawTile.setSize(fd3.wid,fd3.hei);
+			var _this12 = this.pivot;
+			if(!_this12.isUndefined && !_this12.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd3.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd3.realY | 0);
+			} else {
+				var _this13 = this.pivot;
+				if(!_this13.isUndefined && _this13.usingFactor) {
+					this.rawTile.dx = -(fd3.realWid * this.pivot.centerFactorX + fd3.realX | 0);
+					this.rawTile.dy = -(fd3.realHei * this.pivot.centerFactorY + fd3.realY | 0);
+				}
+			}
+		} else {
+			var _this14 = this.pivot;
+			if(!_this14.isUndefined && !_this14.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this15 = this.pivot;
+				if(!_this15.isUndefined && _this15.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		this.addBounds(relativeTo,out,tmp,tmp1,tmp2,this.rawTile.height);
+	}
+	,get_tile: function() {
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd = this.frameData;
+			this.rawTile.setPosition(fd.x,fd.y);
+			this.rawTile.setSize(fd.wid,fd.hei);
+			var _this = this.pivot;
+			if(!_this.isUndefined && !_this.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd.realY | 0);
+			} else {
+				var _this1 = this.pivot;
+				if(!_this1.isUndefined && _this1.usingFactor) {
+					this.rawTile.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
+					this.rawTile.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
+				}
+			}
+		} else {
+			var _this2 = this.pivot;
+			if(!_this2.isUndefined && !_this2.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this3 = this.pivot;
+				if(!_this3.isUndefined && _this3.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		return this.rawTile;
+	}
+	,draw: function(ctx) {
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd = this.frameData;
+			this.rawTile.setPosition(fd.x,fd.y);
+			this.rawTile.setSize(fd.wid,fd.hei);
+			var _this = this.pivot;
+			if(!_this.isUndefined && !_this.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd.realY | 0);
+			} else {
+				var _this1 = this.pivot;
+				if(!_this1.isUndefined && _this1.usingFactor) {
+					this.rawTile.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
+					this.rawTile.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
+				}
+			}
+		} else {
+			var _this2 = this.pivot;
+			if(!_this2.isUndefined && !_this2.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this3 = this.pivot;
+				if(!_this3.isUndefined && _this3.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		this.emitTile(ctx,this.rawTile);
+	}
+	,sync: function(ctx) {
+		h2d_Drawable.prototype.sync.call(this,ctx);
+		if(this._animManager != null) {
+			if(this._animManager == null) {
+				this._animManager = new mt_heaps_slib_AnimManager(this);
+				if(this.onAnimManAlloc != null) {
+					this.onAnimManAlloc(this._animManager);
+				}
+			}
+			var _this = this._animManager;
+			var dt = !isNaN(mt_heaps_slib_SpriteLib.DT) ? mt_heaps_slib_SpriteLib.DT : ctx.elapsedTime * hxd_Timer.wantedFPS;
+			if(_this.needUpdates) {
+				_this._update(dt);
+			}
+		}
+	}
+	,__class__: mt_heaps_slib_HSprite
+	,__properties__: $extend(h2d_Drawable.prototype.__properties__,{get_tile:"get_tile",get_animAllocated:"get_animAllocated",get_anim:"get_anim"})
+});
+var mt_heaps_slib_HSpriteBE = function(sb,l,g,f) {
+	if(f == null) {
+		f = 0;
+	}
+	if(l.pages.length > 1) {
+		throw new js__$Boot_HaxeError("Cannot access tile when there is multiple pages");
+	}
+	h2d_BatchElement.call(this,l.pages[0].clone());
+	this.destroyed = false;
+	this.pivot = new mt_heaps_slib_SpritePivot();
+	sb.add(this);
+	var changed = false;
+	if(l != null && this.lib != l) {
+		changed = true;
+		if(g == null) {
+			this.groupName = null;
+			this.group = null;
+			this.frameData = null;
+		}
+		if(this.allocated && this.lib != null) {
+			this.lib.removeChild(this);
+		}
+		this.lib = l;
+		if(this.allocated) {
+			this.lib.addChild(this);
+		}
+		if(this.pivot.isUndefined) {
+			var _this = this.pivot;
+			_this.centerFactorX = this.lib.defaultCenterX;
+			_this.centerFactorY = this.lib.defaultCenterY;
+			_this.usingFactor = true;
+			_this.isUndefined = false;
+			this.updateTile();
+		}
+	}
+	if(g != null && g != this.groupName) {
+		changed = true;
+		this.groupName = g;
+	}
+	if(f != null && f != this.frame) {
+		changed = true;
+		this.frame = f;
+	}
+	if(!this.destroyed && this.groupName != null && changed) {
+		var _this1 = this.lib;
+		var k = this.groupName;
+		var tmp;
+		if(k == null) {
+			tmp = _this1.currentGroup;
+		} else {
+			var _this2 = _this1.groups;
+			tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+		}
+		this.group = tmp;
+		var _this3 = this.lib;
+		var k1 = this.groupName;
+		var g1;
+		if(k1 == null) {
+			g1 = _this3.currentGroup;
+		} else {
+			var _this4 = _this3.groups;
+			g1 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+		}
+		this.frameData = g1 == null ? null : g1.frames[f];
+		if(this.frameData == null) {
+			throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + f + ")");
+		}
+		this.updateTile();
+		if(this.onFrameChange != null) {
+			this.onFrameChange();
+		}
+	}
+};
+$hxClasses["mt.heaps.slib.HSpriteBE"] = mt_heaps_slib_HSpriteBE;
+mt_heaps_slib_HSpriteBE.__name__ = "mt.heaps.slib.HSpriteBE";
+mt_heaps_slib_HSpriteBE.__interfaces__ = [mt_heaps_slib_SpriteInterface];
+mt_heaps_slib_HSpriteBE.__super__ = h2d_BatchElement;
+mt_heaps_slib_HSpriteBE.prototype = $extend(h2d_BatchElement.prototype,{
+	onAdd: function() {
+		if(this.allocated) {
+			return;
+		}
+		this.allocated = true;
+		if(this.lib != null) {
+			this.lib.addChild(this);
+		}
+	}
+	,onRemove: function() {
+		if(!this.allocated) {
+			return;
+		}
+		this.allocated = false;
+		if(this.lib != null) {
+			this.lib.removeChild(this);
+		}
+	}
+	,get_anim: function() {
+		if(this._animManager == null) {
+			this._animManager = new mt_heaps_slib_AnimManager(this);
+			if(this.batch != null) {
+				this.batch.hasUpdate = true;
+			}
+			if(this.onAnimManAlloc != null) {
+				this.onAnimManAlloc(this._animManager);
+			}
+		}
+		return this._animManager;
+	}
+	,get_animAllocated: function() {
+		return this._animManager != null;
+	}
+	,disposeAnimManager: function() {
+		if(this._animManager != null) {
+			this._animManager.destroy();
+			this._animManager = null;
+		}
+	}
+	,toString: function() {
+		return "HSpriteBE_" + this.groupName + "[" + this.frame + "]";
+	}
+	,setPos: function(x,y) {
+		this.x = x;
+		this.y = y;
+	}
+	,set: function(l,g,f,stopAllAnims) {
+		if(stopAllAnims == null) {
+			stopAllAnims = false;
+		}
+		if(f == null) {
+			f = 0;
+		}
+		var changed = false;
+		if(l != null && this.lib != l) {
+			changed = true;
+			if(g == null) {
+				this.groupName = null;
+				this.group = null;
+				this.frameData = null;
+			}
+			if(this.allocated && this.lib != null) {
+				this.lib.removeChild(this);
+			}
+			this.lib = l;
+			if(this.allocated) {
+				this.lib.addChild(this);
+			}
+			if(this.pivot.isUndefined) {
+				var _this = this.pivot;
+				_this.centerFactorX = this.lib.defaultCenterX;
+				_this.centerFactorY = this.lib.defaultCenterY;
+				_this.usingFactor = true;
+				_this.isUndefined = false;
+				this.updateTile();
+			}
+		}
+		if(g != null && g != this.groupName) {
+			changed = true;
+			this.groupName = g;
+		}
+		if(f != null && f != this.frame) {
+			changed = true;
+			this.frame = f;
+		}
+		if(!this.destroyed && this.groupName != null && changed) {
+			if(stopAllAnims && this._animManager != null) {
+				if(this._animManager == null) {
+					this._animManager = new mt_heaps_slib_AnimManager(this);
+					if(this.batch != null) {
+						this.batch.hasUpdate = true;
+					}
+					if(this.onAnimManAlloc != null) {
+						this.onAnimManAlloc(this._animManager);
+					}
+				}
+				this._animManager.stopWithoutStateAnims();
+			}
+			var _this1 = this.lib;
+			var k = this.groupName;
+			var tmp;
+			if(k == null) {
+				tmp = _this1.currentGroup;
+			} else {
+				var _this2 = _this1.groups;
+				tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+			}
+			this.group = tmp;
+			var _this3 = this.lib;
+			var k1 = this.groupName;
+			var g1;
+			if(k1 == null) {
+				g1 = _this3.currentGroup;
+			} else {
+				var _this4 = _this3.groups;
+				g1 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+			}
+			this.frameData = g1 == null ? null : g1.frames[f];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + f + ")");
+			}
+			this.updateTile();
+			if(this.onFrameChange != null) {
+				this.onFrameChange();
+			}
+		}
+	}
+	,setRandom: function(l,g,rndFunc) {
+		var _this = this.lib;
+		var f;
+		var f1;
+		if(g != null) {
+			var _this1 = _this.groups;
+			f1 = __map_reserved[g] != null ? _this1.existsReserved(g) : _this1.h.hasOwnProperty(g);
+		} else {
+			f1 = false;
+		}
+		if(f1) {
+			var _this2 = _this.groups;
+			f = (__map_reserved[g] != null ? _this2.getReserved(g) : _this2.h[g]).frames.length > 0;
+		} else {
+			f = false;
+		}
+		if(!f) {
+			throw new js__$Boot_HaxeError("Unknown group " + g);
+		}
+		var f2;
+		if(g == null) {
+			f2 = _this.currentGroup;
+		} else {
+			var _this3 = _this.groups;
+			f2 = __map_reserved[g] != null ? _this3.getReserved(g) : _this3.h[g];
+		}
+		var f3 = (rndFunc == null ? Std.random : rndFunc)(f2.frames.length);
+		var changed = false;
+		if(l != null && this.lib != l) {
+			changed = true;
+			if(g == null) {
+				this.groupName = null;
+				this.group = null;
+				this.frameData = null;
+			}
+			if(this.allocated && this.lib != null) {
+				this.lib.removeChild(this);
+			}
+			this.lib = l;
+			if(this.allocated) {
+				this.lib.addChild(this);
+			}
+			if(this.pivot.isUndefined) {
+				var _this4 = this.pivot;
+				_this4.centerFactorX = this.lib.defaultCenterX;
+				_this4.centerFactorY = this.lib.defaultCenterY;
+				_this4.usingFactor = true;
+				_this4.isUndefined = false;
+				this.updateTile();
+			}
+		}
+		if(g != null && g != this.groupName) {
+			changed = true;
+			this.groupName = g;
+		}
+		if(f3 != null && f3 != this.frame) {
+			changed = true;
+			this.frame = f3;
+		}
+		if(!this.destroyed && this.groupName != null && changed) {
+			var _this5 = this.lib;
+			var k = this.groupName;
+			var tmp;
+			if(k == null) {
+				tmp = _this5.currentGroup;
+			} else {
+				var _this6 = _this5.groups;
+				tmp = __map_reserved[k] != null ? _this6.getReserved(k) : _this6.h[k];
+			}
+			this.group = tmp;
+			var _this7 = this.lib;
+			var k1 = this.groupName;
+			var g1;
+			if(k1 == null) {
+				g1 = _this7.currentGroup;
+			} else {
+				var _this8 = _this7.groups;
+				g1 = __map_reserved[k1] != null ? _this8.getReserved(k1) : _this8.h[k1];
+			}
+			this.frameData = g1 == null ? null : g1.frames[f3];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + f3 + ")");
+			}
+			this.updateTile();
+			if(this.onFrameChange != null) {
+				this.onFrameChange();
+			}
+		}
+	}
+	,setRandomFrame: function(rndFunc) {
+		if(!this.destroyed && this.groupName != null) {
+			var g = this.groupName;
+			var rndFunc1 = rndFunc == null ? Std.random : rndFunc;
+			var _this = this.lib;
+			var f;
+			var f1;
+			if(g != null) {
+				var _this1 = _this.groups;
+				f1 = __map_reserved[g] != null ? _this1.existsReserved(g) : _this1.h.hasOwnProperty(g);
+			} else {
+				f1 = false;
+			}
+			if(f1) {
+				var _this2 = _this.groups;
+				f = (__map_reserved[g] != null ? _this2.getReserved(g) : _this2.h[g]).frames.length > 0;
+			} else {
+				f = false;
+			}
+			if(!f) {
+				throw new js__$Boot_HaxeError("Unknown group " + g);
+			}
+			var f2;
+			if(g == null) {
+				f2 = _this.currentGroup;
+			} else {
+				var _this3 = _this.groups;
+				f2 = __map_reserved[g] != null ? _this3.getReserved(g) : _this3.h[g];
+			}
+			var f3 = (rndFunc1 == null ? Std.random : rndFunc1)(f2.frames.length);
+			var changed = false;
+			if(g != null && g != this.groupName) {
+				changed = true;
+				this.groupName = g;
+			}
+			if(f3 != null && f3 != this.frame) {
+				changed = true;
+				this.frame = f3;
+			}
+			if(!this.destroyed && this.groupName != null && changed) {
+				var _this4 = this.lib;
+				var k = this.groupName;
+				var tmp;
+				if(k == null) {
+					tmp = _this4.currentGroup;
+				} else {
+					var _this5 = _this4.groups;
+					tmp = __map_reserved[k] != null ? _this5.getReserved(k) : _this5.h[k];
+				}
+				this.group = tmp;
+				var _this6 = this.lib;
+				var k1 = this.groupName;
+				var g1;
+				if(k1 == null) {
+					g1 = _this6.currentGroup;
+				} else {
+					var _this7 = _this6.groups;
+					g1 = __map_reserved[k1] != null ? _this7.getReserved(k1) : _this7.h[k1];
+				}
+				this.frameData = g1 == null ? null : g1.frames[f3];
+				if(this.frameData == null) {
+					throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + f3 + ")");
+				}
+				this.updateTile();
+				if(this.onFrameChange != null) {
+					this.onFrameChange();
+				}
+			}
+		}
+	}
+	,isGroup: function(k) {
+		return this.groupName == k;
+	}
+	,is: function(k,f) {
+		if(f == null) {
+			f = -1;
+		}
+		if(this.groupName == k) {
+			if(f >= 0) {
+				return this.frame == f;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+	,isReady: function() {
+		if(!this.destroyed) {
+			return this.groupName != null;
+		} else {
+			return false;
+		}
+	}
+	,fitToBox: function(w,h,useFrameDataRealSize) {
+		if(useFrameDataRealSize == null) {
+			useFrameDataRealSize = false;
+		}
+		if(useFrameDataRealSize) {
+			var x = w / this.frameData.realWid;
+			var y = (h == null ? w : h) / this.frameData.realHei;
+			this.scaleX = this.scaleY = x < y ? x : y;
+		} else {
+			var x1 = w / this.t.width;
+			var y1 = (h == null ? w : h) / this.t.height;
+			this.scaleX = this.scaleY = x1 < y1 ? x1 : y1;
+		}
+	}
+	,setScale: function(v) {
+		this.scaleX = this.scaleY = v;
+	}
+	,setPosition: function(x,y) {
+		this.x = x;
+		this.y = y;
+	}
+	,setFrame: function(f) {
+		var changed = f != this.frame;
+		this.frame = f;
+		if(!this.destroyed && this.groupName != null && changed) {
+			var _this = this.lib;
+			var k = this.groupName;
+			var frame = this.frame;
+			var g;
+			if(k == null) {
+				g = _this.currentGroup;
+			} else {
+				var _this1 = _this.groups;
+				g = __map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k];
+			}
+			this.frameData = g == null ? null : g.frames[frame];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + this.frame + ")");
+			}
+			if(this.onFrameChange != null) {
+				this.onFrameChange();
+			}
+			this.updateTile();
+		}
+	}
+	,setPivotCoord: function(x,y) {
+		var _this = this.pivot;
+		_this.coordX = x;
+		_this.coordY = y;
+		_this.usingFactor = false;
+		_this.isUndefined = false;
+		this.updateTile();
+	}
+	,setCenterRatio: function(xRatio,yRatio) {
+		var _this = this.pivot;
+		_this.centerFactorX = xRatio;
+		_this.centerFactorY = yRatio;
+		_this.usingFactor = true;
+		_this.isUndefined = false;
+		this.updateTile();
+	}
+	,totalFrames: function() {
+		return this.group.frames.length;
+	}
+	,uncolorize: function() {
+		this.r = this.g = this.b = 1;
+	}
+	,colorize: function(c,ratio) {
+		if(ratio == null) {
+			ratio = 1.0;
+		}
+		var a = _$UInt_UInt_$Impl_$.toFloat(16777215 >>> 16);
+		var x = a + (_$UInt_UInt_$Impl_$.toFloat(c >>> 16) - a) * ratio;
+		this.r = ((x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0) / 255;
+		var a1 = _$UInt_UInt_$Impl_$.toFloat(16777215 >>> 8 & 255);
+		var x1 = a1 + (_$UInt_UInt_$Impl_$.toFloat(c >>> 8 & 255) - a1) * ratio;
+		this.g = ((x1 > 0 ? x1 + .5 : x1 < 0 ? x1 - .5 : 0) | 0) / 255;
+		var a2 = _$UInt_UInt_$Impl_$.toFloat(16777215 & 255);
+		var x2 = a2 + (_$UInt_UInt_$Impl_$.toFloat(c & 255) - a2) * ratio;
+		this.b = ((x2 > 0 ? x2 + .5 : x2 < 0 ? x2 - .5 : 0) | 0) / 255;
+	}
+	,isColorized: function() {
+		if(!(this.r != 1 || this.g != 1)) {
+			return this.b != 1;
+		} else {
+			return true;
+		}
+	}
+	,updateTile: function() {
+		if(!(!this.destroyed && this.groupName != null)) {
+			return;
+		}
+		var fd = this.frameData;
+		this.lib.updTile(this.t,this.groupName,this.frame);
+		var _this = this.pivot;
+		if(!_this.isUndefined && !_this.usingFactor) {
+			var x = -this.pivot.coordX - fd.realX;
+			this.t.dx = (x > 0 ? x + .5 : x < 0 ? x - .5 : 0) | 0;
+			var x1 = -this.pivot.coordY - fd.realY;
+			this.t.dy = (x1 > 0 ? x1 + .5 : x1 < 0 ? x1 - .5 : 0) | 0;
+		}
+		var _this1 = this.pivot;
+		if(!_this1.isUndefined && _this1.usingFactor) {
+			this.t.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
+			this.t.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
+		}
+	}
+	,dispose: function() {
+		this.remove();
+	}
+	,remove: function() {
+		h2d_BatchElement.prototype.remove.call(this);
+		if(!this.destroyed) {
+			this.destroyed = true;
+			if(this._animManager != null) {
+				this._animManager.destroy();
+				this._animManager = null;
+			}
+		}
+	}
+	,update: function(et) {
+		if(this._animManager != null) {
+			if(this._animManager == null) {
+				this._animManager = new mt_heaps_slib_AnimManager(this);
+				if(this.batch != null) {
+					this.batch.hasUpdate = true;
+				}
+				if(this.onAnimManAlloc != null) {
+					this.onAnimManAlloc(this._animManager);
+				}
+			}
+			var _this = this._animManager;
+			var dt = !isNaN(mt_heaps_slib_SpriteLib.DT) ? mt_heaps_slib_SpriteLib.DT : et * hxd_Timer.wantedFPS;
+			if(_this.needUpdates) {
+				_this._update(dt);
+			}
+		}
+		return h2d_BatchElement.prototype.update.call(this,et);
+	}
+	,__class__: mt_heaps_slib_HSpriteBE
+	,__properties__: $extend(h2d_BatchElement.prototype.__properties__,{get_animAllocated:"get_animAllocated",get_anim:"get_anim"})
+});
+var mt_heaps_slib_HSpriteBatch = function(t,parent) {
+	h2d_SpriteBatch.call(this,t,parent);
+};
+$hxClasses["mt.heaps.slib.HSpriteBatch"] = mt_heaps_slib_HSpriteBatch;
+mt_heaps_slib_HSpriteBatch.__name__ = "mt.heaps.slib.HSpriteBatch";
+mt_heaps_slib_HSpriteBatch.__super__ = h2d_SpriteBatch;
+mt_heaps_slib_HSpriteBatch.prototype = $extend(h2d_SpriteBatch.prototype,{
+	onAdd: function() {
+		h2d_SpriteBatch.prototype.onAdd.call(this);
+		var c = this.first;
+		while(c != null) {
+			if((c instanceof mt_heaps_slib_HSpriteBE)) {
+				c.onAdd();
+			}
+			c = c.next;
+		}
+	}
+	,onRemove: function() {
+		h2d_SpriteBatch.prototype.onRemove.call(this);
+		var c = this.first;
+		while(c != null) {
+			if((c instanceof mt_heaps_slib_HSpriteBE)) {
+				c.onRemove();
+			}
+			c = c.next;
+		}
+	}
+	,add: function(e,before) {
+		if(before == null) {
+			before = false;
+		}
+		e = h2d_SpriteBatch.prototype.add.call(this,e,before);
+		if(this.allocated && (e instanceof mt_heaps_slib_HSpriteBE)) {
+			e.onAdd();
+		}
+		return e;
+	}
+	,'delete': function(e) {
+		h2d_SpriteBatch.prototype["delete"].call(this,e);
+		if(this.allocated && (e instanceof mt_heaps_slib_HSpriteBE)) {
+			e.onRemove();
+		}
+	}
+	,__class__: mt_heaps_slib_HSpriteBatch
+});
+var mt_heaps_slib_FrameData = function(page,x,y,wid,hei,realX,realY,realWid,realHei,tile) {
+	this.page = page;
+	this.x = x;
+	this.y = y;
+	this.wid = wid;
+	this.hei = hei;
+	this.realX = realX;
+	this.realY = realY;
+	this.realWid = realWid;
+	this.realHei = realHei;
+	this.tile = tile;
+};
+$hxClasses["mt.heaps.slib.FrameData"] = mt_heaps_slib_FrameData;
+mt_heaps_slib_FrameData.__name__ = "mt.heaps.slib.FrameData";
+mt_heaps_slib_FrameData.prototype = {
+	__class__: mt_heaps_slib_FrameData
+};
+var mt_heaps_slib_LibGroup = function(id,maxWid,maxHei,frames,anim) {
+	this.id = id;
+	this.maxWid = maxWid;
+	this.maxHei = maxHei;
+	this.frames = frames;
+	this.anim = anim;
+};
+$hxClasses["mt.heaps.slib.LibGroup"] = mt_heaps_slib_LibGroup;
+mt_heaps_slib_LibGroup.__name__ = "mt.heaps.slib.LibGroup";
+mt_heaps_slib_LibGroup.prototype = {
+	__class__: mt_heaps_slib_LibGroup
+};
+var mt_heaps_slib_SLBError = $hxEnums["mt.heaps.slib.SLBError"] = { __ename__ : true, __constructs__ : ["NoGroupSelected","GroupAlreadyExists","InvalidFrameDuration","EndFrameLower","InvalidFrames","NoCurrentGroup","AnimFrameExceeds","AssetImportFailed","NotSameSLBFromBatch"]
+	,NoGroupSelected: {_hx_index:0,__enum__:"mt.heaps.slib.SLBError",toString:$estr}
+	,GroupAlreadyExists: ($_=function(g) { return {_hx_index:1,g:g,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["g"],$_)
+	,InvalidFrameDuration: ($_=function(s) { return {_hx_index:2,s:s,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,EndFrameLower: ($_=function(s) { return {_hx_index:3,s:s,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,InvalidFrames: ($_=function(s) { return {_hx_index:4,s:s,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,NoCurrentGroup: {_hx_index:5,__enum__:"mt.heaps.slib.SLBError",toString:$estr}
+	,AnimFrameExceeds: ($_=function(id,anim,frame) { return {_hx_index:6,id:id,anim:anim,frame:frame,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["id","anim","frame"],$_)
+	,AssetImportFailed: ($_=function(e) { return {_hx_index:7,e:e,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["e"],$_)
+	,NotSameSLBFromBatch: {_hx_index:8,__enum__:"mt.heaps.slib.SLBError",toString:$estr}
+};
+mt_heaps_slib_SLBError.__empty_constructs__ = [mt_heaps_slib_SLBError.NoGroupSelected,mt_heaps_slib_SLBError.NoCurrentGroup,mt_heaps_slib_SLBError.NotSameSLBFromBatch];
+var mt_heaps_slib_SpriteLib = function(pages,normalPages) {
+	this.groups = new haxe_ds_StringMap();
+	this.defaultCenterX = 0;
+	this.defaultCenterY = 0;
+	this.gridX = this.gridY = 16;
+	this.children = [];
+	this.pages = pages;
+	this.normalPages = normalPages;
+};
+$hxClasses["mt.heaps.slib.SpriteLib"] = mt_heaps_slib_SpriteLib;
+mt_heaps_slib_SpriteLib.__name__ = "mt.heaps.slib.SpriteLib";
+mt_heaps_slib_SpriteLib.parseAnimDefinition = function(animDef,timin) {
+	if(timin == null) {
+		timin = 1;
+	}
+	animDef = StringTools.replace(animDef,")","(");
+	var frames = [];
+	var parts = animDef.split(",");
+	var _g = 0;
+	while(_g < parts.length) {
+		var p = parts[_g];
+		++_g;
+		var curTiming = timin;
+		if(p.indexOf("(") > 0) {
+			var t = Std.parseInt(p.split("(")[1]);
+			if(isNaN(t)) {
+				throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.InvalidFrameDuration(p));
+			}
+			curTiming = t;
+			p = HxOverrides.substr(p,0,p.indexOf("("));
+		}
+		if(p.indexOf("-") < 0) {
+			var f = Std.parseInt(p);
+			var _g1 = 0;
+			var _g11 = curTiming;
+			while(_g1 < _g11) {
+				var i = _g1++;
+				frames.push(f);
+			}
+			continue;
+		}
+		if(p.indexOf("-") > 0) {
+			var from = Std.parseInt(p.split("-")[0]);
+			var to = Std.parseInt(p.split("-")[1]) + 1;
+			if(to < from) {
+				throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.EndFrameLower(p));
+			}
+			while(from < to) {
+				var _g2 = 0;
+				var _g12 = curTiming;
+				while(_g2 < _g12) {
+					var i1 = _g2++;
+					frames.push(from);
+				}
+				++from;
+			}
+			continue;
+		}
+		throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.InvalidFrames(p));
+	}
+	return frames;
+};
+mt_heaps_slib_SpriteLib.prototype = {
+	get_tile: function() {
+		if(this.pages.length > 1) {
+			throw new js__$Boot_HaxeError("Cannot access tile when there is multiple pages");
+		}
+		return this.pages[0];
+	}
+	,reloadUsing: function(l) {
+		if(this.pages.length > 1) {
+			throw new js__$Boot_HaxeError("Cannot access tile when there is multiple pages");
+		}
+		if(l.pages.length > 1) {
+			throw new js__$Boot_HaxeError("Cannot access tile when there is multiple pages");
+		}
+		this.pages[0].setTexture(l.pages[0].innerTex);
+		this.groups = l.groups;
+		this.currentGroup = null;
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var s = _g1[_g];
+			++_g;
+			var k = s.groupName;
+			var tmp;
+			var tmp1;
+			if(k != null) {
+				var _this = this.groups;
+				tmp1 = __map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k);
+			} else {
+				tmp1 = false;
+			}
+			if(tmp1) {
+				var _this1 = this.groups;
+				tmp = (__map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k]).frames.length > 0;
+			} else {
+				tmp = false;
+			}
+			if(!tmp) {
+				throw new js__$Boot_HaxeError("Group " + s.groupName + " is missing from the target SLib");
+			}
+			var s1 = s.groupName;
+			var s2 = s.frame;
+			var k1 = s.groupName;
+			var tmp2;
+			var tmp3;
+			if(k1 != null) {
+				var _this2 = this.groups;
+				tmp3 = __map_reserved[k1] != null ? _this2.existsReserved(k1) : _this2.h.hasOwnProperty(k1);
+			} else {
+				tmp3 = false;
+			}
+			if(tmp3) {
+				var _this3 = this.groups;
+				tmp2 = (__map_reserved[k1] != null ? _this3.getReserved(k1) : _this3.h[k1]).frames.length > 0;
+			} else {
+				tmp2 = false;
+			}
+			if(!tmp2) {
+				throw new js__$Boot_HaxeError("Unknown group " + k1);
+			}
+			var tmp4;
+			if(k1 == null) {
+				tmp4 = this.currentGroup;
+			} else {
+				var _this4 = this.groups;
+				tmp4 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+			}
+			s.set(this,s1,s2 >= tmp4.frames.length ? 0 : s.frame,false);
+			var _this5 = s.get_anim();
+			if(!_this5.destroyed && _this5.stack.length > 0) {
+				var tmp5 = s.get_anim().stack[0];
+				var k2 = s.groupName;
+				var tmp6;
+				if(k2 == null) {
+					tmp6 = this.currentGroup;
+				} else {
+					var _this6 = this.groups;
+					tmp6 = __map_reserved[k2] != null ? _this6.getReserved(k2) : _this6.h[k2];
+				}
+				tmp5.frames = tmp6.anim;
+			}
+		}
+	}
+	,destroy: function() {
+		while(this.children.length > 0) this.children[0].remove();
+		while(this.pages.length > 0) {
+			var p = this.pages.shift();
+			p.dispose();
+		}
+		if(this.normalPages != null) {
+			while(this.normalPages.length > 0) {
+				var p1 = this.normalPages.shift();
+				if(p1 != null) {
+					p1.dispose();
+				}
+			}
+			this.normalPages = null;
+		}
+	}
+	,preventAutoDispose: function() {
+		var _g = 0;
+		var _g1 = this.pages;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			p.innerTex.preventAutoDispose();
+		}
+		if(this.normalPages != null) {
+			var _g2 = 0;
+			var _g3 = this.normalPages;
+			while(_g2 < _g3.length) {
+				var p1 = _g3[_g2];
+				++_g2;
+				if(p1 != null) {
+					p1.innerTex.preventAutoDispose();
+				}
+			}
+		}
+	}
+	,ensureTexturesAllocated: function() {
+		var _g = 0;
+		var _g1 = this.pages;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			var t = p.innerTex;
+			if(t.t == null && t.realloc != null) {
+				t.realloc();
+			}
+		}
+		if(this.normalPages != null) {
+			var _g2 = 0;
+			var _g3 = this.normalPages;
+			while(_g2 < _g3.length) {
+				var p1 = _g3[_g2];
+				++_g2;
+				if(p1 == null) {
+					continue;
+				}
+				var t1 = p1.innerTex;
+				if(t1.t == null && t1.realloc != null) {
+					t1.realloc();
+				}
+			}
+		}
+	}
+	,sameTile: function(t) {
+		if(this.pages.length > 1) {
+			throw new js__$Boot_HaxeError("Cannot access tile when there is multiple pages");
+		}
+		return this.pages[0].innerTex.id == t.innerTex.id;
+	}
+	,setDefaultCenterRatio: function(rx,ry) {
+		this.defaultCenterX = rx;
+		this.defaultCenterY = ry;
+	}
+	,setSliceGrid: function(w,h) {
+		this.gridX = w;
+		this.gridY = h;
+	}
+	,getGroup: function(k) {
+		if(k == null) {
+			return this.currentGroup;
+		} else {
+			var _this = this.groups;
+			if(__map_reserved[k] != null) {
+				return _this.getReserved(k);
+			} else {
+				return _this.h[k];
+			}
+		}
+	}
+	,getGroups: function() {
+		return this.groups;
+	}
+	,getAnim: function(k) {
+		var tmp;
+		if(k == null) {
+			tmp = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			tmp = __map_reserved[k] != null ? _this.getReserved(k) : _this.h[k];
+		}
+		return tmp.anim;
+	}
+	,getAnimDurationF: function(k) {
+		var tmp;
+		if(k == null) {
+			tmp = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			tmp = __map_reserved[k] != null ? _this.getReserved(k) : _this.h[k];
+		}
+		return tmp.anim.length;
+	}
+	,createGroup: function(k) {
+		var _this = this.groups;
+		if(__map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k)) {
+			throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.GroupAlreadyExists(k));
+		}
+		var this1 = this.groups;
+		var value = new mt_heaps_slib_LibGroup(k,0,0,[],[]);
+		var _this1 = this1;
+		if(__map_reserved[k] != null) {
+			_this1.setReserved(k,value);
+		} else {
+			_this1.h[k] = value;
+		}
+		var tmp;
+		if(k == null) {
+			tmp = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+		}
+		this.currentGroup = tmp;
+		return this.currentGroup;
+	}
+	,setCurrentGroup: function(k) {
+		var tmp;
+		if(k == null) {
+			tmp = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			tmp = __map_reserved[k] != null ? _this.getReserved(k) : _this.h[k];
+		}
+		this.currentGroup = tmp;
+		return this.currentGroup;
+	}
+	,getFrameData: function(k,frame) {
+		if(frame == null) {
+			frame = 0;
+		}
+		var g;
+		if(k == null) {
+			g = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			g = __map_reserved[k] != null ? _this.getReserved(k) : _this.h[k];
+		}
+		if(g == null) {
+			return null;
+		} else {
+			return g.frames[frame];
+		}
+	}
+	,exists: function(k,frame) {
+		if(frame == null) {
+			frame = 0;
+		}
+		var tmp;
+		if(k != null && frame >= 0) {
+			var _this = this.groups;
+			tmp = __map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k);
+		} else {
+			tmp = false;
+		}
+		if(tmp) {
+			var _this1 = this.groups;
+			return (__map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k]).frames.length > frame;
+		} else {
+			return false;
+		}
+	}
+	,getRandomFrame: function(k,rndFunc) {
+		var tmp;
+		var tmp1;
+		if(k != null) {
+			var _this = this.groups;
+			tmp1 = __map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k);
+		} else {
+			tmp1 = false;
+		}
+		if(tmp1) {
+			var _this1 = this.groups;
+			tmp = (__map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k]).frames.length > 0;
+		} else {
+			tmp = false;
+		}
+		if(!tmp) {
+			throw new js__$Boot_HaxeError("Unknown group " + k);
+		}
+		var tmp2;
+		if(k == null) {
+			tmp2 = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			tmp2 = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+		}
+		return (rndFunc == null ? Std.random : rndFunc)(tmp2.frames.length);
+	}
+	,countFrames: function(k) {
+		var tmp;
+		var tmp1;
+		if(k != null) {
+			var _this = this.groups;
+			tmp1 = __map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k);
+		} else {
+			tmp1 = false;
+		}
+		if(tmp1) {
+			var _this1 = this.groups;
+			tmp = (__map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k]).frames.length > 0;
+		} else {
+			tmp = false;
+		}
+		if(!tmp) {
+			throw new js__$Boot_HaxeError("Unknown group " + k);
+		}
+		var tmp2;
+		if(k == null) {
+			tmp2 = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			tmp2 = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+		}
+		return tmp2.frames.length;
+	}
+	,sliceCustom: function(groupName,page,frame,x,y,wid,hei,realX,realY,realWid,realHei) {
+		var g;
+		var g1;
+		var g2;
+		if(groupName != null) {
+			var _this = this.groups;
+			g2 = __map_reserved[groupName] != null ? _this.existsReserved(groupName) : _this.h.hasOwnProperty(groupName);
+		} else {
+			g2 = false;
+		}
+		if(g2) {
+			var _this1 = this.groups;
+			g1 = (__map_reserved[groupName] != null ? _this1.getReserved(groupName) : _this1.h[groupName]).frames.length > 0;
+		} else {
+			g1 = false;
+		}
+		if(g1) {
+			if(groupName == null) {
+				g = this.currentGroup;
+			} else {
+				var _this2 = this.groups;
+				g = __map_reserved[groupName] != null ? _this2.getReserved(groupName) : _this2.h[groupName];
+			}
+		} else {
+			g = this.createGroup(groupName);
+		}
+		var x1 = g.maxWid;
+		g.maxWid = x1 > wid ? x1 : wid;
+		var x2 = g.maxHei;
+		g.maxHei = x2 > hei ? x2 : hei;
+		var fd = new mt_heaps_slib_FrameData(page,x,y,wid,hei,realX,realY,realWid,realHei,null);
+		g.frames[frame] = fd;
+		return fd;
+	}
+	,resliceCustom: function(groupName,frame,fd) {
+		var g;
+		var g1;
+		var g2;
+		if(groupName != null) {
+			var _this = this.groups;
+			g2 = __map_reserved[groupName] != null ? _this.existsReserved(groupName) : _this.h.hasOwnProperty(groupName);
+		} else {
+			g2 = false;
+		}
+		if(g2) {
+			var _this1 = this.groups;
+			g1 = (__map_reserved[groupName] != null ? _this1.getReserved(groupName) : _this1.h[groupName]).frames.length > 0;
+		} else {
+			g1 = false;
+		}
+		if(g1) {
+			if(groupName == null) {
+				g = this.currentGroup;
+			} else {
+				var _this2 = this.groups;
+				g = __map_reserved[groupName] != null ? _this2.getReserved(groupName) : _this2.h[groupName];
+			}
+		} else {
+			g = this.createGroup(groupName);
+		}
+		var x = g.maxWid;
+		var y = fd.wid;
+		g.maxWid = x > y ? x : y;
+		var x1 = g.maxHei;
+		var y1 = fd.hei;
+		g.maxHei = x1 > y1 ? x1 : y1;
+		g.frames[frame] = fd;
+		return fd;
+	}
+	,slice: function(groupName,page,x,y,wid,hei,repeatX,repeatY) {
+		if(repeatY == null) {
+			repeatY = 1;
+		}
+		if(repeatX == null) {
+			repeatX = 1;
+		}
+		var g = this.createGroup(groupName);
+		var tmp;
+		if(groupName == null) {
+			tmp = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			tmp = __map_reserved[groupName] != null ? _this.getReserved(groupName) : _this.h[groupName];
+		}
+		this.currentGroup = tmp;
+		var x1 = g.maxWid;
+		g.maxWid = x1 > wid ? x1 : wid;
+		var x2 = g.maxHei;
+		g.maxHei = x2 > hei ? x2 : hei;
+		var _g = 0;
+		var _g1 = repeatY;
+		while(_g < _g1) {
+			var iy = _g++;
+			var _g2 = 0;
+			var _g11 = repeatX;
+			while(_g2 < _g11) {
+				var ix = _g2++;
+				g.frames.push(new mt_heaps_slib_FrameData(page,x + ix * wid,y + iy * hei,wid,hei,0,0,wid,hei,null));
+			}
+		}
+	}
+	,sliceGrid: function(groupName,page,gx,gy,repeatX,repeatY) {
+		if(repeatY == null) {
+			repeatY = 1;
+		}
+		if(repeatX == null) {
+			repeatX = 1;
+		}
+		var g = this.createGroup(groupName);
+		var tmp;
+		if(groupName == null) {
+			tmp = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			tmp = __map_reserved[groupName] != null ? _this.getReserved(groupName) : _this.h[groupName];
+		}
+		this.currentGroup = tmp;
+		var x = g.maxWid;
+		var y = this.gridX;
+		g.maxWid = x > y ? x : y;
+		var x1 = g.maxHei;
+		var y1 = this.gridY;
+		g.maxHei = x1 > y1 ? x1 : y1;
+		var _g = 0;
+		var _g1 = repeatY;
+		while(_g < _g1) {
+			var iy = _g++;
+			var _g2 = 0;
+			var _g11 = repeatX;
+			while(_g2 < _g11) {
+				var ix = _g2++;
+				g.frames.push(new mt_heaps_slib_FrameData(page,this.gridX * (gx + ix),this.gridY * (gy + iy),this.gridX,this.gridY,0,0,this.gridX,this.gridY,null));
+			}
+		}
+	}
+	,sliceAnim: function(groupName,page,frameDuration,x,y,wid,hei,repeatX,repeatY) {
+		if(repeatY == null) {
+			repeatY = 1;
+		}
+		if(repeatX == null) {
+			repeatX = 1;
+		}
+		this.slice(groupName,page,x,y,wid,hei,repeatX,repeatY);
+		var frames = [];
+		var _g = 0;
+		var _g1 = repeatX * repeatY;
+		while(_g < _g1) {
+			var f = _g++;
+			var _g2 = 0;
+			var _g11 = frameDuration;
+			while(_g2 < _g11) {
+				var i = _g2++;
+				frames.push(f);
+			}
+		}
+		this.__defineAnim(groupName,frames);
+	}
+	,sliceAnimGrid: function(groupName,page,frameDuration,gx,gy,repeatX,repeatY) {
+		if(repeatY == null) {
+			repeatY = 1;
+		}
+		if(repeatX == null) {
+			repeatX = 1;
+		}
+		this.sliceGrid(groupName,page,gx,gy,repeatX,repeatY);
+		var frames = [];
+		var _g = 0;
+		var _g1 = repeatX * repeatY;
+		while(_g < _g1) {
+			var f = _g++;
+			var _g2 = 0;
+			var _g11 = frameDuration;
+			while(_g2 < _g11) {
+				var i = _g2++;
+				frames.push(f);
+			}
+		}
+		this.__defineAnim(groupName,frames);
+	}
+	,multiplayAllAnimDurations: function(factor) {
+		var _this = this.groups;
+		var g = new haxe_ds__$StringMap_StringMapIterator(_this,_this.arrayKeys());
+		while(g.hasNext()) {
+			var g1 = g.next();
+			if(g1.anim.length > 0) {
+				var old = g1.anim.slice();
+				g1.anim = [];
+				var _g1 = 0;
+				while(_g1 < old.length) {
+					var f = old[_g1];
+					++_g1;
+					var _g11 = 0;
+					var _g2 = factor;
+					while(_g11 < _g2) {
+						var i = _g11++;
+						g1.anim.push(f);
+					}
+				}
+			}
+		}
+	}
+	,toString: function() {
+		var l = [];
+		var k = this.groups.keys();
+		while(k.hasNext()) {
+			var k1 = k.next();
+			var g;
+			if(k1 == null) {
+				g = this.currentGroup;
+			} else {
+				var _this = this.groups;
+				g = __map_reserved[k1] != null ? _this.getReserved(k1) : _this.h[k1];
+			}
+			l.push(k1 + " (" + g.maxWid + "x" + g.maxHei + ")" + (g.frames.length > 1 ? " " + g.frames.length + "f" : "") + (g.anim.length > 1 ? " animated(" + g.anim.length + "f)" : ""));
+		}
+		l.sort(function(a,b) {
+			return Reflect.compare(a,b);
+		});
+		return "| " + l.join("\n| ");
+	}
+	,listAnims: function() {
+		var l = [];
+		var k = this.groups.keys();
+		while(k.hasNext()) {
+			var k1 = k.next();
+			var g;
+			if(k1 == null) {
+				g = this.currentGroup;
+			} else {
+				var _this = this.groups;
+				g = __map_reserved[k1] != null ? _this.getReserved(k1) : _this.h[k1];
+			}
+			if(g.anim.length > 1) {
+				l.push(k1 + " (" + g.maxWid + "x" + g.maxHei + ") : " + g.frames.length + " frame(s), anim(" + g.anim.length + "f)");
+			}
+		}
+		l.sort(function(a,b) {
+			return Reflect.compare(a,b);
+		});
+		return l;
+	}
+	,addChild: function(s) {
+		this.children.push(s);
+	}
+	,removeChild: function(s) {
+		HxOverrides.remove(this.children,s);
+	}
+	,countChildren: function() {
+		return this.children.length;
+	}
+	,h_get: function(k,frame,xr,yr,smooth,p) {
+		if(yr == null) {
+			yr = 0.;
+		}
+		if(xr == null) {
+			xr = 0.;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		var s = new mt_heaps_slib_HSprite(this,k,frame);
+		if(p != null) {
+			p.addChild(s);
+		}
+		var _this = s.pivot;
+		_this.centerFactorX = xr;
+		_this.centerFactorY = yr;
+		_this.usingFactor = true;
+		_this.isUndefined = false;
+		if(smooth != null) {
+			s.smooth = smooth;
+		}
+		return s;
+	}
+	,h_getRandom: function(k,rndFunc,p) {
+		var frame;
+		var frame1;
+		if(k != null) {
+			var _this = this.groups;
+			frame1 = __map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k);
+		} else {
+			frame1 = false;
+		}
+		if(frame1) {
+			var _this1 = this.groups;
+			frame = (__map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k]).frames.length > 0;
+		} else {
+			frame = false;
+		}
+		if(!frame) {
+			throw new js__$Boot_HaxeError("Unknown group " + k);
+		}
+		var frame2;
+		if(k == null) {
+			frame2 = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			frame2 = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+		}
+		var s = new mt_heaps_slib_HSprite(this,k,(rndFunc == null ? Std.random : rndFunc)(frame2.frames.length));
+		if(p != null) {
+			p.addChild(s);
+		}
+		var _this3 = s.pivot;
+		_this3.centerFactorX = 0.;
+		_this3.centerFactorY = 0.;
+		_this3.usingFactor = true;
+		_this3.isUndefined = false;
+		return s;
+	}
+	,h_getAndPlay: function(k,plays,killAfterPlay,p) {
+		if(killAfterPlay == null) {
+			killAfterPlay = false;
+		}
+		if(plays == null) {
+			plays = 99999;
+		}
+		var s = new mt_heaps_slib_HSprite(this,k,0);
+		if(p != null) {
+			p.addChild(s);
+		}
+		var _this = s.pivot;
+		_this.centerFactorX = 0.;
+		_this.centerFactorY = 0.;
+		_this.usingFactor = true;
+		_this.isUndefined = false;
+		var s1 = s;
+		if(s1._animManager == null) {
+			s1._animManager = new mt_heaps_slib_AnimManager(s1);
+			if(s1.onAnimManAlloc != null) {
+				s1.onAnimManAlloc(s1._animManager);
+			}
+		}
+		s1._animManager.play(k,plays);
+		if(killAfterPlay) {
+			if(s1._animManager == null) {
+				s1._animManager = new mt_heaps_slib_AnimManager(s1);
+				if(s1.onAnimManAlloc != null) {
+					s1.onAnimManAlloc(s1._animManager);
+				}
+			}
+			s1._animManager.killAfterPlay();
+		}
+		return s1;
+	}
+	,hbe_get: function(sb,k,frame,xr,yr) {
+		if(yr == null) {
+			yr = 0.;
+		}
+		if(xr == null) {
+			xr = 0.;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		var e = new mt_heaps_slib_HSpriteBE(sb,this,k,frame);
+		var _this = e.pivot;
+		_this.centerFactorX = xr;
+		_this.centerFactorY = yr;
+		_this.usingFactor = true;
+		_this.isUndefined = false;
+		e.updateTile();
+		return e;
+	}
+	,hbe_getRandom: function(sb,k,rndFunc) {
+		var frame;
+		var frame1;
+		if(k != null) {
+			var _this = this.groups;
+			frame1 = __map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k);
+		} else {
+			frame1 = false;
+		}
+		if(frame1) {
+			var _this1 = this.groups;
+			frame = (__map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k]).frames.length > 0;
+		} else {
+			frame = false;
+		}
+		if(!frame) {
+			throw new js__$Boot_HaxeError("Unknown group " + k);
+		}
+		var frame2;
+		if(k == null) {
+			frame2 = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			frame2 = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+		}
+		var e = new mt_heaps_slib_HSpriteBE(sb,this,k,(rndFunc == null ? Std.random : rndFunc)(frame2.frames.length));
+		var _this3 = e.pivot;
+		_this3.centerFactorX = 0.;
+		_this3.centerFactorY = 0.;
+		_this3.usingFactor = true;
+		_this3.isUndefined = false;
+		e.updateTile();
+		return e;
+	}
+	,hbe_getAndPlay: function(sb,k,plays,killAfterPlay) {
+		if(killAfterPlay == null) {
+			killAfterPlay = false;
+		}
+		if(plays == null) {
+			plays = 99999;
+		}
+		var e = new mt_heaps_slib_HSpriteBE(sb,this,k,0);
+		var _this = e.pivot;
+		_this.centerFactorX = 0.;
+		_this.centerFactorY = 0.;
+		_this.usingFactor = true;
+		_this.isUndefined = false;
+		e.updateTile();
+		var s = e;
+		if(s._animManager == null) {
+			s._animManager = new mt_heaps_slib_AnimManager(s);
+			if(s.batch != null) {
+				s.batch.hasUpdate = true;
+			}
+			if(s.onAnimManAlloc != null) {
+				s.onAnimManAlloc(s._animManager);
+			}
+		}
+		s._animManager.play(k,plays);
+		if(killAfterPlay) {
+			if(s._animManager == null) {
+				s._animManager = new mt_heaps_slib_AnimManager(s);
+				if(s.batch != null) {
+					s.batch.hasUpdate = true;
+				}
+				if(s.onAnimManAlloc != null) {
+					s.onAnimManAlloc(s._animManager);
+				}
+			}
+			s._animManager.killAfterPlay();
+		}
+		return s;
+	}
+	,be_get: function(sb,k,f,xr,yr) {
+		if(yr == null) {
+			yr = 0.;
+		}
+		if(xr == null) {
+			xr = 0.;
+		}
+		if(f == null) {
+			f = 0;
+		}
+		var e = new h2d_BatchElement(this.getTile(k,f));
+		var _this = e.t;
+		_this.dx = -(xr * _this.width | 0);
+		_this.dy = -(yr * _this.height | 0);
+		sb.add(e);
+		return e;
+	}
+	,be_getRandom: function(sb,k,rndFunc) {
+		var e;
+		var e1;
+		if(k != null) {
+			var _this = this.groups;
+			e1 = __map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k);
+		} else {
+			e1 = false;
+		}
+		if(e1) {
+			var _this1 = this.groups;
+			e = (__map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k]).frames.length > 0;
+		} else {
+			e = false;
+		}
+		if(!e) {
+			throw new js__$Boot_HaxeError("Unknown group " + k);
+		}
+		var e2;
+		if(k == null) {
+			e2 = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			e2 = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+		}
+		var e3 = this.be_get(sb,k,(rndFunc == null ? Std.random : rndFunc)(e2.frames.length));
+		sb.add(e3);
+		return e3;
+	}
+	,getTile: function(g,frame,px,py) {
+		if(py == null) {
+			py = 0.0;
+		}
+		if(px == null) {
+			px = 0.0;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		var g1;
+		if(g == null) {
+			g1 = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			g1 = __map_reserved[g] != null ? _this.getReserved(g) : _this.h[g];
+		}
+		var fd = g1 == null ? null : g1.frames[frame];
+		if(fd == null) {
+			throw new js__$Boot_HaxeError("Unknown group " + g + "#" + frame + "!");
+		}
+		var t = this.pages[fd.page].clone();
+		return this.updTile(t,g,frame,px,py);
+	}
+	,getBitmap: function(g,frame,px,py,p) {
+		if(py == null) {
+			py = 0.0;
+		}
+		if(px == null) {
+			px = 0.0;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		return new h2d_Bitmap(this.getTile(g,frame,px,py),p);
+	}
+	,updTile: function(t,g,frame,px,py) {
+		if(py == null) {
+			py = 0.0;
+		}
+		if(px == null) {
+			px = 0.0;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		var g1;
+		if(g == null) {
+			g1 = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			g1 = __map_reserved[g] != null ? _this.getReserved(g) : _this.h[g];
+		}
+		var fd = g1 == null ? null : g1.frames[frame];
+		if(fd == null) {
+			throw new js__$Boot_HaxeError("Unknown group " + g + "#" + frame + "!");
+		}
+		t.setPosition(fd.x,fd.y);
+		t.setSize(fd.wid,fd.hei);
+		t.dx = -(fd.realWid * px + fd.realX | 0);
+		t.dy = -(fd.realHei * py + fd.realY | 0);
+		return t;
+	}
+	,getTileRandom: function(g,px,py,rndFunc) {
+		if(py == null) {
+			py = 0.0;
+		}
+		if(px == null) {
+			px = 0.0;
+		}
+		var tmp;
+		var tmp1;
+		if(g != null) {
+			var _this = this.groups;
+			tmp1 = __map_reserved[g] != null ? _this.existsReserved(g) : _this.h.hasOwnProperty(g);
+		} else {
+			tmp1 = false;
+		}
+		if(tmp1) {
+			var _this1 = this.groups;
+			tmp = (__map_reserved[g] != null ? _this1.getReserved(g) : _this1.h[g]).frames.length > 0;
+		} else {
+			tmp = false;
+		}
+		if(!tmp) {
+			throw new js__$Boot_HaxeError("Unknown group " + g);
+		}
+		var tmp2;
+		if(g == null) {
+			tmp2 = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			tmp2 = __map_reserved[g] != null ? _this2.getReserved(g) : _this2.h[g];
+		}
+		return this.getTile(g,(rndFunc == null ? Std.random : rndFunc)(tmp2.frames.length),px,py);
+	}
+	,getCachedTile: function(g,frame) {
+		if(frame == null) {
+			frame = 0;
+		}
+		var g1;
+		if(g == null) {
+			g1 = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			g1 = __map_reserved[g] != null ? _this.getReserved(g) : _this.h[g];
+		}
+		var fd = g1 == null ? null : g1.frames[frame];
+		if(fd == null) {
+			throw new js__$Boot_HaxeError("Unknown group " + g + "#" + frame + "!");
+		}
+		if(fd.tile == null) {
+			fd.tile = this.getTile(g,frame);
+		}
+		return fd.tile;
+	}
+	,generateAnim: function(group,seq) {
+		this.__defineAnim(group,mt_heaps_slib_SpriteLib.parseAnimDefinition(seq));
+	}
+	,__defineAnim: function(group,anim) {
+		if(this.currentGroup == null && group == null) {
+			throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.NoCurrentGroup);
+		}
+		if(group != null) {
+			var tmp;
+			if(group == null) {
+				tmp = this.currentGroup;
+			} else {
+				var _this = this.groups;
+				tmp = __map_reserved[group] != null ? _this.getReserved(group) : _this.h[group];
+			}
+			this.currentGroup = tmp;
+		}
+		var _g = 0;
+		while(_g < anim.length) {
+			var f = anim[_g];
+			++_g;
+			if(f >= this.currentGroup.frames.length) {
+				throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.AnimFrameExceeds(this.currentGroup.id,"[" + anim.join(",") + "] " + this.currentGroup.frames.length,f));
+			}
+		}
+		this.currentGroup.anim = anim;
+	}
+	,__class__: mt_heaps_slib_SpriteLib
+	,__properties__: {get_tile:"get_tile"}
+};
+var mt_heaps_slib_SpritePivot = function() {
+	this.isUndefined = true;
+};
+$hxClasses["mt.heaps.slib.SpritePivot"] = mt_heaps_slib_SpritePivot;
+mt_heaps_slib_SpritePivot.__name__ = "mt.heaps.slib.SpritePivot";
+mt_heaps_slib_SpritePivot.prototype = {
+	toString: function() {
+		if(this.isUndefined) {
+			return "None";
+		} else if(!this.isUndefined && !this.usingFactor) {
+			return "Coord_" + (this.coordX | 0) + "," + (this.coordY | 0);
+		} else {
+			return "Factor_" + (this.centerFactorX | 0) + "," + (this.centerFactorY | 0);
+		}
+	}
+	,isUsingFactor: function() {
+		if(!this.isUndefined) {
+			return this.usingFactor;
+		} else {
+			return false;
+		}
+	}
+	,isUsingCoord: function() {
+		if(!this.isUndefined) {
+			return !this.usingFactor;
+		} else {
+			return false;
+		}
+	}
+	,setCenterRatio: function(xr,yr) {
+		this.centerFactorX = xr;
+		this.centerFactorY = yr;
+		this.usingFactor = true;
+		this.isUndefined = false;
+	}
+	,setCoord: function(x,y) {
+		this.coordX = x;
+		this.coordY = y;
+		this.usingFactor = false;
+		this.isUndefined = false;
+	}
+	,makeUndefined: function() {
+		this.isUndefined = true;
+	}
+	,copyFrom: function(from) {
+		if(!from.isUndefined && !from.usingFactor) {
+			this.coordX = from.coordX;
+			this.coordY = from.coordY;
+			this.usingFactor = false;
+			this.isUndefined = false;
+		}
+		if(!from.isUndefined && from.usingFactor) {
+			this.centerFactorX = from.centerFactorX;
+			this.centerFactorY = from.centerFactorY;
+			this.usingFactor = true;
+			this.isUndefined = false;
+		}
+	}
+	,clone: function() {
+		var p = new mt_heaps_slib_SpritePivot();
+		p.copyFrom(this);
+		return p;
+	}
+	,__class__: mt_heaps_slib_SpritePivot
+};
 function $getIterator(o) { if( o instanceof Array ) return HxOverrides.iter(o); else return o.iterator(); }
 var $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
@@ -68576,7 +77659,7 @@ var Float = Number;
 var Bool = Boolean;
 var Class = { };
 var Enum = { };
-haxe_Resource.content = [{ name : "R_minecraftiaOutline_fnt", data : "QkZOVAABCwBNaW5lY3JhZnRpYQYAFgBtaW5lY3JhZnRpYU91dGxpbmUucG5nDAAKAAAAAABAAAAA3wABAAgACQD//wIABgAAAAAAwAAAALYAIQAHAAwA/////wUAAAAAACAAAAABAAgAAgACAP//CQAEAAAAAABgAAAA4wAMAAQABQD//wIAAgAAAAAA4AAAAK8AMwAHAAkA//8CAAUAAAAAAFAAAABnAAwABwAJAP//AgAFAAAAAADQAAAALwAzAAgACQD+/wIABQAAAAAAMAAAAGkAAQAHAAkA//8CAAUAAAAAALAAAABBACQABQAFAP//AgADAAAAAABwAAAAYAAYAAcACAD//wQABQAAAAAA8AAAACUAQAAHAAoA//8BAAUAAAAAAEgAAAApAAwABwAJAP//AgAFAAAAAADIAAAA9gAhAAcADAD/////BQAAAAAAKAAAADQAAQAGAAkA//8CAAQAAAAAAKgAAAABACQABwADAP//AgAFAAAAAABoAAAAKAAWAAcACQD//wIABQAAAAAA6AAAAO8AMwAHAAkA//8CAAUAAAAAAFgAAACnAAwABwAJAP//AgAFAAAAAADYAAAAcAAzAAcACQD//wIABQAAAAAAOAAAAKkAAQAHAAkA//8CAAUAAAAAALgAAAB9ACcABQAGAP//BQADAAAAAAB4AAAAngAYAAcABwD//wQABQAAAAAAeAEAAKQAPwAHAAsA//8AAAUAAAAAAPgAAABmAEMABwAHAP//BAAFAAAAAABEAAAACQAMAAcACQD//wIABQAAAAAAxAAAANYAIgAHAAsA//8AAAUAAAAAACQAAAAXAAEABwAJAP//AgAFAAAAAACkAAAA5QAXAAYABwD//wMABAAAAAAAZAAAAAkAFgAHAAkA//8CAAUAAAAAAOQAAADPADMABwAJAP//AgAFAAAAAABUAAAAhwAMAAcACQD//wIABQAAAAAA1AAAAFAAMAAHAAwA/////wUAAAAAADQAAACJAAEABwAJAP//AgAFAAAAAAC0AAAAXgAkAAQABQD//wIAAgAAAAAAdAAAAIAAFgAFAAkA//8CAAMAAAAAAPQAAABFAEEABwAJAP//AgAFAAAAAABMAAAARwAMAAcACQD//wIABQAAAAAAzAAAABkAMgAEAAoA//8BAAIAAAAAACwAAABRAAYAAwAFAP//BwABAAAAAACsAAAAIAAoAAcABQD//wYABQAAAAAAbAAAAEMAFgAEAAkA//8CAAIAAAAAAOwAAAARAEAABAAKAP//AQACAAAAAABcAAAAxQAMAAcACQD//wIABQAAAAAA3AAAAJAAMQAHAAsA//8AAAUAAAAAADwAAADBAAEABgAJAP//AgAEAAAAAAC8AAAAlgAkAAcACQD//wIABQAAAAAAfAAAAL0AFgADAAkA//8CAAEAAAAAAPwAAACGAEEABwAJAP//AgAFAAAAAABCAAAA8AABAAcACQD//wIABQAAAAAAwgAAAMYAIQAHAAwA/////wUAAAAAACIAAAAIAAEABgAFAP//AgAEAAAAAACiAAAA1QAWAAcACQD//wIABQAAAAAAYgAAAPAADAAHAAkA//8CAAUAAAAAAOIAAAC/ADMABwAJAP//AgAFAAAAAABSAAAAdwAMAAcACQD//wIABQAAAAAA0gAAAEAAMAAHAAwA/////wUAAAAAADIAAAB5AAEABwAJAP//AgAFAAAAAACyAAAAUAAkAAYABwD//wIABAAAAAAAcgAAAHAAGAAHAAcA//8EAAUAAAAAAPIAAAA1AEEABwAJAP//AgAFAAAAAABKAAAANwAMAAcACQD//wIABQAAAAAAygAAAAkAMAAHAAwA/////wUAAAAAACoAAABCAAMABgAFAP//BAAEAAAAAACqAAAAEgAkAAUABQD//wIAAwAAAAAAagAAADQAFgAHAAoA//8CAAUAAAAAAOoAAAABAEEABwAJAP//AgAFAAAAAABaAAAAtwAMAAcACQD//wIABQAAAAAA2gAAAIAAMQAHAAsA//8AAAUAAAAAADoAAAC5AAIAAwAIAP//AwABAAAAAAC6AAAAiAAkAAUABQD//wIAAwAAAAAAegAAAK4AGAAHAAcA//8EAAUAAAAAAPoAAAB2AEEABwAJAP//AgAFAAAAAABGAAAAGQAMAAcACQD//wIABQAAAAAAxgAAAOYAJAAHAAkA//8CAAUAAAAAACYAAAAnAAEABwAJAP//AgAFAAAAAACmAAAA9AAWAAMACQD//wIAAQAAAAAAZgAAABkAFgAGAAkA//8CAAQAAAAAAOYAAADfADUABwAHAP//BAAFAAAAAABWAAAAlwAMAAcACQD//wIABQAAAAAA1gAAAGAAMQAHAAsA//8AAAUAAAAAADYAAACZAAEABwAJAP//AgAFAAAAAAC2AAAAbQAkAAoACQD//wIACAAAAAAAdgAAAI4AGAAHAAcA//8EAAUAAAAAAPYAAABVAEEABwAJAP//AgAFAAAAAABOAAAAVwAMAAcACQD//wIABQAAAAAAzgAAACMAMgAFAAoA//8BAAMAAAAAAC4AAABdAAYAAwAEAP//BwABAAAAAACuAAAAMAAkAAgABwD//wIABgAAAAAAbgAAAFAAGAAHAAcA//8EAAUAAAAAAO4AAAAbAD8AAwALAP//AAABAAAAAABeAAAA0wAMAAcABQD//wIABQAAAAAA3gAAAKAAMwAGAAkA//8CAAQAAAAAAD4AAADQAAEABgAJAP//AgAEAAAAAAC+AAAApgAkAAcACQD//wIABQAAAAAAfgAAAMgAFgAIAAQA//8CAAYAAAAAAP4AAACWAEIABQAJAP//AwADAAAAAABBAAAA6AABAAcACQD//wIABQAAAAAAwQAAAL4AIQAHAAwA/////wUAAAAAACEAAAAEAAEAAwAJAP//AgABAAAAAAChAAAA0QAXAAMACAD//wMAAQAAAAAAYQAAAOgADgAHAAcA//8EAAUAAAAAAOEAAAC3ADMABwAJAP//AgAFAAAAAABRAAAAbwAMAAcACQD//wIABQAAAAAA0QAAADgAMQAHAAsA//8AAAUAAAAAADEAAABxAAEABwAJAP//AgAFAAAAAACxAAAARwAkAAgACQD//wIABgAAAAAAcQAAAGgAGAAHAAgA//8EAAUAAAAAAPEAAAAtAEEABwAJAP//AgAFAAAAAABJAAAAMQAMAAUACQD//wIAAwAAAAAAyQAAAAEAMAAHAAwA/////wUAAAAAACkAAAA7AAEABgAJAP//AgAEAAAAAACpAAAACQAmAAgABwD//wQABgAAAAAAaQAAADAAFgADAAkA//8CAAEAAAAAAOkAAAD3ADMABwAJAP//AgAFAAAAAABZAAAArwAMAAcACQD//wIABQAAAAAA2QAAAHgAMQAHAAsA//8AAAUAAAAAADkAAACxAAEABwAJAP//AgAFAAAAAAC5AAAAgwAkAAQABQD//wIAAgAAAAAAeQAAAKYAGAAHAAgA//8EAAUAAAAAAPkAAABuAEEABwAJAP//AgAFAAAAAABFAAAAEQAMAAcACQD//wIABQAAAAAAxQAAAN4AIgAHAAsA//8AAAUAAAAAACUAAAAfAAEABwAJAP//AgAFAAAAAAClAAAA7AAWAAcACQD//wIABQAAAAAAZQAAABEAGAAHAAcA//8EAAUAAAAAAOUAAADXADMABwAJAP//AgAFAAAAAABVAAAAjwAMAAcACQD//wIABQAAAAAA1QAAAFgAMQAHAAsA//8AAAUAAAAAADUAAACRAAEABwAJAP//AgAFAAAAAAC1AAAAYwAkAAkACAD//wIABwAAAAAAdQAAAIYAGAAHAAcA//8EAAUAAAAAAPUAAABNAEEABwAJAP//AgAFAAAAAABNAAAATwAMAAcACQD//wIABQAAAAAAzQAAAB4AMgAEAAoAAAABAAMAAAAAAC0AAABVAAQABwADAP//BQAFAAAAAACtAAAAKAAmAAcAAwD//wQABQAAAAAAbQAAAEgAGAAHAAcA//8EAAUAAAAAAO0AAAAWAEAABAAKAP//AQACAAAAAABdAAAAzQAMAAUACQD//wIAAwAAAAAA3QAAAJgAMQAHAAsA//8AAAUAAAAAAD0AAADIAAMABwAGAP//BAAFAAAAAAC9AAAAngAkAAcACQD//wIABQAAAAAAfQAAAMEAFgAGAAkA//8CAAQAAAAAAP0AAACOAEEABwAKAP//AgAFAAAAAABDAAAAAQAMAAcACQD//wIABQAAAAAAwwAAAM4AIgAHAAsA//8AAAUAAAAAACMAAAAPAAEABwAJAP//AgAFAAAAAACjAAAA3QAWAAcACQD//wIABQAAAAAAYwAAAAEAGAAHAAcA//8EAAUAAAAAAOMAAADHADMABwAJAP//AgAFAAAAAABTAAAAfwAMAAcACQD//wIABQAAAAAA0wAAAEgAMAAHAAwA/////wUAAAAAADMAAACBAAEABwAJAP//AgAFAAAAAACzAAAAVwAkAAYABwD//wIABAAAAAAAcwAAAHgAGAAHAAcA//8EAAUAAAAAAPMAAAA9AEEABwAJAP//AgAFAAAAAABLAAAAPwAMAAcACQD//wIABQAAAAAAywAAABEAMQAHAAsA//8AAAUAAAAAACsAAABJAAIABwAHAP//AwAFAAAAAACrAAAAGAAmAAcABwD//wQABQAAAAAAawAAADwAFgAGAAkA//8CAAQAAAAAAOsAAAAJAEEABwAJAP//AgAFAAAAAABbAAAAvwAMAAUACQD//wIAAwAAAAAA2wAAAIgAMQAHAAsA//8AAAUAAAAAADsAAAC9AAIAAwAJAP//AwABAAAAAAC7AAAAjgAmAAcABwD//wQABQAAAAAAewAAALYAFgAGAAkA//8CAAQAAAAAAPsAAAB+AEEABwAJAP//AgAFAAAAAABHAAAAIQAMAAcACQD//wIABQAAAAAAxwAAAO4AJAAHAAsA//8CAAUAAAAAACcAAAAvAAEABAAFAP//AgACAAAAAACnAAAA+AAWAAYACQD//wIABAAAAAAAZwAAACAAGAAHAAgA//8EAAUAAAAAAOcAAADnADQABwAKAP//AwAFAAAAAABXAAAAnwAMAAcACQD//wIABQAAAAAA1wAAAGgANAAHAAcA//8DAAUAAAAAADcAAAChAAEABwAJAP//AgAFAAAAAAC3AAAAeAAoAAQAAwD//wYAAgAAAAAAdwAAAJYAGAAHAAcA//8EAAUAAAAAAPcAAABdAEEACAAJAP//AgAGAAAAAABPAAAAXwAMAAcACQD//wIABQAAAAAAzwAAACkAMwAFAAkA//8CAAMAAAAAAC8AAABhAAEABwAJAP//AgAFAAAAAACvAAAAOQAkAAcAAwD//wIABQAAAAAAbwAAAFgAGAAHAAcA//8EAAUAAAAAAO8AAAAfAD8ABQALAP//AAADAAAAAABfAAAA2wASAAcAAwD//wgABQAAAAAA3wAAAKcAMwAHAAkA//8CAAUAAAAAAD8AAADXAAEABwAJAP//AgAFAAAAAAC/AAAArgAkAAcACQD//wIABQAAAAAA/wAAAJwAQQAHAAoA//8CAAUAAAAAAAAAAAA"},{ name : "R_minecraftiaOutline_png", data : "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"},{ name : "R_data_cdb", data : "ewoJInNoZWV0cyI6IFsKCQl7CgkJCSJuYW1lIjogInRlc3QiLAoJCQkiY29sdW1ucyI6IFsKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICIwIiwKCQkJCQkibmFtZSI6ICJpZCIKCQkJCX0KCQkJXSwKCQkJImxpbmVzIjogWwoJCQkJewoJCQkJCSJpZCI6ICJ0ZXN0IgoJCQkJfSwKCQkJCXsKCQkJCQkiaWQiOiAicmV0Z3JlIgoJCQkJfQoJCQldLAoJCQkic2VwYXJhdG9ycyI6IFtdLAoJCQkicHJvcHMiOiB7fQoJCX0sCgkJewoJCQkibmFtZSI6ICJsZXZlbCIsCgkJCSJjb2x1bW5zIjogWwoJCQkJewoJCQkJCSJuYW1lIjogImlkIiwKCQkJCQkidHlwZVN0ciI6ICIwIgoJCQkJfSwKCQkJCXsKCQkJCQkibmFtZSI6ICJ3aWR0aCIsCgkJCQkJInR5cGVTdHIiOiAiMyIKCQkJCX0sCgkJCQl7CgkJCQkJIm5hbWUiOiAiaGVpZ2h0IiwKCQkJCQkidHlwZVN0ciI6ICIzIgoJCQkJfSwKCQkJCXsKCQkJCQkibmFtZSI6ICJwcm9wcyIsCgkJCQkJInR5cGVTdHIiOiAiMTYiCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogInRpbGVQcm9wcyIsCgkJCQkJInR5cGVTdHIiOiAiOCIKCQkJCX0sCgkJCQl7CgkJCQkJIm5hbWUiOiAibGF5ZXJzIiwKCQkJCQkidHlwZVN0ciI6ICI4IgoJCQkJfSwKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICI4IiwKCQkJCQkibmFtZSI6ICJtYXJrZXJzIgoJCQkJfQoJCQldLAoJCQkibGluZXMiOiBbCgkJCQl7CgkJCQkJImlkIjogImZpcnN0IiwKCQkJCQkid2lkdGgiOiAxMjgsCgkJCQkJImhlaWdodCI6IDEyOCwKCQkJCQkidGlsZVByb3BzIjogW10sCgkJCQkJImxheWVycyI6IFsKCQkJCQkJewoJCQkJCQkJIm5hbWUiOiAic2t5IiwKCQkJCQkJCSJkYXRhIjogewoJCQkJCQkJCSJmaWxlIjogInRpbGVzLnBuZyIsCgkJCQkJCQkJInNpemUiOiA4LAoJCQkJCQkJCSJzdHJpZGUiOiAxMCwKCQkJCQkJCQkiZGF0YSI6ICJBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFHQUFaQUJvQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUNJQUl3QWtBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQzBBTGdCQUFBQUFBQUFBQUFBQVBRQStBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBTmdBM0FEZ0FTZ0FBQUFBQUFBQUFBRWNBU0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUJUQUZRQUdBQVpBQm9BUGdCUkFGSUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQ0lBSXdBL0FFQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFDMEFTUUJLQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFOZ0EzQUZNQVZBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQT0iCgkJCQkJCQl9CgkJCQkJCX0sCgkJCQkJCXsKCQkJCQkJCSJuYW1lIjogIm1haW4iLAoJCQkJCQkJImRhdGEiOiB7CgkJCQkJCQkJImZpbGUiOiAidGlsZXMucG5nIiwKCQkJCQkJCQkic2l6ZSI6IDgsCgkJCQkJCQkJInN0cmlkZSI6IDEwLAoJCQkJCQkJCSJkYXRhIjogIkFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUxBQVFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBS3dBTEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBRUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFEVUFDd0FFQUFBQUFBQUFBQUFBQUFBQUFBQUFDd0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFWQUJZQUN3QUVBQVFBQUFBQUFBQUFBQUFFQUNzQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUh3QWdBQXNBQ3dBTEFBUUFBQUFBQUFRQUN3QTFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQXNBQ3dBVkFCWUFDd0FMQUFRQUJBQUxBQlVBRmdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBTEFBc0FId0FnQUNrQUtnQUxBQXNBQ3dBZkFDQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFDd0FMQUFzQUN3QXpBRFFBQ3dBTEFDc0FDd0FMQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBPSIKCQkJCQkJCX0KCQkJCQkJfSwKCQkJCQkJewoJCQkJCQkJIm5hbWUiOiAiZnJlZUJsb2NrcyIsCgkJCQkJCQkiZGF0YSI6IHsKCQkJCQkJCQkiZmlsZSI6ICJ0aWxlcy5wbmciLAoJCQkJCQkJCSJzaXplIjogOCwKCQkJCQkJCQkic3RyaWRlIjogMTAsCgkJCQkJCQkJImRhdGEiOiAiLy84RkFEMEFKUUFOQUVZQUpRQXpBRWdBSkFCTkFFMEFKUUFWQUYwQUpRQXRBRjBBSlFCRkFGMEFKUUE9IgoJCQkJCQkJfQoJCQkJCQl9CgkJCQkJXSwKCQkJCQkicHJvcHMiOiB7CgkJCQkJCSJ0aWxlU2l6ZSI6IDgsCgkJCQkJCSJsYXllcnMiOiBbCgkJCQkJCQl7CgkJCQkJCQkJImwiOiAibWFpbiIsCgkJCQkJCQkJInAiOiB7CgkJCQkJCQkJCSJhbHBoYSI6IDEKCQkJCQkJCQl9CgkJCQkJCQl9LAoJCQkJCQkJewoJCQkJCQkJCSJsIjogInNreSIsCgkJCQkJCQkJInAiOiB7CgkJCQkJCQkJCSJhbHBoYSI6IDEKCQkJCQkJCQl9CgkJCQkJCQl9LAoJCQkJCQkJewoJCQkJCQkJCSJsIjogIm1hcmtlcnMiLAoJCQkJCQkJCSJwIjogewoJCQkJCQkJCQkiYWxwaGEiOiAxCgkJCQkJCQkJfQoJCQkJCQkJfSwKCQkJCQkJCXsKCQkJCQkJCQkibCI6ICJmcmVlQmxvY2tzIiwKCQkJCQkJCQkicCI6IHsKCQkJCQkJCQkJImFscGhhIjogMSwKCQkJCQkJCQkJIm1vZGUiOiAib2JqZWN0cyIKCQkJCQkJCQl9CgkJCQkJCQl9CgkJCQkJCV0KCQkJCQl9LAoJCQkJCSJtYXJrZXJzIjogWwoJCQkJCQl7CgkJCQkJCQkieCI6IDAsCgkJCQkJCQkieSI6IDQsCgkJCQkJCQkibWFya2VyIjogIkhlcm8iLAoJCQkJCQkJIndpZHRoIjogMSwKCQkJCQkJCSJoZWlnaHQiOiAxCgkJCQkJCX0sCgkJCQkJCXsKCQkJCQkJCSJ4IjogOSwKCQkJCQkJCSJ5IjogOCwKCQkJCQkJCSJtYXJrZXIiOiAiTW9iIiwKCQkJCQkJCSJ3aWR0aCI6IDEsCgkJCQkJCQkiaGVpZ2h0IjogMQoJCQkJCQl9CgkJCQkJXQoJCQkJfQoJCQldLAoJCQkic2VwYXJhdG9ycyI6IFtdLAoJCQkicHJvcHMiOiB7CgkJCQkibGV2ZWwiOiB7CgkJCQkJInRpbGVTZXRzIjogewoJCQkJCQkidGlsZXMucG5nIjogewoJCQkJCQkJInN0cmlkZSI6IDEwLAoJCQkJCQkJInNldHMiOiBbXSwKCQkJCQkJCSJwcm9wcyI6IFtdCgkJCQkJCX0KCQkJCQl9CgkJCQl9CgkJCX0KCQl9LAoJCXsKCQkJIm5hbWUiOiAibGV2ZWxAdGlsZVByb3BzIiwKCQkJInByb3BzIjogewoJCQkJImhpZGUiOiB0cnVlCgkJCX0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJsaW5lcyI6IFtdLAoJCQkiY29sdW1ucyI6IFtdCgkJfSwKCQl7CgkJCSJuYW1lIjogImxldmVsQGxheWVycyIsCgkJCSJwcm9wcyI6IHsKCQkJCSJoaWRlIjogdHJ1ZQoJCQl9LAoJCQkic2VwYXJhdG9ycyI6IFtdLAoJCQkibGluZXMiOiBbXSwKCQkJImNvbHVtbnMiOiBbCgkJCQl7CgkJCQkJIm5hbWUiOiAibmFtZSIsCgkJCQkJInR5cGVTdHIiOiAiMSIKCQkJCX0sCgkJCQl7CgkJCQkJIm5hbWUiOiAiZGF0YSIsCgkJCQkJInR5cGVTdHIiOiAiMTUiCgkJCQl9CgkJCV0KCQl9LAoJCXsKCQkJIm5hbWUiOiAibWFya2VycyIsCgkJCSJjb2x1bW5zIjogWwoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjExIiwKCQkJCQkibmFtZSI6ICJjb2xvciIsCgkJCQkJImRpc3BsYXkiOiBudWxsCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjE0IiwKCQkJCQkibmFtZSI6ICJpY29uIiwKCQkJCQkiZGlzcGxheSI6IG51bGwKCQkJCX0sCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiMCIsCgkJCQkJIm5hbWUiOiAiaWQiCgkJCQl9CgkJCV0sCgkJCSJsaW5lcyI6IFsKCQkJCXsKCQkJCQkiaWQiOiAiSGVybyIsCgkJCQkJImNvbG9yIjogMTc2OTIxNiwKCQkJCQkiaWNvbiI6IHsKCQkJCQkJImZpbGUiOiAidGlsZXMucG5nIiwKCQkJCQkJInNpemUiOiA4LAoJCQkJCQkieCI6IDEsCgkJCQkJCSJ5IjogMAoJCQkJCX0KCQkJCX0sCgkJCQl7CgkJCQkJImNvbG9yIjogMTY3MTE2ODAsCgkJCQkJImlkIjogIk1vYiIsCgkJCQkJImljb24iOiB7CgkJCQkJCSJmaWxlIjogInRpbGVzLnBuZyIsCgkJCQkJCSJzaXplIjogOCwKCQkJCQkJIngiOiA5LAoJCQkJCQkieSI6IDEKCQkJCQl9CgkJCQl9CgkJCV0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJwcm9wcyI6IHt9CgkJfSwKCQl7CgkJCSJuYW1lIjogImxldmVsQG1hcmtlcnMiLAoJCQkicHJvcHMiOiB7CgkJCQkiaGlkZSI6IHRydWUKCQkJfSwKCQkJInNlcGFyYXRvcnMiOiBbXSwKCQkJImxpbmVzIjogW10sCgkJCSJjb2x1bW5zIjogWwoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjY6bWFya2VycyIsCgkJCQkJIm5hbWUiOiAibWFya2VyIiwKCQkJCQkiZGlzcGxheSI6IG51bGwKCQkJCX0sCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiMyIsCgkJCQkJIm5hbWUiOiAieCIsCgkJCQkJImRpc3BsYXkiOiBudWxsCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjMiLAoJCQkJCSJuYW1lIjogInkiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfSwKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICIzIiwKCQkJCQkibmFtZSI6ICJ3aWR0aCIsCgkJCQkJImRpc3BsYXkiOiBudWxsCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjMiLAoJCQkJCSJuYW1lIjogImhlaWdodCIsCgkJCQkJImRpc3BsYXkiOiBudWxsCgkJCQl9CgkJCV0KCQl9CgldLAoJImN1c3RvbVR5cGVzIjogW10sCgkiY29tcHJlc3MiOiBmYWxzZQp9"}];
+haxe_Resource.content = [{ name : "R_minecraftiaOutline_fnt", data : "QkZOVAABCwBNaW5lY3JhZnRpYQYAFgBtaW5lY3JhZnRpYU91dGxpbmUucG5nDAAKAAAAAADtAAAAFgBAAAQACgD//wEAAgAAAAAATwAAAF8ADAAHAAkA//8CAAUAAAAAAO4AAAAbAD8AAwALAP//AAABAAAAAABQAAAAZwAMAAcACQD//wIABQAAAAAA7wAAAB8APwAFAAsA//8AAAMAAAAAAFEAAABvAAwABwAJAP//AgAFAAAAAADwAAAAJQBAAAcACgD//wEABQAAAAAAoQAAANEAFwADAAgA//8DAAEAAAAAAFIAAAB3AAwABwAJAP//AgAFAAAAAADxAAAALQBBAAcACQD//wIABQAAAAAAogAAANUAFgAHAAkA//8CAAUAAAAAAFMAAAB/AAwABwAJAP//AgAFAAAAAADyAAAANQBBAAcACQD//wIABQAAAAAAowAAAN0AFgAHAAkA//8CAAUAAAAAAFQAAACHAAwABwAJAP//AgAFAAAAAADzAAAAPQBBAAcACQD//wIABQAAAAAApAAAAOUAFwAGAAcA//8DAAQAAAAAAFUAAACPAAwABwAJAP//AgAFAAAAAAD0AAAARQBBAAcACQD//wIABQAAAAAApQAAAOwAFgAHAAkA//8CAAUAAAAAAFYAAACXAAwABwAJAP//AgAFAAAAAAD1AAAATQBBAAcACQD//wIABQAAAAAApgAAAPQAFgADAAkA//8CAAEAAAAAAFcAAACfAAwABwAJAP//AgAFAAAAAAD2AAAAVQBBAAcACQD//wIABQAAAAAApwAAAPgAFgAGAAkA//8CAAQAAAAAAFgAAACnAAwABwAJAP//AgAFAAAAAAD3AAAAXQBBAAgACQD//wIABgAAAAAAqAAAAAEAJAAHAAMA//8CAAUAAAAAAFkAAACvAAwABwAJAP//AgAFAAAAAAD4AAAAZgBDAAcABwD//wQABQAAAAAAqQAAAAkAJgAIAAcA//8EAAYAAAAAAFoAAAC3AAwABwAJAP//AgAFAAAAAAD5AAAAbgBBAAcACQD//wIABQAAAAAAqgAAABIAJAAFAAUA//8CAAMAAAAAAFsAAAC/AAwABQAJAP//AgADAAAAAAD6AAAAdgBBAAcACQD//wIABQAAAAAAqwAAABgAJgAHAAcA//8EAAUAAAAAAFwAAADFAAwABwAJAP//AgAFAAAAAAD7AAAAfgBBAAcACQD//wIABQAAAAAArAAAACAAKAAHAAUA//8GAAUAAAAAAF0AAADNAAwABQAJAP//AgADAAAAAAD8AAAAhgBBAAcACQD//wIABQAAAAAArQAAACgAJgAHAAMA//8EAAUAAAAAAF4AAADTAAwABwAFAP//AgAFAAAAAAD9AAAAjgBBAAcACgD//wIABQAAAAAArgAAADAAJAAIAAcA//8CAAYAAAAAAF8AAADbABIABwADAP//CAAFAAAAAAD+AAAAlgBCAAUACQD//wMAAwAAAAAArwAAADkAJAAHAAMA//8CAAUAAAAAAGAAAADjAAwABAAFAP//AgACAAAAAAD/AAAAnABBAAcACgD//wIABQAAAAAAsAAAAEEAJAAFAAUA//8CAAMAAAAAAGEAAADoAA4ABwAHAP//BAAFAAAAAACxAAAARwAkAAgACQD//wIABgAAAAAAYgAAAPAADAAHAAkA//8CAAUAAAAAALIAAABQACQABgAHAP//AgAEAAAAAABjAAAAAQAYAAcABwD//wQABQAAAAAAswAAAFcAJAAGAAcA//8CAAQAAAAAAGQAAAAJABYABwAJAP//AgAFAAAAAAC0AAAAXgAkAAQABQD//wIAAgAAAAAAZQAAABEAGAAHAAcA//8EAAUAAAAAALUAAABjACQACQAIAP//AgAHAAAAAABmAAAAGQAWAAYACQD//wIABAAAAAAAtgAAAG0AJAAKAAkA//8CAAgAAAAAAGcAAAAgABgABwAIAP//BAAFAAAAAAC3AAAAeAAoAAQAAwD//wYAAgAAAAAAaAAAACgAFgAHAAkA//8CAAUAAAAAALgAAAB9ACcABQAGAP//BQADAAAAAABpAAAAMAAWAAMACQD//wIAAQAAAAAAagAAADQAFgAHAAoA//8CAAUAAAAAALkAAACDACQABAAFAP//AgACAAAAAABrAAAAPAAWAAYACQD//wIABAAAAAAAugAAAIgAJAAFAAUA//8CAAMAAAAAAGwAAABDABYABAAJAP//AgACAAAAAAC7AAAAjgAmAAcABwD//wQABQAAAAAAbQAAAEgAGAAHAAcA//8EAAUAAAAAALwAAACWACQABwAJAP//AgAFAAAAAABuAAAAUAAYAAcABwD//wQABQAAAAAAvQAAAJ4AJAAHAAkA//8CAAUAAAAAACAAAAABAAgAAgACAP//CQAEAAAAAAC+AAAApgAkAAcACQD//wIABQAAAAAAbwAAAFgAGAAHAAcA//8EAAUAAAAAACEAAAAEAAEAAwAJAP//AgABAAAAAAC/AAAArgAkAAcACQD//wIABQAAAAAAcAAAAGAAGAAHAAgA//8EAAUAAAAAACIAAAAIAAEABgAFAP//AgAEAAAAAADAAAAAtgAhAAcADAD/////BQAAAAAAcQAAAGgAGAAHAAgA//8EAAUAAAAAACMAAAAPAAEABwAJAP//AgAFAAAAAADBAAAAvgAhAAcADAD/////BQAAAAAAcgAAAHAAGAAHAAcA//8EAAUAAAAAACQAAAAXAAEABwAJAP//AgAFAAAAAADCAAAAxgAhAAcADAD/////BQAAAAAAcwAAAHgAGAAHAAcA//8EAAUAAAAAAMMAAADOACIABwALAP//AAAFAAAAAAB0AAAAgAAWAAUACQD//wIAAwAAAAAAJQAAAB8AAQAHAAkA//8CAAUAAAAAAMQAAADWACIABwALAP//AAAFAAAAAAB1AAAAhgAYAAcABwD//wQABQAAAAAAJgAAACcAAQAHAAkA//8CAAUAAAAAAMUAAADeACIABwALAP//AAAFAAAAAAB2AAAAjgAYAAcABwD//wQABQAAAAAAJwAAAC8AAQAEAAUA//8CAAIAAAAAAMYAAADmACQABwAJAP//AgAFAAAAAAB3AAAAlgAYAAcABwD//wQABQAAAAAAKAAAADQAAQAGAAkA//8CAAQAAAAAAMcAAADuACQABwALAP//AgAFAAAAAAB4AAAAngAYAAcABwD//wQABQAAAAAAKQAAADsAAQAGAAkA//8CAAQAAAAAAMgAAAD2ACEABwAMAP////8FAAAAAAB5AAAApgAYAAcACAD//wQABQAAAAAAKgAAAEIAAwAGAAUA//8EAAQAAAAAAMkAAAABADAABwAMAP////8FAAAAAAB6AAAArgAYAAcABwD//wQABQAAAAAAKwAAAEkAAgAHAAcA//8DAAUAAAAAAMoAAAAJADAABwAMAP////8FAAAAAAB7AAAAtgAWAAYACQD//wIABAAAAAAALAAAAFEABgADAAUA//8HAAEAAAAAAMsAAAARADEABwALAP//AAAFAAAAAAB8AAAAvQAWAAMACQD//wIAAQAAAAAALQAAAFUABAAHAAMA//8FAAUAAAAAAMwAAAAZADIABAAKAP//AQACAAAAAAB9AAAAwQAWAAYACQD//wIABAAAAAAALgAAAF0ABgADAAQA//8HAAEAAAAAAM0AAAAeADIABAAKAAAAAQADAAAAAAB+AAAAyAAWAAgABAD//wIABgAAAAAALwAAAGEAAQAHAAkA//8CAAUAAAAAAM4AAAAjADIABQAKAP//AQADAAAAAAAwAAAAaQABAAcACQD//wIABQAAAAAAzwAAACkAMwAFAAkA//8CAAMAAAAAADEAAABxAAEABwAJAP//AgAFAAAAAADQAAAALwAzAAgACQD+/wIABQAAAAAAMgAAAHkAAQAHAAkA//8CAAUAAAAAANEAAAA4ADEABwALAP//AAAFAAAAAAAzAAAAgQABAAcACQD//wIABQAAAAAA0gAAAEAAMAAHAAwA/////wUAAAAAADQAAACJAAEABwAJAP//AgAFAAAAAADTAAAASAAwAAcADAD/////BQAAAAAANQAAAJEAAQAHAAkA//8CAAUAAAAAANQAAABQADAABwAMAP////8FAAAAAAA2AAAAmQABAAcACQD//wIABQAAAAAA1QAAAFgAMQAHAAsA//8AAAUAAAAAADcAAAChAAEABwAJAP//AgAFAAAAAADWAAAAYAAxAAcACwD//wAABQAAAAAAOAAAAKkAAQAHAAkA//8CAAUAAAAAANcAAABoADQABwAHAP//AwAFAAAAAAA5AAAAsQABAAcACQD//wIABQAAAAAA2AAAAHAAMwAHAAkA//8CAAUAAAAAADoAAAC5AAIAAwAIAP//AwABAAAAAADZAAAAeAAxAAcACwD//wAABQAAAAAAOwAAAL0AAgADAAkA//8DAAEAAAAAAHgBAACkAD8ABwALAP//AAAFAAAAAADaAAAAgAAxAAcACwD//wAABQAAAAAAPAAAAMEAAQAGAAkA//8CAAQAAAAAANsAAACIADEABwALAP//AAAFAAAAAAA9AAAAyAADAAcABgD//wQABQAAAAAA3AAAAJAAMQAHAAsA//8AAAUAAAAAAD4AAADQAAEABgAJAP//AgAEAAAAAADdAAAAmAAxAAcACwD//wAABQAAAAAAPwAAANcAAQAHAAkA//8CAAUAAAAAAN4AAACgADMABgAJAP//AgAEAAAAAABAAAAA3wABAAgACQD//wIABgAAAAAA3wAAAKcAMwAHAAkA//8CAAUAAAAAAEEAAADoAAEABwAJAP//AgAFAAAAAADgAAAArwAzAAcACQD//wIABQAAAAAAQgAAAPAAAQAHAAkA//8CAAUAAAAAAOEAAAC3ADMABwAJAP//AgAFAAAAAABDAAAAAQAMAAcACQD//wIABQAAAAAA4gAAAL8AMwAHAAkA//8CAAUAAAAAAEQAAAAJAAwABwAJAP//AgAFAAAAAADjAAAAxwAzAAcACQD//wIABQAAAAAARQAAABEADAAHAAkA//8CAAUAAAAAAOQAAADPADMABwAJAP//AgAFAAAAAABGAAAAGQAMAAcACQD//wIABQAAAAAA5QAAANcAMwAHAAkA//8CAAUAAAAAAEcAAAAhAAwABwAJAP//AgAFAAAAAADmAAAA3wA1AAcABwD//wQABQAAAAAASAAAACkADAAHAAkA//8CAAUAAAAAAOcAAADnADQABwAKAP//AwAFAAAAAABJAAAAMQAMAAUACQD//wIAAwAAAAAA6AAAAO8AMwAHAAkA//8CAAUAAAAAAEoAAAA3AAwABwAJAP//AgAFAAAAAADpAAAA9wAzAAcACQD//wIABQAAAAAASwAAAD8ADAAHAAkA//8CAAUAAAAAAOoAAAABAEEABwAJAP//AgAFAAAAAABMAAAARwAMAAcACQD//wIABQAAAAAA6wAAAAkAQQAHAAkA//8CAAUAAAAAAE0AAABPAAwABwAJAP//AgAFAAAAAADsAAAAEQBAAAQACgD//wEAAgAAAAAATgAAAFcADAAHAAkA//8CAAUAAAAAAAAAAAA"},{ name : "R_levelTiles_png", data : "iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA9pJREFUeNrs3DFK5UAcwOE8eYilnYK2W+kRrL2CR7D3HjZWeggP4BZW1lvtVhbaWAgWr7AQESIRBkLwoZnMvjGZ76tEjQHh/5tJ8shs7+68rloWv2+qzcODqqv5fqP5Wfj65e9DtX1yVOU8/unselYBUWZNAMJA9dEM39vDoto9Pa5ijh8qnH9x+UcAINJa7PDllPv8UGwA2sM339nMOvw5zg+TCkB3+/56+7j0l5+v/i29NrfywwR2AOu/tpYOX3fFba7Bcw7/Ks8PkwzAZ3fc+6y83zneyg8jvQfghh8UEoDu9b/hh0J3AOE5e67rbMMPKw5AuAEYhi/XYzbDDysKQPcxXnf4vopA6seAhh9WGID2XfzvDl+4LGjikPIpQN/h90EgSLQDiFl5Pz6Ln2gHEHt+YOA9gNwrr20/5DEPw9deTcOAt7f6y1bc5viN/R3DDyM0q+t60B/Yv7+oYy8DUgy/9wHAwEuAHFIMv3sAMMIA2PZDoQFIOfweA0LmAPS5/rfyQ6E7gP8x/O4BQOYADH2fADDhHYDhh0IDYPih0AAYfig0AIYfCgnAV+8TACYcgJj3CaTig0DwQ3YAOVZ+nwOAH3APwLYfxmmeavhj3yfw2c/6HA/EG/w+AKDwSwBAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEAAfAvAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAQAAAAQAEABAAQAAAAQAEABAAQAAAAQAEABAAQAAAAQAEABAAQAAAAQAEABAAQAAAAQAEABAAQAAAAQAEABAAQAAAAQAEABAAQAAAAQAEABAAQABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAAABAAQAEABAAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAAAEABAAQAEAAQAAAAQAEABAAQAAAAQAEABAAQAAAAQAEABibdwEGAMKSHnyqwGsBAAAAAElFTkSuQmCC"},{ name : "R_minecraftiaOutline_png", data : "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"},{ name : "R_data_cdb", data : "ewoJInNoZWV0cyI6IFsKCQl7CgkJCSJuYW1lIjogInJvb20iLAoJCQkiY29sdW1ucyI6IFsKCQkJCXsKCQkJCQkibmFtZSI6ICJpZCIsCgkJCQkJInR5cGVTdHIiOiAiMCIKCQkJCX0sCgkJCQl7CgkJCQkJIm5hbWUiOiAid2lkdGgiLAoJCQkJCSJ0eXBlU3RyIjogIjMiCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogImhlaWdodCIsCgkJCQkJInR5cGVTdHIiOiAiMyIKCQkJCX0sCgkJCQl7CgkJCQkJIm5hbWUiOiAicHJvcHMiLAoJCQkJCSJ0eXBlU3RyIjogIjE2IgoJCQkJfSwKCQkJCXsKCQkJCQkibmFtZSI6ICJ0aWxlUHJvcHMiLAoJCQkJCSJ0eXBlU3RyIjogIjgiCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjgiLAoJCQkJCSJuYW1lIjogImNvbGxpc2lvbnMiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfSwKCQkJCXsKCQkJCQkibmFtZSI6ICJsYXllcnMiLAoJCQkJCSJ0eXBlU3RyIjogIjgiCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjgiLAoJCQkJCSJuYW1lIjogIm1hcmtlcnMiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfQoJCQldLAoJCQkibGluZXMiOiBbCgkJCQl7CgkJCQkJImlkIjogIlRlc3QiLAoJCQkJCSJ3aWR0aCI6IDMwLAoJCQkJCSJoZWlnaHQiOiAxMCwKCQkJCQkidGlsZVByb3BzIjogW10sCgkJCQkJImxheWVycyI6IFsKCQkJCQkJewoJCQkJCQkJIm5hbWUiOiAiYmdUaWxlcyIsCgkJCQkJCQkiZGF0YSI6IHsKCQkJCQkJCQkiZmlsZSI6ICJsZXZlbFRpbGVzLnBuZyIsCgkJCQkJCQkJInNpemUiOiAxNiwKCQkJCQkJCQkic3RyaWRlIjogMTYsCgkJCQkJCQkJImRhdGEiOiAiQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBRUFBUUFCQUFFQUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFFQUFRQUJBQUVBQVFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFRQUJBQUlBQXdBQkFBRUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUJBQUVBQVFBQkFCSUFFd0FCQUFFQUFBQUFBQUFBQVFBQ0FBTUFBUUFCQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUJBQUVBQVFBQ0FBTUFBUUFCQUFFQUFnQURBQUVBQVFBQkFBRUFBUUFTQUJNQUFRQUJBQUVBQWdBREFBRUFBUUFCQUFFQUFRQUNBQU1BQVFBQkFBRUFBUUFTQUJNQUFRQUJBQUVBRWdBVEFBRUFBUUFCQUFFQUFRQUJBQUVBQVFBQkFBRUFFZ0FUQUFFQUFRQUJBQUVBQVFBU0FCTUEiCgkJCQkJCQl9CgkJCQkJCX0KCQkJCQldLAoJCQkJCSJtYXJrZXJzIjogWwoJCQkJCQl7CgkJCQkJCQkieCI6IDE0LAoJCQkJCQkJInkiOiAyLAoJCQkJCQkJIm1hcmtlciI6ICJIZXJvMiIsCgkJCQkJCQkid2lkdGgiOiAxLAoJCQkJCQkJImhlaWdodCI6IDEKCQkJCQkJfSwKCQkJCQkJewoJCQkJCQkJIngiOiA2LAoJCQkJCQkJInkiOiA1LAoJCQkJCQkJIm1hcmtlciI6ICJIZXJvMSIsCgkJCQkJCQkid2lkdGgiOiAxLAoJCQkJCQkJImhlaWdodCI6IDEKCQkJCQkJfQoJCQkJCV0sCgkJCQkJInByb3BzIjogewoJCQkJCQkidGlsZVNpemUiOiAxNiwKCQkJCQkJImxheWVycyI6IFsKCQkJCQkJCXsKCQkJCQkJCQkibCI6ICJtYXJrZXJzIiwKCQkJCQkJCQkicCI6IHsKCQkJCQkJCQkJImFscGhhIjogMQoJCQkJCQkJCX0KCQkJCQkJCX0sCgkJCQkJCQl7CgkJCQkJCQkJImwiOiAiY29sbGlzaW9ucyIsCgkJCQkJCQkJInAiOiB7CgkJCQkJCQkJCSJhbHBoYSI6IDEsCgkJCQkJCQkJCSJjb2xvciI6IDE2NzExNjgwCgkJCQkJCQkJfQoJCQkJCQkJfSwKCQkJCQkJCXsKCQkJCQkJCQkibCI6ICJiZ1RpbGVzIiwKCQkJCQkJCQkicCI6IHsKCQkJCQkJCQkJImFscGhhIjogMQoJCQkJCQkJCX0KCQkJCQkJCX0KCQkJCQkJXQoJCQkJCX0sCgkJCQkJImNvbGxpc2lvbnMiOiBbCgkJCQkJCXsKCQkJCQkJCSJ4IjogMjMsCgkJCQkJCQkieSI6IDAsCgkJCQkJCQkid2lkdGgiOiAxLAoJCQkJCQkJImhlaWdodCI6IDgKCQkJCQkJfSwKCQkJCQkJewoJCQkJCQkJIngiOiAyLAoJCQkJCQkJInkiOiAzLAoJCQkJCQkJIndpZHRoIjogNCwKCQkJCQkJCSJoZWlnaHQiOiAxCgkJCQkJCX0sCgkJCQkJCXsKCQkJCQkJCSJ4IjogMTMsCgkJCQkJCQkieSI6IDMsCgkJCQkJCQkid2lkdGgiOiA2LAoJCQkJCQkJImhlaWdodCI6IDEKCQkJCQkJfSwKCQkJCQkJewoJCQkJCQkJIngiOiA1LAoJCQkJCQkJInkiOiA2LAoJCQkJCQkJIndpZHRoIjogMiwKCQkJCQkJCSJoZWlnaHQiOiAyCgkJCQkJCX0sCgkJCQkJCXsKCQkJCQkJCSJ4IjogNywKCQkJCQkJCSJ5IjogNiwKCQkJCQkJCSJ3aWR0aCI6IDUsCgkJCQkJCQkiaGVpZ2h0IjogMgoJCQkJCQl9LAoJCQkJCQl7CgkJCQkJCQkieCI6IDQsCgkJCQkJCQkieSI6IDcsCgkJCQkJCQkid2lkdGgiOiAxLAoJCQkJCQkJImhlaWdodCI6IDEKCQkJCQkJfSwKCQkJCQkJewoJCQkJCQkJIngiOiAxNSwKCQkJCQkJCSJ5IjogNywKCQkJCQkJCSJ3aWR0aCI6IDUsCgkJCQkJCQkiaGVpZ2h0IjogMQoJCQkJCQl9LAoJCQkJCQl7CgkJCQkJCQkieCI6IDAsCgkJCQkJCQkieSI6IDgsCgkJCQkJCQkid2lkdGgiOiAzMCwKCQkJCQkJCSJoZWlnaHQiOiAyCgkJCQkJCX0KCQkJCQldCgkJCQl9CgkJCV0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJwcm9wcyI6IHsKCQkJCSJsZXZlbCI6IHsKCQkJCQkidGlsZVNldHMiOiB7CgkJCQkJCSJsZXZlbFRpbGVzLnBuZyI6IHsKCQkJCQkJCSJzdHJpZGUiOiAxNiwKCQkJCQkJCSJzZXRzIjogW10sCgkJCQkJCQkicHJvcHMiOiBbXQoJCQkJCQl9CgkJCQkJfQoJCQkJfQoJCQl9CgkJfSwKCQl7CgkJCSJuYW1lIjogInJvb21AdGlsZVByb3BzIiwKCQkJInByb3BzIjogewoJCQkJImhpZGUiOiB0cnVlCgkJCX0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJsaW5lcyI6IFtdLAoJCQkiY29sdW1ucyI6IFtdCgkJfSwKCQl7CgkJCSJuYW1lIjogInJvb21AbGF5ZXJzIiwKCQkJInByb3BzIjogewoJCQkJImhpZGUiOiB0cnVlCgkJCX0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJsaW5lcyI6IFtdLAoJCQkiY29sdW1ucyI6IFsKCQkJCXsKCQkJCQkibmFtZSI6ICJuYW1lIiwKCQkJCQkidHlwZVN0ciI6ICIxIgoJCQkJfSwKCQkJCXsKCQkJCQkibmFtZSI6ICJkYXRhIiwKCQkJCQkidHlwZVN0ciI6ICIxNSIKCQkJCX0KCQkJXQoJCX0sCgkJewoJCQkibmFtZSI6ICJtYXJrZXIiLAoJCQkiY29sdW1ucyI6IFsKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICIxMSIsCgkJCQkJIm5hbWUiOiAiY29sb3IiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfSwKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICIwIiwKCQkJCQkibmFtZSI6ICJpZCIKCQkJCX0KCQkJXSwKCQkJImxpbmVzIjogWwoJCQkJewoJCQkJCSJjb2xvciI6IDY1Mjg3LAoJCQkJCSJpZCI6ICJIZXJvMSIKCQkJCX0sCgkJCQl7CgkJCQkJImNvbG9yIjogNjI3MTksCgkJCQkJImlkIjogIkhlcm8yIgoJCQkJfQoJCQldLAoJCQkic2VwYXJhdG9ycyI6IFtdLAoJCQkicHJvcHMiOiB7fQoJCX0sCgkJewoJCQkibmFtZSI6ICJyb29tQG1hcmtlcnMiLAoJCQkicHJvcHMiOiB7CgkJCQkiaGlkZSI6IHRydWUKCQkJfSwKCQkJInNlcGFyYXRvcnMiOiBbXSwKCQkJImxpbmVzIjogW10sCgkJCSJjb2x1bW5zIjogWwoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjY6bWFya2VyIiwKCQkJCQkibmFtZSI6ICJtYXJrZXIiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfSwKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICIzIiwKCQkJCQkibmFtZSI6ICJ4IgoJCQkJfSwKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICIzIiwKCQkJCQkibmFtZSI6ICJ5IiwKCQkJCQkiZGlzcGxheSI6IG51bGwKCQkJCX0sCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiMyIsCgkJCQkJIm5hbWUiOiAid2lkdGgiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfSwKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICIzIiwKCQkJCQkibmFtZSI6ICJoZWlnaHQiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfQoJCQldCgkJfSwKCQl7CgkJCSJuYW1lIjogInJvb21AY29sbGlzaW9ucyIsCgkJCSJwcm9wcyI6IHsKCQkJCSJoaWRlIjogdHJ1ZQoJCQl9LAoJCQkic2VwYXJhdG9ycyI6IFtdLAoJCQkibGluZXMiOiBbXSwKCQkJImNvbHVtbnMiOiBbCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiMyIsCgkJCQkJIm5hbWUiOiAieCIsCgkJCQkJImRpc3BsYXkiOiBudWxsCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjMiLAoJCQkJCSJuYW1lIjogInkiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfSwKCQkJCXsKCQkJCQkidHlwZVN0ciI6ICIzIiwKCQkJCQkibmFtZSI6ICJ3aWR0aCIsCgkJCQkJImRpc3BsYXkiOiBudWxsCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjMiLAoJCQkJCSJuYW1lIjogImhlaWdodCIsCgkJCQkJImRpc3BsYXkiOiBudWxsCgkJCQl9CgkJCV0KCQl9CgldLAoJImN1c3RvbVR5cGVzIjogW10sCgkiY29tcHJlc3MiOiBmYWxzZQp9"}];
 haxe_ds_ObjectMap.count = 0;
 var __map_reserved = {};
 haxe_MainLoop.add(hxd_System.updateCursor,-1);
@@ -68589,8 +77672,9 @@ if(ArrayBuffer.prototype.slice == null) {
 Assets.initDone = false;
 h2d_Console.HIDE_LOG_TIMEOUT = 3.;
 Const.FPS = 60;
-Const.AUTO_SCALE_TARGET_HEIGHT = 120;
-Const.SCALE = 6.0;
+Const.AUTO_SCALE_TARGET_HEIGHT = -1;
+Const.SCALE = 3.0;
+Const.GRID = 16;
 Const._uniq = 0;
 Const.INFINITE = 999999;
 Const._inc = 0;
@@ -68598,15 +77682,15 @@ Const.DP_BG = Const._inc++;
 Const.DP_MAIN = Const._inc++;
 Const.DP_TOP = Const._inc++;
 Const.DP_UI = Const._inc++;
-_$Data_TestKind_$Impl_$.test = "test";
-_$Data_TestKind_$Impl_$.retgre = "retgre";
-_$Data_LevelKind_$Impl_$.first = "first";
-_$Data_MarkersKind_$Impl_$.Hero = "Hero";
-_$Data_MarkersKind_$Impl_$.Mob = "Mob";
+_$Data_RoomKind_$Impl_$.Test = "Test";
+_$Data_MarkerKind_$Impl_$.Hero1 = "Hero1";
+_$Data_MarkerKind_$Impl_$.Hero2 = "Hero2";
 DateTools.DAY_SHORT_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 DateTools.DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 DateTools.MONTH_SHORT_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 DateTools.MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+Entity.ALL = [];
+Entity.GC = [];
 mt_Process.CUSTOM_STAGE_WIDTH = -1;
 mt_Process.CUSTOM_STAGE_HEIGHT = -1;
 mt_Process.UNIQ_ID = 0;
@@ -68624,6 +77708,7 @@ cdb__$Data_TileMode_$Impl_$.Ground = "ground";
 cdb__$Data_TileMode_$Impl_$.Border = "border";
 cdb__$Data_TileMode_$Impl_$.Object = "object";
 cdb__$Data_TileMode_$Impl_$.Group = "group";
+en_Hero.ALL = [];
 format_gif_Tools.LN2 = Math.log(2);
 format_mp3_MPEG.V1 = 3;
 format_mp3_MPEG.V2 = 2;
@@ -68995,6 +78080,7 @@ hxd_fmt_hmd_Data.CURRENT_VERSION = 2;
 hxd_fmt_hmd_Reader.BLEND = h2d_BlendMode.__empty_constructs__.slice();
 hxd_fmt_hmd_Reader.CULLING = h3d_mat_Face.__empty_constructs__.slice();
 hxd_fs_EmbedFileSystem.invalidChars = new EReg("[^A-Za-z0-9_]","g");
+hxd_poly2tri_Point.C_ID = 0;
 hxd_prefab_Library.registeredElements = new haxe_ds_StringMap();
 hxd_prefab_Library.registeredExtensions = new haxe_ds_StringMap();
 hxd_prefab_Library._ = hxd_prefab_Library.register("prefab",hxd_prefab_Library,"prefab");
@@ -69209,6 +78295,7 @@ hxsl__$Linker_ShaderInfos.UID = 0;
 hxsl_Printer.SWIZ = ["x","y","z","w"];
 hxsl_RuntimeShader.UID = 0;
 hxsl_SharedShader.UNROLL_LOOPS = false;
+mt_Cooldown.__meta__ = { obj : { indexes : ["jumpLock","onGroundRecently","doubleJumpLock","extendJump"]}};
 mt_MLib.INT8_MIN = -128;
 mt_MLib.INT8_MAX = 127;
 mt_MLib.UINT8_MAX = 255;
@@ -69233,6 +78320,9 @@ mt_MLib.EPS = 1e-6;
 mt_MLib.SQRT2 = 1.414213562373095;
 mt_data_MoReader.MAGIC = -1794895138;
 mt_data_MoReader.MAGIC2 = -569244523;
+mt_deepnight_Color.BLACK = { r : 0, g : 0, b : 0};
+mt_deepnight_Color.WHITE = { r : 255, g : 255, b : 255};
+mt_deepnight_Color.MEDIAN_GRAY = { r : 128, g : 128, b : 128};
 mt_deepnight_Sfx.GLOBAL_GROUPS = new haxe_ds_IntMap();
 mt_deepnight_Tweenie.DEFAULT_DURATION = 1000.0;
 mt_heaps_Controller.UNIQ_ID = 0;
@@ -69270,6 +78360,8 @@ mt_heaps__$GamePad_PadKey_$Impl_$.AXIS_RIGHT_Y_POS = 27;
 mt_heaps__$GamePad_PadKey_$Impl_$.LENGTH = 28;
 mt_heaps_GamePad.ALL = [];
 mt_heaps_GamePad.MAPPING = [hxd_Pad.DEFAULT_CONFIG.A,hxd_Pad.DEFAULT_CONFIG.B,hxd_Pad.DEFAULT_CONFIG.X,hxd_Pad.DEFAULT_CONFIG.Y,hxd_Pad.DEFAULT_CONFIG.back,hxd_Pad.DEFAULT_CONFIG.start,hxd_Pad.DEFAULT_CONFIG.LT,hxd_Pad.DEFAULT_CONFIG.RT,hxd_Pad.DEFAULT_CONFIG.LB,hxd_Pad.DEFAULT_CONFIG.RB,hxd_Pad.DEFAULT_CONFIG.analogClick,hxd_Pad.DEFAULT_CONFIG.ranalogClick,hxd_Pad.DEFAULT_CONFIG.dpadUp,hxd_Pad.DEFAULT_CONFIG.dpadDown,hxd_Pad.DEFAULT_CONFIG.dpadLeft,hxd_Pad.DEFAULT_CONFIG.dpadRight,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogY,hxd_Pad.DEFAULT_CONFIG.ranalogY,hxd_Pad.DEFAULT_CONFIG.ranalogY];
+mt_heaps_slib_AnimManager.UNSYNC = new haxe_ds_StringMap();
+mt_heaps_slib_SpriteLib.DT = NaN;
 {
 	Boot.main();
 	haxe_EntryPoint.run();
