@@ -15,8 +15,10 @@ class Game extends mt.Process {
 		ca = Main.ME.controller.createAccess("game");
 		createRootInLayers(Main.ME.root, Const.DP_BG);
 
-		level = new Level();
-		new en.Hero();
+		level = new Level(Test);
+		var pt = level.getMarker(Hero1);
+		if( pt==null ) pt = new CPoint(0,0);
+		new en.Hero(pt.cx, pt.cy);
 	}
 
 	public function onCdbReload() {

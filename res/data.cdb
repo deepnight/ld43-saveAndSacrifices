@@ -1,25 +1,6 @@
 {
 	"sheets": [
 		{
-			"name": "test",
-			"columns": [
-				{
-					"typeStr": "0",
-					"name": "id"
-				}
-			],
-			"lines": [
-				{
-					"id": "test"
-				},
-				{
-					"id": "retgre"
-				}
-			],
-			"separators": [],
-			"props": {}
-		},
-		{
 			"name": "room",
 			"columns": [
 				{
@@ -43,25 +24,110 @@
 					"typeStr": "8"
 				},
 				{
+					"typeStr": "8",
+					"name": "collisions",
+					"display": null
+				},
+				{
 					"name": "layers",
 					"typeStr": "8"
 				},
 				{
 					"typeStr": "8",
-					"name": "markers"
+					"name": "markers",
+					"display": null
 				}
 			],
-			"lines": [],
+			"lines": [
+				{
+					"id": "Test",
+					"width": 30,
+					"height": 10,
+					"tileProps": [],
+					"layers": [],
+					"markers": [
+						{
+							"x": 16,
+							"y": 2,
+							"marker": "Hero1",
+							"width": 1,
+							"height": 1
+						}
+					],
+					"props": {
+						"tileSize": 16,
+						"layers": [
+							{
+								"l": "markers",
+								"p": {
+									"alpha": 1
+								}
+							},
+							{
+								"l": "collisions",
+								"p": {
+									"alpha": 1,
+									"color": 16711680
+								}
+							}
+						]
+					},
+					"collisions": [
+						{
+							"x": 23,
+							"y": 0,
+							"width": 1,
+							"height": 8
+						},
+						{
+							"x": 2,
+							"y": 3,
+							"width": 4,
+							"height": 1
+						},
+						{
+							"x": 13,
+							"y": 3,
+							"width": 6,
+							"height": 1
+						},
+						{
+							"x": 5,
+							"y": 6,
+							"width": 2,
+							"height": 2
+						},
+						{
+							"x": 7,
+							"y": 6,
+							"width": 5,
+							"height": 2
+						},
+						{
+							"x": 4,
+							"y": 7,
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 15,
+							"y": 7,
+							"width": 5,
+							"height": 1
+						},
+						{
+							"x": 0,
+							"y": 8,
+							"width": 30,
+							"height": 2
+						}
+					]
+				}
+			],
 			"separators": [],
 			"props": {
 				"level": {
-					"tileSets": {
-						"tiles.png": {
-							"stride": 10,
-							"sets": [],
-							"props": []
-						}
-					}
+					"tileSets": {}
 				}
 			}
 		},
@@ -101,16 +167,16 @@
 					"display": null
 				},
 				{
-					"typeStr": "14",
-					"name": "icon",
-					"display": null
-				},
-				{
 					"typeStr": "0",
 					"name": "id"
 				}
 			],
-			"lines": [],
+			"lines": [
+				{
+					"color": 65287,
+					"id": "Hero1"
+				}
+			],
 			"separators": [],
 			"props": {}
 		},
@@ -127,6 +193,35 @@
 					"name": "marker",
 					"display": null
 				},
+				{
+					"typeStr": "3",
+					"name": "x"
+				},
+				{
+					"typeStr": "3",
+					"name": "y",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "width",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "height",
+					"display": null
+				}
+			]
+		},
+		{
+			"name": "room@collisions",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
 				{
 					"typeStr": "3",
 					"name": "x",

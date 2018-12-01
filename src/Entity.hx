@@ -22,8 +22,8 @@ class Entity {
 
     public var dx = 0.;
     public var dy = 0.;
-	public var frict = 0.9;
-	public var gravity = 0.02;
+	public var frict = 0.82;
+	public var gravity = 0.03;
 	public var hasGravity = true;
 	public var weight = 1.;
 	public var hei = Const.GRID;
@@ -45,11 +45,11 @@ class Entity {
 	public var centerX(get,never) : Float; inline function get_centerX() return footX;
 	public var centerY(get,never) : Float; inline function get_centerY() return footY-radius;
 
-    public function new() {
+    public function new(x:Int, y:Int) {
         uid = Const.NEXT_UNIQ;
         ALL.push(this);
 
-        setPosCase(5,5);
+        setPosCase(x,y);
         trace(this);
 
         spr = new HSprite();
