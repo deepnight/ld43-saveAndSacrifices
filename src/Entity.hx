@@ -25,7 +25,7 @@ class Entity {
 	public var gravity = 0.024;
 	public var hasGravity = true;
 	public var weight = 1.;
-	public var hei = Const.GRID;
+	public var hei : Float = Const.GRID;
 	public var radius = Const.GRID*0.5;
 	public var lifter = false;
 

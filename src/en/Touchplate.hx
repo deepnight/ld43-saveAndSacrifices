@@ -12,7 +12,7 @@ class Touchplate extends Entity {
     }
 
     override function update() {
-
+        super.update();
         if( triggerId!=null )
             for(e in Hero.ALL)
                 if( e.cx==cx && e.cy==cy && e.onGround ) {
