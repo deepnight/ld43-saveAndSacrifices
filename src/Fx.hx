@@ -210,6 +210,17 @@ class Fx extends mt.Process {
 		}
 	}
 
+	public function darkness(x:Float, y:Float, c:UInt) {
+		var p = allocTopNormal(getTile("smoke"), x+rnd(0,4,true), y+rnd(0,4,true));
+		p.colorize(c);
+		p.setScale(rnd(2.5,3)*Const.GRID/p.t.width);
+		p.rotation = rnd(0,6.28);
+		p.setFadeS(rnd(0.6,0.9), rnd(0.3,0.4), rnd(0.5,1.2));
+		p.dr = rnd(0,0.002,true);
+		p.lifeS = rnd(0.3,0.7);
+		p.delayS = rnd(0,0.3);
+	}
+
 	override function update() {
 		super.update();
 

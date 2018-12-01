@@ -65,25 +65,18 @@
 							"id": "a"
 						},
 						{
-							"x": 6,
-							"y": 8,
-							"marker": "Hero2",
-							"width": 1,
-							"height": 1
+							"x": 12,
+							"y": 6,
+							"marker": "Light",
+							"width": 6,
+							"height": 6
 						},
 						{
-							"x": 6,
-							"y": 9,
-							"marker": "Hero3",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 8,
-							"y": 9,
-							"marker": "Hero1",
-							"width": 1,
-							"height": 1
+							"x": 1,
+							"y": 7,
+							"marker": "Light",
+							"width": 5,
+							"height": 5
 						},
 						{
 							"x": 17,
@@ -92,6 +85,34 @@
 							"width": 1,
 							"height": 1,
 							"id": "a"
+						},
+						{
+							"x": 4,
+							"y": 10,
+							"marker": "Hero1",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 25,
+							"y": 10,
+							"marker": "Light",
+							"width": 3,
+							"height": 3
+						},
+						{
+							"x": 2,
+							"y": 11,
+							"marker": "Hero2",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 3,
+							"y": 11,
+							"marker": "Hero3",
+							"width": 1,
+							"height": 1
 						}
 					],
 					"props": {
@@ -100,7 +121,7 @@
 							{
 								"l": "markers",
 								"p": {
-									"alpha": 1
+									"alpha": 0.53
 								}
 							},
 							{
@@ -379,6 +400,16 @@
 				{
 					"color": 9983007,
 					"id": "Door",
+					"icon": {
+						"file": "levelTiles.png",
+						"size": 16,
+						"x": 1,
+						"y": 31
+					}
+				},
+				{
+					"color": 16764956,
+					"id": "Light",
 					"icon": {
 						"file": "levelTiles.png",
 						"size": 16,

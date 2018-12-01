@@ -2,11 +2,13 @@ import mt.deepnight.CdbHelper;
 
 class Level extends mt.Process {
 	public var game(get,never) : Game; inline function get_game() return Game.ME;
+	public var fx(get,never) : Fx; inline function get_fx() return Game.ME.fx;
 	public var lid : Data.RoomKind;
 	public var infos(default,null) : Data.Room;
     public var wid(get,never) : Int; inline function get_wid() return infos.width;
     public var hei(get,never) : Int; inline function get_hei() return infos.height;
     public var collMap : Map<Int,Bool>;
+    public var lightMap  : Map<Int,Bool>;
 	var spots : Map<String, Map<Int,Bool>>;
 
     public function new(id:Data.RoomKind) {
@@ -18,6 +20,7 @@ class Level extends mt.Process {
 		lid = id;
 		infos = Data.room.get(lid);
         collMap = new Map();
+        lightMap = new Map();
 		spots = new Map();
 		for(m in infos.collisions)
 			for(x in m.x...m.x+m.width)
@@ -51,6 +54,9 @@ class Level extends mt.Process {
 				case Hero3 :
 					game.hero3 = new en.Hero(m.x, m.y);
 
+				case Light :
+					new en.Light((m.x+m.width*0.5)*Const.GRID, (m.y+m.height*0.5)*Const.GRID, MLib.fmax(m.width, m.height)*Const.GRID*0.5);
+
 				case Door :
 					new en.Door(m.x, m.y, m.width, m.height, m.id);
 
@@ -81,14 +87,20 @@ class Level extends mt.Process {
 			for(t in CdbHelper.getLayerTiles(l.data, Assets.levelTiles, wid, tileSet))
 				tg.add(t.x, t.y, t.t);
 		}
-
 	}
+
+	public function setLight(cx:Int,cy:Int,light:Bool) {
+		if( isValid(cx,cy) )
+			lightMap.set(coordId(cx,cy), light);
+	}
+
+	public inline function hasLight(cx:Int,cy:Int) return isValid(cx,cy) && lightMap.get(coordId(cx,cy))==true;
 
 	public function isValid(cx:Float,cy:Float) {
 		return cx>=0 && cx<wid && cy>=0 && cy<hei;
 	}
 
-	public function coordId(x,y) return x+y*wid;
+	public function coordId(x:Int,y:Int) return x+y*wid;
 
 	public function hasColl(x:Int, y:Int) {
 		return !isValid(x,y) ? true : collMap.get(coordId(x,y));
@@ -99,6 +111,9 @@ class Level extends mt.Process {
 	}
 
 	public function addSpot(k:String, cx:Int, cy:Int) {
+		if( !isValid(cx,cy) )
+			throw "Invalid spot "+k+" at "+cx+","+cy;
+
 		if( !spots.exists(k) )
 			spots.set(k, new Map());
 		spots.get(k).set(coordId(cx,cy), true);
@@ -121,5 +136,29 @@ class Level extends mt.Process {
 			if( m.markerId==id )
 				a.push( new CPoint(m.x, m.y) );
 		return a;
+	}
+
+	public function rebuildLightMap() {
+		lightMap = new Map();
+
+		for(e in en.Light.ALL)
+			if( e.active )
+				mt.deepnight.Bresenham.iterateDisc(e.cx, e.cy, MLib.ceil(e.radius/Const.GRID), function(cx,cy) {
+					setLight(cx,cy, true);
+				});
+	}
+
+	override function postUpdate() {
+		super.postUpdate();
+		if( !cd.hasSetS("darkness",0.5) ) {
+			for( cx in 0...wid)
+			for( cy in 0...hei)
+				if( !hasLight(cx,cy) )
+					fx.darkness((cx+0.5)*Const.GRID, (cy+0.5)*Const.GRID, 0x121118);
+		}
+	}
+
+	override function update() {
+		super.update();
 	}
 }

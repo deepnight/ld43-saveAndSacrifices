@@ -46,7 +46,7 @@ class Entity {
 	public var headX(get,never) : Float; inline function get_headX() return (cx+xr)*Const.GRID;
 	public var headY(get,never) : Float; inline function get_headY() return (cy+yr)*Const.GRID-hei;
 	public var centerX(get,never) : Float; inline function get_centerX() return footX;
-	public var centerY(get,never) : Float; inline function get_centerY() return footY-radius;
+	public var centerY(get,never) : Float; inline function get_centerY() return footY-hei*0.5;
 
     public function new(x:Int, y:Int) {
         uid = Const.NEXT_UNIQ;
@@ -81,6 +81,22 @@ class Entity {
 		cy = Std.int(y/Const.GRID);
 		xr = (x-cx*Const.GRID)/Const.GRID;
 		yr = (y-cy*Const.GRID)/Const.GRID;
+	}
+
+	public inline function rnd(min,max,?sign) return Lib.rnd(min,max,sign);
+	public inline function irnd(min,max,?sign) return Lib.irnd(min,max,sign);
+	public inline function pretty(v,?p=1) return Lib.prettyFloat(v,p);
+
+	public inline function distCase(e:Entity) {
+		return Lib.distance(cx+xr, cy+yr, e.cx+e.xr, e.cy+e.yr);
+	}
+
+	public inline function distPx(e:Entity) {
+		return Lib.distance(footX, footY, e.footX, e.footY);
+	}
+
+	public inline function distPxFree(x:Float, y:Float) {
+		return Lib.distance(footX, footY, x, y);
 	}
 
     public inline function destroy() {
