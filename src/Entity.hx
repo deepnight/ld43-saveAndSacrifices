@@ -28,7 +28,7 @@ class Entity {
 	public var weight = 1.;
 	public var hei = Const.GRID;
 	public var radius = Const.GRID*0.5;
-	public var canLift = false;
+	public var lifter = false;
 
 	public var dir(default,set) = 1;
 	public var hasColl = true;
@@ -121,9 +121,16 @@ class Entity {
 	function ySpecialPhysics() {
 	}
 
+	public function canLift(e:Entity) {
+		return e!=this && lifter;
+	}
+
 	function checkLifters() {
+		if( level.hasColl(cx,cy-1) )
+			return;
+
         for( e in ALL ) {
-            if( e==this || !e.canLift )
+            if( !e.canLift(this) )
                 continue;
 
             // Landing on another lifter
@@ -173,6 +180,8 @@ class Entity {
 			steps--;
 		}
 		dx*=Math.pow(frict,tmod);
+		if( MLib.fabs(dx)<=0.01*tmod )
+			dx = 0;
 
 		// Gravity
 		if( !onGround && hasGravity )
@@ -193,8 +202,8 @@ class Entity {
 					onLand();
 					steps = 0;
 				}
-				if( yr<0.3 && level.hasColl(cx,cy-1) ) {
-					yr = 0.3;
+				if( yr<0.2 && level.hasColl(cx,cy-1) ) {
+					yr = 0.2;
 					onTouchCeiling();
 					steps = 0;
 				}
@@ -204,6 +213,8 @@ class Entity {
 			steps--;
 		}
 		dy*=Math.pow(frict,tmod);
+		if( MLib.fabs(dy)<=0.01*tmod )
+			dy = 0;
 		checkLifters();
     }
 }

@@ -6,11 +6,12 @@ class Hero extends Entity {
     var ca(get,never) : mt.heaps.Controller.ControllerAccess; inline function get_ca() return Game.ME.ca;
     public var active = false;
     var horizontalControl = 1.0;
+    var grabbing = false;
 
     public function new(x,y) {
         super(x,y);
         ALL.push(this);
-        canLift = true;
+        lifter = true;
     }
 
     override function dispose() {
@@ -46,30 +47,65 @@ class Hero extends Entity {
             spr.scaleY*=1.2;
     }
 
+    override function canLift(e:Entity):Bool {
+        return super.canLift(e) && !grabbing;
+    }
+
+    function grabAt(x,y) {
+        setPosCase(x,y);
+        grabbing = true;
+        hasGravity = false;
+        dx = dy = 0;
+        xr = level.hasSpot("grabRight",cx,cy) ? 0.8 : 0.2;
+        yr = 0.75;
+        cd.setS("jumpLock",Const.INFINITE);
+    }
+
     override function update() {
         super.update();
 
         if( active ) {
-            if( onGround )
+            if( onGround || grabbing )
                 horizontalControl = 1;
             else
                 horizontalControl*=Math.pow(0.99,tmod);
 
-            if( ca.leftDown() ) dx-=0.020*tmod * horizontalControl;
-            if( ca.rightDown() ) dx+=0.020*tmod * horizontalControl;
+            if( !grabbing ) {
+                if( ca.leftDown() ) dx-=0.020*tmod * horizontalControl;
+                if( ca.rightDown() ) dx+=0.020*tmod * horizontalControl;
+            }
+
+            // Ledge grabbing & other traversal helpers
+            if( level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.6 && yr>=0.6 )
+                grabAt(cx,cy);
+            if( level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.4 && yr>=0.6 )
+                grabAt(cx,cy);
+            if( level.hasSpot("grabRightUp",cx,cy) && dx>0 && dy>0 && xr>=0.7 && yr<=0.4 )
+                grabAt(cx,cy-1);
+            if( level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.4 )
+                grabAt(cx,cy-1);
+            // Ledge hopping
+            if( !grabbing && level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.5 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {
+                xr = MLib.fmin(xr, 0.2);
+                dy = -0.25;
+            }
+            if( !grabbing && level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.5 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {
+                xr = MLib.fmax(xr, 0.8);
+                dy = -0.25;
+            }
 
             // Double jump
-            if( ca.aPressed() && !onGround && !cd.has("onGroundRecently") && !cd.has("doubleJumpLock") && !isLiftingSomeone() ) {
-                dy = -0.4;
+            if( !grabbing && ca.aPressed() && !onGround && !cd.has("onGroundRecently") && !cd.has("doubleJumpLock") && !isLiftingSomeone() ) {
+                dy = -0.3;
                 cd.unset("extendJump");
                 cd.setS("doubleJumpLock", Const.INFINITE);
             }
-            if( onGround )
+            if( onGround || grabbing )
                 cd.unset("doubleJumpLock");
 
             // Jump
             if( ca.aDown() )
-                if( !cd.has("jumpLock") && ( onGround || cd.has("onGroundRecently") ) ) {
+                if( !cd.has("jumpLock") && ( grabbing || onGround || cd.has("onGroundRecently") ) ) {
                     if( isLiftingSomeone() ) {
                         dy = -0.06;
                         // pushLifteds(0,-0.07);
@@ -78,8 +114,12 @@ class Hero extends Entity {
                     }
                     else {
                         dy = -0.3;
-                        if( isLifted() )
-                            dy-=0.2;
+                        // if( isLifted() )
+                            // dy-=0.1;
+                        if( grabbing ) {
+                            hasGravity = true;
+                            grabbing = false;
+                        }
                         cd.unset("onGroundRecently");
                         cd.setS("extendJump", 0.1);
                         cd.unset("lifted");

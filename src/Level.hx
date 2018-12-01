@@ -6,6 +6,7 @@ class Level extends mt.Process {
     public var wid(get,never) : Int; inline function get_wid() return infos.width;
     public var hei(get,never) : Int; inline function get_hei() return infos.height;
     public var collMap : Map<Int,Bool>;
+	var spots : Map<String, Map<Int,Bool>>;
 
     public function new(id:Data.RoomKind) {
 		super(Game.ME);
@@ -15,10 +16,25 @@ class Level extends mt.Process {
 		lid = id;
 		infos = Data.room.get(lid);
         collMap = new Map();
+		spots = new Map();
 		for(m in infos.collisions)
 			for(x in m.x...m.x+m.width)
 			for(y in m.y...m.y+m.height)
 				setColl(x,y, true);
+
+		for(cx in 0...wid)
+		for(cy in 0...hei) {
+			if( hasColl(cx,cy) && !hasColl(cx,cy-1) ) {
+				if( !hasColl(cx-1,cy) && !hasColl(cx-1,cy+1) ) {
+					addSpot("grabRight",cx-1,cy);
+					addSpot("grabRightUp",cx-1,cy+1);
+				}
+				if( !hasColl(cx+1,cy) && !hasColl(cx+1, cy+1) ) {
+					addSpot("grabLeft",cx+1,cy);
+					addSpot("grabLeftUp",cx+1,cy+1);
+				}
+			}
+		}
 
 		render();
     }
@@ -47,6 +63,16 @@ class Level extends mt.Process {
 
 	public function setColl(x,y,v:Bool) {
 		collMap.set(coordId(x,y), v);
+	}
+
+	public function addSpot(k:String, cx:Int, cy:Int) {
+		if( !spots.exists(k) )
+			spots.set(k, new Map());
+		spots.get(k).set(coordId(cx,cy), true);
+	}
+
+	public inline function hasSpot(k, cx,cy) {
+		return spots.exists(k) && spots.get(k).get(coordId(cx,cy))==true;
 	}
 
 	public function getMarker(id:Data.MarkerKind) {
