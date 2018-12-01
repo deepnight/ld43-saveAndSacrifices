@@ -17,10 +17,10 @@ class Touchplate extends Entity {
             for(e in Hero.ALL)
                 if( e.cx==cx && e.cy==cy && e.onGround ) {
                     trace("click!");
-                    triggerId = null;
                     for(e in Door.ALL)
                         if( e.triggerId==triggerId )
                             e.open();
+                    triggerId = null;
                 }
     }
 }

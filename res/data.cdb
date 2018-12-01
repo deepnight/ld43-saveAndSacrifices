@@ -68,7 +68,7 @@
 							"x": 4,
 							"y": 5,
 							"marker": "Door",
-							"width": 4,
+							"width": 2,
 							"height": 1,
 							"id": "a"
 						},
@@ -127,6 +127,12 @@
 						]
 					},
 					"collisions": [
+						{
+							"x": 6,
+							"y": 5,
+							"width": 2,
+							"height": 1
+						},
 						{
 							"x": 8,
 							"y": 5,

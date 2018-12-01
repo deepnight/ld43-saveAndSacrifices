@@ -52,7 +52,7 @@ class Level extends mt.Process {
 					game.hero3 = new en.Hero(m.x, m.y);
 
 				case Door :
-					new en.Door(m.x, m.y, m.width, m.height);
+					new en.Door(m.x, m.y, m.width, m.height, m.id);
 
 				case Touchplate :
 					new en.Touchplate(m.x, m.y, m.id);
