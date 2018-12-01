@@ -138,6 +138,7 @@ class Entity {
                 cy = e.cy-1;
                 yr = e.yr;
                 dy = 0;
+				e.dy = 0;
                 cd.setF("lifted",2);
 				e.cd.setF("lifting", 2);
             }

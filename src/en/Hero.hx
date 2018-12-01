@@ -52,6 +52,11 @@ class Hero extends Entity {
         return super.canLift(e) && !grabbing;
     }
 
+    override function checkLifters() {
+        if( !grabbing )
+            super.checkLifters();
+    }
+
     function grabAt(x,y) {
         setPosCase(x,y);
         grabbing = true;
