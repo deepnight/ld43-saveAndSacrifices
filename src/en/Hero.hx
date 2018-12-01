@@ -12,6 +12,7 @@ class Hero extends Entity {
         super(x,y);
         ALL.push(this);
         lifter = true;
+        spr.set("guy",1);
     }
 
     override function dispose() {
@@ -41,7 +42,7 @@ class Hero extends Entity {
     override function postUpdate() {
         super.postUpdate();
         spr.alpha = active ? 1 : 0.5;
-        if( isLiftingSomeone() || level.hasColl(cx,cy) )
+        if( isLiftingSomeone() || level.hasColl(cx,cy) || level.hasColl(cx,cy-1) )
             spr.scaleX*=1.2;
         else
             spr.scaleY*=1.2;
@@ -73,23 +74,23 @@ class Hero extends Entity {
             // Walk
             if( !grabbing ) {
                 if( ca.leftDown() ) {
-                    dx-=0.020*tmod * horizontalControl;
+                    dx-=0.020*tmod * horizontalControl * -ca.lxValue();
                     dir = -1;
                 }
                 if( ca.rightDown() ) {
-                    dx+=0.020*tmod * horizontalControl;
+                    dx+=0.020*tmod * horizontalControl * ca.lxValue();
                     dir = 1;
                 }
             }
 
             // Ledge grabbing & other traversal helpers
-            if( level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.6 && yr>=0.6 )
+            if( level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.6 && yr>=0.6 && !level.hasColl(cx+1,cy-1) )
                 grabAt(cx,cy);
-            if( level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.4 && yr>=0.6 )
+            if( level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.4 && yr>=0.6 && !level.hasColl(cx-1,cy-1) )
                 grabAt(cx,cy);
-            if( level.hasSpot("grabRightUp",cx,cy) && dx>0 && dy>0 && xr>=0.7 && yr<=0.4 )
+            if( level.hasSpot("grabRightUp",cx,cy) && dx>0 && dy>0 && xr>=0.7 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx+1,cy-2) )
                 grabAt(cx,cy-1);
-            if( level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.4 )
+            if( level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx-1,cy-2) )
                 grabAt(cx,cy-1);
             // Ledge hopping
             if( !grabbing && level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.5 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {

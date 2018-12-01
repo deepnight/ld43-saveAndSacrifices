@@ -2,6 +2,7 @@ package en.h;
 class Ghost extends en.Hero {
     public function new(x,y) {
         super(x,y);
+        spr.set("guy",0);
     }
 
     override function onTouchWall(wdir:Int) {
@@ -37,8 +38,8 @@ class Ghost extends en.Hero {
 
             // Inside wall
             if( level.hasColl(cx,cy) ) {
-                fx.wallGlow( cx*Const.GRID, (cy+1)*Const.GRID, 0x7b213f, -1);
-                fx.wallGlow( (cx+1)*Const.GRID, (cy+1)*Const.GRID, 0x7b213f, 1);
+                fx.wallPenetrate( cx*Const.GRID, (cy+1)*Const.GRID, 0x7b213f, -1);
+                fx.wallPenetrate( (cx+1)*Const.GRID, (cy+1)*Const.GRID, 0x7b213f, 1);
             }
         }
     }

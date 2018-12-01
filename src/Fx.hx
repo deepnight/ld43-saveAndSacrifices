@@ -159,6 +159,28 @@ class Fx extends mt.Process {
 	}
 
 	public function wallGlow(x:Float, y:Float, c:UInt, dir:Int) {
+		for(i in 0...4) {
+			var p = allocTopAdd(getTile("dot"), x+rnd(0,1,true),y-rnd(0,Const.GRID));
+			p.colorize(c);
+			p.scaleY = rnd(1,2);
+			// p.gy = rnd(0,0.1);
+			p.frict = 0.9;
+			p.setFadeS(rnd(0.3,0.7), 0, rnd(0.2,0.3));
+			p.lifeS = rnd(0.3,0.5);
+			p.onUpdate = _groundPhysics;
+		}
+		for(i in 0...3) {
+			var p = allocTopAdd(getTile("dot"), x+rnd(0,1,true),y-rnd(0,Const.GRID));
+			p.colorize(c);
+			p.scaleX = rnd(1,3);
+			p.gx = rnd(0,0.06)*dir;
+			p.frict = rnd(0.7,0.8);
+			p.setFadeS(rnd(0.3,0.7), 0, rnd(0.2,0.3));
+			p.lifeS = rnd(0.3,0.5);
+		}
+	}
+
+	public function wallPenetrate(x:Float, y:Float, c:UInt, dir:Int) {
 		for(i in 0...7) {
 			var p = allocTopAdd(getTile("dot"), x+rnd(0,1,true),y-rnd(0,Const.GRID));
 			p.colorize(c);
@@ -172,8 +194,16 @@ class Fx extends mt.Process {
 		for(i in 0...7) {
 			var p = allocTopAdd(getTile("dot"), x+rnd(0,1,true),y-rnd(0,Const.GRID));
 			p.colorize(c);
-			p.scaleX = rnd(1,3);
-			p.gx = rnd(0,0.1)*dir;
+			p.gx = rnd(0.01,0.03)*dir;
+			p.frict = rnd(0.7,0.8);
+			p.setFadeS(rnd(0.3,0.7), 0, rnd(0.2,0.3));
+			p.lifeS = rnd(0.3,0.5);
+		}
+		for(i in 0...4) {
+			var p = allocTopAdd(getTile("dot"), x-dir,y-rnd(0,Const.GRID));
+			p.colorize(c);
+			p.scaleX = rnd(2,4);
+			p.gx = rnd(0.01,0.03)*-dir;
 			p.frict = rnd(0.7,0.8);
 			p.setFadeS(rnd(0.3,0.7), 0, rnd(0.2,0.3));
 			p.lifeS = rnd(0.3,0.5);

@@ -1,6 +1,7 @@
 import mt.deepnight.CdbHelper;
 
 class Level extends mt.Process {
+	public var game(get,never) : Game; inline function get_game() return Game.ME;
 	public var lid : Data.RoomKind;
 	public var infos(default,null) : Data.Room;
     public var wid(get,never) : Int; inline function get_wid() return infos.width;
@@ -11,6 +12,7 @@ class Level extends mt.Process {
     public function new(id:Data.RoomKind) {
 		super(Game.ME);
 
+		Game.ME.level = this;
 		createRootInLayers(Game.ME.scroller, Const.DP_BG);
 
 		lid = id;
@@ -36,11 +38,41 @@ class Level extends mt.Process {
 			}
 		}
 
+		// Attach entities
+		for(m in infos.markers)
+			switch( m.markerId ) {
+				case Hero1 :
+					game.hero1 = new en.h.Ghost(m.x, m.y);
+					game.hero1.activate();
+
+				case Hero2 :
+					game.hero2 = new en.Hero(m.x, m.y);
+
+				case Hero3 :
+					game.hero3 = new en.Hero(m.x, m.y);
+
+				case Door :
+					new en.Door(m.x, m.y, m.width, m.height);
+
+				case Touchplate :
+					new en.Touchplate(m.x, m.y, m.id);
+			}
+
 		render();
     }
 
 	public function render() {
 		root.removeChildren();
+
+		#if debug
+		var g = new h2d.Graphics(root);
+		for(cx in 0...wid)
+		for(cy in 0...hei)
+			if( hasColl(cx,cy) ) {
+				g.beginFill(0xff0000,0.8);
+				g.drawRect(cx*Const.GRID, cy*Const.GRID, Const.GRID, Const.GRID);
+			}
+		#end
 
 		for(l in infos.layers) {
 			var tileSet = infos.props.getTileset(Data.room, l.data.file);
@@ -49,6 +81,7 @@ class Level extends mt.Process {
 			for(t in CdbHelper.getLayerTiles(l.data, Assets.levelTiles, wid, tileSet))
 				tg.add(t.x, t.y, t.t);
 		}
+
 	}
 
 	public function isValid(cx:Float,cy:Float) {

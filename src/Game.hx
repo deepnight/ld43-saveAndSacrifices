@@ -25,19 +25,6 @@ class Game extends mt.Process {
 
 		fx = new Fx();
 		level = new Level(Test);
-
-		var pt = level.getMarker(Hero1);
-		if( pt==null ) pt = new CPoint(0,0);
-		hero1 = new en.h.Ghost(pt.cx, pt.cy);
-		hero1.activate();
-
-		var pt = level.getMarker(Hero2);
-		if( pt==null ) pt = new CPoint(0,0);
-		hero2 = new en.Hero(pt.cx, pt.cy);
-
-		var pt = level.getMarker(Hero3);
-		if( pt==null ) pt = new CPoint(0,0);
-		hero3 = new en.Hero(pt.cx, pt.cy);
 	}
 
 	public function onCdbReload() {

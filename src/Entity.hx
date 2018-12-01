@@ -7,7 +7,6 @@ class Entity {
     public static var GC : Array<Entity> = [];
 
 	public var game(get,never) : Game; inline function get_game() return Game.ME;
-	// public var hero(get,never) : en.Hero; inline function get_hero() return Game.ME.hero;
 	public var level(get,never) : Level; inline function get_level() return Game.ME.level;
 	public var fx(get,never) : Fx; inline function get_fx() return Game.ME.fx;
 	public var destroyed(default,null) = false;
@@ -57,12 +56,13 @@ class Entity {
 
         setPosCase(x,y);
 
-        spr = new HSprite();
+        spr = new HSprite(Assets.gameElements);
         Game.ME.scroller.add(spr, Const.DP_MAIN);
-        var g = new h2d.Graphics(spr);
-        g.beginFill(0xff0000);
-        g.drawRect(0,0,radius,hei);
-        g.setPosition(-radius*0.5, -hei);
+		spr.setCenterRatio(0.5,1);
+        // var g = new h2d.Graphics(spr);
+        // g.beginFill(0xff0000);
+        // g.drawRect(0,0,radius,hei);
+        // g.setPosition(-radius*0.5, -hei);
     }
 
 	inline function set_dir(v) {
@@ -215,6 +215,7 @@ class Entity {
 		dy*=Math.pow(frict,tmod);
 		if( MLib.fabs(dy)<=0.01*tmod )
 			dy = 0;
-		checkLifters();
+		if( hasColl )
+			checkLifters();
     }
 }

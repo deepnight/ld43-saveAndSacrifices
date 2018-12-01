@@ -57,6 +57,22 @@
 					],
 					"markers": [
 						{
+							"x": 3,
+							"y": 5,
+							"marker": "Door",
+							"width": 1,
+							"height": 2,
+							"id": "a"
+						},
+						{
+							"x": 4,
+							"y": 5,
+							"marker": "Door",
+							"width": 4,
+							"height": 1,
+							"id": "a"
+						},
+						{
 							"x": 6,
 							"y": 8,
 							"marker": "Hero2",
@@ -71,11 +87,19 @@
 							"height": 1
 						},
 						{
-							"x": 10,
+							"x": 8,
 							"y": 9,
 							"marker": "Hero1",
 							"width": 1,
 							"height": 1
+						},
+						{
+							"x": 17,
+							"y": 9,
+							"marker": "Touchplate",
+							"width": 1,
+							"height": 1,
+							"id": "a"
 						}
 					],
 					"props": {
@@ -97,7 +121,7 @@
 							{
 								"l": "bgTiles",
 								"p": {
-									"alpha": 0.55
+									"alpha": 0.6
 								}
 							}
 						]
@@ -293,6 +317,10 @@
 					"display": null
 				},
 				{
+					"typeStr": "14",
+					"name": "icon"
+				},
+				{
 					"typeStr": "0",
 					"name": "id"
 				}
@@ -300,19 +328,59 @@
 			"lines": [
 				{
 					"color": 65287,
-					"id": "Hero1"
+					"id": "Hero1",
+					"icon": {
+						"file": "levelTiles.png",
+						"size": 16,
+						"x": 0,
+						"y": 30
+					}
 				},
 				{
 					"color": 62719,
-					"id": "Hero2"
+					"id": "Hero2",
+					"icon": {
+						"file": "levelTiles.png",
+						"size": 16,
+						"x": 1,
+						"y": 30
+					}
 				},
 				{
 					"color": 12779775,
-					"id": "Hero3"
+					"id": "Hero3",
+					"icon": {
+						"file": "levelTiles.png",
+						"size": 16,
+						"x": 2,
+						"y": 30
+					}
+				},
+				{
+					"color": 7573661,
+					"id": "Touchplate",
+					"icon": {
+						"file": "levelTiles.png",
+						"size": 16,
+						"x": 0,
+						"y": 31
+					}
+				},
+				{
+					"color": 9983007,
+					"id": "Door",
+					"icon": {
+						"file": "levelTiles.png",
+						"size": 16,
+						"x": 1,
+						"y": 31
+					}
 				}
 			],
 			"separators": [],
-			"props": {}
+			"props": {
+				"displayIcon": "icon"
+			}
 		},
 		{
 			"name": "room@markers",
@@ -345,6 +413,11 @@
 					"typeStr": "3",
 					"name": "height",
 					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "id",
+					"opt": true
 				}
 			]
 		},
