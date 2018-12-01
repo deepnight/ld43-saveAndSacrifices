@@ -17,7 +17,7 @@ class Ghost extends en.Hero {
     override function xSpecialPhysics() {
         super.xSpecialPhysics();
         if( level.hasColl(cx,cy) )
-            dx*=Math.pow(0.66,tmod);
+            dx*=Math.pow(0.9,tmod);
     }
 
     override function update() {
