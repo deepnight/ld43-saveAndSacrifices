@@ -49,6 +49,8 @@ class Entity {
         uid = Const.NEXT_UNIQ;
         ALL.push(this);
 
+		cd = new mt.Cooldown(Const.FPS);
+
         setPosCase(x,y);
         trace(this);
 
@@ -136,6 +138,9 @@ class Entity {
 		// Gravity
 		if( !onGround && hasGravity )
 			dy += gravity*tmod;
+
+		if( onGround )
+			cd.setS("onGroundRecently",0.1);
 
 		// Y
 		var steps = MLib.ceil( MLib.fabs(dy*tmod) );

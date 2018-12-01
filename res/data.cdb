@@ -175,6 +175,10 @@
 				{
 					"color": 65287,
 					"id": "Hero1"
+				},
+				{
+					"color": 62719,
+					"id": "Hero2"
 				}
 			],
 			"separators": [],
