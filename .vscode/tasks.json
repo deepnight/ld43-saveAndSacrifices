@@ -8,7 +8,7 @@
             "type": "hxml",
             "file": "hl.debug.hxml",
             "presentation": {
-                "reveal": "silent",
+                "reveal": "never",
                 "panel": "dedicated",
                 "clear": true
             },
@@ -24,7 +24,7 @@
             "type": "hxml",
             "file": "hl.hxml",
             "presentation": {
-                "reveal": "silent",
+                "reveal": "never",
                 "panel": "dedicated",
                 "clear": true
             },
@@ -36,7 +36,7 @@
             "type": "hxml",
             "file": "js.hxml",
             "presentation": {
-                "reveal": "silent",
+                "reveal": "never",
                 "panel": "dedicated",
                 "clear": true
             },
