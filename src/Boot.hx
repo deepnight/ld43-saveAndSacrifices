@@ -22,8 +22,13 @@ class Boot extends hxd.App {
 	var speed = 1.0;
 	override function update(dt:Float) {
 		super.update(dt);
+
+		// Bullet time
+		#if debug
 		if( hxd.Key.isPressed(hxd.Key.NUMPAD_SUB) )
 			speed = speed>=1 ? 0.33 : 1;
+		#end
+
 		var tmod = hxd.Timer.tmod * speed;
 		mt.heaps.Controller.beforeUpdate();
 		mt.Process.updateAll(tmod);
