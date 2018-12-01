@@ -44,11 +44,28 @@
 					"width": 30,
 					"height": 10,
 					"tileProps": [],
-					"layers": [],
+					"layers": [
+						{
+							"name": "bgTiles",
+							"data": {
+								"file": "levelTiles.png",
+								"size": 16,
+								"stride": 16,
+								"data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQABAAEAAAAAAAAAAAAAAAAAAAABAAEAAQABAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQABAAIAAwABAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEAAQABABIAEwABAAEAAAAAAAAAAQACAAMAAQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAEAAQACAAMAAQABAAEAAgADAAEAAQABAAEAAQASABMAAQABAAEAAgADAAEAAQABAAEAAQACAAMAAQABAAEAAQASABMAAQABAAEAEgATAAEAAQABAAEAAQABAAEAAQABAAEAEgATAAEAAQABAAEAAQASABMA"
+							}
+						}
+					],
 					"markers": [
 						{
-							"x": 16,
+							"x": 14,
 							"y": 2,
+							"marker": "Hero2",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 6,
+							"y": 5,
 							"marker": "Hero1",
 							"width": 1,
 							"height": 1
@@ -68,6 +85,12 @@
 								"p": {
 									"alpha": 1,
 									"color": 16711680
+								}
+							},
+							{
+								"l": "bgTiles",
+								"p": {
+									"alpha": 1
 								}
 							}
 						]
@@ -127,7 +150,13 @@
 			"separators": [],
 			"props": {
 				"level": {
-					"tileSets": {}
+					"tileSets": {
+						"levelTiles.png": {
+							"stride": 16,
+							"sets": [],
+							"props": []
+						}
+					}
 				}
 			}
 		},

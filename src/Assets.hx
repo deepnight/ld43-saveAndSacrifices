@@ -5,6 +5,7 @@ class Assets {
 	// public static var SFX = Sfx.importDirectory("sfx");
 	// public static var MUS = Sfx.importDirectory("music");
 	// public static var tiles : SpriteLib;
+	public static var levelTiles : h2d.Tile;
 	public static var font : h2d.Font;
 
 	static var initDone = false;
@@ -14,6 +15,7 @@ class Assets {
 		initDone = true;
 
 		font = hxd.Res.minecraftiaOutline.toFont();
+		levelTiles = hxd.Res.levelTiles.toTile();
 
 		// Sound init
 		Sfx.setGroupVolume(0, 1);
