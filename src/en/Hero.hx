@@ -78,12 +78,13 @@ class Hero extends Entity {
 
             // Walk
             if( !grabbing ) {
+                var spd = 0.017;
                 if( ca.leftDown() ) {
-                    dx-=0.020*tmod * horizontalControl * -ca.lxValue();
+                    dx-=spd*tmod * horizontalControl * -ca.lxValue();
                     dir = -1;
                 }
                 if( ca.rightDown() ) {
-                    dx+=0.020*tmod * horizontalControl * ca.lxValue();
+                    dx+=spd*tmod * horizontalControl * ca.lxValue();
                     dir = 1;
                 }
             }
