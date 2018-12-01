@@ -9,6 +9,7 @@ class Game extends mt.Process {
 	public var ca : mt.heaps.Controller.ControllerAccess;
 	public var hero1 : en.Hero;
 	public var hero2 : en.Hero;
+	public var hero3 : en.Hero;
 	public var level : Level;
 	public var scroller : h2d.Layers;
 
@@ -31,6 +32,10 @@ class Game extends mt.Process {
 		var pt = level.getMarker(Hero2);
 		if( pt==null ) pt = new CPoint(0,0);
 		hero2 = new en.Hero(pt.cx, pt.cy);
+
+		var pt = level.getMarker(Hero3);
+		if( pt==null ) pt = new CPoint(0,0);
+		hero3 = new en.Hero(pt.cx, pt.cy);
 	}
 
 	public function onCdbReload() {
@@ -43,6 +48,14 @@ class Game extends mt.Process {
 		for(e in Entity.GC)
 			e.dispose();
 		Entity.GC = [];
+	}
+
+	override function onDispose() {
+		super.onDispose();
+
+		for(e in Entity.ALL)
+			e.destroy();
+		gc();
 	}
 
 	override function update() {
@@ -59,6 +72,8 @@ class Game extends mt.Process {
 		if( ca.xPressed() ) {
 			if( hero1.active )
 				hero2.activate();
+			else if( hero2.active )
+				hero3.activate();
 			else
 				hero1.activate();
 		}

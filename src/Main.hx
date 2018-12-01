@@ -65,9 +65,14 @@ class Main extends mt.Process {
 	}
 
 	public function startGame() {
-		if( Game.ME!=null )
+		if( Game.ME!=null ) {
 			Game.ME.destroy();
-		new Game();
+			delayer.addS(function() {
+				new Game();
+			},0.1);
+		}
+		else
+			new Game();
 	}
 
 	override public function onResize() {

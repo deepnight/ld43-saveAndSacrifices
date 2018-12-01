@@ -23,11 +23,12 @@ class Entity {
     public var dx = 0.;
     public var dy = 0.;
 	public var frict = 0.82;
-	public var gravity = 0.03;
+	public var gravity = 0.024;
 	public var hasGravity = true;
 	public var weight = 1.;
 	public var hei = Const.GRID;
 	public var radius = Const.GRID*0.5;
+	public var canLift = false;
 
 	public var dir(default,set) = 1;
 	public var hasColl = true;
@@ -38,10 +39,13 @@ class Entity {
 
     public var spr : HSprite;
 
-	public var onGround(get,never) : Bool; inline function get_onGround() return level.hasColl(cx,cy+1) && yr>=1 && dy==0;
+	public var onGround(get,never) : Bool; inline function get_onGround() return ( level.hasColl(cx,cy+1) ) && yr>=1 && dy==0 || cd.has("lifted");
+	// public var lifter : Null<Entity>;
 
 	public var footX(get,never) : Float; inline function get_footX() return (cx+xr)*Const.GRID;
 	public var footY(get,never) : Float; inline function get_footY() return (cy+yr)*Const.GRID;
+	public var headX(get,never) : Float; inline function get_headX() return (cx+xr)*Const.GRID;
+	public var headY(get,never) : Float; inline function get_headY() return (cy+yr)*Const.GRID-hei;
 	public var centerX(get,never) : Float; inline function get_centerX() return footX;
 	public var centerY(get,never) : Float; inline function get_centerY() return footY-radius;
 
@@ -111,8 +115,43 @@ class Entity {
     }
 
 
+	function xSpecialPhysics() {
+	}
+
+	function ySpecialPhysics() {
+	}
+
+	function checkLifters() {
+        for( e in ALL ) {
+            if( e==this || !e.canLift )
+                continue;
+
+            // Landing on another lifter
+            if( dy>=0 && isStandingOn(e) ) {
+                cy = e.cy-1;
+                yr = e.yr;
+                dy = 0;
+                cd.setF("lifted",2);
+				e.cd.setF("lifting", 2);
+            }
+        }
+	}
+
+	function isStandingOn(e:Entity) {
+		return MLib.fabs(centerX-e.centerX)<=Const.GRID*0.6 && footY>=e.headY-1 && footY<=e.headY+8;
+	}
+
+	public inline function isLiftingSomeone() {
+		return cd.has("lifting");
+	}
+
+	public inline function isLifted() {
+		return cd.has("lifted");
+	}
+
     public function update() {
 		// X
+		xSpecialPhysics();
 		var steps = MLib.ceil( MLib.fabs(dx*tmod) );
 		var step = dx*tmod / steps;
 		while( steps>0 ) {
@@ -143,6 +182,7 @@ class Entity {
 			cd.setS("onGroundRecently",0.06);
 
 		// Y
+		ySpecialPhysics();
 		var steps = MLib.ceil( MLib.fabs(dy*tmod) );
 		var step = dy*tmod / steps;
 		while( steps>0 ) {
@@ -164,5 +204,6 @@ class Entity {
 			steps--;
 		}
 		dy*=Math.pow(frict,tmod);
+		checkLifters();
     }
 }

@@ -19,9 +19,12 @@ class Boot extends hxd.App {
 		mt.Process.resizeAll();
 	}
 
+	var speed = 1.0;
 	override function update(dt:Float) {
 		super.update(dt);
-		var tmod = hxd.Timer.tmod;
+		if( hxd.Key.isPressed(hxd.Key.NUMPAD_SUB) )
+			speed = speed>=1 ? 0.33 : 1;
+		var tmod = hxd.Timer.tmod * speed;
 		mt.heaps.Controller.beforeUpdate();
 		mt.Process.updateAll(tmod);
 	}
