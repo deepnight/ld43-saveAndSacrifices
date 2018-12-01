@@ -104,7 +104,7 @@ class Hero extends Entity {
                 cd.unset("doubleJumpLock");
 
             // Jump
-            if( ca.aDown() )
+            if( ca.aDown() && !level.hasColl(cx,cy) )
                 if( !cd.has("jumpLock") && ( grabbing || onGround || cd.has("onGroundRecently") ) ) {
                     if( isLiftingSomeone() ) {
                         dy = -0.06;

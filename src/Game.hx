@@ -7,7 +7,7 @@ class Game extends mt.Process {
 	public static var ME : Game;
 
 	public var ca : mt.heaps.Controller.ControllerAccess;
-	public var hero1 : en.Hero;
+	public var hero1 : en.h.Ghost;
 	public var hero2 : en.Hero;
 	public var hero3 : en.Hero;
 	public var level : Level;
@@ -26,7 +26,7 @@ class Game extends mt.Process {
 
 		var pt = level.getMarker(Hero1);
 		if( pt==null ) pt = new CPoint(0,0);
-		hero1 = new en.Hero(pt.cx, pt.cy);
+		hero1 = new en.h.Ghost(pt.cx, pt.cy);
 		hero1.activate();
 
 		var pt = level.getMarker(Hero2);
