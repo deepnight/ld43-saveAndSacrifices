@@ -1,7 +1,8 @@
 class Const {
 	public static var FPS = 60;
-	public static var AUTO_SCALE_TARGET_HEIGHT = 120; // -1 to disable auto-scaling
-	public static var SCALE = 6.0; // ignored if auto-scaling
+	public static var AUTO_SCALE_TARGET_HEIGHT = -1; // -1 to disable auto-scaling
+	public static var SCALE = 5.0; // ignored if auto-scaling
+	public static var GRID = 16;
 
 	static var _uniq = 0;
 	public static var NEXT_UNIQ(get,never) : Int; static inline function get_NEXT_UNIQ() return _uniq++;

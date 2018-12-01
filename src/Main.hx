@@ -13,7 +13,6 @@ class Main extends mt.Process {
 		ME = this;
 
         createRoot(s);
-        root.scale(6);
         root.filter = new h2d.filter.ColorMatrix(); // force rendering for pixel perfect
 
 		// Engine settings
@@ -71,10 +70,9 @@ class Main extends mt.Process {
 		super.onResize();
 
 		// Auto scaling
-		if( Const.AUTO_SCALE_TARGET_HEIGHT>0 ) {
+		if( Const.AUTO_SCALE_TARGET_HEIGHT>0 )
 			Const.SCALE = MLib.floor( h()/Const.AUTO_SCALE_TARGET_HEIGHT );
-			root.setScale(Const.SCALE);
-		}
+		root.setScale(Const.SCALE);
 	}
 
     override function update() {
