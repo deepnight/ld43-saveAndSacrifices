@@ -144,6 +144,12 @@ class Hero extends Entity {
                 dy = -0.25;
             }
 
+            // Grab lost
+            if( grabbing && !level.hasSpot("grabLeft",cx,cy) && !level.hasSpot("grabRight",cx,cy) ) {
+                grabbing = false;
+                hasGravity = true;
+            }
+
             // Double jump
             if( !grabbing && ca.aPressed() && !onGround && !cd.has("onGroundRecently") && !cd.has("doubleJumpLock") && !isLiftingSomeone() ) {
                 dy = -0.40;
@@ -190,6 +196,7 @@ class Hero extends Entity {
                 spr.anim.play("heroKick");
                 dx = 0.1*dir;
                 dy = -0.1;
+                grabbing = false;
                 var dh = new DecisionHelper(Entity.ALL);
                 dh.remove( function(e) return !e.isAlive() || distCase(e)>1.5 || !e.canBeKicked() );
                 dh.score( function(e) return Std.is(e,Mob) ? ( e.as(Mob).isHoldingTarget ? 20 : 5 ) : 0);

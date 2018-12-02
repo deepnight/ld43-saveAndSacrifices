@@ -235,6 +235,66 @@ class Fx extends mt.Process {
 		p.lifeS = 0.2;
 	}
 
+	public function lightStatusChange(l:en.Light, e:Entity, c:UInt) {
+		var a = Math.atan2(e.centerY-l.centerY, e.centerX-l.centerX);
+		var d = l.radius;
+		for(i in 0...20) {
+			var a = a+rnd(0,0.1,true);
+			var p = allocTopAdd(getTile("line"), l.centerX+Math.cos(a)*d, l.centerY+Math.sin(a)*d);
+			p.colorize(c);
+			p.setFadeS(rnd(0.3,0.5), 0, rnd(0.2,0.4));
+			p.scaleX = rnd(0.6,0.8,true);
+			p.scaleY = rnd(1,2,true);
+			p.rotation = a+1.57;
+			// p.moveAng(a, rnd(3,6));
+			// p.frict = rnd(0.7,0.8);
+			p.lifeS = rnd(0.1,0.3);
+		}
+
+		for(i in 0...15) {
+			var p = allocTopAdd(getTile("dot"), e.centerX+rnd(0,10,true), e.centerY+rnd(0,10,true));
+			p.alphaFlicker = 0.4;
+			p.colorize(c);
+			p.setFadeS(rnd(0.4,0.8), rnd(0.1,0.3), rnd(0.5,1.2));
+			p.moveAwayFrom(e.centerX, e.centerY, rnd(1,2));
+			p.frict = rnd(0.9,0.92);
+			p.delayS = rnd(0,0.1);
+			p.lifeS = rnd(0.2,0.9);
+		}
+	}
+
+	public function lightRepel(l:en.Light, e:Entity, c:UInt) {
+		var a = Math.atan2(e.centerY-l.centerY, e.centerX-l.centerX);
+		var d = l.distPx(e);
+		for(i in 0...30) {
+			var a = a+rnd(0,0.2,true);
+			var d = d-rnd(6,10);
+			var p = allocTopAdd(getTile("line"), l.centerX+Math.cos(a)*d, l.centerY+Math.sin(a)*d);
+			p.colorize(c);
+			p.setFadeS(rnd(0.5,0.8), 0, rnd(0.2,0.4));
+			p.scaleX = rnd(0.7,1.2,true);
+			p.rotation = a+1.57;
+			p.moveAng(a, rnd(3,6));
+			p.frict = rnd(0.7,0.8);
+			p.lifeS = rnd(0.1,0.3);
+		}
+	}
+
+	public function lightZone(x:Float, y:Float, r:Float, c:UInt) {
+		var n = irnd(20,30);
+		for(i in 0...n) {
+			var a = 6.28*i/n;
+			var p = allocTopAdd(getTile("line"), x+Math.cos(a)*r, y+Math.sin(a)*r);
+			p.colorize(c);
+			p.setFadeS(rnd(0.1,0.2), 0, rnd(0.2,0.4));
+			p.scaleX = rnd(0.7,1.2,true);
+			p.rotation = a+1.57;
+			p.moveAng(a, rnd(0,0.2,true));
+			p.frict = rnd(0.92,0.93);
+			p.lifeS = rnd(0.1,0.3);
+		}
+	}
+
 	override function update() {
 		super.update();
 
