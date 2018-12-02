@@ -24,11 +24,14 @@ class Node {
                 return;
 
         links.push(n);
-        Game.ME.fx.markerFree(
-            ((cx+0.5)*0.8+0.2*(n.cx+0.5))*Const.GRID,
-            ((cy+0.5)*0.8+0.2*(n.cy+0.5))*Const.GRID,
-            999., 0xffcc00
-        );
+        #if debug
+        if( Console.ME.hasFlag("pf") )
+            Game.ME.fx.markerFree(
+                ((cx+0.5)*0.8+0.2*(n.cx+0.5))*Const.GRID,
+                ((cy+0.5)*0.8+0.2*(n.cy+0.5))*Const.GRID,
+                999., 0xffcc00
+            );
+        #end
         if( symetric )
             n.linkTo(this, false);
     }
