@@ -120,7 +120,7 @@ class Demon extends en.Mob {
                 target.onCatchByMob(this);
                 target.cd.setS("stillInteresting", rnd(2,3));
                 lockAiS(1);
-                cd.setS("slowFlyStart", 5);
+                cd.setS("slowFlyStart", 6.5);
                 dy = -rnd(0.07,0.08);
             }
         }
