@@ -46,7 +46,7 @@ class Peon extends Entity {
         dx = dy = 0;
         xr = level.hasSpot("grabRight",cx,cy) ? 0.8 : 0.2;
         yr = 0.75;
-        cd.setS("maintainGrab", rnd(0.7, 1.3));
+        cd.setS("maintainGrab", rnd(0.4, 0.6));
     }
 
 
@@ -156,8 +156,8 @@ class Peon extends Entity {
         if( grabbing && !cd.has("maintainGrab") ) {
             grabbing = false;
             hasGravity = true;
-            dx = dir*0.1;
-            dy = -0.15;
+            dx = dir*0.16;
+            dy = -0.17;
             cd.setS("jumping", 0.15);
         }
     }

@@ -99,12 +99,18 @@ class Hero extends Entity {
             if( level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx-1,cy-2) )
                 grabAt(cx,cy-1);
             // Ledge hopping
-            if( !grabbing && level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.5 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {
-                xr = MLib.fmin(xr, 0.2);
+            if( !grabbing && level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {
+                // xr = MLib.fmin(xr, 0.1);
+                xr = 0.1;
+                yr = 0.1;
+                dx = MLib.fmin(-0.15, dx);
                 dy = -0.25;
             }
-            if( !grabbing && level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.5 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {
-                xr = MLib.fmax(xr, 0.8);
+            if( !grabbing && level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.7 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {
+                // xr = MLib.fmax(xr, 0.9);
+                xr = 0.9;
+                yr = 0.1;
+                dx = MLib.fmax(0.15, dx);
                 dy = -0.25;
             }
 

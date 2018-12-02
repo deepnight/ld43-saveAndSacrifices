@@ -192,13 +192,13 @@ class Entity {
 		while( steps>0 ) {
 			xr+=step;
 			if( hasColl ) {
-				if( dx>=0 && xr>0.7 && level.hasColl(cx+1,cy) ) {
-					xr = 0.7;
+				if( dx>=0 && xr>0.8 && level.hasColl(cx+1,cy) ) {
+					xr = 0.8;
 					onTouchWall(1);
 					steps = 0;
 				}
-				if( dx<=0 && xr<0.3 && level.hasColl(cx-1,cy) ) {
-					xr = 0.3;
+				if( dx<=0 && xr<0.2 && level.hasColl(cx-1,cy) ) {
+					xr = 0.2;
 					onTouchWall(-1);
 					steps = 0;
 				}

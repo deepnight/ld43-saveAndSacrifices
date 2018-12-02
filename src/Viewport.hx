@@ -13,7 +13,7 @@ class Viewport extends mt.Process {
 	public var hei(get,never) : Int;
 	public var screenWid(get,never) : Int;
 	public var screenHei(get,never) : Int;
-	var offY = -40;
+	var offY = -10;
 	var target : Entity;
 
 	public function new() {
@@ -46,27 +46,13 @@ class Viewport extends mt.Process {
 		// Balance between hero & mobs
 		var tx = target.centerX;
 		var ty = target.centerY + offY;
-		var n = 1.0;
-		var w = 1;
-		// for(e in en.Mob.ALL) {
-		// 	if( !e.isAlive() )
-		// 		continue;
-
-		// 	//if( e.distCase(target)>=25 )
-		// 		//continue;
-
-		// 	tx+=e.centerX*w;
-		// 	ty+=e.centerY*w;
-		// 	n+=w;
-		// }
-		tx/=n;
-		ty/=n;
 
 		var a = Math.atan2(ty-y, tx-x);
 		var d = mt.deepnight.Lib.distance(x, y, tx, ty);
-		var deadZone = 60;
-		if( d>=deadZone ) {
-			var s = 0.5 * MLib.fclamp((d-deadZone)/200,0,1);
+		var deadZoneX = 60;
+		var deadZoneY = 30;
+		if( MLib.fabs(x-tx)>=deadZoneX || MLib.fabs(y-ty)>=deadZoneY ) {
+			var s = 0.5 * MLib.fclamp((d-deadZoneY)/200,0,1);
 			// var s = 0.5 * MLib.fclamp((d-deadZone)/200,0,1);
 			dx+=Math.cos(a)*s*dt;
 			dy+=Math.sin(a)*s*dt;
