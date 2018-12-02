@@ -32,10 +32,11 @@ class Game extends mt.Process {
 
 		viewport = new Viewport();
 		viewport.track(hero, true);
+
+		renderBg();
 	}
 
-	override function onResize() {
-		super.onResize();
+	function renderBg() {
 		bg.clear();
 		var t = Assets.gameElements.getTile("gradient");
 		var nx = MLib.ceil( w()/Const.SCALE / t.width );
@@ -43,12 +44,14 @@ class Game extends mt.Process {
 		for(x in 0...nx)
 		for(y in 0...ny)
 			bg.add(x*t.width, y*t.height, t);
-		// bg.scaleX = (w()/Const.SCALE) / bg.tile.width;
-		// bg.scaleY = (h()/Const.SCALE) / bg.tile.height;
+	}
+
+	override function onResize() {
+		super.onResize();
+		renderBg();
 	}
 
 	public function onCdbReload() {
-		onResize();
 	}
 
 	function gc() {

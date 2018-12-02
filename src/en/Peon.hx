@@ -35,6 +35,7 @@ class Peon extends Entity {
     override function dispose() {
         super.dispose();
         ALL.remove(this);
+        path = null;
     }
 
     public function goto(x,y) {
