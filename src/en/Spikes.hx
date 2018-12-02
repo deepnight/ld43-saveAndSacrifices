@@ -7,13 +7,18 @@ class Spikes extends Entity {
         hasGravity = false;
         hasColl = false;
         hei = Const.GRID;
+        spr.setRandom("spikes", Std.random);
+    }
+
+    override function postUpdate() {
+        super.postUpdate();
     }
 
     override function update() {
         super.update();
         if( active )
             for(e in Peon.ALL)
-                if( e.onGround && e.cx==cx && e.cy==cy-1 && MLib.fabs(e.xr-0.5)<=0.4 && !Mob.anyoneHolds(e) ) {
+                if( e.yr>=0.8 && e.cx==cx && e.cy==cy && MLib.fabs(e.xr-0.5)<=0.4 && !Mob.anyoneHolds(e) ) {
                     // active = false;
                     e.kill();
                 }

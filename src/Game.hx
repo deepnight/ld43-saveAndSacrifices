@@ -48,6 +48,7 @@ class Game extends mt.Process {
 	}
 
 	public function onCdbReload() {
+		onResize();
 	}
 
 	function gc() {

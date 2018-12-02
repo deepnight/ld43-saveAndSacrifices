@@ -1,40 +1,40 @@
 
 gameElements.png
-size: 291,308
+size: 276,324
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 angelRing0
   rotate: false
-  xy: 259, 231
+  xy: 174, 314
   size: 11, 9
   orig: 13, 11
   offset: 1, 2
   index: -1
 circle0
   rotate: false
-  xy: 258, 259
+  xy: 1, 308
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 dot0
   rotate: false
-  xy: 289, 1
+  xy: 139, 288
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 dotGlow0
   rotate: false
-  xy: 278, 19
+  xy: 142, 264
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 feather0
   rotate: false
-  xy: 177, 303
+  xy: 250, 305
   size: 5, 3
   orig: 5, 3
   offset: 0, 0
@@ -48,252 +48,259 @@ gradient
   index: -1
 guy0
   rotate: false
-  xy: 164, 291
+  xy: 101, 307
   size: 11, 16
   orig: 16, 16
   offset: 2, 0
   index: -1
 guy1
   rotate: false
-  xy: 278, 1
+  xy: 114, 307
   size: 9, 16
   orig: 16, 16
   offset: 3, 0
   index: -1
 guy2
   rotate: false
-  xy: 278, 1
+  xy: 114, 307
   size: 9, 16
   orig: 16, 16
   offset: 3, 0
   index: -1
 heroGrab0
   rotate: false
-  xy: 259, 49
+  xy: 259, 25
   size: 16, 21
   orig: 32, 32
   offset: 9, 0
   index: -1
 heroIdle0
   rotate: false
-  xy: 259, 72
+  xy: 259, 48
   size: 16, 21
   orig: 32, 32
   offset: 8, 0
   index: -1
 heroIdle1
   rotate: false
-  xy: 259, 95
+  xy: 259, 71
   size: 16, 21
   orig: 32, 32
   offset: 8, 0
   index: -1
 heroIdle2
   rotate: false
-  xy: 259, 118
+  xy: 259, 94
   size: 16, 21
   orig: 32, 32
   offset: 8, 0
   index: -1
 heroIdle3
   rotate: false
-  xy: 259, 141
+  xy: 259, 117
   size: 16, 21
   orig: 32, 32
   offset: 8, 0
   index: -1
 heroJumpDown0
   rotate: false
-  xy: 259, 1
+  xy: 123, 264
   size: 17, 22
   orig: 32, 32
   offset: 8, 1
   index: -1
 heroJumpUp0
   rotate: false
-  xy: 259, 25
+  xy: 259, 1
   size: 16, 22
   orig: 32, 32
   offset: 8, 1
   index: -1
 heroKick0
   rotate: false
-  xy: 259, 210
+  xy: 260, 297
   size: 14, 19
   orig: 32, 32
   offset: 8, 0
   index: -1
 heroKick1
   rotate: false
-  xy: 109, 287
+  xy: 139, 296
   size: 18, 20
   orig: 32, 32
   offset: 10, 3
   index: -1
 heroKick2
   rotate: false
-  xy: 277, 25
+  xy: 159, 296
   size: 13, 21
   orig: 32, 32
   offset: 11, 0
   index: -1
 heroRun0
   rotate: false
-  xy: 242, 259
+  xy: 259, 196
   size: 14, 21
   orig: 32, 32
   offset: 9, 0
   index: -1
 heroRun1
   rotate: false
-  xy: 236, 282
+  xy: 259, 219
   size: 14, 21
   orig: 32, 32
   offset: 10, 1
   index: -1
 heroRun2
   rotate: false
-  xy: 259, 187
+  xy: 174, 291
   size: 14, 21
   orig: 32, 32
   offset: 9, 0
   index: -1
 heroRun3
   rotate: false
-  xy: 259, 164
+  xy: 241, 259
   size: 17, 21
   orig: 32, 32
   offset: 7, 1
   index: -1
 lightOff
   rotate: false
-  xy: 258, 276
+  xy: 260, 282
   size: 15, 13
   orig: 15, 18
   offset: 0, 0
   index: -1
 lightOn0
   rotate: false
-  xy: 275, 187
+  xy: 260, 242
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 lightOn1
   rotate: false
-  xy: 275, 207
+  xy: 260, 262
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 lightOn2
   rotate: false
-  xy: 275, 227
+  xy: 52, 307
   size: 15, 16
   orig: 15, 18
   offset: 0, 0
   index: -1
 line0
   rotate: false
-  xy: 259, 245
+  xy: 139, 291
   size: 31, 3
   orig: 31, 3
   offset: 0, 0
   index: -1
+peonDead0
+  rotate: false
+  xy: 190, 307
+  size: 16, 7
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 peonGrab0
   rotate: false
-  xy: 277, 132
+  xy: 125, 305
   size: 11, 14
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonIdle0
   rotate: false
-  xy: 277, 148
+  xy: 223, 307
   size: 10, 14
   orig: 16, 16
   offset: 3, 0
   index: -1
 peonJumpDown0
   rotate: false
-  xy: 277, 66
+  xy: 124, 288
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonJumpUp0
   rotate: false
-  xy: 277, 48
+  xy: 86, 307
   size: 13, 16
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun0
   rotate: false
-  xy: 277, 100
+  xy: 109, 291
   size: 13, 14
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun1
   rotate: false
-  xy: 277, 116
+  xy: 208, 307
   size: 13, 14
   orig: 16, 16
   offset: 2, 1
   index: -1
 peonRun2
   rotate: false
-  xy: 277, 83
+  xy: 235, 305
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonStunAir0
   rotate: false
-  xy: 177, 291
+  xy: 259, 184
   size: 16, 10
   orig: 16, 16
   offset: 0, 0
   index: -1
 peonStunGround0
   rotate: false
-  xy: 259, 250
+  xy: 187, 316
   size: 16, 7
   orig: 16, 16
   offset: 0, 0
   index: -1
 peonStunRise0
   rotate: false
-  xy: 275, 259
+  xy: 18, 308
   size: 15, 15
   orig: 16, 16
   offset: 1, 0
   index: -1
 peonStunRise1
   rotate: false
-  xy: 275, 276
+  xy: 35, 308
   size: 15, 15
   orig: 16, 16
   offset: 1, 0
   index: -1
 peonTaken0
   rotate: false
-  xy: 147, 291
+  xy: 69, 307
   size: 15, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 peonTaken1
   rotate: false
-  xy: 129, 287
+  xy: 259, 140
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 pixel
   rotate: false
-  xy: 278, 164
+  xy: 142, 269
   size: 3, 3
   orig: 1, 1
   offset: 0, -2
@@ -305,6 +312,27 @@ smoke0
   orig: 52, 52
   offset: 2, 3
   index: -1
+spikes0
+  rotate: false
+  xy: 259, 158
+  size: 16, 11
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+spikes1
+  rotate: false
+  xy: 259, 171
+  size: 16, 11
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+spikesOff
+  rotate: false
+  xy: 125, 321
+  size: 16, 2
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 targetLine
   rotate: false
   xy: 52, 259
@@ -314,14 +342,14 @@ targetLine
   index: -1
 wings0
   rotate: false
-  xy: 123, 264
+  xy: 235, 282
   size: 23, 21
   orig: 32, 32
   offset: 4, 5
   index: -1
 wingsFlap0
   rotate: false
-  xy: 148, 259
+  xy: 147, 259
   size: 45, 30
   orig: 45, 43
   offset: 0, 12
@@ -342,14 +370,14 @@ wingsFlap2
   index: -1
 wingsFlap3
   rotate: false
-  xy: 195, 259
+  xy: 194, 259
   size: 45, 21
   orig: 45, 43
   offset: 0, 0
   index: -1
 wingsFlap4
   rotate: false
-  xy: 195, 282
+  xy: 194, 282
   size: 39, 23
   orig: 39, 43
   offset: 0, 7

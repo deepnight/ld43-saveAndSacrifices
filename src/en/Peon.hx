@@ -124,6 +124,11 @@ class Peon extends Entity {
         }
     }
 
+    override function kill() {
+        super.kill();
+        new en.Cadaver(this);
+    }
+
     override function update() {
         if( onGround && !isInLight() && !cd.hasSetS("pickLightTarget",4) )
             pickTargetLight();
