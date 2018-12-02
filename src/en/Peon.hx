@@ -10,6 +10,7 @@ class Peon extends Entity {
     var path : Array<PathFinder.Node>;
     var dumbMode = true;
     public var invalidatePath = false;
+    var job : Null<Entity>;
 
     public function new(x,y) {
         super(x,y);
@@ -20,17 +21,23 @@ class Peon extends Entity {
         path = [];
         cd.setS("turboLock",rnd(2.5,6));
 
-        spr.set("peonIdle");
-        spr.anim.registerStateAnim("peonTaken",10, function() return Mob.anyoneHolds(this));
-        spr.anim.registerStateAnim("peonGrab",9, function() return grabbing);
-        spr.anim.registerStateAnim("peonStunRise",5, function() return cd.has("stun") && onGround && cd.getS("stun")<=0.5 );
-        spr.anim.registerStateAnim("peonStunAir",4, function() return cd.has("stun") && !onGround);
-        spr.anim.registerStateAnim("peonStunGround",3, function() return cd.has("stun"));
-        spr.anim.registerStateAnim("peonJumpUp",2, function() return !onGround && dy<0 );
-        spr.anim.registerStateAnim("peonJumpDown",2, function() return !onGround && dy>0 );
-        spr.anim.registerStateAnim("peonRun",1, function() return target!=null && !grabbing && !Mob.anyoneHolds(this) && !aiLocked() && MLib.fabs(dx)>=0.03*speed );
-        spr.anim.registerStateAnim("peonIdle",0);
+        updateSkin();
     }
+
+    function updateSkin() {
+        var skinId = isWorker() ? "worker" : "peon";
+        spr.anim.registerStateAnim(skinId+"Taken",10, function() return Mob.anyoneHolds(this));
+        spr.anim.registerStateAnim(skinId+"Grab",9, function() return grabbing);
+        spr.anim.registerStateAnim(skinId+"StunRise",5, function() return cd.has("stun") && onGround && cd.getS("stun")<=0.5 );
+        spr.anim.registerStateAnim(skinId+"StunAir",4, function() return cd.has("stun") && !onGround);
+        spr.anim.registerStateAnim(skinId+"StunGround",3, function() return cd.has("stun"));
+        spr.anim.registerStateAnim(skinId+"JumpUp",2, function() return !onGround && dy<0 );
+        spr.anim.registerStateAnim(skinId+"JumpDown",2, function() return !onGround && dy>0 );
+        spr.anim.registerStateAnim(skinId+"Run",1, function() return target!=null && !grabbing && !Mob.anyoneHolds(this) && !aiLocked() && MLib.fabs(dx)>=0.03*speed );
+        spr.anim.registerStateAnim(skinId+"Idle",0);
+    }
+
+    public inline function isWorker() return job!=null && job.isAlive();
 
     override function dispose() {
         super.dispose();
