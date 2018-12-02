@@ -10,6 +10,7 @@ class Entity {
 	public var level(get,never) : Level; inline function get_level() return Game.ME.level;
 	public var fx(get,never) : Fx; inline function get_fx() return Game.ME.fx;
 	public var destroyed(default,null) = false;
+	public var ftime(get,never) : Float; inline function get_ftime() return game.ftime;
 	public var cd : mt.Cooldown;
 	public var tmod : Float;
 
@@ -78,6 +79,11 @@ class Entity {
 		cy = y;
 		xr = 0.5;
 		yr = 1;
+	}
+
+	public function onKick(by:en.Hero) {}
+	public function canBeKicked() {
+		return false;
 	}
 
 	public function setPosPixel(x:Float, y:Float) {
@@ -172,6 +178,10 @@ class Entity {
 				e.cd.setF("lifting", 2);
             }
         }
+	}
+
+	public inline function isInLight() {
+		return false;
 	}
 
 	function isStandingOn(e:Entity) {

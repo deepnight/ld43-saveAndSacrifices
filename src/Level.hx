@@ -68,6 +68,9 @@ class Level extends mt.Process {
 
 				case Peon :
 					new en.Peon(m.x, m.y);
+
+				case Demon :
+					new en.m.Demon(m.x, m.y);
 			}
 
 		render();

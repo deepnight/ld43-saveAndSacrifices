@@ -116,7 +116,7 @@ class Hero extends Entity {
 
             // Double jump
             if( !grabbing && ca.aPressed() && !onGround && !cd.has("onGroundRecently") && !cd.has("doubleJumpLock") && !isLiftingSomeone() ) {
-                dy = -0.3;
+                dy = -0.35;
                 cd.unset("extendJump");
                 cd.setS("doubleJumpLock", Const.INFINITE);
             }
@@ -126,23 +126,16 @@ class Hero extends Entity {
             // Jump
             if( ca.aDown() && !level.hasColl(cx,cy) )
                 if( !cd.has("jumpLock") && ( grabbing || onGround || cd.has("onGroundRecently") ) ) {
-                    // if( isLiftingSomeone() ) {
-                    //     dy = -0.06;
-                    //     cd.setS("doubleJumpLock", Const.INFINITE);
-                    //     cd.unset("extendJump");
-                    // }
-                    // else {
-                        dy = -0.3;
-                        if( isLiftingSomeone() )
-                            cd.unset("lifting");
-                        if( grabbing ) {
-                            hasGravity = true;
-                            grabbing = false;
-                        }
-                        cd.unset("onGroundRecently");
-                        cd.setS("extendJump", 0.1);
-                        cd.unset("lifted");
-                    // }
+                    dy = -0.35;
+                    if( isLiftingSomeone() )
+                        cd.unset("lifting");
+                    if( grabbing ) {
+                        hasGravity = true;
+                        grabbing = false;
+                    }
+                    cd.unset("onGroundRecently");
+                    cd.setS("extendJump", 0.12);
+                    cd.unset("lifted");
                 }
                 else if( cd.has("extendJump") )
                     dy -= 0.037*tmod;
@@ -158,24 +151,39 @@ class Hero extends Entity {
                 game.fx.markerCase(cx,cy);
 
             // Call peon
-            if( ca.xPressed() && onGround ) {
+            if( ca.yPressed() && onGround ) {
                 for(e in Peon.ALL)
                     e.goto(cx,cy);
             }
 
             // Kick
-            if( ca.yPressed() ) {
-                for(e in Peon.ALL) {
-                    if( distCase(e)<=1 ) {
-                        e.dx = dir*0.5;
-                        e.dy = -0.2;
-                        e.invalidatePath = true;
-                        e.cd.setS("stun", rnd(0.7,1));
-                        // var ang = Math.atan2(e.footY-footY, e.footX-footX);
-                        // e.dx += Math.cos(ang)*0.4;
-                        // e.dy += Math.sin(ang)*0.4;
+            if( ca.xPressed() ) {
+                for(e in Entity.ALL) {
+                    if( distCase(e)<=1.5 && e.canBeKicked() ) {
+                        e.dx = dir*rnd(0.4, 0.6);
+                        e.dy = -rnd(0.2,0.3);
+                        e.onKick(this);
                     }
                 }
+                // for(e in Peon.ALL) {
+                //     if( distCase(e)<=1 && !Mob.anyoneHolds(e) ) {
+                //         e.dx = dir*rnd(0.3,0.4);
+                //         e.dy = -rnd(0.4,0.5);
+                //         e.invalidatePath = true;
+                //         e.cd.setS("stun", rnd(0.7,0.8));
+                //         e.onKick(this);
+                //     }
+                // }
+                //  for(e in Mob.ALL) {
+                //     if( distCase(e)<=1 ) {
+                //         e.dx = dir*rnd(0.6, 0.7);
+                //         e.dy = -rnd(0.2,0.3);
+                //         e.lockAiS(rnd(0.2, 0.4));
+                //         e.cd.setS("stun", rnd(0.7,0.9));
+                //         e.onKick(this);
+                //     }
+                // }
+
             }
 
             #if debug

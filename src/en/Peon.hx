@@ -16,6 +16,7 @@ class Peon extends Entity {
         ALL.push(this);
         hei = Const.GRID;
         spr.set("guy",1);
+        spr.colorize(0x6633ee);
         speed = rnd(0.9,1);
         // lifter = true;
         path = [];
@@ -53,12 +54,33 @@ class Peon extends Entity {
 
 
     override function checkLifters() {
-        if( !grabbing )
+        if( !grabbing && !Mob.anyoneHolds(this) )
             super.checkLifters();
     }
 
     function aiLocked() {
-        return cd.has("stun") || cd.has("aiLock");
+        return cd.has("stun") || cd.has("aiLock") || Mob.anyoneHolds(this);
+    }
+
+    public function onCatchByMob(e:Mob) {
+        hasGravity = false;
+        grabbing = false;
+        dx = dy = 0;
+    }
+
+    public function onRelease() {
+        hasGravity = true;
+        dx = dy = 0;
+    }
+
+    override function canBeKicked():Bool {
+        return isAlive() && !Mob.anyoneHolds(this);
+    }
+
+    override function onKick(by:Dynamic) {
+        super.onKick(by);
+        invalidatePath = true;
+        cd.setS("stun",rnd(0.7,0.8));
     }
 
     override function update() {
