@@ -81,7 +81,7 @@ class Main extends mt.Process {
 
 		// Auto scaling
 		if( Const.AUTO_SCALE_TARGET_HEIGHT>0 )
-			Const.SCALE = MLib.floor( h()/Const.AUTO_SCALE_TARGET_HEIGHT );
+			Const.SCALE = MLib.ceil( h()/Const.AUTO_SCALE_TARGET_HEIGHT );
 		root.setScale(Const.SCALE);
 	}
 

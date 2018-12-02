@@ -12,6 +12,7 @@ class Game extends mt.Process {
 	public var fx : Fx;
 	public var scroller : h2d.Layers;
 	public var viewport : Viewport;
+	var bg : h2d.TileGroup;
 
 	public function new() {
 		super(Main.ME);
@@ -22,11 +23,28 @@ class Game extends mt.Process {
 		scroller = new h2d.Layers();
 		root.add(scroller, Const.DP_MAIN);
 
+		bg = new h2d.TileGroup(Assets.gameElements.tile);
+		// bg = Assets.gameElements.h_get("gradient");
+		root.add(bg, Const.DP_BG);
+
 		fx = new Fx();
 		level = new Level(Test);
 
 		viewport = new Viewport();
 		viewport.track(hero, true);
+	}
+
+	override function onResize() {
+		super.onResize();
+		bg.clear();
+		var t = Assets.gameElements.getTile("gradient");
+		var nx = MLib.ceil( w()/Const.SCALE / t.width );
+		var ny = MLib.ceil( h()/Const.SCALE / t.height );
+		for(x in 0...nx)
+		for(y in 0...ny)
+			bg.add(x*t.width, y*t.height, t);
+		// bg.scaleX = (w()/Const.SCALE) / bg.tile.width;
+		// bg.scaleY = (h()/Const.SCALE) / bg.tile.height;
 	}
 
 	public function onCdbReload() {

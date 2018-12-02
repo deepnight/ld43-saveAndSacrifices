@@ -199,6 +199,46 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">export/angelRing0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,1,7,3</rect>
+                <key>scale9Paddings</key>
+                <rect>3,1,7,3</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/circle0.png</key>
+            <key type="filename">export/guy0.png</key>
+            <key type="filename">export/guy1.png</key>
+            <key type="filename">export/guy2.png</key>
+            <key type="filename">export/peonGrab0.png</key>
+            <key type="filename">export/peonIdle0.png</key>
+            <key type="filename">export/peonJumpDown0.png</key>
+            <key type="filename">export/peonJumpUp0.png</key>
+            <key type="filename">export/peonRun0.png</key>
+            <key type="filename">export/peonRun1.png</key>
+            <key type="filename">export/peonRun2.png</key>
+            <key type="filename">export/peonStunAir0.png</key>
+            <key type="filename">export/peonStunGround0.png</key>
+            <key type="filename">export/peonStunRise0.png</key>
+            <key type="filename">export/peonStunRise1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9Paddings</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">export/dot0.png</key>
             <key type="filename">export/dotGlow0.png</key>
             <struct type="IndividualSpriteSettings">
@@ -213,16 +253,189 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">export/guy.png</key>
+            <key type="filename">export/feather0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>4,4,8,8</rect>
+                <rect>1,1,3,2</rect>
                 <key>scale9Paddings</key>
-                <rect>4,4,8,8</rect>
+                <rect>1,1,3,2</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/gradient.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>52,52,104,104</rect>
+                <key>scale9Paddings</key>
+                <rect>52,52,104,104</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/heroGrab0.png</key>
+            <key type="filename">export/heroIdle0.png</key>
+            <key type="filename">export/heroIdle1.png</key>
+            <key type="filename">export/heroIdle2.png</key>
+            <key type="filename">export/heroIdle3.png</key>
+            <key type="filename">export/heroJumpDown0.png</key>
+            <key type="filename">export/heroJumpUp0.png</key>
+            <key type="filename">export/heroKick0.png</key>
+            <key type="filename">export/heroKick1.png</key>
+            <key type="filename">export/heroKick2.png</key>
+            <key type="filename">export/heroRun0.png</key>
+            <key type="filename">export/heroRun1.png</key>
+            <key type="filename">export/heroRun2.png</key>
+            <key type="filename">export/heroRun3.png</key>
+            <key type="filename">export/wings0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/lightOff.png</key>
+            <key type="filename">export/lightOn0.png</key>
+            <key type="filename">export/lightOn1.png</key>
+            <key type="filename">export/lightOn2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,5,8,9</rect>
+                <key>scale9Paddings</key>
+                <rect>4,5,8,9</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/line0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,1,16,2</rect>
+                <key>scale9Paddings</key>
+                <rect>8,1,16,2</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/pixel.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>0,0,1,1</rect>
+                <key>scale9Paddings</key>
+                <rect>0,0,1,1</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/smoke0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,13,26,26</rect>
+                <key>scale9Paddings</key>
+                <rect>13,13,26,26</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/targetLine.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>23,1,47,2</rect>
+                <key>scale9Paddings</key>
+                <rect>23,1,47,2</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/wingsFlap0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>11,8,23,16</rect>
+                <key>scale9Paddings</key>
+                <rect>11,8,23,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/wingsFlap1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>14,8,28,16</rect>
+                <key>scale9Paddings</key>
+                <rect>14,8,28,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/wingsFlap2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,8,20,16</rect>
+                <key>scale9Paddings</key>
+                <rect>10,8,20,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/wingsFlap3.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,9,20,17</rect>
+                <key>scale9Paddings</key>
+                <rect>10,9,20,17</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">export/wingsFlap4.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,11,20,22</rect>
+                <key>scale9Paddings</key>
+                <rect>10,11,20,22</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

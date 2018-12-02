@@ -21,7 +21,7 @@ class Peon extends Entity {
         cd.setS("turboLock",rnd(2.5,6));
 
         spr.set("peonIdle");
-        spr.anim.registerStateAnim("peonIdle",10, function() return Mob.anyoneHolds(this));
+        spr.anim.registerStateAnim("peonTaken",10, function() return Mob.anyoneHolds(this));
         spr.anim.registerStateAnim("peonGrab",9, function() return grabbing);
         spr.anim.registerStateAnim("peonStunRise",5, function() return cd.has("stun") && onGround && cd.getS("stun")<=0.5 );
         spr.anim.registerStateAnim("peonStunAir",4, function() return cd.has("stun") && !onGround);
@@ -93,6 +93,7 @@ class Peon extends Entity {
         super.onKick(by);
         invalidatePath = true;
         grabbing = false;
+        hasGravity = true;
         cd.setS("stun",rnd(1.6, 2));
         cd.setS("kickLock", 0.25);
         cd.setS("targetPrio",cd.getS("stun"));
@@ -232,8 +233,10 @@ class Peon extends Entity {
             //     grabAt(cx,cy-1);
         }
 
-        if( grabbing && cd.has("stun") )
+        if( grabbing && cd.has("stun") ) {
+            hasGravity = true;
             grabbing = false;
+        }
 
         // Leave grab
         if( grabbing && !cd.has("maintainGrab") ) {
