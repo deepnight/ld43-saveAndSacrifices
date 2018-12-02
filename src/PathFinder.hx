@@ -115,7 +115,6 @@ class PathFinder {
 
         if( start==null || target==null )
             return path;
-            trace(start+" "+target);
         exploreRec(start, start, target, new Map(), path);
         path.reverse();
         #if debug

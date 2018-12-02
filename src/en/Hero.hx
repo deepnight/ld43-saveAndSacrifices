@@ -163,11 +163,17 @@ class Hero extends Entity {
                     e.goto(cx,cy);
             }
 
-            // Kill peon
+            // Kick
             if( ca.yPressed() ) {
+            }
+
+            #if debug
+            // Kill peon
+            if( ca.dpadDownPressed() ) {
                 for(e in Peon.ALL)
                     e.destroy();
             }
+            #end
         }
     }
 }

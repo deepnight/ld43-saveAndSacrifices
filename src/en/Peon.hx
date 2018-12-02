@@ -84,7 +84,6 @@ class Peon extends Entity {
                     dx = 0.2*dir;
                     cd.unset("walkLock");
                     cd.setS("jumping", 0.10);
-                    trace("jump");
                 }
 
                 // High jump
