@@ -175,7 +175,7 @@ class Entity {
 	}
 
 	function isStandingOn(e:Entity) {
-		return MLib.fabs(centerX-e.centerX)<=Const.GRID*0.6 && footY>=e.headY-1 && footY<=e.headY+8;
+		return MLib.fabs(centerX-e.centerX)<=Const.GRID*0.6 && footY>=e.headY-1 && footY<=e.headY+4;
 	}
 
 	public inline function isLiftingSomeone() {

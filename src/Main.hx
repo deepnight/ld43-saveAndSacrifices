@@ -39,7 +39,7 @@ class Main extends mt.Process {
 				startGame();
             	if( Game.ME!=null )
                     Game.ME.onCdbReload();
-            }, 0.33);
+            }, 0.2);
         });
 		#end
 

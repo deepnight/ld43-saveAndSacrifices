@@ -57,16 +57,16 @@
 					],
 					"markers": [
 						{
-							"x": 17,
-							"y": 11,
-							"marker": "Peon",
+							"x": 23,
+							"y": 6,
+							"marker": "Hero1",
 							"width": 1,
 							"height": 1
 						},
 						{
-							"x": 30,
-							"y": 12,
-							"marker": "Hero1",
+							"x": 1,
+							"y": 15,
+							"marker": "Peon",
 							"width": 1,
 							"height": 1
 						}
