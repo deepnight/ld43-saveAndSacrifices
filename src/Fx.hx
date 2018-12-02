@@ -153,7 +153,7 @@ class Fx extends mt.Process {
 
 	function _groundPhysics(p:HParticle) {
 		if( collides(p) ) {
-			// p.gy = 0;
+			p.gy = 0;
 			p.dy = 0;
 			p.dx = rnd(0,0.2,true);
 		}
@@ -338,6 +338,45 @@ class Fx extends mt.Process {
 			p.frict = rnd(0.8,0.9);
 			p.dr = rnd(0,0.001,true);
 			p.lifeS = rnd(0.5,1);
+		}
+	}
+
+	function _bloodPhysics(p:HParticle) {
+		if( collides(p) ) {
+			p.dy = p.gy = 0;
+			p.dx *= 0.5;
+			p.frict = rnd(0.7,0.8);
+			if( collidesGround(p) ) {
+				p.rotation = 0;
+				p.scaleX = rnd(2,3);
+				p.scaleY = rnd(0.4,0.7);
+			}
+			p.onUpdate = null;
+		}
+	}
+
+	public function fakeExitingPeon(e:en.Peon) {
+		var p = allocBgNormal(getTile("peonRun"), (e.cx+0.2)*Const.GRID, (e.cy+1)*Const.GRID);
+		p.setCenterRatio(0.5,1);
+		p.setFadeS(1,0,0.5);
+		p.playAnimLoop(Assets.gameElements, "peonRun");
+		p.dx = 0.19;
+		p.dy = -0.19;
+		p.lifeS = 0.2;
+	}
+
+	public function gibs(x:Float, y:Float) {
+		for(i in 0...20) {
+			var p = allocBgNormal(getTile("gib"), x+rnd(0,10,true), y+rnd(0,5,true));
+			p.colorize(mt.deepnight.Color.interpolateInt(0x6f0d0d, 0xaf3030, rnd(0,1)));
+			p.setFadeS(rnd(0.7,1),0,rnd(3,5));
+			p.dx = rnd(0,1,true);
+			p.dy = -rnd(2,5);
+			p.gy = rnd(0.1,0.2);
+			p.rotation = rnd(0,6.28);
+			p.frict = 0.94;
+			p.lifeS = rnd(8,12);
+			p.onUpdate = _bloodPhysics;
 		}
 	}
 

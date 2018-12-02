@@ -71,6 +71,9 @@ class Level extends mt.Process {
 				case Door :
 					new en.Door(m.x, m.y, m.width, m.height, m.id);
 
+				case Exit :
+					new en.Exit(m.x, m.y);
+
 				case Touchplate :
 					new en.Touchplate(m.x, m.y, m.id);
 

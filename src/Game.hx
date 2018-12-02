@@ -28,7 +28,7 @@ class Game extends mt.Process {
 		root.add(bg, Const.DP_BG);
 
 		fx = new Fx();
-		level = new Level(Test);
+		level = new Level(Tutorial);
 
 		viewport = new Viewport();
 		viewport.track(hero, true);

@@ -16,8 +16,7 @@ class Peon extends Entity {
         super(x,y);
         ALL.push(this);
         hei = Const.GRID;
-        speed = rnd(0.5,1);
-        // lifter = true;
+        speed = level.infos.params.fastPeons ? 1 : rnd(0.5,1);
         path = [];
         cd.setS("turboLock",rnd(2.5,6));
 
@@ -110,10 +109,6 @@ class Peon extends Entity {
                 e.cancelTarget();
     }
 
-    override function postUpdate() {
-        super.postUpdate();
-    }
-
     function pickTargetLight() {
         target = null;
         var dh = new DecisionHelper(Light.ALL);
@@ -134,12 +129,20 @@ class Peon extends Entity {
 
     override function kill(by) {
         super.kill(by);
-        new en.Cadaver(this);
+        fx.gibs(centerX, centerY);
+        if( by!=null )
+            new en.Cadaver(this);
     }
 
     override function update() {
         if( onGround && !isInLight() && !cd.hasSetS("pickLightTarget",4) )
             pickTargetLight();
+
+        if( onGround && isInLight() && !cd.hasSetS("exitCheck",0.5) ) {
+            for(e in Exit.ALL)
+                if( distCase(e)<=8 /*&& sightCheck(e)*/ )
+                    goto(e.cx, e.cy);
+        }
 
         // Recompute path
         if( !aiLocked() && path.length>0 && onGround && invalidatePath ) {

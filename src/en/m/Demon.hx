@@ -25,7 +25,7 @@ class Demon extends en.Mob {
     override function pickTarget() {
         super.pickTarget();
         var dh = new DecisionHelper(Peon.ALL);
-        dh.remove( function(e) return e.isInLight() || distCase(e)>=16 && !cd.has("aggro") );
+        dh.remove( function(e) return e.isInLight() || distCase(e)>=12 && !cd.has("aggro") );
         dh.remove( function(e) return Mob.anyoneHolds(e) && !e.cd.has("stillInteresting") );
         dh.score( function(e) return Mob.anyoneHolds(e) ? 2 : Mob.anyoneTargets(e) ? 2 : 0 );
         dh.score( function(e) return -distCase(e) );

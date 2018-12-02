@@ -155,7 +155,7 @@ class Hero extends Entity {
                 dy = -0.40;
                 cd.unset("extendJump");
                 // cd.setS("doubleJumpLock", Const.INFINITE);
-                cd.setS("doubleJumpLock", 0.18);
+                cd.setS("doubleJumpLock", 0.17);
                 wings.anim.play("wingsFlap");
                 for(i in 0...irnd(1,4))
                     fx.feather(centerX + rnd(0,20,true), centerY-25+rnd(0,5,true));
@@ -216,8 +216,7 @@ class Hero extends Entity {
 
             #if debug
             if( ca.bPressed() ) {
-                game.viewport.shakeS(1,1);
-                fx.explosion(centerX, centerY, Const.GRID*3);
+                fx.gibs(centerX, centerY);
             }
             // Kill peon
             if( ca.dpadDownPressed() ) {
