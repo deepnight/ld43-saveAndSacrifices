@@ -17,7 +17,7 @@ class Peon extends Entity {
         hei = Const.GRID;
         spr.set("guy",1);
         spr.colorize(0x6633ee);
-        speed = rnd(0.9,1);
+        speed = rnd(0.7,1);
         // lifter = true;
         path = [];
     }
@@ -106,7 +106,7 @@ class Peon extends Entity {
 
             // Jump (dumb mode)
             if( dumbMode && onGround && level.hasColl(cx+dir, cy) && ( dir==1 && xr>=0.7 || dir==-1 && xr<=0.3 ) && !cd.hasSetS("jump",rnd(0.3,0.7)) ) {
-                dy = -0.21;
+                dy = -0.23;
                 dx = 0.2*dir;
                 cd.setS("jumping", 0.10);
             }
@@ -122,7 +122,7 @@ class Peon extends Entity {
 
                 // High jump
                 if( onGround && target.cy<cy-1 && ( dir==1 && xr>=0.6 || dir==-1 && xr<=0.4 ) && !cd.hasSetS("jump",rnd(0.2,0.4)) ) {
-                    dy = -0.21;
+                    dy = -0.23;
                     dir = target.cx<cx ? -1 : 1;
                     if( target.cy==cy-1 && MLib.fabs(xr-0.5)<=0.2 )
                         dx = dir*0.1;

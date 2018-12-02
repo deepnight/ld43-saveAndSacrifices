@@ -21,6 +21,8 @@ class Light extends Entity {
         g.beginFill(0xffc900,0.03);
         g.lineStyle(1, 0xffc900, 0.10);
         g.drawCircle(0, 0, radius);
+
+        turnOn();
     }
 
     override function dispose() {
@@ -46,16 +48,16 @@ class Light extends Entity {
 
     override function update() {
         super.update();
-        if( active ) {
-            // for(e in Hero.ALL)
-            //     if( distPx(e) <= radius )
-            //     // if( Lib.distance(centerX, centerY, e.centerX, e.centerY) <= radius )
-            //         e.cd.setS("inLight", 0.1);
+
+        if( active && !cd.hasSetS("tick",0.1) ) {
+            for(e in Entity.ALL)
+                if( distPx(e) <= radius )
+                    e.cd.setS("lighten", 0.15);
         }
-        else {
+
+        if( !active )
             for(e in Hero.ALL)
                 if( distPx(e)<=Const.GRID*2 )
                     turnOn();
-        }
     }
 }

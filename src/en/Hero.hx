@@ -158,32 +158,18 @@ class Hero extends Entity {
 
             // Kick
             if( ca.xPressed() ) {
-                for(e in Entity.ALL) {
-                    if( distCase(e)<=1.5 && e.canBeKicked() ) {
-                        e.dx = dir*rnd(0.4, 0.6);
-                        e.dy = -rnd(0.2,0.3);
-                        e.onKick(this);
-                    }
+                var dh = new DecisionHelper(Entity.ALL);
+                dh.remove( function(e) return distCase(e)>1.5 || !e.canBeKicked() );
+                dh.score( function(e) return Std.is(e,Mob) ? ( e.as(Mob).isHoldingTarget ? 20 : 5 ) : 0);
+                dh.score( function(e) return Std.is(e,Mob) ? 5 : 0);
+                dh.score( function(e) return -distCase(e) );
+                dh.score( function(e) return dir==1 && e.centerX>=centerX-8 || dir==-1 && e.centerX<=centerX+8? 1 : 0 );
+                var e = dh.getBest();
+                if( e!=null ) {
+                    e.dx = dir*rnd(0.4, 0.6);
+                    e.dy = -rnd(0.2,0.3);
+                    e.onKick(this);
                 }
-                // for(e in Peon.ALL) {
-                //     if( distCase(e)<=1 && !Mob.anyoneHolds(e) ) {
-                //         e.dx = dir*rnd(0.3,0.4);
-                //         e.dy = -rnd(0.4,0.5);
-                //         e.invalidatePath = true;
-                //         e.cd.setS("stun", rnd(0.7,0.8));
-                //         e.onKick(this);
-                //     }
-                // }
-                //  for(e in Mob.ALL) {
-                //     if( distCase(e)<=1 ) {
-                //         e.dx = dir*rnd(0.6, 0.7);
-                //         e.dy = -rnd(0.2,0.3);
-                //         e.lockAiS(rnd(0.2, 0.4));
-                //         e.cd.setS("stun", rnd(0.7,0.9));
-                //         e.onKick(this);
-                //     }
-                // }
-
             }
 
             #if debug

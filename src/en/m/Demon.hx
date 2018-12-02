@@ -26,6 +26,7 @@ class Demon extends en.Mob {
         super.pickTarget();
         var dh = new DecisionHelper(Peon.ALL);
         dh.remove( function(e) return e.isInLight() );
+        dh.remove( function(e) return Mob.anyoneHolds(e) && !e.cd.has("stillInteresting") );
         dh.score( function(e) return Mob.anyoneHolds(e) ? -6 : Mob.anyoneTargets(e) ? 2 : 0 );
         dh.score( function(e) return -distCase(e) );
         target = dh.getBest();
@@ -61,8 +62,11 @@ class Demon extends en.Mob {
         if( target!=null && !target.isAlive() )
             cancelTarget();
 
+        if( target!=null && target.isInLight() )
+            cancelTarget();
+
         // Forced to free target
-        if( target!=null && isHoldingTarget && isUnconscious() ) {
+        if( target!=null && isHoldingTarget && ( isUnconscious() || isInLight() ) ) {
             freeHoldedTarget();
             target.dx = rnd(0,0.1,true);
             target.dy = -rnd(0.05,0.08);
@@ -103,17 +107,6 @@ class Demon extends en.Mob {
 
             // fx.markerFree(tx,ty, 0.1, 0xff0000);
 
-            // Apply movement
-            var a = Math.atan2(ty-centerY, tx-centerX);
-            var s = 0.0030;
-            dx+= Math.cos(a)*s*tmod;
-            dy+= Math.sin(a)*s*tmod;
-
-            var s = 0.0015;
-            wanderAng += rnd(0.03,0.06) * tmod;
-            dx+= Math.cos(wanderAng)*s*tmod;
-            dy+= Math.sin(wanderAng)*s*tmod;
-
             // Catch target!
             if( distPx(target)<=6 && !Mob.anyoneHolds(target) ) {
                 isHoldingTarget = true;
@@ -124,6 +117,24 @@ class Demon extends en.Mob {
                 dy = -rnd(0.07,0.08);
             }
         }
+
+        if( !aiLocked() && !isUnconscious() ) {
+            if( target==null ) {
+                tx = startPt.centerX;
+                ty = startPt.centerY;
+            }
+            // Apply movement
+            var a = Math.atan2(ty-centerY, tx-centerX);
+            var s = 0.0030;
+            dx+= Math.cos(a)*s*tmod;
+            dy+= Math.sin(a)*s*tmod;
+
+            var s = 0.0015;
+            wanderAng += rnd(0.03,0.06) * tmod;
+            dx+= Math.cos(wanderAng)*s*tmod;
+            dy+= Math.sin(wanderAng)*s*tmod;
+        }
+
 
         // Move target around
         if( isHoldingTarget ) {

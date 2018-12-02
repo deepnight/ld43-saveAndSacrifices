@@ -3,12 +3,14 @@ package en;
 class Mob extends Entity {
     public static var ALL : Array<Mob> = [];
 
+    var startPt : CPoint;
     public var target : Null<Peon>;
     public var isHoldingTarget = false;
 
     function new(x,y) {
         super(x,y);
         ALL.push(this);
+        startPt = new CPoint(cx,cy);
     }
 
     override function dispose() {
