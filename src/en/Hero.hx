@@ -165,6 +165,16 @@ class Hero extends Entity {
 
             // Kick
             if( ca.yPressed() ) {
+                for(e in Peon.ALL) {
+                    if( distCase(e)<=1 ) {
+                        e.dx = dir*0.5;
+                        e.dy = -0.2;
+                        e.invalidatePath = true;
+                        // var ang = Math.atan2(e.footY-footY, e.footX-footX);
+                        // e.dx += Math.cos(ang)*0.4;
+                        // e.dy += Math.sin(ang)*0.4;
+                    }
+                }
             }
 
             #if debug

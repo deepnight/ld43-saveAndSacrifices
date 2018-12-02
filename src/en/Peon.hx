@@ -9,6 +9,7 @@ class Peon extends Entity {
     var targetXr = 0.5;
     var path : Array<PathFinder.Node>;
     var dumbMode = true;
+    public var invalidatePath = false;
 
     public function new(x,y) {
         super(x,y);
@@ -26,6 +27,7 @@ class Peon extends Entity {
     }
 
     public function goto(x,y) {
+        invalidatePath = false;
         path = level.pf.getPath(cx,cy, x,y);
         if( path.length>1 ) {
             dumbMode = false;
@@ -56,6 +58,12 @@ class Peon extends Entity {
     }
 
     override function update() {
+        // Recompute path
+        if( path.length>0 && onGround && invalidatePath ) {
+            var last = path[path.length-1];
+            goto(last.cx, last.cy);
+        }
+
         if( !grabbing && target!=null ) {
             // Seek target
             if( !cd.has("walkLock") ) {
@@ -141,13 +149,13 @@ class Peon extends Entity {
 
         // Ledge grabbing
         if( dumbMode || target!=null && target.cy<cy ) {
-            if( level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.6 && yr>=0.6 && !level.hasColl(cx+1,cy-1) )
+            if( dir==1 && level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.6 && yr>=0.6 && !level.hasColl(cx+1,cy-1) )
                 grabAt(cx,cy);
-            if( level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.4 && yr>=0.6 && !level.hasColl(cx-1,cy-1) )
+            if( dir==-1 && level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.4 && yr>=0.6 && !level.hasColl(cx-1,cy-1) )
                 grabAt(cx,cy);
-            if( level.hasSpot("grabRightUp",cx,cy) && dx>0 && dy>0 && xr>=0.7 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx+1,cy-2) )
+            if( dir==1 && level.hasSpot("grabRightUp",cx,cy) && dx>0 && dy>0 && xr>=0.7 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx+1,cy-2) )
                 grabAt(cx,cy-1);
-            if( level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx-1,cy-2) )
+            if( dir==-1 && level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx-1,cy-2) )
                 grabAt(cx,cy-1);
         }
 

@@ -91,6 +91,8 @@ class Entity {
 	public inline function irnd(min,max,?sign) return Lib.irnd(min,max,sign);
 	public inline function pretty(v,?p=1) return Lib.prettyFloat(v,p);
 
+	public inline function dirTo(e:Entity) return e.centerX<centerX ? -1 : 1;
+
 	public inline function distCase(e:Entity) {
 		return Lib.distance(cx+xr, cy+yr, e.cx+e.xr, e.cy+e.yr);
 	}
