@@ -15,12 +15,18 @@ class Peon extends Entity {
         super(x,y);
         ALL.push(this);
         hei = Const.GRID;
-        spr.set("guy",1);
-        spr.colorize(0x6633ee);
-        speed = rnd(0.7,1);
+        speed = rnd(0.5,1);
         // lifter = true;
         path = [];
         cd.setS("turboLock",rnd(2.5,6));
+
+        spr.set("peonIdle");
+        spr.anim.registerStateAnim("peonIdle",10, function() return Mob.anyoneHolds(this));
+        spr.anim.registerStateAnim("peonGrab",3, function() return grabbing);
+        spr.anim.registerStateAnim("peonJumpUp",2, function() return !onGround && dy<0 );
+        spr.anim.registerStateAnim("peonJumpDown",2, function() return !onGround && dy>0 );
+        spr.anim.registerStateAnim("peonRun",1, function() return target!=null && !grabbing && !Mob.anyoneHolds(this) && !aiLocked() && MLib.fabs(dx)>=0.03*speed );
+        spr.anim.registerStateAnim("peonIdle",0);
     }
 
     override function dispose() {
@@ -89,7 +95,6 @@ class Peon extends Entity {
 
     override function postUpdate() {
         super.postUpdate();
-        spr.alpha = isInLight() ? 1 : 0.7;
     }
 
     function pickTargetLight() {
@@ -128,7 +133,7 @@ class Peon extends Entity {
             }
             // Seek target
             if( !cd.has("walkLock") ) {
-                var s = speed * 0.008 * (onGround?1:0.5) * ( isLiftingSomeone() ? 0.3 : 1) * (cd.has("turbo")?2:1);
+                var s = speed * 0.007 * (onGround?1:0.5) * ( isLiftingSomeone() ? 0.3 : 1) * (cd.has("turbo")?2:1);
                 if( target.cx>cx || target.cx==cx && xr<0.5 ) {
                     dir = 1;
                     dx+=s*tmod;
@@ -140,7 +145,7 @@ class Peon extends Entity {
             }
 
             // Jump (dumb mode)
-            var jumpPow = 0.41;
+            var jumpPow = 0.43;
             if( dumbMode && onGround && level.hasColl(cx+dir, cy) && ( dir==1 && xr>=0.7 || dir==-1 && xr<=0.3 ) && !cd.hasSetS("jump",rnd(0.3,0.7)) ) {
                 dy = -jumpPow;
                 dx = 0.2*dir;
@@ -208,15 +213,15 @@ class Peon extends Entity {
         super.update();
 
         // Ledge grabbing
-        if( !aiLocked() && ( dumbMode || target!=null && target.cy<cy ) ) {
-            if( dir==1 && level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.6 && yr>=0.6 && !level.hasColl(cx+1,cy-1) )
+        if( !aiLocked() && !onGround && dy>0 /*( dumbMode || target!=null && target.cy<cy )*/ ) {
+            if( dir==1 && level.hasSpot("grabRight",cx,cy) && xr>=0.3 && yr>=0.5 && !level.hasColl(cx+1,cy-1) )
                 grabAt(cx,cy);
-            if( dir==-1 && level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.4 && yr>=0.6 && !level.hasColl(cx-1,cy-1) )
+            if( dir==-1 && level.hasSpot("grabLeft",cx,cy) && xr<=0.7 && yr>=0.5 && !level.hasColl(cx-1,cy-1) )
                 grabAt(cx,cy);
-            if( dir==1 && level.hasSpot("grabRightUp",cx,cy) && dx>0 && dy>0 && xr>=0.7 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx+1,cy-2) )
-                grabAt(cx,cy-1);
-            if( dir==-1 && level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx-1,cy-2) )
-                grabAt(cx,cy-1);
+            // if( dir==1 && level.hasSpot("grabRightUp",cx,cy) && dx>0 && dy>0 && xr>=0.3 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx+1,cy-2) )
+            //     grabAt(cx,cy-1);
+            // if( dir==-1 && level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.7 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx-1,cy-2) )
+            //     grabAt(cx,cy-1);
         }
 
         if( cd.has("stun") && grabbing )

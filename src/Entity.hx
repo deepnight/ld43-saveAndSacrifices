@@ -227,8 +227,8 @@ class Entity {
 			steps--;
 		}
 		dx*=Math.pow(frict,tmod);
-		// if( MLib.fabs(dx)<=0.001*tmod )
-		// 	dx = 0;
+		if( MLib.fabs(dx)<=0.0005*tmod )
+			dx = 0;
 
 		// Gravity
 		if( !onGround && hasGravity )
@@ -260,8 +260,8 @@ class Entity {
 			steps--;
 		}
 		dy*=Math.pow(frict,tmod);
-		// if( MLib.fabs(dy)<=0.001*tmod )
-		// 	dy = 0;
+		if( MLib.fabs(dy)<=0.0005*tmod )
+			dy = 0;
 		if( hasColl )
 			checkLifters();
     }

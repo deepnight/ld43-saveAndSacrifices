@@ -25,5 +25,6 @@ class Assets {
 		#end
 
 		gameElements = mt.heaps.slib.assets.Atlas.load("gameElements.atlas");
+		gameElements.defineAnim("peonRun", "0(4),1(10),0(4),2(7)");
 	}
 }

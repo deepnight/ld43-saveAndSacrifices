@@ -86,6 +86,7 @@ class Main extends mt.Process {
 	}
 
     override function update() {
+		SpriteLib.DT = dt;
         super.update();
     }
 }

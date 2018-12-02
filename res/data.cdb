@@ -57,13 +57,6 @@
 					],
 					"markers": [
 						{
-							"x": 28,
-							"y": 8,
-							"marker": "Demon",
-							"width": 1,
-							"height": 1
-						},
-						{
 							"x": 23,
 							"y": 9,
 							"marker": "Light",
@@ -73,20 +66,6 @@
 						{
 							"x": 37,
 							"y": 9,
-							"marker": "Demon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 13,
-							"y": 10,
-							"marker": "Demon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 11,
-							"y": 12,
 							"marker": "Demon",
 							"width": 1,
 							"height": 1
@@ -113,13 +92,6 @@
 							"height": 1
 						},
 						{
-							"x": 2,
-							"y": 14,
-							"marker": "Light",
-							"width": 1,
-							"height": 1
-						},
-						{
 							"x": 7,
 							"y": 14,
 							"marker": "Hero1",
@@ -137,34 +109,6 @@
 							"x": 45,
 							"y": 14,
 							"marker": "Light",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 0,
-							"y": 16,
-							"marker": "Peon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 2,
-							"y": 16,
-							"marker": "Peon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 4,
-							"y": 16,
-							"marker": "Peon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 9,
-							"y": 17,
-							"marker": "Spikes",
 							"width": 1,
 							"height": 1
 						}
@@ -231,6 +175,12 @@
 							"height": 3
 						},
 						{
+							"x": 8,
+							"y": 14,
+							"width": 1,
+							"height": 3
+						},
+						{
 							"x": 19,
 							"y": 14,
 							"width": 1,
@@ -255,12 +205,6 @@
 							"height": 1
 						},
 						{
-							"x": 6,
-							"y": 15,
-							"width": 3,
-							"height": 2
-						},
-						{
 							"x": 15,
 							"y": 15,
 							"width": 5,
@@ -276,12 +220,6 @@
 							"x": 44,
 							"y": 15,
 							"width": 3,
-							"height": 1
-						},
-						{
-							"x": 5,
-							"y": 16,
-							"width": 1,
 							"height": 1
 						},
 						{
