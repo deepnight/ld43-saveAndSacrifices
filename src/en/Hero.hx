@@ -147,9 +147,6 @@ class Hero extends Entity {
             if( !ca.leftDown() && !ca.rightDown() )
                 dx*=Math.pow(0.7,tmod);
 
-            if( ca.bDown() )
-                game.fx.markerCase(cx,cy);
-
             // Call peon
             if( ca.yPressed() && onGround ) {
                 for(e in Peon.ALL)
@@ -159,9 +156,9 @@ class Hero extends Entity {
             // Kick
             if( ca.xPressed() ) {
                 var dh = new DecisionHelper(Entity.ALL);
-                dh.remove( function(e) return distCase(e)>1.5 || !e.canBeKicked() );
+                dh.remove( function(e) return !e.isAlive() || distCase(e)>1.5 || !e.canBeKicked() );
                 dh.score( function(e) return Std.is(e,Mob) ? ( e.as(Mob).isHoldingTarget ? 20 : 5 ) : 0);
-                dh.score( function(e) return Std.is(e,Mob) ? 5 : 0);
+                dh.score( function(e) return Std.is(e,Light) ? 2 : 0);
                 dh.score( function(e) return -distCase(e) );
                 dh.score( function(e) return dir==1 && e.centerX>=centerX-8 || dir==-1 && e.centerX<=centerX+8? 1 : 0 );
                 var e = dh.getBest();

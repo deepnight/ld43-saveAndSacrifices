@@ -45,6 +45,10 @@ class PathFinder {
     var nodes : Map<Int, Node>;
 
     public function new() {
+        parse();
+    }
+
+    public function parse() {
         nodes = new Map();
         for(cx in 0...level.wid)
         for(cy in 0...level.hei) {
@@ -74,6 +78,13 @@ class PathFinder {
 
             if( hasNodeAt(n.cx-1, n.cy-2) && !level.hasColl(n.cx,n.cy-1) && !level.hasColl(n.cx,n.cy-2) )
                 n.linkTo( getNodeAt(n.cx-1, n.cy-2), false );
+
+            // Very high jumps
+            if( hasNodeAt(n.cx+1, n.cy-3) && !level.hasColl(n.cx,n.cy-1) && !level.hasColl(n.cx,n.cy-2) && !level.hasColl(n.cx,n.cy-3) )
+                n.linkTo( getNodeAt(n.cx+1, n.cy-3), false );
+
+            if( hasNodeAt(n.cx-1, n.cy-3) && !level.hasColl(n.cx,n.cy-1) && !level.hasColl(n.cx,n.cy-2) && !level.hasColl(n.cx,n.cy-3) )
+                n.linkTo( getNodeAt(n.cx-1, n.cy-3), false );
 
             // Falls
             if( !level.hasColl(n.cx+1,n.cy) && !level.hasColl(n.cx+1,n.cy+1) ) {

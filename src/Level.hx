@@ -58,7 +58,8 @@ class Level extends mt.Process {
 					// game.hero3 = new en.Hero(m.x, m.y);
 
 				case Light :
-					new en.Light((m.x+m.width*0.5)*Const.GRID, (m.y+m.height*0.5)*Const.GRID, MLib.fmax(m.width, m.height)*Const.GRID*0.5);
+					new en.Light(m.x, m.y, 5*Const.GRID);
+					// new en.Light((m.x+m.width*0.5)*Const.GRID, (m.y+m.height*0.5)*Const.GRID, MLib.fmax(m.width, m.height)*Const.GRID*0.5);
 
 				case Door :
 					new en.Door(m.x, m.y, m.width, m.height, m.id);

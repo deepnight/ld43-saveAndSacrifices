@@ -19,7 +19,7 @@ class Mob extends Entity {
     }
 
     override function canBeKicked():Bool {
-        return isAlive();
+        return true;
     }
 
     public static function anyoneHolds(e:Peon) {

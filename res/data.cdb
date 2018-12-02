@@ -92,22 +92,29 @@
 							"height": 1
 						},
 						{
-							"x": 0,
-							"y": 12,
-							"marker": "Light",
-							"width": 6,
-							"height": 6
-						},
-						{
-							"x": 43,
-							"y": 12,
-							"marker": "Light",
-							"width": 6,
-							"height": 6
-						},
-						{
-							"x": 16,
+							"x": 1,
 							"y": 14,
+							"marker": "Peon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 2,
+							"y": 14,
+							"marker": "Light",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 45,
+							"y": 14,
+							"marker": "Light",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 0,
+							"y": 16,
 							"marker": "Peon",
 							"width": 1,
 							"height": 1
@@ -121,13 +128,6 @@
 						},
 						{
 							"x": 4,
-							"y": 16,
-							"marker": "Peon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 44,
 							"y": 16,
 							"marker": "Peon",
 							"width": 1,
@@ -163,6 +163,12 @@
 							"x": 24,
 							"y": 10,
 							"width": 3,
+							"height": 1
+						},
+						{
+							"x": 19,
+							"y": 12,
+							"width": 1,
 							"height": 1
 						},
 						{
@@ -202,6 +208,12 @@
 							"height": 3
 						},
 						{
+							"x": 1,
+							"y": 15,
+							"width": 3,
+							"height": 1
+						},
+						{
 							"x": 6,
 							"y": 15,
 							"width": 3,
@@ -226,9 +238,21 @@
 							"height": 2
 						},
 						{
+							"x": 44,
+							"y": 15,
+							"width": 3,
+							"height": 1
+						},
+						{
 							"x": 20,
 							"y": 16,
 							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 21,
+							"y": 16,
+							"width": 4,
 							"height": 1
 						},
 						{

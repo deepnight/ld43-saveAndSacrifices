@@ -5,10 +5,9 @@ class Light extends Entity {
     public var active = false;
     var halo : HSprite;
 
-    public function new(xx:Float,yy:Float, r:Float) {
-        super(0,0);
+    public function new(x,y, r:Float) {
+        super(x,y);
         ALL.push(this);
-        setPosPixel(xx,yy);
         hasGravity = false;
         hasColl = false;
         radius = r;
@@ -41,6 +40,20 @@ class Light extends Entity {
         level.rebuildLightMap();
     }
 
+    override function canBeKicked():Bool {
+        return active;
+    }
+
+    override function onKick(by:Hero) {
+        super.onKick(by);
+        turnOff();
+        dx*=0.5;
+        hasGravity = true;
+        hasColl = true;
+    }
+
+    override function checkLifters() {} // nope
+
     public function turnOff() {
         active = false;
         level.rebuildLightMap();
@@ -55,9 +68,9 @@ class Light extends Entity {
                     e.cd.setS("lighten", 0.15);
         }
 
-        if( !active )
-            for(e in Hero.ALL)
-                if( distPx(e)<=Const.GRID*2 )
-                    turnOn();
+        // if( !active )
+        //     for(e in Hero.ALL)
+        //         if( distPx(e)<=Const.GRID*2 )
+        //             turnOn();
     }
 }

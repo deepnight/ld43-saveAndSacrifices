@@ -20,6 +20,7 @@ class Peon extends Entity {
         speed = rnd(0.7,1);
         // lifter = true;
         path = [];
+        cd.setS("turboLock",rnd(2.5,6));
     }
 
     override function dispose() {
@@ -71,10 +72,11 @@ class Peon extends Entity {
     public function onRelease() {
         hasGravity = true;
         dx = dy = 0;
+        cd.setS("catchImmunity", 1);
     }
 
     override function canBeKicked():Bool {
-        return isAlive() && !Mob.anyoneHolds(this);
+        return !Mob.anyoneHolds(this);
     }
 
     override function onKick(by:Dynamic) {
@@ -83,7 +85,33 @@ class Peon extends Entity {
         cd.setS("stun",rnd(0.7,0.8));
     }
 
+    override function postUpdate() {
+        super.postUpdate();
+        spr.alpha = isInLight() ? 1 : 0.7;
+    }
+
+    function pickTargetLight() {
+        target = null;
+        var dh = new DecisionHelper(Light.ALL);
+        dh.keepOnly(function(e) return e.active);
+        dh.score(function(e) return -e.cx);
+        var nextLight = dh.getBest();
+        if( nextLight!=null ) {
+            fx.markerEntity(nextLight); // HACK
+            var dh = new DecisionHelper(mt.deepnight.Bresenham.getDisc(nextLight.cx, nextLight.cy, Std.int(nextLight.radius/Const.GRID)));
+            dh.keepOnly( function(pt) return !level.hasColl(pt.x,pt.y) && level.hasColl(pt.x,pt.y+1) );
+            dh.score( function(pt) return -Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)*0.25 );
+            dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)<=1 ? -3 : 0 );
+            dh.score( function(pt) return rnd(0,1) );
+            var pt = dh.getBest();
+            goto(pt.x, pt.y);
+        }
+    }
+
     override function update() {
+        if( onGround && !isInLight() && !cd.hasSetS("pickLightTarget",4) )
+            pickTargetLight();
+
         // Recompute path
         if( !aiLocked() && path.length>0 && onGround && invalidatePath ) {
             var last = path[path.length-1];
@@ -91,9 +119,13 @@ class Peon extends Entity {
         }
 
         if( !aiLocked() && !grabbing && target!=null ) {
+            if( !cd.has("turboLock") ) {
+                cd.setS("turbo",rnd(0.5,1.1));
+                cd.setS("turboLock",rnd(2.5,6));
+            }
             // Seek target
             if( !cd.has("walkLock") ) {
-                var s = speed * 0.008 * (onGround?1:0.5) * ( isLiftingSomeone() ? 0.3 : 1);
+                var s = speed * 0.008 * (onGround?1:0.5) * ( isLiftingSomeone() ? 0.3 : 1) * (cd.has("turbo")?2:1);
                 if( target.cx>cx || target.cx==cx && xr<0.5 ) {
                     dir = 1;
                     dx+=s*tmod;
@@ -197,6 +229,18 @@ class Peon extends Entity {
             dx = dir*0.16;
             dy = -0.17;
             cd.setS("jumping", 0.15);
+        }
+
+        // Stuck in wall
+        if( level.hasColl(cx,cy) && !Mob.anyoneHolds(this) && !cd.hasSetS("stuckWallLimit",0.5) ) {
+            var dh = new DecisionHelper( mt.deepnight.Bresenham.getDisc(cx,cy,3) );
+            dh.keepOnly( function(pt) return !level.hasColl(pt.x,pt.y) && level.hasColl(pt.x,pt.y+1) );
+            dh.score( function(pt) return -Lib.distance(cx,cy,pt.x,pt.y) );
+            var pt = dh.getBest();
+            if( pt!=null )
+                setPosCase(pt.x, pt.y);
+            else
+                dy = -0.2;
         }
     }
 }

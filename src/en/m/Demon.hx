@@ -30,7 +30,7 @@ class Demon extends en.Mob {
         dh.score( function(e) return Mob.anyoneHolds(e) ? -6 : Mob.anyoneTargets(e) ? 2 : 0 );
         dh.score( function(e) return -distCase(e) );
         target = dh.getBest();
-        cd.setS("keepTarget", rnd(4,5));
+        cd.setS("keepTarget", rnd(2,4));
         fx.markerEntity(target);
     }
 
@@ -108,13 +108,13 @@ class Demon extends en.Mob {
             // fx.markerFree(tx,ty, 0.1, 0xff0000);
 
             // Catch target!
-            if( distPx(target)<=6 && !Mob.anyoneHolds(target) ) {
+            if( distPx(target)<=8 && !Mob.anyoneHolds(target) && !target.cd.has("catchImmunity") ) {
                 isHoldingTarget = true;
                 target.onCatchByMob(this);
                 target.cd.setS("stillInteresting", rnd(2,3));
                 lockAiS(1);
                 cd.setS("slowFlyStart", 6.5);
-                dy = -rnd(0.07,0.08);
+                dy = level.hasColl(cx,cy) ? -rnd(0.15,0.17) : -rnd(0.07,0.08);
             }
         }
 
