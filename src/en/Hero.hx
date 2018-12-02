@@ -18,6 +18,7 @@ class Hero extends Entity {
         wings = Assets.gameElements.h_get("wings",0, 0.5,1);
         game.scroller.add(wings, Const.DP_BG);
         wings.setPosition(footX, footY);
+        wings.anim.registerStateAnim("wings",0);
 
         ring = Assets.gameElements.h_get("angelRing",0, 0.5,1);
         game.scroller.add(ring, Const.DP_BG);
@@ -60,7 +61,7 @@ class Hero extends Entity {
     override function postUpdate() {
         super.postUpdate();
         wings.x += (footX-dir*2-wings.x)*0.4;
-        wings.y += (footY-1-wings.y)*0.4 + (MLib.fabs(dx)>=0.05 ? Math.cos(ftime*0.4)*0.5 : 0);
+        wings.y += (footY+4-wings.y)*0.4 + (MLib.fabs(dx)>=0.05 ? Math.cos(ftime*0.4)*0.5 : 0);
         wings.scaleX = 1+Math.cos(ftime*0.035)*0.1;
 
         ring.x += (headX+dir-dir*2-ring.x)*0.3 + Math.cos(ftime*0.027)*0.5;
@@ -103,7 +104,7 @@ class Hero extends Entity {
             if( onGround || grabbing )
                 horizontalControl = 1;
             else
-                horizontalControl*=Math.pow(0.99,tmod);
+                horizontalControl*=Math.pow(0.999,tmod);
 
             // Walk
             if( !grabbing ) {
@@ -149,6 +150,7 @@ class Hero extends Entity {
                 cd.unset("extendJump");
                 // cd.setS("doubleJumpLock", Const.INFINITE);
                 cd.setS("doubleJumpLock", 0.2);
+                wings.anim.play("wingsFlap");
             }
             if( onGround || grabbing )
                 cd.unset("doubleJumpLock");
