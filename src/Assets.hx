@@ -27,5 +27,7 @@ class Assets {
 		gameElements = mt.heaps.slib.assets.Atlas.load("gameElements.atlas");
 		gameElements.defineAnim("peonRun", "0(4),1(10),0(4),2(7)");
 		gameElements.defineAnim("peonStunRise", "0(7),1(7)");
+		gameElements.defineAnim("heroKick", "0(2),1(8),2(4)");
+		gameElements.defineAnim("heroRun", "0(4),1(8),2(4),3(8)");
 	}
 }

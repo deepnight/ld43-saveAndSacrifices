@@ -18,13 +18,16 @@ class Hero extends Entity {
         wings = Assets.gameElements.h_get("wings",0, 0.5,1);
         game.scroller.add(wings, Const.DP_BG);
         wings.setPosition(footX, footY);
-        wings.blendMode = Add;
 
         ring = Assets.gameElements.h_get("angelRing",0, 0.5,1);
         game.scroller.add(ring, Const.DP_BG);
         ring.setPosition(headX, headY);
         ring.blendMode = Add;
 
+        spr.anim.registerStateAnim("heroGrab",9, function() return grabbing);
+        spr.anim.registerStateAnim("heroJumpUp",2, function() return !onGround && dy<0 );
+        spr.anim.registerStateAnim("heroJumpDown",2, function() return !onGround && dy>0 );
+        spr.anim.registerStateAnim("heroRun",1, function() return !grabbing && MLib.fabs(dx)>=0.05 );
         spr.anim.registerStateAnim("heroIdle",0);
     }
 
@@ -57,7 +60,7 @@ class Hero extends Entity {
     override function postUpdate() {
         super.postUpdate();
         wings.x += (footX-dir*2-wings.x)*0.4;
-        wings.y += (footY-wings.y)*0.4;
+        wings.y += (footY-1-wings.y)*0.4 + (MLib.fabs(dx)>=0.05 ? Math.cos(ftime*0.4)*0.5 : 0);
         wings.scaleX = 1+Math.cos(ftime*0.035)*0.1;
 
         ring.x += (headX+dir-dir*2-ring.x)*0.3 + Math.cos(ftime*0.027)*0.5;
@@ -180,7 +183,10 @@ class Hero extends Entity {
             }
 
             // Kick
-            if( ca.xPressed() ) {
+            if( ca.xPressed() && !cd.hasSetS("kick",0.15) ) {
+                spr.anim.play("heroKick");
+                dx = 0.1*dir;
+                dy = -0.1;
                 var dh = new DecisionHelper(Entity.ALL);
                 dh.remove( function(e) return !e.isAlive() || distCase(e)>1.5 || !e.canBeKicked() );
                 dh.score( function(e) return Std.is(e,Mob) ? ( e.as(Mob).isHoldingTarget ? 20 : 5 ) : 0);
