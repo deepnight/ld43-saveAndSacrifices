@@ -57,14 +57,18 @@ class Peon extends Entity {
             super.checkLifters();
     }
 
+    function aiLocked() {
+        return cd.has("stun") || cd.has("aiLock");
+    }
+
     override function update() {
         // Recompute path
-        if( path.length>0 && onGround && invalidatePath ) {
+        if( !aiLocked() && path.length>0 && onGround && invalidatePath ) {
             var last = path[path.length-1];
             goto(last.cx, last.cy);
         }
 
-        if( !grabbing && target!=null ) {
+        if( !aiLocked() && !grabbing && target!=null ) {
             // Seek target
             if( !cd.has("walkLock") ) {
                 var s = speed * 0.008 * (onGround?1:0.5) * ( isLiftingSomeone() ? 0.3 : 1);
@@ -98,6 +102,8 @@ class Peon extends Entity {
                 if( onGround && target.cy<cy-1 && ( dir==1 && xr>=0.6 || dir==-1 && xr<=0.4 ) && !cd.hasSetS("jump",rnd(0.2,0.4)) ) {
                     dy = -0.21;
                     dir = target.cx<cx ? -1 : 1;
+                    if( target.cy==cy-1 && MLib.fabs(xr-0.5)<=0.2 )
+                        dx = dir*0.1;
                     cd.setS("walkLock", 1);
                     cd.setS("jumping", 0.10);
                 }
@@ -122,7 +128,7 @@ class Peon extends Entity {
                 fx.markerCase(target.cx, target.cy, 0.2, 0x990000);
             #end
         }
-        else if( !grabbing ) {
+        else if( !aiLocked() && !grabbing ) {
             // Wander
             if( !cd.hasSetS("wander", rnd(0.7,1)) )
                 targetXr = rnd(0.1,0.9);
@@ -148,7 +154,7 @@ class Peon extends Entity {
         super.update();
 
         // Ledge grabbing
-        if( dumbMode || target!=null && target.cy<cy ) {
+        if( !aiLocked() && ( dumbMode || target!=null && target.cy<cy ) ) {
             if( dir==1 && level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.6 && yr>=0.6 && !level.hasColl(cx+1,cy-1) )
                 grabAt(cx,cy);
             if( dir==-1 && level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.4 && yr>=0.6 && !level.hasColl(cx-1,cy-1) )
@@ -158,6 +164,9 @@ class Peon extends Entity {
             if( dir==-1 && level.hasSpot("grabLeftUp",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.4 && !level.hasColl(cx,cy-1) && !level.hasColl(cx-1,cy-2) )
                 grabAt(cx,cy-1);
         }
+
+        if( cd.has("stun") && grabbing )
+            grabbing = false;
 
         // Leave grab
         if( grabbing && !cd.has("maintainGrab") ) {

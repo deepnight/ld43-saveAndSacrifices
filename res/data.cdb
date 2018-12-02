@@ -57,16 +57,16 @@
 					],
 					"markers": [
 						{
-							"x": 15,
-							"y": 13,
-							"marker": "Hero1",
+							"x": 17,
+							"y": 11,
+							"marker": "Peon",
 							"width": 1,
 							"height": 1
 						},
 						{
-							"x": 13,
-							"y": 15,
-							"marker": "Peon",
+							"x": 30,
+							"y": 12,
+							"marker": "Hero1",
 							"width": 1,
 							"height": 1
 						}
@@ -97,21 +97,45 @@
 					},
 					"collisions": [
 						{
-							"x": 24,
+							"x": 19,
 							"y": 7,
+							"width": 1,
+							"height": 2
+						},
+						{
+							"x": 21,
+							"y": 7,
+							"width": 6,
+							"height": 1
+						},
+						{
+							"x": 27,
+							"y": 7,
+							"width": 2,
+							"height": 1
+						},
+						{
+							"x": 26,
+							"y": 8,
 							"width": 1,
 							"height": 1
 						},
 						{
-							"x": 24,
-							"y": 8,
-							"width": 1,
+							"x": 19,
+							"y": 9,
+							"width": 6,
 							"height": 1
 						},
 						{
 							"x": 26,
 							"y": 9,
 							"width": 1,
+							"height": 2
+						},
+						{
+							"x": 29,
+							"y": 9,
+							"width": 2,
 							"height": 1
 						},
 						{
@@ -121,9 +145,21 @@
 							"height": 3
 						},
 						{
-							"x": 22,
+							"x": 19,
 							"y": 11,
-							"width": 4,
+							"width": 8,
+							"height": 1
+						},
+						{
+							"x": 21,
+							"y": 11,
+							"width": 1,
+							"height": 2
+						},
+						{
+							"x": 27,
+							"y": 11,
+							"width": 2,
 							"height": 1
 						},
 						{
