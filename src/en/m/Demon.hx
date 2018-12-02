@@ -46,8 +46,6 @@ class Demon extends en.Mob {
         if( target==null )
             return;
 
-        if( target.isAlive() )
-            target.onRelease();
         target = null;
     }
 

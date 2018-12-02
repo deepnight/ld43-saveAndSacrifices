@@ -8,7 +8,6 @@ class Level extends mt.Process {
     public var wid(get,never) : Int; inline function get_wid() return infos.width;
     public var hei(get,never) : Int; inline function get_hei() return infos.height;
     public var collMap : Map<Int,Bool>;
-    public var lightMap  : Map<Int,Bool>;
 	public var pf : PathFinder;
 	var spots : Map<String, Map<Int,Bool>>;
 
@@ -16,18 +15,26 @@ class Level extends mt.Process {
 		super(Game.ME);
 
 		Game.ME.level = this;
-		createRootInLayers(Game.ME.scroller, Const.DP_BG);
-
 		lid = id;
 		infos = Data.room.get(lid);
-        collMap = new Map();
-        lightMap = new Map();
-		spots = new Map();
-		for(m in infos.collisions)
-			for(x in m.x...m.x+m.width)
-			for(y in m.y...m.y+m.height)
-				setColl(x,y, true);
 
+		createRootInLayers(Game.ME.scroller, Const.DP_BG);
+
+		// Init collisions
+        collMap = new Map();
+		for(l in infos.layers) {
+			if( l.name=="collisions" )
+				for(t in CdbHelper.getLayerPoints(l.data, wid))
+					setColl(t.cx, t.cy, true);
+		}
+		// for(m in infos.collisions)
+		// 	for(x in m.x...m.x+m.width)
+		// 	for(y in m.y...m.y+m.height)
+		// 		setColl(x,y, true);
+
+
+		// Spots
+		spots = new Map();
 		for(cx in 0...wid)
 		for(cy in 0...hei) {
 			if( hasColl(cx,cy) && !hasColl(cx,cy-1) ) {
@@ -103,13 +110,6 @@ class Level extends mt.Process {
 		}
 	}
 
-	public function setLight(cx:Int,cy:Int,light:Bool) {
-		if( isValid(cx,cy) )
-			lightMap.set(coordId(cx,cy), light);
-	}
-
-	public inline function hasLight(cx:Int,cy:Int) return isValid(cx,cy) && lightMap.get(coordId(cx,cy))==true;
-
 	public function isValid(cx:Float,cy:Float) {
 		return cx>=0 && cx<wid && cy>=0 && cy<hei;
 	}
@@ -150,16 +150,6 @@ class Level extends mt.Process {
 			if( m.markerId==id )
 				a.push( new CPoint(m.x, m.y) );
 		return a;
-	}
-
-	public function rebuildLightMap() {
-		lightMap = new Map();
-
-		for(e in en.Light.ALL)
-			if( e.active )
-				mt.deepnight.Bresenham.iterateDisc(e.cx, e.cy, MLib.ceil(e.radius/Const.GRID), function(cx,cy) {
-					setLight(cx,cy, true);
-				});
 	}
 
 	override function postUpdate() {

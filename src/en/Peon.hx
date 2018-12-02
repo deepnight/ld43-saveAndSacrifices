@@ -22,7 +22,10 @@ class Peon extends Entity {
 
         spr.set("peonIdle");
         spr.anim.registerStateAnim("peonIdle",10, function() return Mob.anyoneHolds(this));
-        spr.anim.registerStateAnim("peonGrab",3, function() return grabbing);
+        spr.anim.registerStateAnim("peonGrab",9, function() return grabbing);
+        spr.anim.registerStateAnim("peonStunRise",5, function() return cd.has("stun") && onGround && cd.getS("stun")<=0.5 );
+        spr.anim.registerStateAnim("peonStunAir",4, function() return cd.has("stun") && !onGround);
+        spr.anim.registerStateAnim("peonStunGround",3, function() return cd.has("stun"));
         spr.anim.registerStateAnim("peonJumpUp",2, function() return !onGround && dy<0 );
         spr.anim.registerStateAnim("peonJumpDown",2, function() return !onGround && dy>0 );
         spr.anim.registerStateAnim("peonRun",1, function() return target!=null && !grabbing && !Mob.anyoneHolds(this) && !aiLocked() && MLib.fabs(dx)>=0.03*speed );
@@ -79,6 +82,7 @@ class Peon extends Entity {
         hasGravity = true;
         dx = dy = 0;
         cd.setS("catchImmunity", 1);
+        cd.setS("stun", rnd(1.1,1.3));
     }
 
     override function canBeKicked():Bool {
@@ -89,7 +93,7 @@ class Peon extends Entity {
         super.onKick(by);
         invalidatePath = true;
         grabbing = false;
-        cd.setS("stun",rnd(0.7,0.8));
+        cd.setS("stun",rnd(1,1.2));
         cd.setS("kickLock", 0.25);
     }
 
@@ -213,7 +217,7 @@ class Peon extends Entity {
         super.update();
 
         // Ledge grabbing
-        if( !aiLocked() && !onGround && dy>0 /*( dumbMode || target!=null && target.cy<cy )*/ ) {
+        if( !cd.has("stun") && !aiLocked() && !onGround && dy>0 ) {
             if( dir==1 && level.hasSpot("grabRight",cx,cy) && xr>=0.3 && yr>=0.5 && !level.hasColl(cx+1,cy-1) )
                 grabAt(cx,cy);
             if( dir==-1 && level.hasSpot("grabLeft",cx,cy) && xr<=0.7 && yr>=0.5 && !level.hasColl(cx-1,cy-1) )
@@ -224,7 +228,7 @@ class Peon extends Entity {
             //     grabAt(cx,cy-1);
         }
 
-        if( cd.has("stun") && grabbing )
+        if( grabbing && cd.has("stun") )
             grabbing = false;
 
         // Leave grab

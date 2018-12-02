@@ -37,7 +37,6 @@ class Light extends Entity {
 
     public function turnOn() {
         active = true;
-        level.rebuildLightMap();
     }
 
     override function canBeKicked():Bool {
@@ -56,7 +55,6 @@ class Light extends Entity {
 
     public function turnOff() {
         active = false;
-        level.rebuildLightMap();
     }
 
     override function update() {

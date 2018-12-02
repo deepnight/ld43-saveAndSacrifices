@@ -6,21 +6,21 @@ filter: Linear,Linear
 repeat: none
 circle0
   rotate: false
-  xy: 1, 50
+  xy: 19, 59
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 dot0
   rotate: false
-  xy: 48, 50
+  xy: 61, 69
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 dotGlow0
   rotate: false
-  xy: 59, 69
+  xy: 51, 69
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
@@ -34,14 +34,14 @@ guy0
   index: -1
 guy1
   rotate: false
-  xy: 48, 69
+  xy: 52, 51
   size: 9, 16
   orig: 16, 16
   offset: 3, 0
   index: -1
 guy2
   rotate: false
-  xy: 48, 69
+  xy: 52, 51
   size: 9, 16
   orig: 16, 16
   offset: 3, 0
@@ -62,42 +62,70 @@ peonIdle0
   index: -1
 peonJumpDown0
   rotate: false
-  xy: 1, 67
+  xy: 36, 68
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonJumpUp0
   rotate: false
-  xy: 18, 50
+  xy: 37, 50
   size: 13, 16
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun0
   rotate: false
-  xy: 48, 53
+  xy: 35, 85
   size: 13, 14
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun1
   rotate: false
-  xy: 33, 67
+  xy: 50, 85
   size: 13, 14
   orig: 16, 16
   offset: 2, 1
   index: -1
 peonRun2
   rotate: false
-  xy: 33, 50
+  xy: 1, 79
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
+peonStunAir0
+  rotate: false
+  xy: 1, 50
+  size: 16, 10
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+peonStunGround0
+  rotate: false
+  xy: 19, 50
+  size: 16, 7
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+peonStunRise0
+  rotate: false
+  xy: 1, 62
+  size: 15, 15
+  orig: 16, 16
+  offset: 1, 0
+  index: -1
+peonStunRise1
+  rotate: false
+  xy: 18, 76
+  size: 15, 15
+  orig: 16, 16
+  offset: 1, 0
+  index: -1
 pixel
   rotate: false
-  xy: 59, 74
+  xy: 56, 69
   size: 3, 3
   orig: 1, 1
   offset: 0, -2
