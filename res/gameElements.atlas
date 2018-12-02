@@ -4,23 +4,30 @@ size: 64,128
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+angelRing0
+  rotate: false
+  xy: 52, 35
+  size: 11, 9
+  orig: 13, 11
+  offset: 1, 2
+  index: -1
 circle0
   rotate: false
-  xy: 19, 59
+  xy: 1, 84
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 dot0
   rotate: false
-  xy: 61, 69
+  xy: 19, 118
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 dotGlow0
   rotate: false
-  xy: 51, 69
+  xy: 60, 99
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
@@ -34,17 +41,24 @@ guy0
   index: -1
 guy1
   rotate: false
-  xy: 52, 51
+  xy: 35, 84
   size: 9, 16
   orig: 16, 16
   offset: 3, 0
   index: -1
 guy2
   rotate: false
-  xy: 52, 51
+  xy: 35, 84
   size: 9, 16
   orig: 16, 16
   offset: 3, 0
+  index: -1
+heroIdle0
+  rotate: false
+  xy: 1, 50
+  size: 21, 32
+  orig: 32, 32
+  offset: 9, 0
   index: -1
 peonGrab0
   rotate: false
@@ -55,77 +69,77 @@ peonGrab0
   index: -1
 peonIdle0
   rotate: false
-  xy: 52, 35
+  xy: 48, 99
   size: 10, 14
   orig: 16, 16
   offset: 3, 0
   index: -1
 peonJumpDown0
   rotate: false
-  xy: 36, 68
+  xy: 18, 101
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonJumpUp0
   rotate: false
-  xy: 37, 50
+  xy: 33, 102
   size: 13, 16
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun0
   rotate: false
-  xy: 35, 85
+  xy: 49, 67
   size: 13, 14
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun1
   rotate: false
-  xy: 50, 85
+  xy: 46, 83
   size: 13, 14
   orig: 16, 16
   offset: 2, 1
   index: -1
 peonRun2
   rotate: false
-  xy: 1, 79
+  xy: 49, 50
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonStunAir0
   rotate: false
-  xy: 1, 50
+  xy: 24, 72
   size: 16, 10
   orig: 16, 16
   offset: 0, 0
   index: -1
 peonStunGround0
   rotate: false
-  xy: 19, 50
+  xy: 1, 118
   size: 16, 7
   orig: 16, 16
   offset: 0, 0
   index: -1
 peonStunRise0
   rotate: false
-  xy: 1, 62
+  xy: 1, 101
   size: 15, 15
   orig: 16, 16
   offset: 1, 0
   index: -1
 peonStunRise1
   rotate: false
-  xy: 18, 76
+  xy: 18, 84
   size: 15, 15
   orig: 16, 16
   offset: 1, 0
   index: -1
 pixel
   rotate: false
-  xy: 56, 69
+  xy: 60, 104
   size: 3, 3
   orig: 1, 1
   offset: 0, -2
@@ -136,4 +150,11 @@ smoke0
   size: 49, 47
   orig: 52, 52
   offset: 2, 4
+  index: -1
+wings0
+  rotate: false
+  xy: 24, 50
+  size: 23, 20
+  orig: 32, 32
+  offset: 4, 0
   index: -1

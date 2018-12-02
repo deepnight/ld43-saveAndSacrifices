@@ -7,17 +7,32 @@ class Hero extends Entity {
     public var active = false;
     var horizontalControl = 1.0;
     var grabbing = false;
+    var wings : HSprite;
+    var ring : HSprite;
 
     public function new(x,y) {
         super(x,y);
         ALL.push(this);
         lifter = true;
-        spr.set("guy",1);
+
+        wings = Assets.gameElements.h_get("wings",0, 0.5,1);
+        game.scroller.add(wings, Const.DP_BG);
+        wings.setPosition(footX, footY);
+        wings.blendMode = Add;
+
+        ring = Assets.gameElements.h_get("angelRing",0, 0.5,1);
+        game.scroller.add(ring, Const.DP_BG);
+        ring.setPosition(headX, headY);
+        ring.blendMode = Add;
+
+        spr.anim.registerStateAnim("heroIdle",0);
     }
 
     override function dispose() {
         super.dispose();
         ALL.remove(this);
+        wings.remove();
+        ring.remove();
     }
 
     public function deactivate() {
@@ -41,6 +56,14 @@ class Hero extends Entity {
 
     override function postUpdate() {
         super.postUpdate();
+        wings.x += (footX-dir*2-wings.x)*0.4;
+        wings.y += (footY-wings.y)*0.4;
+        wings.scaleX = 1+Math.cos(ftime*0.035)*0.1;
+
+        ring.x += (headX+dir-dir*2-ring.x)*0.3 + Math.cos(ftime*0.027)*0.5;
+        ring.y += (headY-7-ring.y)*0.3 + Math.sin(ftime*0.021)*0.5;
+        ring.rotation += Lib.angularSubstractionRad( -dir*0.1, ring.rotation )*0.2;
+
         spr.alpha = active ? 1 : 0.5;
         if( isLiftingSomeone() || level.hasColl(cx,cy) || level.hasColl(cx,cy-1) )
             spr.scaleX*=1.2;
