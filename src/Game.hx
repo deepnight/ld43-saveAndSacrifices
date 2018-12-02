@@ -7,12 +7,11 @@ class Game extends mt.Process {
 	public static var ME : Game;
 
 	public var ca : mt.heaps.Controller.ControllerAccess;
-	public var hero1 : en.h.Ghost;
-	public var hero2 : en.Hero;
-	public var hero3 : en.Hero;
+	public var hero : en.h.Ghost;
 	public var level : Level;
 	public var fx : Fx;
 	public var scroller : h2d.Layers;
+	public var viewport : Viewport;
 
 	public function new() {
 		super(Main.ME);
@@ -25,6 +24,9 @@ class Game extends mt.Process {
 
 		fx = new Fx();
 		level = new Level(Test);
+
+		viewport = new Viewport();
+		viewport.track(hero, true);
 	}
 
 	public function onCdbReload() {
@@ -57,15 +59,17 @@ class Game extends mt.Process {
 		gc();
 
 
-		// Global controls
-		if( ca.xPressed() ) {
-			if( hero1.active )
-				hero2.activate();
-			else if( hero2.active )
-				hero3.activate();
-			else
-				hero1.activate();
-		}
+		// Change active hero
+		// if( ca.xPressed() ) {
+		// 	if( hero1.active )
+		// 		hero2.activate();
+		// 	else if( hero2.active )
+		// 		hero3.activate();
+		// 	else
+		// 		hero1.activate();
+		// }
+
+		// Restart
 		if( ca.selectPressed() )
 			Main.ME.startGame();
 	}

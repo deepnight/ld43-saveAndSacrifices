@@ -9,6 +9,7 @@ class Level extends mt.Process {
     public var hei(get,never) : Int; inline function get_hei() return infos.height;
     public var collMap : Map<Int,Bool>;
     public var lightMap  : Map<Int,Bool>;
+	public var pf : PathFinder;
 	var spots : Map<String, Map<Int,Bool>>;
 
     public function new(id:Data.RoomKind) {
@@ -41,18 +42,20 @@ class Level extends mt.Process {
 			}
 		}
 
+		pf = new PathFinder();
+
 		// Attach entities
 		for(m in infos.markers)
 			switch( m.markerId ) {
 				case Hero1 :
-					game.hero1 = new en.h.Ghost(m.x, m.y);
-					game.hero1.activate();
+					game.hero = new en.h.Ghost(m.x, m.y);
+					game.hero.activate();
 
 				case Hero2 :
-					game.hero2 = new en.Hero(m.x, m.y);
+					// game.hero2 = new en.Hero(m.x, m.y);
 
 				case Hero3 :
-					game.hero3 = new en.Hero(m.x, m.y);
+					// game.hero3 = new en.Hero(m.x, m.y);
 
 				case Light :
 					new en.Light((m.x+m.width*0.5)*Const.GRID, (m.y+m.height*0.5)*Const.GRID, MLib.fmax(m.width, m.height)*Const.GRID*0.5);
@@ -62,6 +65,9 @@ class Level extends mt.Process {
 
 				case Touchplate :
 					new en.Touchplate(m.x, m.y, m.id);
+
+				case Peon :
+					new en.Peon(m.x, m.y);
 			}
 
 		render();
@@ -150,12 +156,13 @@ class Level extends mt.Process {
 
 	override function postUpdate() {
 		super.postUpdate();
-		if( !cd.hasSetS("darkness",0.5) ) {
-			for( cx in 0...wid)
-			for( cy in 0...hei)
-				if( !hasLight(cx,cy) )
-					fx.darkness((cx+0.5)*Const.GRID, (cy+0.5)*Const.GRID, 0x121118);
-		}
+
+		// if( !cd.hasSetS("darkness",0.5) ) {
+		// 	for( cx in 0...wid)
+		// 	for( cy in 0...hei)
+		// 		if( !hasLight(cx,cy) )
+		// 			fx.darkness((cx+0.5)*Const.GRID, (cy+0.5)*Const.GRID, 0x121118);
+		// }
 	}
 
 	override function update() {

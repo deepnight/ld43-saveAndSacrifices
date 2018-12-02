@@ -41,8 +41,8 @@
 			"lines": [
 				{
 					"id": "Test",
-					"width": 30,
-					"height": 13,
+					"width": 50,
+					"height": 20,
 					"tileProps": [],
 					"layers": [
 						{
@@ -51,66 +51,22 @@
 								"file": "levelTiles.png",
 								"size": 16,
 								"stride": 16,
-								"data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAIAAwABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAwAAAAAAAAAAABIAEwABAAIAAwAAAAAAAAAAAAAAAAACAAMAEgATAAEAAAAAAAAAAAAAAAAAAQABABIAEwAAAAAAAAAAAAAAAAAAABIAEwABAAEAAQABAAEAAQASABMAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQABAAIAAwABAAEAAQAAAAAAAQABAAEAAQABAAEAAQASABMAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEAAQABABIAEwABAAEAAAAAAAAAAQAAAAMAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAEAAQACAAMAAQABAAEAAgADAAEAAQABAAEAAQASABMAAQABAAEAAgADAAEAAQABAAEAAQACAAMA"
+								"data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 							}
 						}
 					],
 					"markers": [
 						{
 							"x": 15,
-							"y": 0,
-							"marker": "Door",
-							"width": 1,
-							"height": 7,
-							"id": "a"
-						},
-						{
-							"x": 12,
-							"y": 6,
-							"marker": "Light",
-							"width": 6,
-							"height": 6
-						},
-						{
-							"x": 1,
-							"y": 7,
-							"marker": "Light",
-							"width": 5,
-							"height": 5
-						},
-						{
-							"x": 17,
-							"y": 9,
-							"marker": "Touchplate",
-							"width": 1,
-							"height": 1,
-							"id": "a"
-						},
-						{
-							"x": 4,
-							"y": 10,
+							"y": 13,
 							"marker": "Hero1",
 							"width": 1,
 							"height": 1
 						},
 						{
-							"x": 25,
-							"y": 10,
-							"marker": "Light",
-							"width": 3,
-							"height": 3
-						},
-						{
-							"x": 2,
-							"y": 11,
-							"marker": "Hero2",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 3,
-							"y": 11,
-							"marker": "Hero3",
+							"x": 13,
+							"y": 15,
+							"marker": "Peon",
 							"width": 1,
 							"height": 1
 						}
@@ -139,6 +95,134 @@
 							}
 						]
 					},
+					"collisions": [
+						{
+							"x": 24,
+							"y": 7,
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 24,
+							"y": 8,
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 26,
+							"y": 9,
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 5,
+							"y": 11,
+							"width": 1,
+							"height": 3
+						},
+						{
+							"x": 22,
+							"y": 11,
+							"width": 4,
+							"height": 1
+						},
+						{
+							"x": 32,
+							"y": 11,
+							"width": 2,
+							"height": 2
+						},
+						{
+							"x": 17,
+							"y": 12,
+							"width": 1,
+							"height": 4
+						},
+						{
+							"x": 10,
+							"y": 13,
+							"width": 3,
+							"height": 3
+						},
+						{
+							"x": 18,
+							"y": 13,
+							"width": 4,
+							"height": 1
+						},
+						{
+							"x": 28,
+							"y": 13,
+							"width": 6,
+							"height": 1
+						},
+						{
+							"x": 39,
+							"y": 13,
+							"width": 1,
+							"height": 2
+						},
+						{
+							"x": 4,
+							"y": 14,
+							"width": 3,
+							"height": 1
+						},
+						{
+							"x": 9,
+							"y": 14,
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 15,
+							"y": 14,
+							"width": 2,
+							"height": 2
+						},
+						{
+							"x": 18,
+							"y": 14,
+							"width": 4,
+							"height": 1
+						},
+						{
+							"x": 22,
+							"y": 14,
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 26,
+							"y": 14,
+							"width": 4,
+							"height": 2
+						},
+						{
+							"x": 8,
+							"y": 15,
+							"width": 2,
+							"height": 1
+						},
+						{
+							"x": 36,
+							"y": 15,
+							"width": 5,
+							"height": 1
+						},
+						{
+							"x": 0,
+							"y": 16,
+							"width": 50,
+							"height": 4
+						}
+					]
+				},
+				{
+					"id": "TestBak",
+					"width": 30,
+					"height": 13,
+					"tileProps": [],
 					"collisions": [
 						{
 							"x": 6,
@@ -296,7 +380,102 @@
 							"width": 30,
 							"height": 1
 						}
-					]
+					],
+					"layers": [
+						{
+							"name": "bgTiles",
+							"data": {
+								"file": "levelTiles.png",
+								"size": 16,
+								"stride": 16,
+								"data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAIAAwABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAwAAAAAAAAAAABIAEwABAAIAAwAAAAAAAAAAAAAAAAACAAMAEgATAAEAAAAAAAAAAAAAAAAAAQABABIAEwAAAAAAAAAAAAAAAAAAABIAEwABAAEAAQABAAEAAQASABMAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQABAAIAAwABAAEAAQAAAAAAAQABAAEAAQABAAEAAQASABMAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEAAQABABIAEwABAAEAAAAAAAAAAQAAAAMAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAEAAQACAAMAAQABAAEAAgADAAEAAQABAAEAAQASABMAAQABAAEAAgADAAEAAQABAAEAAQACAAMA"
+							}
+						}
+					],
+					"markers": [
+						{
+							"x": 15,
+							"y": 0,
+							"marker": "Door",
+							"width": 1,
+							"height": 7,
+							"id": "a"
+						},
+						{
+							"x": 12,
+							"y": 6,
+							"marker": "Light",
+							"width": 6,
+							"height": 6
+						},
+						{
+							"x": 1,
+							"y": 7,
+							"marker": "Light",
+							"width": 5,
+							"height": 5
+						},
+						{
+							"x": 17,
+							"y": 9,
+							"marker": "Touchplate",
+							"width": 1,
+							"height": 1,
+							"id": "a"
+						},
+						{
+							"x": 4,
+							"y": 10,
+							"marker": "Hero1",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 25,
+							"y": 10,
+							"marker": "Light",
+							"width": 3,
+							"height": 3
+						},
+						{
+							"x": 2,
+							"y": 11,
+							"marker": "Hero2",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 3,
+							"y": 11,
+							"marker": "Hero3",
+							"width": 1,
+							"height": 1
+						}
+					],
+					"props": {
+						"tileSize": 16,
+						"layers": [
+							{
+								"l": "markers",
+								"p": {
+									"alpha": 0.53
+								}
+							},
+							{
+								"l": "collisions",
+								"p": {
+									"alpha": 1,
+									"color": 16711680
+								}
+							},
+							{
+								"l": "bgTiles",
+								"p": {
+									"alpha": 0.6
+								}
+							}
+						]
+					}
 				}
 			],
 			"separators": [],
@@ -384,6 +563,16 @@
 						"file": "levelTiles.png",
 						"size": 16,
 						"x": 2,
+						"y": 30
+					}
+				},
+				{
+					"color": 16713409,
+					"id": "Peon",
+					"icon": {
+						"file": "levelTiles.png",
+						"size": 16,
+						"x": 1,
 						"y": 30
 					}
 				},

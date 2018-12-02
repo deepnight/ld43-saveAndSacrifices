@@ -80,11 +80,11 @@ class Hero extends Entity {
             if( !grabbing ) {
                 var spd = 0.017;
                 if( ca.leftDown() ) {
-                    dx-=spd*tmod * horizontalControl * -ca.lxValue();
+                    dx-=spd*tmod * horizontalControl * (ca.isGamePad()?-ca.lxValue():1);
                     dir = -1;
                 }
                 if( ca.rightDown() ) {
-                    dx+=spd*tmod * horizontalControl * ca.lxValue();
+                    dx+=spd*tmod * horizontalControl * (ca.isGamePad()?ca.lxValue():1);
                     dir = 1;
                 }
             }
@@ -120,16 +120,15 @@ class Hero extends Entity {
             // Jump
             if( ca.aDown() && !level.hasColl(cx,cy) )
                 if( !cd.has("jumpLock") && ( grabbing || onGround || cd.has("onGroundRecently") ) ) {
-                    if( isLiftingSomeone() ) {
-                        dy = -0.06;
-                        // pushLifteds(0,-0.07);
-                        cd.setS("doubleJumpLock", Const.INFINITE);
-                        cd.unset("extendJump");
-                    }
-                    else {
+                    // if( isLiftingSomeone() ) {
+                    //     dy = -0.06;
+                    //     cd.setS("doubleJumpLock", Const.INFINITE);
+                    //     cd.unset("extendJump");
+                    // }
+                    // else {
                         dy = -0.3;
-                        // if( isLifted() )
-                            // dy-=0.1;
+                        if( isLiftingSomeone() )
+                            cd.unset("lifting");
                         if( grabbing ) {
                             hasGravity = true;
                             grabbing = false;
@@ -137,7 +136,7 @@ class Hero extends Entity {
                         cd.unset("onGroundRecently");
                         cd.setS("extendJump", 0.1);
                         cd.unset("lifted");
-                    }
+                    // }
                 }
                 else if( cd.has("extendJump") )
                     dy -= 0.037*tmod;
@@ -151,6 +150,18 @@ class Hero extends Entity {
 
             if( ca.bDown() )
                 game.fx.markerCase(cx,cy);
+
+            // Call peon
+            if( ca.xPressed() ) {
+                for(e in Peon.ALL)
+                    e.goto(cx,cy);
+            }
+
+            // Kill peon
+            if( ca.yPressed() ) {
+                for(e in Peon.ALL)
+                    e.destroy();
+            }
         }
     }
 }

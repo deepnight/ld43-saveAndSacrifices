@@ -17,7 +17,7 @@ class Console extends h2d.Console {
 		// Console flags
 		flags = new Map();
 		this.addCommand("set", [{ name:"k", t:AString }], function(k:String) {
-			set(k,true);
+			setFlag(k,true);
 			log("+ "+k, 0x80FF00);
 		});
 		this.addCommand("unset", [{ name:"k", t:AString, opt:true } ], function(?k:String) {
@@ -27,7 +27,7 @@ class Console extends h2d.Console {
 			}
 			else {
 				log("- "+k,0xFF8000);
-				set(k,false);
+				setFlag(k,false);
 			}
 		});
 		this.addAlias("+","set");
@@ -36,7 +36,7 @@ class Console extends h2d.Console {
 	}
 
 	#if debug
-	public function set(k:String,v) return flags.set(k,v);
-	public function has(k:String) return flags.get(k)==true;
+	public function setFlag(k:String,v) return flags.set(k,v);
+	public function hasFlag(k:String) return flags.get(k)==true;
 	#end
 }

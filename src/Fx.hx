@@ -85,33 +85,34 @@ class Fx extends mt.Process {
 		if( e==null )
 			return;
 
-		markerCase(e.cx, e.cy, c, short);
+		markerCase(e.cx, e.cy, short?0.03:3, c);
 		#end
 	}
 
-	public function markerCase(cx:Int, cy:Int, ?c=0xFF00FF, ?short=false) {
+	public function markerCase(cx:Int, cy:Int, ?sec=3.0, ?c=0xFF00FF) {
 		var p = allocTopAdd(getTile("circle"), (cx+0.5)*Const.GRID, (cy+0.5)*Const.GRID);
 		p.setFadeS(1, 0, 0.06);
 		p.colorize(c);
 		p.frict = 0.92;
-		p.lifeS = short ? 0.06 : 3;
+		p.lifeS = sec;
 
 		var p = allocTopAdd(getTile("dot"), (cx+0.5)*Const.GRID, (cy+0.5)*Const.GRID);
 		p.setFadeS(1, 0, 0.06);
 		p.colorize(c);
 		p.setScale(2);
 		p.frict = 0.92;
-		p.lifeS = short ? 0.06 : 3;
+		p.lifeS = sec;
 	}
 
-	public function markerFree(x:Float, y:Float, ?c=0xFF00FF, ?short=false) {
+	public function markerFree(x:Float, y:Float, ?sec=3.0, ?c=0xFF00FF) {
 		var p = allocTopAdd(getTile("dot"), x,y);
+		p.setCenterRatio(0.5,0.5);
 		p.setFadeS(1, 0, 0.06);
 		p.colorize(c);
 		p.setScale(3);
-		p.dr = 0.3;
+		// p.dr = 0.3;
 		p.frict = 0.92;
-		p.lifeS = short ? 0.06 : 3;
+		p.lifeS = sec;
 	}
 
 	public function markerText(cx:Int, cy:Int, txt:String, ?t=1.0) {

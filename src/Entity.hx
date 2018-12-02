@@ -69,6 +69,10 @@ class Entity {
 		return dir = v>0 ? 1 : v<0 ? -1 : dir;
 	}
 
+	public inline function isAlive() {
+		return !destroyed;
+	}
+
 	public function setPosCase(x:Int, y:Int) {
 		cx = x;
 		cy = y;
@@ -108,6 +112,12 @@ class Entity {
 
     public function dispose() {
         ALL.remove(this);
+
+		spr.remove();
+		spr = null;
+
+		cd.destroy();
+		cd = null;
     }
 
     function onLand() {
@@ -154,7 +164,8 @@ class Entity {
                 cy = e.cy-1;
                 yr = e.yr;
                 dy = 0;
-				e.dy = 0;
+				if( e.dy<0 )
+					e.dy = 0;
                 cd.setF("lifted",2);
 				e.cd.setF("lifting", 2);
             }
@@ -197,8 +208,8 @@ class Entity {
 			steps--;
 		}
 		dx*=Math.pow(frict,tmod);
-		if( MLib.fabs(dx)<=0.01*tmod )
-			dx = 0;
+		// if( MLib.fabs(dx)<=0.001*tmod )
+		// 	dx = 0;
 
 		// Gravity
 		if( !onGround && hasGravity )
@@ -230,8 +241,8 @@ class Entity {
 			steps--;
 		}
 		dy*=Math.pow(frict,tmod);
-		if( MLib.fabs(dy)<=0.01*tmod )
-			dy = 0;
+		// if( MLib.fabs(dy)<=0.001*tmod )
+		// 	dy = 0;
 		if( hasColl )
 			checkLifters();
     }
