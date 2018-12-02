@@ -6,14 +6,14 @@ filter: Linear,Linear
 repeat: none
 angelRing0
   rotate: false
-  xy: 14, 147
+  xy: 35, 141
   size: 11, 9
   orig: 13, 11
   offset: 1, 2
   index: -1
 circle0
   rotate: false
-  xy: 100, 140
+  xy: 48, 123
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
@@ -30,6 +30,13 @@ dotGlow0
   xy: 123, 26
   size: 3, 3
   orig: 3, 3
+  offset: 0, 0
+  index: -1
+feather0
+  rotate: false
+  xy: 37, 102
+  size: 5, 3
+  orig: 5, 3
   offset: 0, 0
   index: -1
 guy0
@@ -67,6 +74,27 @@ heroIdle0
   orig: 32, 32
   offset: 8, 0
   index: -1
+heroIdle1
+  rotate: false
+  xy: 48, 100
+  size: 16, 21
+  orig: 32, 32
+  offset: 8, 0
+  index: -1
+heroIdle2
+  rotate: false
+  xy: 66, 100
+  size: 16, 21
+  orig: 32, 32
+  offset: 8, 0
+  index: -1
+heroIdle3
+  rotate: false
+  xy: 84, 121
+  size: 16, 21
+  orig: 32, 32
+  offset: 8, 0
+  index: -1
 heroJumpDown0
   rotate: false
   xy: 48, 51
@@ -83,7 +111,7 @@ heroJumpUp0
   index: -1
 heroKick0
   rotate: false
-  xy: 64, 129
+  xy: 96, 163
   size: 14, 19
   orig: 32, 32
   offset: 8, 0
@@ -104,21 +132,21 @@ heroKick2
   index: -1
 heroRun0
   rotate: false
-  xy: 1, 124
+  xy: 48, 140
   size: 14, 21
   orig: 32, 32
   offset: 9, 0
   index: -1
 heroRun1
   rotate: false
-  xy: 17, 124
+  xy: 64, 140
   size: 14, 21
   orig: 32, 32
   offset: 10, 1
   index: -1
 heroRun2
   rotate: false
-  xy: 48, 127
+  xy: 80, 144
   size: 14, 21
   orig: 32, 32
   offset: 9, 0
@@ -132,28 +160,28 @@ heroRun3
   index: -1
 lightOff
   rotate: false
-  xy: 48, 112
+  xy: 1, 127
   size: 15, 13
   orig: 15, 18
   offset: 0, 0
   index: -1
 lightOn0
   rotate: false
-  xy: 66, 109
+  xy: 102, 143
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 lightOn1
   rotate: false
-  xy: 83, 121
+  xy: 1, 107
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 lightOn2
   rotate: false
-  xy: 100, 122
+  xy: 18, 107
   size: 15, 16
   orig: 15, 18
   offset: 0, 0
@@ -167,77 +195,77 @@ line0
   index: -1
 peonGrab0
   rotate: false
-  xy: 1, 147
+  xy: 35, 125
   size: 11, 14
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonIdle0
   rotate: false
-  xy: 117, 122
+  xy: 16, 158
   size: 10, 14
   orig: 16, 16
   offset: 3, 0
   index: -1
 peonJumpDown0
   rotate: false
-  xy: 33, 143
+  xy: 112, 181
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonJumpUp0
   rotate: false
-  xy: 33, 125
+  xy: 112, 163
   size: 13, 16
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun0
   rotate: false
-  xy: 48, 150
+  xy: 16, 142
   size: 13, 14
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun1
   rotate: false
-  xy: 63, 150
+  xy: 31, 152
   size: 13, 14
   orig: 16, 16
   offset: 2, 1
   index: -1
 peonRun2
   rotate: false
-  xy: 80, 141
+  xy: 1, 142
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonStunAir0
   rotate: false
-  xy: 48, 100
+  xy: 102, 122
   size: 16, 10
   orig: 16, 16
   offset: 0, 0
   index: -1
 peonStunGround0
   rotate: false
-  xy: 66, 100
+  xy: 102, 134
   size: 16, 7
   orig: 16, 16
   offset: 0, 0
   index: -1
 peonStunRise0
   rotate: false
-  xy: 1, 107
+  xy: 65, 123
   size: 15, 15
   orig: 16, 16
   offset: 1, 0
   index: -1
 peonStunRise1
   rotate: false
-  xy: 18, 107
+  xy: 18, 125
   size: 15, 15
   orig: 16, 16
   offset: 1, 0

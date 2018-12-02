@@ -291,6 +291,27 @@ class Fx extends mt.Process {
 		}
 	}
 
+	function _feather(p:HParticle) {
+		p.rotation = Math.cos(ftime*p.data0 + p.data1)*0.2;
+	}
+	public function feather(x:Float, y:Float) {
+		var p = allocBgNormal(getTile("feather"),x,y);
+		p.setCenterRatio(0.5, -rnd(5,8));
+		p.setFadeS(rnd(0.5,1), 0.1, rnd(1,2));
+		p.scaleX = rnd(0.4,1,true);
+		p.scaleY = rnd(0.4,1,true);
+		p.scaleYMul = rnd(0.98,0.99);
+		p.moveAng(rnd(0,6.28), rnd(1,4));
+		p.gx = rnd(0,0.02);
+		p.gy = rnd(0.05,0.10);
+		p.frict = rnd(0.8,0.9);
+		p.lifeS = rnd(1,2);
+
+		p.data0 = rnd(0.10,0.25);
+		p.data1 = rnd(0,6.28);
+		p.onUpdate = _feather;
+	}
+
 	public function lightZone(x:Float, y:Float, r:Float, c:UInt) {
 		var n = irnd(20,30);
 		for(i in 0...n) {

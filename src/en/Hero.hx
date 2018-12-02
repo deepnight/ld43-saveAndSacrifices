@@ -157,6 +157,8 @@ class Hero extends Entity {
                 // cd.setS("doubleJumpLock", Const.INFINITE);
                 cd.setS("doubleJumpLock", 0.18);
                 wings.anim.play("wingsFlap");
+                for(i in 0...irnd(1,4))
+                    fx.feather(centerX + rnd(0,20,true), centerY-25+rnd(0,5,true));
             }
             if( onGround || grabbing )
                 cd.unset("doubleJumpLock");
