@@ -121,7 +121,6 @@ class Peon extends Entity {
             dh.score( function(pt) return rnd(0,1) );
             var pt = dh.getBest();
             goto(pt.x, pt.y);
-            fx.markerCase(pt.x, pt.y); // HACK
         }
     }
 
