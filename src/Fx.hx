@@ -280,6 +280,17 @@ class Fx extends mt.Process {
 		}
 	}
 
+	public function candleSmoke(x:Float, y:Float) {
+		for(i in 0...2) {
+			var p = allocBgNormal(getTile("dot"), x, y-rnd(0,2));
+			p.setFadeS(rnd(0.1,0.2), rnd(0.1,0.2), rnd(0.2,0.4));
+			p.gx = rnd(0,0.01);
+			p.gy = -rnd(0.03,0.05);
+			p.frict = rnd(0.7,0.8);
+			p.lifeS = rnd(0.2,0.4);
+		}
+	}
+
 	public function lightZone(x:Float, y:Float, r:Float, c:UInt) {
 		var n = irnd(20,30);
 		for(i in 0...n) {
@@ -292,6 +303,18 @@ class Fx extends mt.Process {
 			p.moveAng(a, rnd(0,0.2,true));
 			p.frict = rnd(0.92,0.93);
 			p.lifeS = rnd(0.1,0.3);
+		}
+		// Core
+		for(i in 0...5) {
+			var p = allocTopAdd(getTile("line"), x,y);
+			p.colorize(c);
+			p.setFadeS(rnd(0.1,0.25), rnd(0.1,0.2), rnd(0.2,0.3));
+			p.rotation = rnd(0,6.28);
+			p.dr = rnd(0,0.01,true);
+			p.scaleX = i==0 ? rnd(1,2) : rnd(0.8,1);
+			p.scaleY = rnd(1,2);
+			p.scaleXMul = rnd(0.98,1.01);
+			p.lifeS = rnd(0.2,0.3);
 		}
 	}
 

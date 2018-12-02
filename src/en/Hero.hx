@@ -197,6 +197,7 @@ class Hero extends Entity {
                 dx = 0.1*dir;
                 dy = -0.1;
                 grabbing = false;
+                hasGravity = true;
                 var dh = new DecisionHelper(Entity.ALL);
                 dh.remove( function(e) return !e.isAlive() || distCase(e)>1.5 || !e.canBeKicked() );
                 dh.score( function(e) return Std.is(e,Mob) ? ( e.as(Mob).isHoldingTarget ? 20 : 5 ) : 0);

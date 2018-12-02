@@ -30,7 +30,8 @@ class Assets {
 
 		gameElements.defineAnim("heroKick", "0(2),1(8),2(4)");
 		gameElements.defineAnim("heroRun", "0(4),1(8),2(4),3(8)");
-
 		gameElements.defineAnim("wingsFlap", "0(6),1(5),2(4),3(3),4(3)");
+
+		gameElements.defineAnim("lightOn", "0(4),1(4),2(3)");
 	}
 }

@@ -11,10 +11,13 @@ class Light extends Entity {
         hasGravity = false;
         hasColl = false;
         radius = r;
-        hei = 0;
+        hei = Const.GRID;
 
         halo = Assets.gameElements.h_get("pixel");
         game.scroller.add(halo, Const.DP_FX_TOP);
+
+        spr.anim.registerStateAnim("lightOn",1, function() return active);
+        spr.anim.registerStateAnim("lightOff",0);
 
         // var g = new h2d.Graphics(halo);
         // g.beginFill(0xffc900,0.03);
@@ -33,8 +36,18 @@ class Light extends Entity {
         super.postUpdate();
         halo.setPosition(centerX, centerY);
         halo.visible = active;
+        if( !onGround )
+            spr.rotation += ( MLib.sign(dx)*0.22 - spr.rotation )*0.2;
+        else
+            spr.rotation = 0;
+
         if( active && !cd.hasSetS("fx",0.06) )
             fx.lightZone(centerX, centerY, radius, 0x29b5b4);
+        if( !active && !cd.hasSetS("fx",0.06) ) {
+            fx.candleSmoke(centerX, centerY-1);
+            fx.candleSmoke(centerX-5, centerY-1);
+            fx.candleSmoke(centerX+4, centerY+3);
+        }
     }
 
     public function turnOn() {
@@ -48,7 +61,8 @@ class Light extends Entity {
     override function onKick(by:Hero) {
         super.onKick(by);
         turnOff();
-        dx*=0.5;
+        dx*=0.3;
+        dy*=0.2;
         hasGravity = true;
         hasColl = true;
     }

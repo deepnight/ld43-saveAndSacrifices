@@ -6,14 +6,14 @@ filter: Linear,Linear
 repeat: none
 angelRing0
   rotate: false
-  xy: 27, 142
+  xy: 14, 147
   size: 11, 9
   orig: 13, 11
   offset: 1, 2
   index: -1
 circle0
   rotate: false
-  xy: 66, 109
+  xy: 100, 140
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
@@ -34,7 +34,7 @@ dotGlow0
   index: -1
 guy0
   rotate: false
-  xy: 1, 130
+  xy: 35, 107
   size: 11, 16
   orig: 16, 16
   offset: 2, 0
@@ -83,7 +83,7 @@ heroJumpUp0
   index: -1
 heroKick0
   rotate: false
-  xy: 64, 126
+  xy: 64, 129
   size: 14, 19
   orig: 32, 32
   offset: 8, 0
@@ -104,21 +104,21 @@ heroKick2
   index: -1
 heroRun0
   rotate: false
-  xy: 1, 107
+  xy: 1, 124
   size: 14, 21
   orig: 32, 32
   offset: 9, 0
   index: -1
 heroRun1
   rotate: false
-  xy: 17, 107
+  xy: 17, 124
   size: 14, 21
   orig: 32, 32
   offset: 10, 1
   index: -1
 heroRun2
   rotate: false
-  xy: 48, 112
+  xy: 48, 127
   size: 14, 21
   orig: 32, 32
   offset: 9, 0
@@ -130,6 +130,34 @@ heroRun3
   orig: 32, 32
   offset: 7, 1
   index: -1
+lightOff
+  rotate: false
+  xy: 48, 112
+  size: 15, 13
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+lightOn0
+  rotate: false
+  xy: 66, 109
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+lightOn1
+  rotate: false
+  xy: 83, 121
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+lightOn2
+  rotate: false
+  xy: 100, 122
+  size: 15, 16
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
 line0
   rotate: false
   xy: 96, 1
@@ -139,7 +167,7 @@ line0
   index: -1
 peonGrab0
   rotate: false
-  xy: 14, 130
+  xy: 1, 147
   size: 11, 14
   orig: 16, 16
   offset: 2, 0
@@ -153,35 +181,35 @@ peonIdle0
   index: -1
 peonJumpDown0
   rotate: false
-  xy: 33, 125
+  xy: 33, 143
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonJumpUp0
   rotate: false
-  xy: 33, 107
+  xy: 33, 125
   size: 13, 16
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun0
   rotate: false
-  xy: 80, 138
+  xy: 48, 150
   size: 13, 14
   orig: 16, 16
   offset: 2, 0
   index: -1
 peonRun1
   rotate: false
-  xy: 63, 147
+  xy: 63, 150
   size: 13, 14
   orig: 16, 16
   offset: 2, 1
   index: -1
 peonRun2
   rotate: false
-  xy: 48, 135
+  xy: 80, 141
   size: 13, 15
   orig: 16, 16
   offset: 2, 0
@@ -202,14 +230,14 @@ peonStunGround0
   index: -1
 peonStunRise0
   rotate: false
-  xy: 83, 121
+  xy: 1, 107
   size: 15, 15
   orig: 16, 16
   offset: 1, 0
   index: -1
 peonStunRise1
   rotate: false
-  xy: 100, 122
+  xy: 18, 107
   size: 15, 15
   orig: 16, 16
   offset: 1, 0
