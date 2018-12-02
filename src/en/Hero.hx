@@ -101,10 +101,10 @@ class Hero extends Entity {
         super.update();
 
         if( active ) {
-            if( onGround || grabbing )
-                horizontalControl = 1;
-            else
-                horizontalControl*=Math.pow(0.999,tmod);
+            // if( onGround || grabbing )
+            //     horizontalControl = 1;
+            // else
+            //     horizontalControl*=Math.pow(0.99,tmod);
 
             // Walk
             if( !grabbing ) {
@@ -146,10 +146,10 @@ class Hero extends Entity {
 
             // Double jump
             if( !grabbing && ca.aPressed() && !onGround && !cd.has("onGroundRecently") && !cd.has("doubleJumpLock") && !isLiftingSomeone() ) {
-                dy = -0.35;
+                dy = -0.40;
                 cd.unset("extendJump");
                 // cd.setS("doubleJumpLock", Const.INFINITE);
-                cd.setS("doubleJumpLock", 0.2);
+                cd.setS("doubleJumpLock", 0.18);
                 wings.anim.play("wingsFlap");
             }
             if( onGround || grabbing )
