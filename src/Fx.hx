@@ -222,6 +222,19 @@ class Fx extends mt.Process {
 		p.delayS = rnd(0,0.3);
 	}
 
+	public function targetLine(from:Entity, to:Entity, c:UInt) {
+		var p = allocTopAdd(getTile("targetLine"), from.centerX, from.centerY);
+		p.colorize(c);
+		p.setCenterRatio(0,0.5);
+		p.scaleX = from.distPx(to) / p.t.width;
+		p.scaleY = 2;
+		p.rotation = Math.atan2(to.centerY-from.centerY, to.centerX-from.centerX);
+		// p.moveAng(p.rotation, 1);
+		// p.frict = 0.92;
+		p.setFadeS(0.3, 0.1, 0.3);
+		p.lifeS = 0.2;
+	}
+
 	override function update() {
 		super.update();
 

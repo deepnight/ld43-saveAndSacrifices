@@ -52,6 +52,13 @@
 					],
 					"markers": [
 						{
+							"x": 29,
+							"y": 7,
+							"marker": "Demon",
+							"width": 1,
+							"height": 1
+						},
+						{
 							"x": 23,
 							"y": 9,
 							"marker": "Light",
@@ -66,15 +73,22 @@
 							"height": 1
 						},
 						{
-							"x": 39,
+							"x": 11,
 							"y": 12,
 							"marker": "Demon",
 							"width": 1,
 							"height": 1
 						},
 						{
-							"x": 40,
-							"y": 13,
+							"x": 16,
+							"y": 12,
+							"marker": "Demon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 33,
+							"y": 12,
 							"marker": "Demon",
 							"width": 1,
 							"height": 1
@@ -83,6 +97,20 @@
 							"x": 1,
 							"y": 14,
 							"marker": "Peon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 2,
+							"y": 14,
+							"marker": "Peon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 3,
+							"y": 14,
+							"marker": "Light",
 							"width": 1,
 							"height": 1
 						},
@@ -104,6 +132,27 @@
 							"x": 45,
 							"y": 14,
 							"marker": "Light",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 0,
+							"y": 16,
+							"marker": "Peon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 2,
+							"y": 16,
+							"marker": "Peon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 5,
+							"y": 16,
+							"marker": "Peon",
 							"width": 1,
 							"height": 1
 						}

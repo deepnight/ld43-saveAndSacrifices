@@ -147,7 +147,8 @@ class Hero extends Entity {
             if( !grabbing && ca.aPressed() && !onGround && !cd.has("onGroundRecently") && !cd.has("doubleJumpLock") && !isLiftingSomeone() ) {
                 dy = -0.35;
                 cd.unset("extendJump");
-                cd.setS("doubleJumpLock", Const.INFINITE);
+                // cd.setS("doubleJumpLock", Const.INFINITE);
+                cd.setS("doubleJumpLock", 0.2);
             }
             if( onGround || grabbing )
                 cd.unset("doubleJumpLock");

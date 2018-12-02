@@ -29,32 +29,19 @@ class Demon extends en.Mob {
         dh.remove( function(e) return Mob.anyoneHolds(e) && !e.cd.has("stillInteresting") );
         dh.score( function(e) return Mob.anyoneHolds(e) ? -6 : Mob.anyoneTargets(e) ? 2 : 0 );
         dh.score( function(e) return -distCase(e) );
+        dh.score( function(e) return e.cd.has("targetPrio") ? 5 : 0 );
         target = dh.getBest();
         if( target!=null ) {
             cd.setS("keepTarget", rnd(2,4));
-            fx.markerEntity(target);
+            // fx.markerEntity(target);
+            fx.targetLine(this, target, 0xff0000);
             cd.setS("aggro", 10);        }
     }
 
     override function onKick(by:Hero) {
         super.onKick(by);
+        dy *= rnd(0.35,0.50);
         cd.setS("stun", rnd(0.4,0.8));
-    }
-
-    function cancelTarget() {
-        freeHoldedTarget();
-        if( target==null )
-            return;
-
-        target = null;
-    }
-
-    function freeHoldedTarget() {
-        if( target==null || !isHoldingTarget )
-            return;
-        isHoldingTarget = false;
-        if( target.isAlive() )
-            target.onRelease();
     }
 
     override function update() {
@@ -104,8 +91,6 @@ class Demon extends en.Mob {
                 tx = target.centerX - Math.cos(a) * d;
                 ty = target.centerY - Math.sin(a) * d;
             }
-
-            // fx.markerFree(tx,ty, 0.1, 0xff0000);
 
             // Catch target!
             for(e in Peon.ALL)

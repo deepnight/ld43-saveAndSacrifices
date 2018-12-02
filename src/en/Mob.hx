@@ -11,6 +11,7 @@ class Mob extends Entity {
         super(x,y);
         ALL.push(this);
         startPt = new CPoint(cx,cy);
+        cd.setS("targetPickLock", 0.2);
     }
 
     override function dispose() {
@@ -20,6 +21,22 @@ class Mob extends Entity {
 
     override function canBeKicked():Bool {
         return true;
+    }
+
+    public function cancelTarget() {
+        freeHoldedTarget();
+        if( target==null )
+            return;
+
+        target = null;
+    }
+
+    function freeHoldedTarget() {
+        if( target==null || !isHoldingTarget )
+            return;
+        isHoldingTarget = false;
+        if( target.isAlive() )
+            target.onRelease();
     }
 
     public static function anyoneHolds(e:Peon) {

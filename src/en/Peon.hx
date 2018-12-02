@@ -93,8 +93,12 @@ class Peon extends Entity {
         super.onKick(by);
         invalidatePath = true;
         grabbing = false;
-        cd.setS("stun",rnd(1,1.2));
+        cd.setS("stun",rnd(1.6, 2));
         cd.setS("kickLock", 0.25);
+        cd.setS("targetPrio",cd.getS("stun"));
+        for(e in Mob.ALL)
+            if( distCase(e)<=15 && e.target!=null && !e.isHoldingTarget )
+                e.cancelTarget();
     }
 
     override function postUpdate() {
