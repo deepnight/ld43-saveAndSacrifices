@@ -74,6 +74,10 @@ class Entity {
 		return !destroyed;
 	}
 
+	public function kill() {
+		destroy();
+	}
+
 	public function setPosCase(x:Int, y:Int) {
 		cx = x;
 		cy = y;

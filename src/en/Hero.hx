@@ -62,7 +62,7 @@ class Hero extends Entity {
         grabbing = true;
         hasGravity = false;
         dx = dy = 0;
-        xr = level.hasSpot("grabRight",cx,cy) ? 0.8 : 0.2;
+        xr = dir==1 && level.hasSpot("grabRight",cx,cy) ? 0.8 : 0.2;
         yr = 0.75;
         cd.setS("jumpLock",Const.INFINITE);
     }
@@ -166,8 +166,8 @@ class Hero extends Entity {
                 dh.score( function(e) return dir==1 && e.centerX>=centerX-8 || dir==-1 && e.centerX<=centerX+8? 1 : 0 );
                 var e = dh.getBest();
                 if( e!=null ) {
-                    e.dx = dir*rnd(0.4, 0.6);
-                    e.dy = -rnd(0.2,0.3);
+                    e.dx = 0.5*dir;
+                    e.dy = -0.35;
                     e.onKick(this);
                 }
             }

@@ -76,13 +76,15 @@ class Peon extends Entity {
     }
 
     override function canBeKicked():Bool {
-        return !Mob.anyoneHolds(this);
+        return !Mob.anyoneHolds(this) && !cd.has("kickLock-");
     }
 
-    override function onKick(by:Dynamic) {
+    override function onKick(by:en.Hero) {
         super.onKick(by);
         invalidatePath = true;
+        grabbing = false;
         cd.setS("stun",rnd(0.7,0.8));
+        cd.setS("kickLock", 0.25);
     }
 
     override function postUpdate() {
@@ -241,6 +243,6 @@ class Peon extends Entity {
         }
 
         if( cy<=1 )
-            destroy();
+            kill();
     }
 }

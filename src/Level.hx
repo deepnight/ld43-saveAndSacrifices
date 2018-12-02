@@ -67,6 +67,10 @@ class Level extends mt.Process {
 				case Touchplate :
 					new en.Touchplate(m.x, m.y, m.id);
 
+				case Spikes :
+					for(cx in m.x...m.x+m.width)
+						new en.Spikes(cx, m.y, m.id);
+
 				case Peon :
 					new en.Peon(m.x, m.y);
 
@@ -80,7 +84,7 @@ class Level extends mt.Process {
 	public function render() {
 		root.removeChildren();
 
-		#if debug
+		// #if debug
 		var g = new h2d.Graphics(root);
 		for(cx in 0...wid)
 		for(cy in 0...hei)
@@ -88,7 +92,7 @@ class Level extends mt.Process {
 				g.beginFill(0xff0000,0.8);
 				g.drawRect(cx*Const.GRID, cy*Const.GRID, Const.GRID, Const.GRID);
 			}
-		#end
+		// #end
 
 		for(l in infos.layers) {
 			var tileSet = infos.props.getTileset(Data.room, l.data.file);

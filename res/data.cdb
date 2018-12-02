@@ -57,9 +57,51 @@
 					],
 					"markers": [
 						{
-							"x": 24,
+							"x": 28,
+							"y": 8,
+							"marker": "Demon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 23,
 							"y": 9,
 							"marker": "Light",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 37,
+							"y": 9,
+							"marker": "Demon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 13,
+							"y": 10,
+							"marker": "Demon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 11,
+							"y": 12,
+							"marker": "Demon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 39,
+							"y": 12,
+							"marker": "Demon",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 40,
+							"y": 13,
+							"marker": "Demon",
 							"width": 1,
 							"height": 1
 						},
@@ -82,6 +124,13 @@
 							"y": 14,
 							"marker": "Hero1",
 							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 25,
+							"y": 14,
+							"marker": "Spikes",
+							"width": 5,
 							"height": 1
 						},
 						{
@@ -111,6 +160,13 @@
 							"marker": "Peon",
 							"width": 1,
 							"height": 1
+						},
+						{
+							"x": 9,
+							"y": 17,
+							"marker": "Spikes",
+							"width": 1,
+							"height": 1
 						}
 					],
 					"props": {
@@ -126,7 +182,7 @@
 								"l": "collisions",
 								"p": {
 									"alpha": 1,
-									"color": 16711680
+									"color": 0
 								}
 							},
 							{
@@ -139,9 +195,9 @@
 					},
 					"collisions": [
 						{
-							"x": 24,
+							"x": 23,
 							"y": 10,
-							"width": 3,
+							"width": 1,
 							"height": 1
 						},
 						{
@@ -157,9 +213,9 @@
 							"height": 1
 						},
 						{
-							"x": 26,
+							"x": 25,
 							"y": 12,
-							"width": 6,
+							"width": 3,
 							"height": 1
 						},
 						{
@@ -179,6 +235,12 @@
 							"y": 14,
 							"width": 1,
 							"height": 1
+						},
+						{
+							"x": 25,
+							"y": 14,
+							"width": 6,
+							"height": 3
 						},
 						{
 							"x": 31,
@@ -205,12 +267,6 @@
 							"height": 1
 						},
 						{
-							"x": 26,
-							"y": 15,
-							"width": 6,
-							"height": 1
-						},
-						{
 							"x": 35,
 							"y": 15,
 							"width": 3,
@@ -229,6 +285,12 @@
 							"height": 1
 						},
 						{
+							"x": 15,
+							"y": 16,
+							"width": 5,
+							"height": 1
+						},
+						{
 							"x": 20,
 							"y": 16,
 							"width": 1,
@@ -238,12 +300,6 @@
 							"x": 21,
 							"y": 16,
 							"width": 4,
-							"height": 1
-						},
-						{
-							"x": 26,
-							"y": 16,
-							"width": 5,
 							"height": 1
 						},
 						{
@@ -253,265 +309,6 @@
 							"height": 3
 						}
 					]
-				},
-				{
-					"id": "TestBak",
-					"width": 30,
-					"height": 13,
-					"tileProps": [],
-					"collisions": [
-						{
-							"x": 6,
-							"y": 5,
-							"width": 2,
-							"height": 1
-						},
-						{
-							"x": 8,
-							"y": 5,
-							"width": 1,
-							"height": 2
-						},
-						{
-							"x": 9,
-							"y": 5,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 10,
-							"y": 5,
-							"width": 1,
-							"height": 2
-						},
-						{
-							"x": 2,
-							"y": 6,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 3,
-							"y": 6,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 9,
-							"y": 6,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 11,
-							"y": 6,
-							"width": 2,
-							"height": 2
-						},
-						{
-							"x": 19,
-							"y": 6,
-							"width": 2,
-							"height": 1
-						},
-						{
-							"x": 21,
-							"y": 6,
-							"width": 3,
-							"height": 1
-						},
-						{
-							"x": 0,
-							"y": 7,
-							"width": 4,
-							"height": 1
-						},
-						{
-							"x": 13,
-							"y": 7,
-							"width": 6,
-							"height": 1
-						},
-						{
-							"x": 19,
-							"y": 7,
-							"width": 2,
-							"height": 1
-						},
-						{
-							"x": 23,
-							"y": 7,
-							"width": 1,
-							"height": 3
-						},
-						{
-							"x": 11,
-							"y": 8,
-							"width": 1,
-							"height": 2
-						},
-						{
-							"x": 22,
-							"y": 9,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 5,
-							"y": 10,
-							"width": 2,
-							"height": 2
-						},
-						{
-							"x": 7,
-							"y": 10,
-							"width": 5,
-							"height": 2
-						},
-						{
-							"x": 12,
-							"y": 10,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 15,
-							"y": 10,
-							"width": 5,
-							"height": 1
-						},
-						{
-							"x": 20,
-							"y": 10,
-							"width": 4,
-							"height": 1
-						},
-						{
-							"x": 4,
-							"y": 11,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 15,
-							"y": 11,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 17,
-							"y": 11,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 19,
-							"y": 11,
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 0,
-							"y": 12,
-							"width": 30,
-							"height": 1
-						}
-					],
-					"layers": [
-						{
-							"name": "bgTiles",
-							"data": {
-								"file": "levelTiles.png",
-								"size": 16,
-								"stride": 16,
-								"data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAIAAwABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAwAAAAAAAAAAABIAEwABAAIAAwAAAAAAAAAAAAAAAAACAAMAEgATAAEAAAAAAAAAAAAAAAAAAQABABIAEwAAAAAAAAAAAAAAAAAAABIAEwABAAEAAQABAAEAAQASABMAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQABAAIAAwABAAEAAQAAAAAAAQABAAEAAQABAAEAAQASABMAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEAAQABABIAEwABAAEAAAAAAAAAAQAAAAMAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAAEAAQACAAMAAQABAAEAAgADAAEAAQABAAEAAQASABMAAQABAAEAAgADAAEAAQABAAEAAQACAAMA"
-							}
-						}
-					],
-					"markers": [
-						{
-							"x": 15,
-							"y": 0,
-							"marker": "Door",
-							"width": 1,
-							"height": 7,
-							"id": "a"
-						},
-						{
-							"x": 12,
-							"y": 6,
-							"marker": "Light",
-							"width": 6,
-							"height": 6
-						},
-						{
-							"x": 1,
-							"y": 7,
-							"marker": "Light",
-							"width": 5,
-							"height": 5
-						},
-						{
-							"x": 17,
-							"y": 9,
-							"marker": "Touchplate",
-							"width": 1,
-							"height": 1,
-							"id": "a"
-						},
-						{
-							"x": 4,
-							"y": 10,
-							"marker": "Hero1",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 25,
-							"y": 10,
-							"marker": "Light",
-							"width": 3,
-							"height": 3
-						},
-						{
-							"x": 2,
-							"y": 11,
-							"marker": "Hero2",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 3,
-							"y": 11,
-							"marker": "Hero3",
-							"width": 1,
-							"height": 1
-						}
-					],
-					"props": {
-						"tileSize": 16,
-						"layers": [
-							{
-								"l": "markers",
-								"p": {
-									"alpha": 0.53
-								}
-							},
-							{
-								"l": "collisions",
-								"p": {
-									"alpha": 1,
-									"color": 16711680
-								}
-							},
-							{
-								"l": "bgTiles",
-								"p": {
-									"alpha": 0.6
-								}
-							}
-						]
-					}
 				}
 			],
 			"separators": [],
@@ -649,6 +446,16 @@
 						"file": "levelTiles.png",
 						"size": 16,
 						"x": 1,
+						"y": 31
+					}
+				},
+				{
+					"color": 16711680,
+					"id": "Spikes",
+					"icon": {
+						"file": "levelTiles.png",
+						"size": 16,
+						"x": 0,
 						"y": 31
 					}
 				}
