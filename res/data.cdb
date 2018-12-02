@@ -57,37 +57,9 @@
 					],
 					"markers": [
 						{
-							"x": 21,
-							"y": 4,
-							"marker": "Demon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 13,
+							"x": 24,
 							"y": 9,
-							"marker": "Demon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 18,
-							"y": 9,
-							"marker": "Demon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 5,
-							"y": 10,
-							"marker": "Demon",
-							"width": 1,
-							"height": 1
-						},
-						{
-							"x": 22,
-							"y": 11,
-							"marker": "Hero1",
+							"marker": "Light",
 							"width": 1,
 							"height": 1
 						},
@@ -102,6 +74,13 @@
 							"x": 2,
 							"y": 14,
 							"marker": "Light",
+							"width": 1,
+							"height": 1
+						},
+						{
+							"x": 7,
+							"y": 14,
+							"marker": "Hero1",
 							"width": 1,
 							"height": 1
 						},
@@ -241,6 +220,12 @@
 							"x": 44,
 							"y": 15,
 							"width": 3,
+							"height": 1
+						},
+						{
+							"x": 5,
+							"y": 16,
+							"width": 1,
 							"height": 1
 						},
 						{

@@ -97,14 +97,15 @@ class Peon extends Entity {
         dh.score(function(e) return -e.cx);
         var nextLight = dh.getBest();
         if( nextLight!=null ) {
-            fx.markerEntity(nextLight); // HACK
             var dh = new DecisionHelper(mt.deepnight.Bresenham.getDisc(nextLight.cx, nextLight.cy, Std.int(nextLight.radius/Const.GRID)));
             dh.keepOnly( function(pt) return !level.hasColl(pt.x,pt.y) && level.hasColl(pt.x,pt.y+1) );
             dh.score( function(pt) return -Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)*0.25 );
             dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)<=1 ? -3 : 0 );
+            dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, cx, cy)*0.05 );
             dh.score( function(pt) return rnd(0,1) );
             var pt = dh.getBest();
             goto(pt.x, pt.y);
+            fx.markerCase(pt.x, pt.y); // HACK
         }
     }
 
@@ -137,29 +138,27 @@ class Peon extends Entity {
             }
 
             // Jump (dumb mode)
+            var jumpPow = 0.41;
             if( dumbMode && onGround && level.hasColl(cx+dir, cy) && ( dir==1 && xr>=0.7 || dir==-1 && xr<=0.3 ) && !cd.hasSetS("jump",rnd(0.3,0.7)) ) {
-                dy = -0.23;
+                dy = -jumpPow;
                 dx = 0.2*dir;
-                cd.setS("jumping", 0.10);
             }
 
             if( !dumbMode ) {
                 // Normal jump
                 if( onGround && target.cy==cy-1 && ( dir==1 && xr>=0.7 || dir==-1 && xr<=0.3 ) && !cd.hasSetS("jump",rnd(0.3,0.7)) ) {
-                    dy = -0.21;
+                    dy = -jumpPow;
                     dx = 0.2*dir;
                     cd.unset("walkLock");
-                    cd.setS("jumping", 0.10);
                 }
 
                 // High jump
-                if( onGround && target.cy<cy-1 && ( dir==1 && xr>=0.6 || dir==-1 && xr<=0.4 ) && !cd.hasSetS("jump",rnd(0.2,0.4)) ) {
-                    dy = -0.23;
+                if( onGround && target.cy<cy-1 && ( dir==1 && xr>=0.6 || dir==-1 && xr<=0.4 ) && !cd.hasSetS("jump",rnd(0.3,0.8)) ) {
+                    dy = -jumpPow;
                     dir = target.cx<cx ? -1 : 1;
                     if( target.cy==cy-1 && MLib.fabs(xr-0.5)<=0.2 )
                         dx = dir*0.1;
                     cd.setS("walkLock", 1);
-                    cd.setS("jumping", 0.10);
                 }
             }
 
@@ -201,9 +200,8 @@ class Peon extends Entity {
             }
         }
 
-        // Jump extra
-        if( !onGround && cd.has("jumping") )
-            dy-=0.042*tmod;
+        if( grabbing )
+            dx = dy = 0;
 
         super.update();
 
@@ -227,8 +225,7 @@ class Peon extends Entity {
             grabbing = false;
             hasGravity = true;
             dx = dir*0.16;
-            dy = -0.17;
-            cd.setS("jumping", 0.15);
+            dy = -0.35;
         }
 
         // Stuck in wall
@@ -242,5 +239,8 @@ class Peon extends Entity {
             else
                 dy = -0.2;
         }
+
+        if( cy<=1 )
+            destroy();
     }
 }

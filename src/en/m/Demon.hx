@@ -108,14 +108,17 @@ class Demon extends en.Mob {
             // fx.markerFree(tx,ty, 0.1, 0xff0000);
 
             // Catch target!
-            if( distPx(target)<=8 && !Mob.anyoneHolds(target) && !target.cd.has("catchImmunity") ) {
-                isHoldingTarget = true;
-                target.onCatchByMob(this);
-                target.cd.setS("stillInteresting", rnd(2,3));
-                lockAiS(1);
-                cd.setS("slowFlyStart", 6.5);
-                dy = level.hasColl(cx,cy) ? -rnd(0.15,0.17) : -rnd(0.07,0.08);
-            }
+            for(e in Peon.ALL)
+                if( distPx(e)<=10 && !e.isInLight() && !Mob.anyoneHolds(e) && !e.cd.has("catchImmunity") ) {
+                    target = e; // change mind if this wasn't the target
+                    isHoldingTarget = true;
+                    e.onCatchByMob(this);
+                    e.cd.setS("stillInteresting", rnd(2,3));
+                    lockAiS(1);
+                    cd.setS("slowFlyStart", 6.5);
+                    dy = level.hasColl(cx,cy) ? -rnd(0.18,0.19) : -rnd(0.11,0.12);
+                    break;
+                }
         }
 
         if( !aiLocked() && !isUnconscious() ) {

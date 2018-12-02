@@ -68,6 +68,9 @@ class Hero extends Entity {
     }
 
     override function update() {
+        if( grabbing )
+            dx = dy = 0;
+
         super.update();
 
         if( active ) {
