@@ -74,7 +74,7 @@ class Entity {
 		return !destroyed;
 	}
 
-	public function kill() {
+	public function kill(by:Null<Entity>) {
 		destroy();
 	}
 
@@ -103,6 +103,13 @@ class Entity {
 	public inline function rnd(min,max,?sign) return Lib.rnd(min,max,sign);
 	public inline function irnd(min,max,?sign) return Lib.irnd(min,max,sign);
 	public inline function pretty(v,?p=1) return Lib.prettyFloat(v,p);
+
+	function canSeeThrought(cx:Int,cy:Int) {
+		return !level.hasColl(cx,cy);
+	}
+	public inline function sightCheck(e:Entity) {
+		return mt.deepnight.Bresenham.checkThinLine(cx,cy, e.cx, e.cy, canSeeThrought);
+	}
 
 	public inline function dirTo(e:Entity) return e.centerX<centerX ? -1 : 1;
 

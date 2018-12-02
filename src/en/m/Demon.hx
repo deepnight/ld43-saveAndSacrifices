@@ -27,7 +27,7 @@ class Demon extends en.Mob {
         var dh = new DecisionHelper(Peon.ALL);
         dh.remove( function(e) return e.isInLight() || distCase(e)>=16 && !cd.has("aggro") );
         dh.remove( function(e) return Mob.anyoneHolds(e) && !e.cd.has("stillInteresting") );
-        dh.score( function(e) return Mob.anyoneHolds(e) ? -6 : Mob.anyoneTargets(e) ? 2 : 0 );
+        dh.score( function(e) return Mob.anyoneHolds(e) ? 2 : Mob.anyoneTargets(e) ? 2 : 0 );
         dh.score( function(e) return -distCase(e) );
         dh.score( function(e) return e.cd.has("targetPrio") ? 5 : 0 );
         target = dh.getBest();
@@ -98,7 +98,7 @@ class Demon extends en.Mob {
                     target = e; // change mind if this wasn't the target
                     isHoldingTarget = true;
                     e.onCatchByMob(this);
-                    e.cd.setS("stillInteresting", rnd(2,3));
+                    e.cd.setS("stillInteresting", rnd(4,5));
                     lockAiS(1);
                     cd.setS("slowFlyStart", 6.5);
                     dy = level.hasColl(cx,cy) ? -rnd(0.18,0.19) : -rnd(0.11,0.12);

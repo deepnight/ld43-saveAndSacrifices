@@ -108,7 +108,7 @@
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
-            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
+            <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
             <key>forceSquared</key>
             <false/>
             <key>maxRects</key>
@@ -216,6 +216,7 @@
             <key type="filename">export/guy0.png</key>
             <key type="filename">export/guy1.png</key>
             <key type="filename">export/guy2.png</key>
+            <key type="filename">export/peonDead0.png</key>
             <key type="filename">export/peonGrab0.png</key>
             <key type="filename">export/peonIdle0.png</key>
             <key type="filename">export/peonJumpDown0.png</key>
@@ -227,6 +228,25 @@
             <key type="filename">export/peonStunGround0.png</key>
             <key type="filename">export/peonStunRise0.png</key>
             <key type="filename">export/peonStunRise1.png</key>
+            <key type="filename">export/peonTaken0.png</key>
+            <key type="filename">export/peonTaken1.png</key>
+            <key type="filename">export/spikes0.png</key>
+            <key type="filename">export/spikes1.png</key>
+            <key type="filename">export/spikesOff.png</key>
+            <key type="filename">export/workerDead0.png</key>
+            <key type="filename">export/workerGrab0.png</key>
+            <key type="filename">export/workerIdle0.png</key>
+            <key type="filename">export/workerJumpDown0.png</key>
+            <key type="filename">export/workerJumpUp0.png</key>
+            <key type="filename">export/workerRun0.png</key>
+            <key type="filename">export/workerRun1.png</key>
+            <key type="filename">export/workerRun2.png</key>
+            <key type="filename">export/workerStunAir0.png</key>
+            <key type="filename">export/workerStunGround0.png</key>
+            <key type="filename">export/workerStunRise0.png</key>
+            <key type="filename">export/workerStunRise1.png</key>
+            <key type="filename">export/workerTaken0.png</key>
+            <key type="filename">export/workerTaken1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

@@ -20,7 +20,7 @@ class Spikes extends Entity {
             for(e in Peon.ALL)
                 if( e.yr>=0.8 && e.cx==cx && e.cy==cy && MLib.fabs(e.xr-0.5)<=0.4 && !Mob.anyoneHolds(e) ) {
                     // active = false;
-                    e.kill();
+                    e.kill(this);
                 }
     }
 }

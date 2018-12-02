@@ -215,6 +215,10 @@ class Hero extends Entity {
             }
 
             #if debug
+            if( ca.bPressed() ) {
+                game.viewport.shakeS(1,1);
+                fx.explosion(centerX, centerY, Const.GRID*3);
+            }
             // Kill peon
             if( ca.dpadDownPressed() ) {
                 for(e in Peon.ALL)

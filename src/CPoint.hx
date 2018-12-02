@@ -20,8 +20,12 @@ class CPoint {
 		cy = y;
 	}
 
-	public function distEnt(e:Entity) {
+	public function distEntCase(e:Entity) {
 		return Lib.distance(e.cx+e.xr,e.cy+e.yr,cx+0.5,cy+0.5);
+	}
+
+	public function distEntPx(e:Entity) {
+		return Lib.distance(e.centerX,e.centerY,centerX, centerY);
 	}
 
 }

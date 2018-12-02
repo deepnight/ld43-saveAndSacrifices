@@ -132,8 +132,8 @@ class Peon extends Entity {
         }
     }
 
-    override function kill() {
-        super.kill();
+    override function kill(by) {
+        super.kill(by);
         new en.Cadaver(this);
     }
 
@@ -271,6 +271,6 @@ class Peon extends Entity {
         }
 
         if( cy<=1 )
-            kill();
+            kill(null);
     }
 }

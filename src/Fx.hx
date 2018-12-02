@@ -291,6 +291,56 @@ class Fx extends mt.Process {
 		}
 	}
 
+	public function explosion(x:Float,y:Float, r:Float) {
+		// Core
+		var p = allocTopAdd(getTile("explosion"), x,y);
+		p.playAnimAndKill(Assets.gameElements, "explosion",0.33);
+		p.setScale(r*2/p.t.width);
+		p.rotation = rnd(0,6.28);
+
+		// Side explosions
+		var n = 10;
+		for(i in 0...n) {
+			var a = i/n*6.28 + rnd(0,0.3,true);
+			var d = r*rnd(0.2,0.8);
+			var p = allocTopAdd(getTile("explosion"), x+Math.cos(a)*d, y+Math.sin(a)*d);
+			p.playAnimAndKill(Assets.gameElements, "explosion",rnd(0.33,0.5));
+			p.setScale(r*2/p.t.width * rnd(0.3,0.5));
+			p.rotation = rnd(0,6.28);
+			p.delayS = rnd(0, 0.1) + i/n*0.2;
+		}
+
+		// Lines
+		var n = 40;
+		for(i in 0...n) {
+			var a = i/n*6.28 + rnd(0,0.3,true);
+			var d = r*rnd(0.7,1);
+			var p = allocTopAdd(getTile("line"), x+Math.cos(a)*d, y+Math.sin(a)*d);
+			p.colorize(0xff5100);
+			p.alpha = rnd(0.3,0.5);
+			p.rotation = a;
+			p.scaleX = rnd(1,3);
+			p.moveAng(a, rnd(8,10));
+			p.frict = rnd(0.8,0.9);
+			p.scaleXMul = rnd(0.95,0.96);
+			p.lifeS = rnd(0.3,0.5);
+		}
+
+		// Smoke
+		var n = 10;
+		for(i in 0...n) {
+			var p = allocBgNormal(getTile("smoke"), x+rnd(0,20,true), y+rnd(0,20,true));
+			p.setFadeS(rnd(0.2,0.3), 0, rnd(1,2));
+			p.colorize(0x0);
+			p.rotation = rnd(0,6.28);
+			p.gy = -rnd(0.05,0.06);
+			p.setScale(rnd(0.6,0.9,true));
+			p.frict = rnd(0.8,0.9);
+			p.dr = rnd(0,0.001,true);
+			p.lifeS = rnd(0.5,1);
+		}
+	}
+
 	function _feather(p:HParticle) {
 		p.rotation = Math.cos(ftime*p.data0 + p.data1)*0.2;
 	}

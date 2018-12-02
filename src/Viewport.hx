@@ -40,6 +40,12 @@ class Viewport extends mt.Process {
 		}
 	}
 
+	var shakePow = 1.0;
+	public function shakeS(t:Float, ?power=1.0) {
+		cd.setS("shaking", t);
+		shakePow = power;
+	}
+
 	override public function update() {
 		super.update();
 
@@ -73,6 +79,11 @@ class Viewport extends mt.Process {
 		var prioCenter = 0;
 		game.scroller.x = Std.int( -(x+prioCenter*level.wid*0.5*Const.GRID)/(1+prioCenter) + wid*0.5 );
 		game.scroller.y = Std.int( -(y+prioCenter*level.hei*0.5*Const.GRID)/(1+prioCenter) + hei*0.5 );
+
+		if( cd.has("shaking") ) {
+			game.scroller.x += Math.cos(ftime*3.1)*1 * cd.getRatio("shaking") * shakePow;
+			game.scroller.y += Math.sin(ftime*3.7)*3 * cd.getRatio("shaking") * shakePow;
+		}
 
 		game.scroller.x = MLib.fclamp(game.scroller.x, -level.wid*Const.GRID+wid, 0);
 		game.scroller.y = MLib.fclamp(game.scroller.y, -level.hei*Const.GRID+hei, 100);
