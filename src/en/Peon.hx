@@ -59,7 +59,7 @@ class Peon extends Entity {
         if( !grabbing && target!=null ) {
             // Seek target
             if( !cd.has("walkLock") ) {
-                var s = speed * 0.006 * (onGround?1:0.5) * ( isLiftingSomeone() ? 0.3 : 1);
+                var s = speed * 0.008 * (onGround?1:0.5) * ( isLiftingSomeone() ? 0.3 : 1);
                 if( target.cx>cx || target.cx==cx && xr<0.5 ) {
                     dir = 1;
                     dx+=s*tmod;
@@ -88,7 +88,7 @@ class Peon extends Entity {
                 }
 
                 // High jump
-                if( onGround && target.cy<cy-1 && ( dir==1 && xr>=0.7 || dir==-1 && xr<=0.3 ) && !cd.hasSetS("jump",rnd(0.2,0.4)) ) {
+                if( onGround && target.cy<cy-1 && ( dir==1 && xr>=0.6 || dir==-1 && xr<=0.4 ) && !cd.hasSetS("jump",rnd(0.2,0.4)) ) {
                     dy = -0.21;
                     dir = target.cx<cx ? -1 : 1;
                     cd.setS("walkLock", 1);
@@ -96,8 +96,12 @@ class Peon extends Entity {
                 }
             }
 
+            // Give up on impossible situations in Dumb Mode
+            if( dumbMode && target.cx==cx && target.cy<cy )
+                target = null;
+
             // Pick next point in path
-            if( cx==target.cx && cy==target.cy && MLib.fabs(xr-0.5)<=0.1 ) {
+            if( target!=null && cx==target.cx && cy==target.cy && MLib.fabs(xr-0.5)<=0.1 ) {
                 if( path.length==0 )
                     target = null;
                 else {

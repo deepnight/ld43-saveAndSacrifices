@@ -152,7 +152,7 @@ class Hero extends Entity {
                 game.fx.markerCase(cx,cy);
 
             // Call peon
-            if( ca.xPressed() ) {
+            if( ca.xPressed() && onGround ) {
                 for(e in Peon.ALL)
                     e.goto(cx,cy);
             }
