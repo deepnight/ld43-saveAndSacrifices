@@ -210,12 +210,20 @@ class Hero extends Entity {
             }
 
             #if debug
-            if( ca.bPressed() ) {
+            if( ca.bPressed() )
                 fx.gibs(centerX, centerY);
-            }
+
+            if( ca.lbPressed() )
+                wings.anim.play("wingsFlap").setSpeed(0.5);
+
+            if( ca.dpadUpPressed() )
+                game.viewport.debugOffY = 70;
+
             // Kill peon
             if( ca.dpadDownPressed() ) {
-                for(e in Peon.ALL)
+                for(e in Mob.ALL)
+                    e.destroy();
+                for(e in Light.ALL)
                     e.destroy();
             }
             #end

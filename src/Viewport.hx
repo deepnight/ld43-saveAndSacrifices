@@ -14,6 +14,8 @@ class Viewport extends mt.Process {
 	public var screenWid(get,never) : Int;
 	public var screenHei(get,never) : Int;
 	var offY = -10;
+	public var debugOffX = 0.;
+	public var debugOffY = 0.;
 	var target : Entity;
 
 	public function new() {
@@ -50,8 +52,8 @@ class Viewport extends mt.Process {
 		super.update();
 
 		// Balance between hero & mobs
-		var tx = target.centerX;
-		var ty = target.centerY + offY;
+		var tx = target.centerX + debugOffX;
+		var ty = target.centerY + offY + debugOffY;
 
 		var a = Math.atan2(ty-y, tx-x);
 		var d = mt.deepnight.Lib.distance(x, y, tx, ty);

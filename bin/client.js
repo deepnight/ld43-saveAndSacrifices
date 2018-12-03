@@ -6874,6 +6874,8 @@ _$UInt_UInt_$Impl_$.toFloat = function(this1) {
 };
 var Viewport = function() {
 	this.shakePow = 1.0;
+	this.debugOffY = 0.;
+	this.debugOffX = 0.;
 	this.offY = -10;
 	this.dy = 0.;
 	this.dx = 0.;
@@ -6979,9 +6981,9 @@ Viewport.prototype = $extend(mt_Process.prototype,{
 	,update: function() {
 		mt_Process.prototype.update.call(this);
 		var _this = this.target;
-		var tx = (_this.cx + _this.xr) * Const.GRID;
+		var tx = (_this.cx + _this.xr) * Const.GRID + this.debugOffX;
 		var _this1 = this.target;
-		var ty = (_this1.cy + _this1.yr) * Const.GRID - _this1.hei * 0.5 + this.offY;
+		var ty = (_this1.cy + _this1.yr) * Const.GRID - _this1.hei * 0.5 + this.offY + this.debugOffY;
 		var a = Math.atan2(ty - this.y,tx - this.x);
 		var ax = this.x;
 		var ay = this.y;

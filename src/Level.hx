@@ -101,15 +101,15 @@ class Level extends mt.Process {
 	public function render() {
 		root.removeChildren();
 
-		#if debug
-		var g = new h2d.Graphics(root);
-		for(cx in 0...wid)
-		for(cy in 0...hei)
-			if( hasColl(cx,cy) ) {
-				g.beginFill(0xff0000,0.8);
-				g.drawRect(cx*Const.GRID, cy*Const.GRID, Const.GRID, Const.GRID);
-			}
-		#end
+		// #if debug
+		// var g = new h2d.Graphics(root);
+		// for(cx in 0...wid)
+		// for(cy in 0...hei)
+		// 	if( hasColl(cx,cy) ) {
+		// 		g.beginFill(0xff0000,0.8);
+		// 		g.drawRect(cx*Const.GRID, cy*Const.GRID, Const.GRID, Const.GRID);
+		// 	}
+		// #end
 
 		for(l in infos.layers) {
 			var tileSet = infos.props.getTileset(Data.room, l.data.file);
