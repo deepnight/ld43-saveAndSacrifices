@@ -53,7 +53,7 @@ class Game extends mt.Process {
 
 	public function nextLevel() {
 		if( level.infos.index+1>=Data.room.all.length ) {
-			// TODO ending
+			new GameCinematic("credits");
 		}
 		else {
 			startLevel(Data.room.all[level.infos.index+1].id);
@@ -127,7 +127,7 @@ class Game extends mt.Process {
 			nextLevel();
 		#end
 
-		if( !GameCinematic.hasAny() && en.Peon.ALL.length==0 ) {
+		if( !GameCinematic.hasAny() && en.Peon.ALL.length==0 && !cd.has("gameEndLock") ) {
 			if( en.Exit.getSavedCount()==0 )
 				new GameCinematic("lost");
 			else

@@ -3,6 +3,8 @@ package en.m;
 class Bomber extends en.Mob {
     public function new(x,y) {
         super(x,y);
+        spr.anim.registerStateAnim("bomberTrigger",1, function() return cd.has("suiciding"));
+        spr.anim.registerStateAnim("bomberIdle",0);
     }
 
     override function onKick(by:Hero) {
@@ -20,6 +22,12 @@ class Bomber extends en.Mob {
         dh.remove( function(e) return !e.isAlive() || distCase(e)>8 || Mob.anyoneHolds(e) || !sightCheck(e) || e.cy!=cy );
         dh.score( function(e) return -distCase(e) );
         target = dh.getBest();
+    }
+
+    override function postUpdate() {
+        super.postUpdate();
+        spr.scaleX += Math.cos(ftime*0.093)*0.1;
+        spr.scaleY += Math.sin(ftime*0.072)*0.1;
     }
 
     override function update() {
@@ -47,7 +55,7 @@ class Bomber extends en.Mob {
 
                 // Near target
                 if( target!=null && distCase(target)<=1 && !cd.has("trigger") ) {
-                    cd.setS("trigger", 0.5);
+                    cd.setS("trigger", 0.6);
                     cd.setS("suiciding", Const.INFINITE);
                     dx*=0.2;
                     dy*=0.2;
@@ -57,18 +65,19 @@ class Bomber extends en.Mob {
 
         // Explodes
         if( cd.has("suiciding") && !cd.has("trigger") ) {
-            fx.explosion(centerX, centerY, Const.GRID*3);
+            var r = 3;
+            fx.explosion(centerX, centerY, Const.GRID*r);
             game.viewport.shakeS(1);
             for(e in Peon.ALL)
-                if( e.isAlive() && distCase(e)<=3 )
+                if( e.isAlive() && distCase(e)<=r )
                     e.kill(this);
             for(e in Hero.ALL)
-                if( distCase(e)<=5 ) {
+                if( distCase(e)<=r+2 ) {
                     e.dx = dirTo(e)*rnd(0.5,0.6);
                     e.dy = -rnd(0.3,0.4);
                 }
             for(e in Cadaver.ALL)
-                if( distCase(e)<=5 ) {
+                if( distCase(e)<=r+2 ) {
                     e.dx = dirTo(e)*rnd(0.6,0.8);
                     e.dy = -rnd(0.3,0.5);
                 }

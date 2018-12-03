@@ -86,6 +86,6 @@ class Viewport extends mt.Process {
 		}
 
 		game.scroller.x = MLib.fclamp(game.scroller.x, -level.wid*Const.GRID+wid, 0);
-		game.scroller.y = MLib.fclamp(game.scroller.y, -level.hei*Const.GRID+hei, 100);
+		game.scroller.y = MLib.fclamp(game.scroller.y, -level.hei*Const.GRID+hei, 0);
 	}
 }

@@ -6,6 +6,7 @@ class Demon extends en.Mob {
     var tx = 0.;
     var ty = 0.;
     var wanderAng = 0.;
+    var wings : HSprite;
 
     public function new(x,y) {
         super(x,y);
@@ -13,13 +14,29 @@ class Demon extends en.Mob {
         hasGravity = false;
         hasColl = false;
         frict = 0.94;
-        spr.set("guy",0);
+
+        wings = Assets.gameElements.h_get("wings",0, 0.5,1);
+        game.scroller.add(wings, Const.DP_BG);
+        wings.setPosition(footX, footY);
+        wings.anim.registerStateAnim("demonWings",0);
+
+        spr.set("demonIdle",0);
         spr.colorize(0xff3311);
     }
 
     override function dispose() {
         super.dispose();
         ALL.remove(this);
+        wings.remove();
+    }
+
+    override function postUpdate() {
+        super.postUpdate();
+        spr.y += Math.cos(ftime*0.07)*1;
+        wings.x += (footX-dir-wings.x)*0.4;
+        wings.y += (footY-wings.y)*0.4 + (MLib.fabs(dx)>=0.05 ? Math.cos(ftime*0.4)*0.5 : 0);
+        wings.scaleX = 0.6+Math.cos(ftime*0.035)*0.1;
+        wings.scaleY = 0.6;
     }
 
     override function pickTarget() {

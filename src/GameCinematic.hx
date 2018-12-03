@@ -10,7 +10,7 @@ class GameCinematic extends mt.Process {
         ALL.push(this);
         cm = new mt.deepnight.Cinematic(Const.FPS);
 
-        cd.setS("skipLock",0.3);
+        cd.setS("skipLock",0.6);
         var ctrlCol = 0x24976b;
         switch( cid ) {
             // case "intro" :
@@ -110,6 +110,20 @@ class GameCinematic extends mt.Process {
                         popText("You sacrified "+killed+" sheeps to save "+saved+" others. You're a monster.", 0xee0000);
                     end;
                     game.nextLevel();
+                    complete();
+                });
+
+            case "credits" :
+                cm.create({
+                    popText("Thank you for playing :)");
+                    end;
+                    popText("This game was created in 48h for the Ludum Dare 46. The theme was 'Sacrifices must be made'.");
+                    end;
+                    popText("It's a rather short entry, I hope you liked it anyway!");
+                    end;
+                    popText("Find more games I made on www.deepnight.net");
+                    end;
+                    game.cd.setS("gameEndLock", 30);
                     complete();
                 });
 
