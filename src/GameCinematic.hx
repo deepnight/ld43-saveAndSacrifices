@@ -44,7 +44,7 @@ class GameCinematic extends mt.Process {
                     end;
                     popText("You should keep them alive.");
                     end;
-                    popText("(Well, at least ONE, that would be great.)", 0xbb0000);
+                    popText("Well, actually, your goal is only to save at least ONE of them.", 0xbb0000);
                     end;
                     complete();
                 });
@@ -124,6 +124,13 @@ class GameCinematic extends mt.Process {
                     popText("Find more games I made on www.deepnight.net");
                     end;
                     game.cd.setS("gameEndLock", 30);
+                    complete();
+                });
+
+            case "illegalLight" :
+                cm.create({
+                    popText("You cannot turn off this candle for now.", 0xbb0000);
+                    end;
                     complete();
                 });
 

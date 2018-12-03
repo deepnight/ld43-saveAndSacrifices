@@ -42,7 +42,8 @@ class Light extends Entity {
             spr.rotation = 0;
 
         if( active && !cd.hasSetS("fx",0.06) )
-            fx.lightZone(centerX, centerY, radius, 0x29b5b4);
+            fx.lightZone(centerX, centerY, radius, isLeftest() ? 0xffd500 : 0x29b5b4);
+
         if( !active && !cd.hasSetS("fx",0.06) ) {
             fx.candleSmoke(centerX, centerY-1);
             fx.candleSmoke(centerX-5, centerY-1);
@@ -58,13 +59,27 @@ class Light extends Entity {
         return active;
     }
 
+    function isLeftest() {
+        for(e in ALL)
+            if( e!=this && e.isAlive() && e.active && e.cx<cx )
+                return false;
+        return true;
+    }
+
     override function onKick(by:Hero) {
         super.onKick(by);
-        turnOff();
-        dx*=0.3;
-        dy*=0.2;
-        hasGravity = true;
-        hasColl = true;
+
+        if( !isLeftest() || ALL.length==1 ) {
+            dx = dy = 0;
+            new GameCinematic("illegalLight");
+        }
+        else {
+            turnOff();
+            dx*=0.3;
+            dy*=0.2;
+            hasGravity = true;
+            hasColl = true;
+        }
     }
 
     override function checkLifters() {} // nope
