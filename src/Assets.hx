@@ -1,5 +1,5 @@
 import mt.heaps.slib.*;
-import mt.deepnight.Sfx;
+// import mt.deepnight.Sfx;
 
 class Assets {
 	// public static var SFX = Sfx.importDirectory("sfx");
@@ -18,11 +18,11 @@ class Assets {
 		levelTiles = hxd.Res.levelTiles.toTile();
 
 		// Sound init
-		Sfx.setGroupVolume(0, 1);
-		Sfx.setGroupVolume(1, 0.5);
-		#if debug
+		// Sfx.setGroupVolume(0, 1);
+		// Sfx.setGroupVolume(1, 0.5);
+		// #if debug
 		// Sfx.toggleMuteGroup(1);
-		#end
+		// #end
 
 		gameElements = mt.heaps.slib.assets.Atlas.load("gameElements.atlas");
 		gameElements.defineAnim("peonTaken", "0-1(6)");

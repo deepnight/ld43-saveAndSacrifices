@@ -3,3 +3,4 @@
 -lib heaps
 -lib hxbit
 -main Boot
+-dce full
