@@ -10,20 +10,28 @@ class GameCinematic extends mt.Process {
         ALL.push(this);
         cm = new mt.deepnight.Cinematic(Const.FPS);
 
+        cd.setS("skipLock",0.3);
         var ctrlCol = 0x24976b;
         switch( cid ) {
+            // case "intro" :
+            //     cm.create({
+            //         popText("You are the Supreme Lord Commander of the Sky.");
+            //         end;
+            //         complete();
+            //     });
+
             case "fly" :
                 cm.create({
                     popText("Press UP (keyboard) or A (gamepad) to jump and use your wings.", ctrlCol);
                     end;
-                    popText("How cool is that?", 0x3045af);
+                    popText("How cool is that?");
                     end;
                     complete();
                 });
 
             case "spikes" :
                 cm.create({
-                    popText("As an Angel Commander, spikes are no threat to you.");
+                    popText("As the Supreme Lord Commander of Heavens, spikes are no threat to you.");
                     end;
                     popText("Just ignore them and go on.");
                     end;
@@ -74,6 +82,14 @@ class GameCinematic extends mt.Process {
                     complete();
                 });
 
+            case "bomber" :
+                cm.create({
+                    popText("It might be a wise idea to send someone as a scout over there.");
+                    showCoord("scout");
+                    end;
+                    complete();
+                });
+
             case "lost" :
                 cm.create({
                     popText("All your sheep are deads. You FAILED.", 0xee0000);
@@ -83,7 +99,7 @@ class GameCinematic extends mt.Process {
                 });
 
             case "levelComplete" :
-                var saved = en.Exit.ALL[0].count;
+                var saved = en.Exit.getSavedCount();
                 var killed = level.getMarkers(Peon).length - saved;
                 cm.create({
                     if( killed==0 )
@@ -154,6 +170,7 @@ class GameCinematic extends mt.Process {
 
         tw.createS(f.x, f.x-20>f.x, 0.2);
         // tw.createS(tf.scaleY, 0>1, 0.12);
+        cd.setS("skipLock", 0.2);
     }
 
     override function onDispose() {
@@ -172,7 +189,7 @@ class GameCinematic extends mt.Process {
         super.update();
 
         if( game.ca.aPressed() || game.ca.bPressed() || game.ca.xPressed() )
-            if( curText!=null ) {
+            if( curText!=null && !cd.has("skipLock") ) {
                 cm.signal();
                 clearText();
             }

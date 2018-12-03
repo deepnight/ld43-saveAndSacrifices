@@ -35,14 +35,14 @@ class Demon extends en.Mob {
             cd.setS("keepTarget", rnd(2,4));
             // fx.markerEntity(target);
             fx.targetLine(this, target, 0xff0000);
-            cd.setS("aggro", 2);
+            cd.setS("aggro", 6);
         }
     }
 
     override function onKick(by:Hero) {
         super.onKick(by);
         dy *= rnd(0.35,0.50);
-        cd.setS("stun", rnd(0.4,0.8));
+        cd.setS("stun", rnd(0.9,1.1));
     }
 
     override function update() {

@@ -138,9 +138,9 @@ class Peon extends Entity {
         if( onGround && !isInLight() && !cd.hasSetS("pickLightTarget",4) )
             pickTargetLight();
 
-        if( onGround && isInLight() && !cd.hasSetS("exitCheck",0.5) ) {
+        if( onGround && !cd.hasSetS("exitCheck",0.5) ) {
             for(e in Exit.ALL)
-                if( distCase(e)<=8 /*&& sightCheck(e)*/ )
+                if( distCase(e)<=7 && sightCheck(e) )
                     goto(e.cx, e.cy);
         }
 

@@ -38,11 +38,11 @@ class Level extends mt.Process {
 		for(cx in 0...wid)
 		for(cy in 0...hei) {
 			if( hasColl(cx,cy) && !hasColl(cx,cy-1) ) {
-				if( !hasColl(cx-1,cy) && !hasColl(cx-1,cy+1) ) {
+				if( !hasColl(cx-1,cy-1) && !hasColl(cx-1,cy) && !hasColl(cx-1,cy+1) ) {
 					addSpot("grabRight",cx-1,cy);
 					addSpot("grabRightUp",cx-1,cy+1);
 				}
-				if( !hasColl(cx+1,cy) && !hasColl(cx+1, cy+1) ) {
+				if( !hasColl(cx+1,cy-1) && !hasColl(cx+1,cy) && !hasColl(cx+1, cy+1) ) {
 					addSpot("grabLeft",cx+1,cy);
 					addSpot("grabLeftUp",cx+1,cy+1);
 				}
@@ -101,7 +101,7 @@ class Level extends mt.Process {
 	public function render() {
 		root.removeChildren();
 
-		// #if debug
+		#if debug
 		var g = new h2d.Graphics(root);
 		for(cx in 0...wid)
 		for(cy in 0...hei)
@@ -109,7 +109,7 @@ class Level extends mt.Process {
 				g.beginFill(0xff0000,0.8);
 				g.drawRect(cx*Const.GRID, cy*Const.GRID, Const.GRID, Const.GRID);
 			}
-		// #end
+		#end
 
 		for(l in infos.layers) {
 			var tileSet = infos.props.getTileset(Data.room, l.data.file);

@@ -128,8 +128,7 @@ class Game extends mt.Process {
 		#end
 
 		if( !GameCinematic.hasAny() && en.Peon.ALL.length==0 ) {
-			var e = en.Exit.ALL[0];
-			if( e.count==0 )
+			if( en.Exit.getSavedCount()==0 )
 				new GameCinematic("lost");
 			else
 				new GameCinematic("levelComplete");

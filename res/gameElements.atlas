@@ -273,7 +273,7 @@ line0
 peonDead0
   rotate: false
   xy: 75, 319
-  size: 16, 7
+  size: 16, 8
   orig: 16, 16
   offset: 0, 0
   index: -1
@@ -335,7 +335,7 @@ peonStunAir0
   index: -1
 peonStunGround0
   rotate: false
-  xy: 93, 319
+  xy: 300, 225
   size: 16, 7
   orig: 16, 16
   offset: 0, 0
@@ -461,8 +461,8 @@ wingsFlap4
   index: -1
 workerDead0
   rotate: false
-  xy: 300, 225
-  size: 16, 7
+  xy: 93, 319
+  size: 16, 8
   orig: 16, 16
   offset: 0, 0
   index: -1

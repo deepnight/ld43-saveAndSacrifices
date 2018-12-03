@@ -18,6 +18,13 @@ class Exit extends Entity {
         updateText();
     }
 
+    public static function getSavedCount() {
+        var n = 0;
+        for(e in ALL)
+            n+=e.count;
+        return n;
+    }
+
     override function dispose() {
         super.dispose();
         ALL.remove(this);
