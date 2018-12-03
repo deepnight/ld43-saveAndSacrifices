@@ -86,6 +86,7 @@ class Light extends Entity {
 
     public function turnOff() {
         active = false;
+        fx.lightZoneOff(centerX, centerY, radius, 0xff0000);
     }
 
     override function update() {

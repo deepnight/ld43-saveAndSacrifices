@@ -24,7 +24,9 @@ class CinematicTrigger extends Entity {
 
         for(e in Hero.ALL)
             if( e.cx>=marker.x && e.cx<marker.x+marker.width && e.cy>=marker.y && e.cy<marker.y+marker.height ) {
+                #if !debug
                 new GameCinematic(marker.id.toLowerCase());
+                #end
                 destroy();
                 break;
             }

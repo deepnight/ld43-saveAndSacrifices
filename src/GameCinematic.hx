@@ -13,12 +13,12 @@ class GameCinematic extends mt.Process {
         cd.setS("skipLock",0.6);
         var ctrlCol = 0x24976b;
         switch( cid ) {
-            // case "intro" :
-            //     cm.create({
-            //         popText("You are the Supreme Lord Commander of the Sky.");
-            //         end;
-            //         complete();
-            //     });
+            case "intro" :
+                cm.create({
+                    popText("\"SAVE & SACRIFICE\"\n\nA 48h game by Sebastien Benard (www.deepnight.net)\n\nPress SPACE (keyboard) or A (gamepad) to continue.");
+                    end;
+                    complete();
+                });
 
             case "fly" :
                 cm.create({
@@ -44,7 +44,9 @@ class GameCinematic extends mt.Process {
                     end;
                     popText("You should keep them alive.");
                     end;
-                    popText("Well, actually, your goal is only to save at least ONE of them.", 0xbb0000);
+                    popText("Well, actually, your goal is only to SAVE AT LEAST ONE of them.", 0xbb0000);
+                    end;
+                    popText("You might need to SACRIFICE some of these simpletons for the greater good.");
                     end;
                     complete();
                 });

@@ -69,10 +69,12 @@ class Viewport extends mt.Process {
 		//game.fx.markerFree(tx,ty,0xFFFF00, true);
 		//game.fx.markerFree(x,y,0xFF00FF, true);
 
-		x+=dx*dt;
-		y+=dy*dt;
-		dx*=Math.pow(0.96,dt);
-		dy*=Math.pow(0.96,dt);
+		if( !game.cd.has("scrollLock") ) {
+			x+=dx*dt;
+			y+=dy*dt;
+			dx*=Math.pow(0.96,dt);
+			dy*=Math.pow(0.96,dt);
+		}
 		// if( Lib.distance(x,y,tx,ty)<=35 ) {
 		// 	dx*=0.7;
 		// 	dy*=0.7;

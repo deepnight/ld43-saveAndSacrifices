@@ -60,6 +60,7 @@ class Main extends mt.Process {
 		controller.bind(A, Key.UP, Key.Z, Key.W);
 		controller.bind(B, Key.DOWN, Key.S, Key.ESCAPE);
 		controller.bind(SELECT, Key.R);
+		controller.bind(START, Key.N);
 
 		// Start
         startGame();

@@ -32,6 +32,7 @@ class Game extends mt.Process {
 
 		renderBg();
 		startLevel(Tutorial);
+		new GameCinematic("intro");
 	}
 
 	public function restartLevel() {
@@ -125,6 +126,11 @@ class Game extends mt.Process {
 		// Next level
 		if( ca.startPressed() )
 			nextLevel();
+		if( ca.isKeyboardPressed(Key.NUMPAD_MULT) )
+			if( cd.has("scrollLock") )
+				cd.unset("scrollLock");
+			else
+				cd.setS("scrollLock",Const.INFINITE);
 		#end
 
 		if( !GameCinematic.hasAny() && en.Peon.ALL.length==0 && !cd.has("gameEndLock") ) {
