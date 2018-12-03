@@ -65,8 +65,7 @@ class Level extends mt.Process {
 					// game.hero3 = new en.Hero(m.x, m.y);
 
 				case Light :
-					new en.Light(m.x, m.y, 5*Const.GRID);
-					// new en.Light((m.x+m.width*0.5)*Const.GRID, (m.y+m.height*0.5)*Const.GRID, MLib.fmax(m.width, m.height)*Const.GRID*0.5);
+					new en.Light(m.x, m.y, ( m.id==null ? 5 : Std.parseInt(m.id) ) *Const.GRID);
 
 				case Door :
 					new en.Door(m.x, m.y, m.width, m.height, m.id);
@@ -84,11 +83,16 @@ class Level extends mt.Process {
 				case Peon :
 					new en.Peon(m.x, m.y);
 
+				case Cinematic :
+					new en.CinematicTrigger(m.x, m.y, m);
+
 				case Demon :
 					new en.m.Demon(m.x, m.y);
 
 				case Bomber :
 					new en.m.Bomber(m.x, m.y);
+
+				case FreeMarker :
 			}
 
 		render();
@@ -143,9 +147,9 @@ class Level extends mt.Process {
 		return spots.exists(k) && spots.get(k).get(coordId(cx,cy))==true;
 	}
 
-	public function getMarker(id:Data.MarkerKind) {
+	public function getMarker(mid:Data.MarkerKind, ?id:String) {
 		for(m in infos.markers)
-			if( m.markerId==id )
+			if( m.markerId==mid && ( id==null || m.id==id ) )
 				return new CPoint(m.x, m.y);
 		return null;
 	}
@@ -156,17 +160,6 @@ class Level extends mt.Process {
 			if( m.markerId==id )
 				a.push( new CPoint(m.x, m.y) );
 		return a;
-	}
-
-	override function postUpdate() {
-		super.postUpdate();
-
-		// if( !cd.hasSetS("darkness",0.5) ) {
-		// 	for( cx in 0...wid)
-		// 	for( cy in 0...hei)
-		// 		if( !hasLight(cx,cy) )
-		// 			fx.darkness((cx+0.5)*Const.GRID, (cy+0.5)*Const.GRID, 0x121118);
-		// }
 	}
 
 	override function update() {

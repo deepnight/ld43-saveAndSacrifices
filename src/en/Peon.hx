@@ -76,7 +76,7 @@ class Peon extends Entity {
     }
 
     function aiLocked() {
-        return cd.has("stun") || cd.has("aiLock") || Mob.anyoneHolds(this);
+        return cd.has("stun") || cd.has("aiLock") || Mob.anyoneHolds(this) || GameCinematic.hasAny();
     }
 
     public function onCatchByMob(e:Mob) {
@@ -119,7 +119,7 @@ class Peon extends Entity {
             var dh = new DecisionHelper(mt.deepnight.Bresenham.getDisc(nextLight.cx, nextLight.cy, Std.int(nextLight.radius/Const.GRID)));
             dh.keepOnly( function(pt) return !level.hasColl(pt.x,pt.y) && level.hasColl(pt.x,pt.y+1) );
             dh.score( function(pt) return -Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)*0.25 );
-            dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)<=1 ? -3 : 0 );
+            dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)<=2 ? -4 : 0 );
             dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, cx, cy)*0.05 );
             dh.score( function(pt) return rnd(0,1) );
             var pt = dh.getBest();

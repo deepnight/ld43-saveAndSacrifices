@@ -54,7 +54,7 @@ class Mob extends Entity {
     }
 
     public inline function lockAiS(t:Float) cd.setS("aiLock",t);
-    public inline function aiLocked() return cd.has("aiLock") || cd.has("stun");
+    public inline function aiLocked() return cd.has("aiLock") || cd.has("stun") || GameCinematic.hasAny();
     public inline function isUnconscious() return cd.has("stun");
 
     function pickTarget() {}

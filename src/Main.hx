@@ -36,7 +36,7 @@ class Main extends mt.Process {
 
             delayer.addS("cdb", function() {
             	Data.load( hxd.Res.data.entry.getBytes().toString() );
-				startGame();
+				Game.ME.restartLevel();
             	if( Game.ME!=null )
                     Game.ME.onCdbReload();
             }, 0.2);

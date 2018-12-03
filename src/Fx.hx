@@ -355,6 +355,20 @@ class Fx extends mt.Process {
 		}
 	}
 
+	public function showCoord(cx:Int, cy:Int, ?sec=6.0, ?c=0x2fb2e3) {
+		var freq = 0.4;
+		var n = MLib.ceil(sec/freq);
+		for(i in 0...n) {
+			var p = allocTopAdd(getTile("square"), (cx+0.5)*Const.GRID, (cy+0.5)*Const.GRID);
+			p.colorize(c);
+			p.setScale(2);
+			p.ds = -0.07;
+			p.dsFrict = 0.9;
+			p.lifeS = freq*0.5;
+			p.delayS = freq*i;
+		}
+	}
+
 	public function fakeExitingPeon(e:en.Peon) {
 		var p = allocBgNormal(getTile("peonRun"), (e.cx+0.2)*Const.GRID, (e.cy+1)*Const.GRID);
 		p.setCenterRatio(0.5,1);

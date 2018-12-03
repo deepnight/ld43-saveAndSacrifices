@@ -28,12 +28,37 @@ class Game extends mt.Process {
 		root.add(bg, Const.DP_BG);
 
 		fx = new Fx();
-		level = new Level(Tutorial);
-
 		viewport = new Viewport();
-		viewport.track(hero, true);
 
 		renderBg();
+		startLevel(Tutorial);
+	}
+
+	public function restartLevel() {
+		startLevel(level.lid);
+	}
+
+	public function startLevel(lid:Data.RoomKind) {
+		if( level!=null ) {
+			level.destroy();
+			for(e in Entity.ALL)
+				e.destroy();
+			gc();
+			fx.clear();
+		}
+
+		level = new Level(lid);
+		viewport.track(hero, true);
+	}
+
+	public function nextLevel() {
+		if( level.infos.index+1>=Data.room.all.length ) {
+			// TODO ending
+		}
+		else {
+			startLevel(Data.room.all[level.infos.index+1].id);
+		}
+
 	}
 
 	function renderBg() {
@@ -66,6 +91,7 @@ class Game extends mt.Process {
 	override function onDispose() {
 		super.onDispose();
 
+		fx.destroy();
 		for(e in Entity.ALL)
 			e.destroy();
 		gc();
@@ -93,7 +119,21 @@ class Game extends mt.Process {
 
 		// Restart
 		if( ca.selectPressed() )
-			Main.ME.startGame();
+			restartLevel();
+
+		#if debug
+		// Next level
+		if( ca.startPressed() )
+			nextLevel();
+		#end
+
+		if( !GameCinematic.hasAny() && en.Peon.ALL.length==0 ) {
+			var e = en.Exit.ALL[0];
+			if( e.count==0 )
+				new GameCinematic("lost");
+			else
+				new GameCinematic("levelComplete");
+		}
 	}
 }
 

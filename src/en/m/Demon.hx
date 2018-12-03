@@ -25,7 +25,7 @@ class Demon extends en.Mob {
     override function pickTarget() {
         super.pickTarget();
         var dh = new DecisionHelper(Peon.ALL);
-        dh.remove( function(e) return e.isInLight() || distCase(e)>=12 && !cd.has("aggro") );
+        dh.remove( function(e) return e.isInLight() || distCase(e)>=10 && !cd.has("aggro") );
         dh.remove( function(e) return Mob.anyoneHolds(e) && !e.cd.has("stillInteresting") );
         dh.score( function(e) return Mob.anyoneHolds(e) ? 2 : Mob.anyoneTargets(e) ? 2 : 0 );
         dh.score( function(e) return -distCase(e) );
@@ -35,7 +35,8 @@ class Demon extends en.Mob {
             cd.setS("keepTarget", rnd(2,4));
             // fx.markerEntity(target);
             fx.targetLine(this, target, 0xff0000);
-            cd.setS("aggro", 10);        }
+            cd.setS("aggro", 2);
+        }
     }
 
     override function onKick(by:Hero) {

@@ -37,7 +37,7 @@ class Bomber extends en.Mob {
             else {
                 // Run to target!
                 dir = dirTo(target);
-                dx += dir*0.02;
+                dx += dir*0.01;
 
                 // Platform end
                 if( level.hasColl(cx+dir,cy) || !level.hasColl(cx+dir,cy+1) ) {

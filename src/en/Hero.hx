@@ -100,12 +100,7 @@ class Hero extends Entity {
 
         super.update();
 
-        if( active ) {
-            // if( onGround || grabbing )
-            //     horizontalControl = 1;
-            // else
-            //     horizontalControl*=Math.pow(0.99,tmod);
-
+        if( active && !GameCinematic.hasAny() ) {
             // Walk
             if( !grabbing ) {
                 var spd = 0.017;
