@@ -13,7 +13,7 @@
         "priority": 0
       },
       {
-        "text": "(Run JS)",
+        "text": "(Run)",
         "color": "yellow",
         "command": "start js.html",
         "alignment": "left",
@@ -25,6 +25,14 @@
         "color": "orange",
         "commandType":"palette",
         "command": "workbench.action.tasks.runTask|HL release",
+        "alignment": "left",
+        "skipTerminateQuickPick": false,
+        "priority": 1
+      },
+      {
+        "text": "(Run)",
+        "color": "orange",
+        "command": "hl bin/client.hl",
         "alignment": "left",
         "skipTerminateQuickPick": false,
         "priority": 1
