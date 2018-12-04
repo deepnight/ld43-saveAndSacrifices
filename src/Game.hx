@@ -80,6 +80,49 @@ class Game extends mt.Process {
 	public function onCdbReload() {
 	}
 
+
+    var curText : Null<h2d.Flow>;
+    function clearText() {
+        if( curText!=null ) {
+            var f = curText;
+            curText = null;
+            tw.createS(f.x, f.x+20, 0.2);
+            tw.createS(f.alpha, 0, 0.2).end( function() f.remove() );
+        }
+    }
+
+    function popText(str:String, ?c=0x282a32) {
+        clearText();
+        var f = new h2d.Flow();
+        curText = f;
+        Main.ME.root.add(f, Const.DP_UI);
+        // f.backgroundTile = Assets.gameElements.getTile("dialog");
+        f.borderWidth = 4;
+        f.borderHeight = 4;
+        f.isVertical = true;
+        f.padding = 8;
+
+        var bg = new h2d.ScaleGrid(Assets.gameElements.getTile("dialog"), 4,4, f);
+        f.getProperties(bg).isAbsolute = true;
+        bg.colorMatrix = mt.deepnight.Color.getColorizeMatrixH2d(c);
+
+        f.onAfterReflow = function() {
+            bg.width = f.outerWidth;
+            bg.height = f.outerHeight;
+        }
+
+        var tf = new h2d.Text(Assets.font, f);
+        tf.text = str;
+        tf.maxWidth = 190;
+        tf.textColor = 0xffffff;
+
+        f.x = Std.int( w()/Const.SCALE * 0.5 - f.outerWidth*0.5 );
+        f.y = Std.int( h()/Const.SCALE - 8 - f.outerHeight );
+
+        tw.createS(f.x, f.x-20>f.x, 0.2);
+		cd.setS("keepText", 1 + str.length*0.07);
+    }
+
 	function gc() {
 		if( Entity.GC==null )
 			return;
@@ -132,6 +175,15 @@ class Game extends mt.Process {
 			else
 				cd.setS("scrollLock",Const.INFINITE);
 		#end
+
+		if( curText!=null && !cd.has("keepText") )
+			clearText();
+
+		if( ca.isKeyboardPressed(Key.ESCAPE) )
+			if( !cd.hasSetS("exitWarn",3) )
+				popText("Press ESCAPE again to quit!",0xbb0000);
+			else
+				hxd.System.exit();
 
 		if( !GameCinematic.hasAny() && en.Peon.ALL.length==0 && !cd.has("gameEndLock") ) {
 			if( en.Exit.getSavedCount()==0 )

@@ -36,6 +36,14 @@
         "alignment": "left",
         "skipTerminateQuickPick": false,
         "priority": 1
+      },
+      {
+        "text": "Make redist",
+        "color": "lightgreen",
+        "command": "makeRedist.bat",
+        "alignment": "left",
+        "skipTerminateQuickPick": false,
+        "priority": 2
       }
     ]
   }

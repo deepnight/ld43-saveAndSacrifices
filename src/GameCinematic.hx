@@ -163,6 +163,7 @@ class GameCinematic extends mt.Process {
             tw.createS(f.alpha, 0, 0.2).end( function() f.remove() );
         }
     }
+
     function popText(str:String, ?c=0x282a32) {
         clearText();
         var f = new h2d.Flow();
@@ -188,6 +189,12 @@ class GameCinematic extends mt.Process {
         tf.maxWidth = 190;
         tf.textColor = 0xffffff;
 
+        f.addSpacing(16);
+        var tf = new h2d.Text(Assets.font, f);
+        tf.text = "ENTER or Gamepad-B to continue";
+        tf.textColor = 0x656f93;
+        f.getProperties(tf).align(Top,Right);
+
         f.x = Std.int( w()/Const.SCALE * 0.5 - f.outerWidth*0.5 + rnd(0,30,true) );
         f.y = rnd(20,40);
 
@@ -211,7 +218,7 @@ class GameCinematic extends mt.Process {
         cm.update(dt);
         super.update();
 
-        if( game.ca.aPressed() || game.ca.bPressed() || game.ca.xPressed() )
+        if( game.ca.bPressed() )
             if( curText!=null && !cd.has("skipLock") ) {
                 cm.signal();
                 clearText();
