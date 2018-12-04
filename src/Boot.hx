@@ -3,6 +3,11 @@ class Boot extends hxd.App {
 
 	// Boot
 	static function main() {
+		#if js
+		var canvas : js.html.CanvasElement = cast js.Browser.document.getElementById("webgl");
+		var w = new hxd.Window(canvas, false);
+		w.setCurrent();
+		#end
 		new Boot();
 	}
 
