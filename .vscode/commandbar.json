@@ -1,0 +1,25 @@
+{
+    "skipTerminateQuickPick": true,
+    "skipSwitchToOutput": false,
+    "skipErrorMessage": true,
+    "commands": [
+      {
+        "text": "⛴ Build JS",
+        "color": "yellow",
+        "commandType":"palette",
+        "command": "workbench.action.tasks.runTask|JS release",
+        "alignment": "left",
+        "skipTerminateQuickPick": false,
+        "priority": 0
+      },
+      {
+        "text": "✪ Build HL",
+        "color": "orange",
+        "commandType":"palette",
+        "command": "workbench.action.tasks.runTask|HL release",
+        "alignment": "left",
+        "skipTerminateQuickPick": false,
+        "priority": 0
+      }
+    ]
+  }
