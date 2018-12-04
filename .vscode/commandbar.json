@@ -13,13 +13,21 @@
         "priority": 0
       },
       {
+        "text": "(Run JS)",
+        "color": "yellow",
+        "command": "start js.html",
+        "alignment": "left",
+        "skipTerminateQuickPick": false,
+        "priority": 0
+      },
+      {
         "text": "✪ Build HL",
         "color": "orange",
         "commandType":"palette",
         "command": "workbench.action.tasks.runTask|HL release",
         "alignment": "left",
         "skipTerminateQuickPick": false,
-        "priority": 0
+        "priority": 1
       }
     ]
   }
