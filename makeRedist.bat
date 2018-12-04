@@ -1,7 +1,7 @@
 @echo off
 
 set redist=redist
-set game=Save and Sacrifice
+set game=SaveAndSacrifice
 
 echo Cleaning...
 rmdir /Q/S "%redist%" >nul
