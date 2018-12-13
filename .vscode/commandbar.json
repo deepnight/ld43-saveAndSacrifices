@@ -60,7 +60,15 @@
         "command": "start bin/client.swf",
         "alignment": "right",
         "skipTerminateQuickPick": false,
-        "priority": 0
+        "priority": 1
+      },
+      {
+        "text": "Make redist",
+        "color": "lightgreen",
+        "command": "haxelib run redistHelper -hl hl.hxml -swf swf.hxml -js js.hxml -o redist -p SaveAndSacrifice",
+        "alignment": "left",
+        "skipTerminateQuickPick": false,
+        "priority": 2
       }
     ]
   }
