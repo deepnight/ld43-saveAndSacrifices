@@ -43541,7 +43541,6 @@ var mt_deepnight_GameFocusHelper = function(p,font) {
 	this.root.set_visible(false);
 	this.firstClick = true;
 	this.suspendGame();
-	haxe_Log.trace("hello",{ fileName : "mt/deepnight/GameFocusHelper.hx", lineNumber : 21, className : "mt.deepnight.GameFocusHelper", methodName : "new"});
 };
 $hxClasses["mt.deepnight.GameFocusHelper"] = mt_deepnight_GameFocusHelper;
 mt_deepnight_GameFocusHelper.__name__ = "mt.deepnight.GameFocusHelper";
@@ -43549,13 +43548,12 @@ mt_deepnight_GameFocusHelper.__super__ = mt_Process;
 mt_deepnight_GameFocusHelper.prototype = $extend(mt_Process.prototype,{
 	suspendGame: function() {
 		var _gthis = this;
-		haxe_Log.trace("SUSPENDED.",{ fileName : "mt/deepnight/GameFocusHelper.hx", lineNumber : 29, className : "mt.deepnight.GameFocusHelper", methodName : "suspendGame"});
 		this.suspended = true;
 		this.parentLayers.over(this.root);
 		this.root.set_visible(true);
 		this.root.removeChildren();
 		var i = new h2d_Interactive(1,1,this.root);
-		i.backgroundColor = (229.5 | 0) << 24 | 0;
+		i.backgroundColor = this.firstClick ? (255 | 0) << 24 | 2436675 : (229.5 | 0) << 24 | 0;
 		i.onClick = function(_) {
 			_gthis.resumeGame();
 		};
