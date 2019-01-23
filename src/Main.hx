@@ -47,6 +47,7 @@ class Main extends mt.Process {
 		Lang.init("en");
 		Assets.init();
 		Data.load( hxd.Res.data.entry.getText() );
+		new mt.deepnight.GameFocusHelper(Boot.ME.s2d, Assets.font);
 
 		// Console
 		new Console(Assets.font, s);
