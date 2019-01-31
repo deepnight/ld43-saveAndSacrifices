@@ -64,7 +64,7 @@ class Main extends mt.Process {
 		controller.bind(START, Key.N);
 
 		// Start
-        startGame();
+		delayer.addF(startGame, 1);
 	}
 
 	public function startGame() {
