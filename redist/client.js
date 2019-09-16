@@ -16,7 +16,7 @@ Assets.init = function() {
 	Assets.initDone = true;
 	Assets.font = hxd_Res.get_loader().loadCache("minecraftiaOutline.fnt",hxd_res_BitmapFont).toFont();
 	Assets.levelTiles = hxd_Res.get_loader().loadCache("levelTiles.png",hxd_res_Image).toTile();
-	Assets.gameElements = mt_heaps_slib_assets_Atlas.load("gameElements.atlas");
+	Assets.gameElements = dn_heaps_slib_assets_Atlas.load("gameElements.atlas");
 	Assets.gameElements.__defineAnim("peonTaken",[0,0,0,0,0,0,1,1,1,1,1,1]);
 	Assets.gameElements.__defineAnim("peonRun",[0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,2,2,2,2,2,2,2]);
 	Assets.gameElements.__defineAnim("peonStunRise",[0,0,0,0,0,0,0,1,1,1,1,1,1,1]);
@@ -128,17 +128,17 @@ Boot.prototype = $extend(hxd_App.prototype,{
 		Boot.ME = this;
 		hxd_Timer.wantedFPS = Const.FPS;
 		new Main(this.s2d);
-		mt_Process.resizeAll();
+		dn_Process.resizeAll();
 	}
 	,onResize: function() {
 		hxd_App.prototype.onResize.call(this);
-		mt_Process.resizeAll();
+		dn_Process.resizeAll();
 	}
 	,update: function(dt) {
 		hxd_App.prototype.update.call(this,dt);
 		var tmod = hxd_Timer.dt * hxd_Timer.wantedFPS * this.speed;
-		mt_heaps_Controller.beforeUpdate();
-		mt_Process.updateAll(tmod);
+		dn_heaps_Controller.beforeUpdate();
+		dn_Process.updateAll(tmod);
 	}
 	,__class__: Boot
 });
@@ -1512,7 +1512,7 @@ var Console = function(f,p) {
 	h2d_Console.call(this,f,p);
 	h2d_Console.HIDE_LOG_TIMEOUT = 30;
 	Console.ME = this;
-	mt_deepnight_Lib.redirectTracesToH2dConsole(this);
+	dn_Lib.redirectTracesToH2dConsole(this);
 };
 $hxClasses["Console"] = Console;
 Console.__name__ = "Console";
@@ -1673,9 +1673,9 @@ var Entity = function(x,y) {
 	this.destroyed = false;
 	this.uid = Const._uniq++;
 	Entity.ALL.push(this);
-	this.cd = new mt_Cooldown(Const.FPS);
+	this.cd = new dn_Cooldown(Const.FPS);
 	this.setPosCase(x,y);
-	this.spr = new mt_heaps_slib_HSprite(Assets.gameElements);
+	this.spr = new dn_heaps_slib_HSprite(Assets.gameElements);
 	Game.ME.scroller.addChildAt(this.spr,Const.DP_MAIN);
 	var _this = this.spr.pivot;
 	_this.centerFactorX = 0.5;
@@ -1800,7 +1800,7 @@ Entity.prototype = {
 						if(cur != null) {
 							cur.frames = frames;
 						} else {
-							_this.cdList.push(new mt__$Cooldown_CdInst(0,frames));
+							_this.cdList.push(new dn__$Cooldown_CdInst(0,frames));
 						}
 					}
 				}
@@ -1821,7 +1821,7 @@ Entity.prototype = {
 						if(cur1 != null) {
 							cur1.frames = frames1;
 						} else {
-							_this1.cdList.push(new mt__$Cooldown_CdInst(37748736,frames1));
+							_this1.cdList.push(new dn__$Cooldown_CdInst(37748736,frames1));
 						}
 					}
 				}
@@ -1900,7 +1900,7 @@ Entity.prototype = {
 					if(cur != null) {
 						cur.frames = frames;
 					} else {
-						_this.cdList.push(new mt__$Cooldown_CdInst(33554432,frames));
+						_this.cdList.push(new dn__$Cooldown_CdInst(33554432,frames));
 					}
 				}
 			}
@@ -1953,29 +1953,29 @@ Entity.prototype = {
 	}
 	,__class__: Entity
 };
-var mt_Process = function(parent) {
+var dn_Process = function(parent) {
 	this.init();
 	if(parent == null) {
-		mt_Process.ROOTS.push(this);
+		dn_Process.ROOTS.push(this);
 	} else {
 		parent.addChild(this);
 	}
 };
-$hxClasses["mt.Process"] = mt_Process;
-mt_Process.__name__ = "mt.Process";
-mt_Process.updateAll = function(tmod,rendering) {
+$hxClasses["dn.Process"] = dn_Process;
+dn_Process.__name__ = "dn.Process";
+dn_Process.updateAll = function(tmod,rendering) {
 	if(rendering == null) {
 		rendering = true;
 	}
 	var _g = 0;
-	var _g1 = mt_Process.ROOTS;
+	var _g1 = dn_Process.ROOTS;
 	while(_g < _g1.length) {
 		var p = _g1[_g];
 		++_g;
-		mt_Process._update(p,tmod,rendering);
+		dn_Process._update(p,tmod,rendering);
 	}
 	var _g2 = 0;
-	var _g3 = mt_Process.ROOTS;
+	var _g3 = dn_Process.ROOTS;
 	while(_g2 < _g3.length) {
 		var p1 = _g3[_g2];
 		++_g2;
@@ -1995,7 +1995,7 @@ mt_Process.updateAll = function(tmod,rendering) {
 							while(_g5 < _g12.length) {
 								var c1 = _g12[_g5];
 								++_g5;
-								mt_Process._postUpdate(c1);
+								dn_Process._postUpdate(c1);
 							}
 						}
 					}
@@ -2003,11 +2003,11 @@ mt_Process.updateAll = function(tmod,rendering) {
 			}
 		}
 	}
-	mt_Process._checkDestroyeds(mt_Process.ROOTS);
+	dn_Process._checkDestroyeds(dn_Process.ROOTS);
 };
-mt_Process.resizeAll = function() {
+dn_Process.resizeAll = function() {
 	var _g = 0;
-	var _g1 = mt_Process.ROOTS;
+	var _g1 = dn_Process.ROOTS;
 	while(_g < _g1.length) {
 		var p = _g1[_g];
 		++_g;
@@ -2025,14 +2025,14 @@ mt_Process.resizeAll = function() {
 					while(_g3 < _g12.length) {
 						var p2 = _g12[_g3];
 						++_g3;
-						mt_Process._resize(p2);
+						dn_Process._resize(p2);
 					}
 				}
 			}
 		}
 	}
 };
-mt_Process._resize = function(p) {
+dn_Process._resize = function(p) {
 	if(!p.destroyed) {
 		p.onResize();
 		var _g = 0;
@@ -2040,11 +2040,11 @@ mt_Process._resize = function(p) {
 		while(_g < _g1.length) {
 			var p1 = _g1[_g];
 			++_g;
-			mt_Process._resize(p1);
+			dn_Process._resize(p1);
 		}
 	}
 };
-mt_Process._update = function(p,tmod,rendering) {
+dn_Process._update = function(p,tmod,rendering) {
 	if(rendering == null) {
 		rendering = true;
 	}
@@ -2070,11 +2070,11 @@ mt_Process._update = function(p,tmod,rendering) {
 		while(_g < _g1.length) {
 			var p1 = _g1[_g];
 			++_g;
-			mt_Process._update(p1,tmod,rendering);
+			dn_Process._update(p1,tmod,rendering);
 		}
 	}
 };
-mt_Process._postUpdate = function(p) {
+dn_Process._postUpdate = function(p) {
 	if(p.paused || p.destroyed) {
 		return;
 	}
@@ -2085,23 +2085,23 @@ mt_Process._postUpdate = function(p) {
 		while(_g < _g1.length) {
 			var c = _g1[_g];
 			++_g;
-			mt_Process._postUpdate(c);
+			dn_Process._postUpdate(c);
 		}
 	}
 };
-mt_Process._checkDestroyeds = function(plist) {
+dn_Process._checkDestroyeds = function(plist) {
 	var i = 0;
 	while(i < plist.length) {
 		var p = plist[i];
 		if(p.destroyed) {
-			mt_Process._dispose(p);
+			dn_Process._dispose(p);
 		} else {
-			mt_Process._checkDestroyeds(p.children);
+			dn_Process._checkDestroyeds(p.children);
 			++i;
 		}
 	}
 };
-mt_Process._dispose = function(p) {
+dn_Process._dispose = function(p) {
 	var _g = 0;
 	var _g1 = p.children;
 	while(_g < _g1.length) {
@@ -2109,14 +2109,14 @@ mt_Process._dispose = function(p) {
 		++_g;
 		p1.destroyed = true;
 	}
-	mt_Process._checkDestroyeds(p.children);
+	dn_Process._checkDestroyeds(p.children);
 	p.delayer.destroy();
 	p.cd.destroy();
 	p.tw.destroy();
 	if(p.parent != null) {
 		HxOverrides.remove(p.parent.children,p);
 	} else {
-		HxOverrides.remove(mt_Process.ROOTS,p);
+		HxOverrides.remove(dn_Process.ROOTS,p);
 	}
 	if(p.root != null) {
 		var _this = p.root;
@@ -2135,19 +2135,19 @@ mt_Process._dispose = function(p) {
 	p.tw = null;
 	p.root = null;
 };
-mt_Process.prototype = {
+dn_Process.prototype = {
 	init: function() {
 		this.name = "process";
-		this.uniqId = mt_Process.UNIQ_ID++;
+		this.uniqId = dn_Process.UNIQ_ID++;
 		this.children = [];
 		this.paused = false;
 		this.destroyed = false;
 		this.ftime = 0;
 		this.tmod = 1;
 		this.speedMod = 1.0;
-		this.delayer = new mt_Delayer(this.getDefaultFrameRate());
-		this.cd = new mt_Cooldown(this.getDefaultFrameRate());
-		this.tw = new mt_deepnight_Tweenie(this.getDefaultFrameRate());
+		this.delayer = new dn_Delayer(this.getDefaultFrameRate());
+		this.cd = new dn_Cooldown(this.getDefaultFrameRate());
+		this.tw = new dn_Tweenie(this.getDefaultFrameRate());
 	}
 	,createRoot: function(ctx) {
 		if(this.root != null) {
@@ -2197,7 +2197,7 @@ mt_Process.prototype = {
 	}
 	,addChild: function(p) {
 		if(p.parent == null) {
-			HxOverrides.remove(mt_Process.ROOTS,p);
+			HxOverrides.remove(dn_Process.ROOTS,p);
 		} else {
 			HxOverrides.remove(p.parent.children,p);
 		}
@@ -2208,7 +2208,7 @@ mt_Process.prototype = {
 		if(runUpdateImmediatly == null) {
 			runUpdateImmediatly = false;
 		}
-		var p = new mt_Process(this);
+		var p = new dn_Process(this);
 		p.name = "childProcess";
 		if(onUpdate != null) {
 			p.onUpdateCb = function() {
@@ -2221,19 +2221,19 @@ mt_Process.prototype = {
 			};
 		}
 		if(runUpdateImmediatly) {
-			mt_Process._update(p,1);
+			dn_Process._update(p,1);
 		}
 		return p;
 	}
-	,__class__: mt_Process
+	,__class__: dn_Process
 };
 var Fx = function() {
-	mt_Process.call(this,Game.ME);
+	dn_Process.call(this,Game.ME);
 	var _this = Assets.gameElements;
 	if(_this.pages.length > 1) {
 		throw new js__$Boot_HaxeError("Cannot access tile when there is multiple pages");
 	}
-	this.pool = new mt_heaps_ParticlePool(_this.pages[0],2048,Const.FPS);
+	this.pool = new dn_heaps_ParticlePool(_this.pages[0],2048,Const.FPS);
 	var _this1 = Assets.gameElements;
 	if(_this1.pages.length > 1) {
 		throw new js__$Boot_HaxeError("Cannot access tile when there is multiple pages");
@@ -2267,10 +2267,10 @@ var Fx = function() {
 };
 $hxClasses["Fx"] = Fx;
 Fx.__name__ = "Fx";
-Fx.__super__ = mt_Process;
-Fx.prototype = $extend(mt_Process.prototype,{
+Fx.__super__ = dn_Process;
+Fx.prototype = $extend(dn_Process.prototype,{
 	onDispose: function() {
-		mt_Process.prototype.onDispose.call(this);
+		dn_Process.prototype.onDispose.call(this);
 		this.pool.dispose();
 		var _this = this.bgAddSb;
 		if(_this != null && _this.parent != null) {
@@ -2472,7 +2472,7 @@ Fx.prototype = $extend(mt_Process.prototype,{
 			var d1 = null ? Math.random() * 0.1 * (Std.random(2) * 2 - 1) : Math.random() * 0.1;
 			var d2 = d1 * p3.fps;
 			d2 = 0 > d2 ? 0 : d2;
-			p3.visible = d2 <= 0;
+			p3.visible = !p3.killed && d2 <= 0;
 			p3.delayF = d2;
 			p3.set_lifeS(null ? (0.2 + Math.random() * 0.7) * (Std.random(2) * 2 - 1) : 0.2 + Math.random() * 0.7);
 		}
@@ -2678,7 +2678,7 @@ Fx.prototype = $extend(mt_Process.prototype,{
 			var d1 = (null ? Math.random() * 0.1 * (Std.random(2) * 2 - 1) : Math.random() * 0.1) + i / n * 0.2;
 			var d2 = d1 * p3.fps;
 			d2 = 0 > d2 ? 0 : d2;
-			p3.visible = d2 <= 0;
+			p3.visible = !p3.killed && d2 <= 0;
 			p3.delayF = d2;
 		}
 		var n1 = 40;
@@ -2869,7 +2869,7 @@ Fx.prototype = $extend(mt_Process.prototype,{
 			var d = freq * i;
 			var d1 = d * p.fps;
 			d1 = 0 > d1 ? 0 : d1;
-			p.visible = d1 <= 0;
+			p.visible = !p.killed && d1 <= 0;
 			p.delayF = d1;
 		}
 	}
@@ -3234,13 +3234,13 @@ Fx.prototype = $extend(mt_Process.prototype,{
 		}
 	}
 	,update: function() {
-		mt_Process.prototype.update.call(this);
+		dn_Process.prototype.update.call(this);
 		this.pool.update(Game.ME.tmod);
 	}
 	,__class__: Fx
 });
 var Game = function() {
-	mt_Process.call(this,Main.ME);
+	dn_Process.call(this,Main.ME);
 	Game.ME = this;
 	this.ca = Main.ME.controller.createAccess("game");
 	this.createRootInLayers(Main.ME.root,Const.DP_BG);
@@ -3260,8 +3260,8 @@ var Game = function() {
 };
 $hxClasses["Game"] = Game;
 Game.__name__ = "Game";
-Game.__super__ = mt_Process;
-Game.prototype = $extend(mt_Process.prototype,{
+Game.__super__ = dn_Process;
+Game.prototype = $extend(dn_Process.prototype,{
 	restartLevel: function() {
 		this.startLevel(this.level.lid);
 	}
@@ -3294,7 +3294,7 @@ Game.prototype = $extend(mt_Process.prototype,{
 	,renderBg: function() {
 		this.bg.clear();
 		var t = Assets.gameElements.getTile("gradient");
-		var x = (mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) / Const.SCALE / t.width;
+		var x = (dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) / Const.SCALE / t.width;
 		var nx;
 		if(x > .0) {
 			var t1 = x + .5 | 0;
@@ -3305,7 +3305,7 @@ Game.prototype = $extend(mt_Process.prototype,{
 		} else {
 			nx = 0;
 		}
-		var x1 = (mt_Process.CUSTOM_STAGE_HEIGHT > 0 ? mt_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) / Const.SCALE / t.height;
+		var x1 = (dn_Process.CUSTOM_STAGE_HEIGHT > 0 ? dn_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) / Const.SCALE / t.height;
 		var ny;
 		if(x1 > .0) {
 			var t3 = x1 + .5 | 0;
@@ -3330,7 +3330,7 @@ Game.prototype = $extend(mt_Process.prototype,{
 		}
 	}
 	,onResize: function() {
-		mt_Process.prototype.onResize.call(this);
+		dn_Process.prototype.onResize.call(this);
 		this.renderBg();
 	}
 	,clearText: function() {
@@ -3373,7 +3373,7 @@ Game.prototype = $extend(mt_Process.prototype,{
 		if(ratioOldColor == null) {
 			ratioOldColor = 0.;
 		}
-		var rgb_r = c >> 16;
+		var rgb_r = c >> 16 & 255;
 		var rgb_g = c >> 8 & 255;
 		var rgb_b = c & 255;
 		var r = 1.0 * rgb_r / 255;
@@ -3392,10 +3392,10 @@ Game.prototype = $extend(mt_Process.prototype,{
 		tf.set_text(str);
 		tf.set_maxWidth(190);
 		tf.set_textColor(16777215);
-		var v = (mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) / Const.SCALE * 0.5 - f.get_outerWidth() * 0.5 | 0;
+		var v = (dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) / Const.SCALE * 0.5 - f.get_outerWidth() * 0.5 | 0;
 		f.posChanged = true;
 		f.x = v;
-		var v1 = (mt_Process.CUSTOM_STAGE_HEIGHT > 0 ? mt_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) / Const.SCALE - 8 - f.get_outerHeight() | 0;
+		var v1 = (dn_Process.CUSTOM_STAGE_HEIGHT > 0 ? dn_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) / Const.SCALE - 8 - f.get_outerHeight() | 0;
 		f.posChanged = true;
 		f.y = v1;
 		var _tween = this.tw.create_(function() {
@@ -3421,7 +3421,7 @@ Game.prototype = $extend(mt_Process.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this.cdList.push(new mt__$Cooldown_CdInst(176160768,frames));
+					_this.cdList.push(new dn__$Cooldown_CdInst(176160768,frames));
 				}
 			}
 		}
@@ -3440,7 +3440,7 @@ Game.prototype = $extend(mt_Process.prototype,{
 		Entity.GC = [];
 	}
 	,onDispose: function() {
-		mt_Process.prototype.onDispose.call(this);
+		dn_Process.prototype.onDispose.call(this);
 		this.fx.destroyed = true;
 		var _g = 0;
 		var _g1 = Entity.ALL;
@@ -3455,7 +3455,7 @@ Game.prototype = $extend(mt_Process.prototype,{
 		this.gc();
 	}
 	,update: function() {
-		mt_Process.prototype.update.call(this);
+		dn_Process.prototype.update.call(this);
 		var _g = 0;
 		var _g1 = Entity.ALL;
 		while(_g < _g1.length) {
@@ -3537,7 +3537,7 @@ Game.prototype = $extend(mt_Process.prototype,{
 						if(cur != null) {
 							cur.frames = frames1;
 						} else {
-							_this2.cdList.push(new mt__$Cooldown_CdInst(180355072,frames1));
+							_this2.cdList.push(new dn__$Cooldown_CdInst(180355072,frames1));
 						}
 					}
 				}
@@ -3561,9 +3561,9 @@ Game.prototype = $extend(mt_Process.prototype,{
 });
 var GameCinematic = function(cid) {
 	var _gthis = this;
-	mt_Process.call(this,Game.ME);
+	dn_Process.call(this,Game.ME);
 	GameCinematic.ALL.push(this);
-	this.cm = new mt_deepnight_Cinematic(Const.FPS);
+	this.cm = new dn_Cinematic(Const.FPS);
 	var _this = this.cd;
 	var frames = 0.6 * this.cd.baseFps;
 	frames = Math.floor(frames * 1000) / 1000;
@@ -3581,7 +3581,7 @@ var GameCinematic = function(cid) {
 			if(cur != null) {
 				cur.frames = frames;
 			} else {
-				_this.cdList.push(new mt__$Cooldown_CdInst(25165824,frames));
+				_this.cdList.push(new dn__$Cooldown_CdInst(25165824,frames));
 			}
 		}
 	}
@@ -3641,7 +3641,7 @@ var GameCinematic = function(cid) {
 					if(cur1 != null) {
 						cur1.frames = frames1;
 					} else {
-						_this1.cdList.push(new mt__$Cooldown_CdInst(29360128,frames1));
+						_this1.cdList.push(new dn__$Cooldown_CdInst(29360128,frames1));
 					}
 				}
 			}
@@ -3851,8 +3851,8 @@ GameCinematic.__name__ = "GameCinematic";
 GameCinematic.hasAny = function() {
 	return GameCinematic.ALL.length > 0;
 };
-GameCinematic.__super__ = mt_Process;
-GameCinematic.prototype = $extend(mt_Process.prototype,{
+GameCinematic.__super__ = dn_Process;
+GameCinematic.prototype = $extend(dn_Process.prototype,{
 	showCoord: function(id,t) {
 		Game.ME.fx.showCoord(Game.ME.level.getMarker("FreeMarker",id).cx,Game.ME.level.getMarker("FreeMarker",id).cy,t);
 	}
@@ -3900,7 +3900,7 @@ GameCinematic.prototype = $extend(mt_Process.prototype,{
 		if(ratioOldColor == null) {
 			ratioOldColor = 0.;
 		}
-		var rgb_r = c >> 16;
+		var rgb_r = c >> 16 & 255;
 		var rgb_g = c >> 8 & 255;
 		var rgb_b = c & 255;
 		var r = 1.0 * rgb_r / 255;
@@ -3926,7 +3926,7 @@ GameCinematic.prototype = $extend(mt_Process.prototype,{
 		var _this = f.getProperties(tf1);
 		_this.verticalAlign = h2d_FlowAlign.Top;
 		_this.horizontalAlign = h2d_FlowAlign.Right;
-		var v = (mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) / Const.SCALE * 0.5 - f.get_outerWidth() * 0.5 + Math.random() * 30 * (Std.random(2) * 2 - 1) | 0;
+		var v = (dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) / Const.SCALE * 0.5 - f.get_outerWidth() * 0.5 + Math.random() * 30 * (Std.random(2) * 2 - 1) | 0;
 		f.posChanged = true;
 		f.x = v;
 		var v1 = null ? (20 + Math.random() * 20) * (Std.random(2) * 2 - 1) : 20 + Math.random() * 20;
@@ -3955,13 +3955,13 @@ GameCinematic.prototype = $extend(mt_Process.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this1.cdList.push(new mt__$Cooldown_CdInst(25165824,frames));
+					_this1.cdList.push(new dn__$Cooldown_CdInst(25165824,frames));
 				}
 			}
 		}
 	}
 	,onDispose: function() {
-		mt_Process.prototype.onDispose.call(this);
+		dn_Process.prototype.onDispose.call(this);
 		this.cm.destroy();
 		this.cm = null;
 		HxOverrides.remove(GameCinematic.ALL,this);
@@ -3974,7 +3974,7 @@ GameCinematic.prototype = $extend(mt_Process.prototype,{
 	}
 	,update: function() {
 		this.cm.update(this.tmod);
-		mt_Process.prototype.update.call(this);
+		dn_Process.prototype.update.call(this);
 		var _this = Game.ME.ca;
 		var k = 1;
 		var tmp;
@@ -4085,7 +4085,7 @@ Lang.init = function(lid) {
 	Lang.CUR = lid;
 };
 var Level = function(id) {
-	mt_Process.call(this,Game.ME);
+	dn_Process.call(this,Game.ME);
 	Game.ME.level = this;
 	this.lid = id;
 	var _this = Data.room.byId;
@@ -4099,7 +4099,7 @@ var Level = function(id) {
 		var l = _g_a[_g_pos++];
 		if(l.name == "collisions") {
 			var _g1 = 0;
-			var _g2 = mt_deepnight_CdbHelper.getLayerPoints(l.data,this.infos.width);
+			var _g2 = dn_CdbHelper.getLayerPoints(l.data,this.infos.width);
 			while(_g1 < _g2.length) {
 				var t = _g2[_g1];
 				++_g1;
@@ -4182,8 +4182,8 @@ var Level = function(id) {
 };
 $hxClasses["Level"] = Level;
 Level.__name__ = "Level";
-Level.__super__ = mt_Process;
-Level.prototype = $extend(mt_Process.prototype,{
+Level.__super__ = dn_Process;
+Level.prototype = $extend(dn_Process.prototype,{
 	render: function() {
 		this.root.removeChildren();
 		var _g_a = this.infos.layers;
@@ -4193,7 +4193,7 @@ Level.prototype = $extend(mt_Process.prototype,{
 			var tileSet = cdb__$Types_LevelPropsAccess_$Impl_$.getTileset(this.infos.props,Data.room,l.data.file);
 			var tg = new h2d_TileGroup(Assets.levelTiles,this.root);
 			var _g1 = 0;
-			var _g2 = mt_deepnight_CdbHelper.getLayerTiles(l.data,Assets.levelTiles,this.infos.width,tileSet);
+			var _g2 = dn_CdbHelper.getLayerTiles(l.data,Assets.levelTiles,this.infos.width,tileSet);
 			while(_g1 < _g2.length) {
 				var t = _g2[_g1];
 				++_g1;
@@ -4269,12 +4269,12 @@ Level.prototype = $extend(mt_Process.prototype,{
 		return a;
 	}
 	,update: function() {
-		mt_Process.prototype.update.call(this);
+		dn_Process.prototype.update.call(this);
 	}
 	,__class__: Level
 });
 var Main = function(s) {
-	mt_Process.call(this);
+	dn_Process.call(this);
 	Main.ME = this;
 	this.createRoot(s);
 	this.root.set_filter(new h2d_filter_ColorMatrix());
@@ -4283,9 +4283,9 @@ var Main = function(s) {
 	Lang.init("en");
 	Assets.init();
 	Data.load(hxd_Res.get_loader().loadCache("data.cdb",hxd_res_Resource).entry.getText());
-	new mt_deepnight_GameFocusHelper(Boot.ME.s2d,Assets.font);
+	new dn_heaps_GameFocusHelper(Boot.ME.s2d,Assets.font);
 	new Console(Assets.font,s);
-	this.controller = new mt_heaps_Controller(s);
+	this.controller = new dn_heaps_Controller(s);
 	this.ca = this.controller.createAccess("main");
 	this.controller.bind(17,37,81,65);
 	this.controller.bind(18,39,68);
@@ -4298,8 +4298,8 @@ var Main = function(s) {
 };
 $hxClasses["Main"] = Main;
 Main.__name__ = "Main";
-Main.__super__ = mt_Process;
-Main.prototype = $extend(mt_Process.prototype,{
+Main.__super__ = dn_Process;
+Main.prototype = $extend(dn_Process.prototype,{
 	startGame: function() {
 		if(Game.ME != null) {
 			Game.ME.destroyed = true;
@@ -4311,9 +4311,9 @@ Main.prototype = $extend(mt_Process.prototype,{
 		}
 	}
 	,onResize: function() {
-		mt_Process.prototype.onResize.call(this);
+		dn_Process.prototype.onResize.call(this);
 		if(Const.AUTO_SCALE_TARGET_HEIGHT > 0) {
-			var x = (mt_Process.CUSTOM_STAGE_HEIGHT > 0 ? mt_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) / Const.AUTO_SCALE_TARGET_HEIGHT;
+			var x = (dn_Process.CUSTOM_STAGE_HEIGHT > 0 ? dn_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) / Const.AUTO_SCALE_TARGET_HEIGHT;
 			var tmp;
 			if(x > .0) {
 				var t = x + .5 | 0;
@@ -4334,8 +4334,8 @@ Main.prototype = $extend(mt_Process.prototype,{
 		_this.scaleY = v;
 	}
 	,update: function() {
-		mt_heaps_slib_SpriteLib.TMOD = this.tmod;
-		mt_Process.prototype.update.call(this);
+		dn_heaps_slib_SpriteLib.TMOD = this.tmod;
+		dn_Process.prototype.update.call(this);
 	}
 	,__class__: Main
 });
@@ -5004,12 +5004,12 @@ var Viewport = function() {
 	this.dx = 0.;
 	this.y = 0.;
 	this.x = 0.;
-	mt_Process.call(this,Game.ME);
+	dn_Process.call(this,Game.ME);
 };
 $hxClasses["Viewport"] = Viewport;
 Viewport.__name__ = "Viewport";
-Viewport.__super__ = mt_Process;
-Viewport.prototype = $extend(mt_Process.prototype,{
+Viewport.__super__ = dn_Process;
+Viewport.prototype = $extend(dn_Process.prototype,{
 	track: function(e,immediate) {
 		if(immediate == null) {
 			immediate = false;
@@ -5043,14 +5043,14 @@ Viewport.prototype = $extend(mt_Process.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this.cdList.push(new mt__$Cooldown_CdInst(54525952,frames));
+					_this.cdList.push(new dn__$Cooldown_CdInst(54525952,frames));
 				}
 			}
 		}
 		this.shakePow = power;
 	}
 	,update: function() {
-		mt_Process.prototype.update.call(this);
+		dn_Process.prototype.update.call(this);
 		var _this = this.target;
 		var tx = (_this.cx + _this.xr) * Const.GRID + this.debugOffX;
 		var _this1 = this.target;
@@ -5725,6 +5725,3290 @@ cdb_IndexId.__super__ = cdb_Index;
 cdb_IndexId.prototype = $extend(cdb_Index.prototype,{
 	__class__: cdb_IndexId
 });
+var dn_Bresenham = function() { };
+$hxClasses["dn.Bresenham"] = dn_Bresenham;
+dn_Bresenham.__name__ = "dn.Bresenham";
+dn_Bresenham.getDisc = function(x0,y0,radius) {
+	var pts = [];
+	dn_Bresenham.iterateDisc(x0,y0,radius,function(x,y) {
+		pts.push({ x : x, y : y});
+	});
+	return pts;
+};
+dn_Bresenham.iterateDisc = function(x0,y0,radius,cb) {
+	var x = radius;
+	var y = 0;
+	var radiusError = 1 - x;
+	while(x >= y) {
+		var fy = y + y0;
+		var _g = -x + x0;
+		var _g1 = x + x0 + 1;
+		while(_g < _g1) {
+			var x1 = _g++;
+			cb(x1,fy);
+		}
+		if((radius <= 1 || x != y && y != 0) && radiusError >= 0) {
+			var fy1 = x + y0;
+			var _g2 = -y + x0;
+			var _g11 = y + x0 + 1;
+			while(_g2 < _g11) {
+				var x2 = _g2++;
+				cb(x2,fy1);
+			}
+		}
+		if(y != 0) {
+			var fy2 = -y + y0;
+			var _g3 = -x + x0;
+			var _g12 = x + x0 + 1;
+			while(_g3 < _g12) {
+				var x3 = _g3++;
+				cb(x3,fy2);
+			}
+		}
+		if((radius <= 1 || x != y && y != 0) && radiusError >= 0) {
+			var fy3 = -x + y0;
+			var _g4 = -y + x0;
+			var _g13 = y + x0 + 1;
+			while(_g4 < _g13) {
+				var x4 = _g4++;
+				cb(x4,fy3);
+			}
+		}
+		++y;
+		if(radiusError < 0) {
+			radiusError += 2 * y + 1;
+		} else {
+			--x;
+			radiusError += 2 * (y - x + 1);
+		}
+	}
+};
+var dn_CdbHelper = function() { };
+$hxClasses["dn.CdbHelper"] = dn_CdbHelper;
+dn_CdbHelper.__name__ = "dn.CdbHelper";
+dn_CdbHelper.getLayerTiles = function(l,sheet,levelWid,tileSetProps) {
+	var lContent = cdb__$Types_TileLayerData_$Impl_$.decode(l.data);
+	var tiles = [];
+	if(lContent[0] == 65535) {
+		lContent.shift();
+		var _g = 0;
+		var _g1 = lContent.length / 3 | 0;
+		while(_g < _g1) {
+			var i = _g++;
+			var x = lContent[i * 3];
+			var y = lContent[i * 3 + 1];
+			var id = lContent[i * 3 + 2];
+			tiles.push({ cx : x / l.size | 0, cy : y / l.size | 0, x : x, y : y, t : dn_CdbHelper.getObjectTile(sheet,l.size,tileSetProps,id)});
+		}
+	} else {
+		var _g2 = 0;
+		var _g11 = lContent.length;
+		while(_g2 < _g11) {
+			var i1 = _g2++;
+			if(lContent[i1] > 0) {
+				var pt_x = i1 - (i1 / levelWid | 0) * levelWid;
+				var pt_y = i1 / levelWid | 0;
+				tiles.push({ cx : pt_x, cy : pt_y, x : pt_x * l.size, y : pt_y * l.size, t : dn_CdbHelper.getTile(sheet,l.size,lContent[i1] - 1)});
+			}
+		}
+	}
+	return tiles;
+};
+dn_CdbHelper.getLayerPoints = function(l,levelWid) {
+	var lContent = cdb__$Types_TileLayerData_$Impl_$.decode(l.data);
+	var tiles = [];
+	if(lContent[0] != 65535) {
+		var _g = 0;
+		var _g1 = lContent.length;
+		while(_g < _g1) {
+			var i = _g++;
+			if(lContent[i] > 0) {
+				var pt_x = i - (i / levelWid | 0) * levelWid;
+				var pt_y = i / levelWid | 0;
+				tiles.push({ cx : pt_x, cy : pt_y, x : pt_x * l.size, y : pt_y * l.size, t : null});
+			}
+		}
+	}
+	return tiles;
+};
+dn_CdbHelper.getTile = function(sheet,tileSize,idx) {
+	var line = sheet.width / tileSize | 0;
+	var y = idx / line | 0;
+	return sheet.sub((idx - y * line) * tileSize,y * tileSize,tileSize,tileSize);
+};
+dn_CdbHelper.getObjectTile = function(source,tileSize,props,idx) {
+	var flip = false;
+	if((idx & 32768) != 0) {
+		idx -= 32768;
+		flip = true;
+	}
+	var line = source.width / tileSize | 0;
+	var y = idx / line | 0;
+	var x = idx - y * line;
+	var t = source.sub(x * tileSize,y * tileSize,tileSize,tileSize);
+	var _g = 0;
+	var _g1 = props.sets;
+	while(_g < _g1.length) {
+		var s = _g1[_g];
+		++_g;
+		if(s.x == x && s.y == y) {
+			t.setSize(s.w * tileSize,s.h * tileSize);
+			break;
+		}
+	}
+	if(flip) {
+		t.flipX();
+		t.dx += t.width;
+	}
+	return t;
+};
+var dn_Cinematic = function(fps) {
+	this.fps = fps;
+	this.turbo = false;
+	this.queues = [];
+	this.persistSignals = new haxe_ds_StringMap();
+};
+$hxClasses["dn.Cinematic"] = dn_Cinematic;
+dn_Cinematic.__name__ = "dn.Cinematic";
+dn_Cinematic.prototype = {
+	destroy: function() {
+		this.queues = null;
+		this.curQueue = null;
+		this.onAllComplete = null;
+	}
+	,signal: function(s) {
+		if(this.queues == null) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.queues;
+		while(_g < _g1.length) {
+			var q = _g1[_g];
+			++_g;
+			if(q.length > 0 && (q[0].s == s || q[0].s == "")) {
+				this.runEvent(q.splice(0,1)[0]);
+			}
+		}
+	}
+	,__add: function(cb,t,signal) {
+		this.curQueue.push({ f : cb, t : this.fps * t / 1000, s : signal});
+	}
+	,__beginNewQueue: function() {
+		this.curQueue = [];
+		this.queues.push(this.curQueue);
+	}
+	,runEvent: function(e) {
+		if(e.s != null) {
+			this.persistSignals.remove(e.s);
+		}
+		e.f();
+	}
+	,update: function(dt) {
+		var i = 0;
+		while(i < this.queues.length) {
+			var q = this.queues[i];
+			if(q.length > 0) {
+				q[0].t -= dt;
+				while(true) {
+					var tmp;
+					if(q.length > 0 && q[0].t <= 0) {
+						if(!(this.turbo || q[0].s == null)) {
+							var key = q[0].s;
+							var _this = this.persistSignals;
+							tmp = __map_reserved[key] != null ? _this.getReserved(key) : _this.h[key];
+						} else {
+							tmp = true;
+						}
+					} else {
+						tmp = false;
+					}
+					if(!tmp) {
+						break;
+					}
+					this.runEvent(q.splice(0,1)[0]);
+				}
+			}
+			if(q.length == 0) {
+				this.queues.splice(i,1);
+				if(this.queues.length == 0 && this.onAllComplete != null) {
+					this.onAllComplete();
+				}
+			} else {
+				++i;
+			}
+		}
+		if(this.curQueue != null && this.curQueue.length == 0) {
+			this.curQueue = null;
+		}
+	}
+	,__class__: dn_Cinematic
+};
+var dn__$Cooldown_CdInst = function(k,f) {
+	this.k = k;
+	this.frames = f;
+	this.initial = f;
+};
+$hxClasses["dn._Cooldown.CdInst"] = dn__$Cooldown_CdInst;
+dn__$Cooldown_CdInst.__name__ = "dn._Cooldown.CdInst";
+dn__$Cooldown_CdInst.prototype = {
+	__class__: dn__$Cooldown_CdInst
+};
+var dn_Cooldown = function(fps) {
+	if(dn_Cooldown.INDEXES == null) {
+		if(haxe_rtti_Meta.getType(dn_Cooldown).indexes != null) {
+			var _g = [];
+			var _g1 = 0;
+			var _g2 = haxe_rtti_Meta.getType(dn_Cooldown).indexes;
+			while(_g1 < _g2.length) {
+				var str = _g2[_g1];
+				++_g1;
+				_g.push(Std.string(str));
+			}
+			dn_Cooldown.INDEXES = _g;
+		}
+	}
+	this.cdList = [];
+	this.fastCheck = new haxe_ds_IntMap();
+	this.baseFps = fps;
+};
+$hxClasses["dn.Cooldown"] = dn_Cooldown;
+dn_Cooldown.__name__ = "dn.Cooldown";
+dn_Cooldown.prototype = {
+	destroy: function() {
+		this.cdList = null;
+		this.fastCheck = null;
+	}
+	,_getRatio: function(k) {
+		var cd = this._getCdObject(k);
+		var max = cd == null ? 0 : cd.initial;
+		if(max <= 0) {
+			return 0;
+		} else {
+			var cd1 = this._getCdObject(k);
+			return (cd1 == null ? 0 : cd1.frames) / max;
+		}
+	}
+	,_getCdObject: function(k) {
+		var _g = 0;
+		var _g1 = this.cdList;
+		while(_g < _g1.length) {
+			var cd = _g1[_g];
+			++_g;
+			if(cd.k == k) {
+				return cd;
+			}
+		}
+		return null;
+	}
+	,update: function(dt) {
+		var i = 0;
+		while(i < this.cdList.length) {
+			var cd = this.cdList[i];
+			cd.frames = Math.floor((cd.frames - dt) * 1000) / 1000;
+			if(cd.frames <= 0) {
+				var cb = cd.cb;
+				HxOverrides.remove(this.cdList,cd);
+				cd.frames = 0;
+				cd.cb = null;
+				this.fastCheck.remove(cd.k);
+				if(cb != null) {
+					cb();
+				}
+			} else {
+				++i;
+			}
+		}
+	}
+	,__class__: dn_Cooldown
+};
+var dn__$Delayer_Task = function(id,t,cb) {
+	this.t = t;
+	this.cb = cb;
+	this.id = id;
+};
+$hxClasses["dn._Delayer.Task"] = dn__$Delayer_Task;
+dn__$Delayer_Task.__name__ = "dn._Delayer.Task";
+dn__$Delayer_Task.prototype = {
+	__class__: dn__$Delayer_Task
+};
+var dn_Delayer = function(fps) {
+	this.now = 0;
+	this.fps = fps;
+	this.delays = [];
+};
+$hxClasses["dn.Delayer"] = dn_Delayer;
+dn_Delayer.__name__ = "dn.Delayer";
+dn_Delayer.prototype = {
+	destroy: function() {
+		this.delays = null;
+	}
+	,cmp: function(a,b) {
+		if(a.t < b.t) {
+			return -1;
+		} else if(a.t > b.t) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+	,addS: function(id,cb,sec) {
+		this.delays.push(new dn__$Delayer_Task(id,this.now + sec * this.fps,cb));
+		haxe_ds_ArraySort.sort(this.delays,$bind(this,this.cmp));
+	}
+	,addF: function(id,cb,frames) {
+		this.delays.push(new dn__$Delayer_Task(id,this.now + frames,cb));
+		haxe_ds_ArraySort.sort(this.delays,$bind(this,this.cmp));
+	}
+	,update: function(dt) {
+		while(this.delays.length > 0 && this.delays[0].t <= this.now) {
+			var d = this.delays.shift();
+			d.cb();
+			d.cb = null;
+		}
+		this.now += dt;
+	}
+	,__class__: dn_Delayer
+};
+var dn_Lib = function() { };
+$hxClasses["dn.Lib"] = dn_Lib;
+dn_Lib.__name__ = "dn.Lib";
+dn_Lib.redirectTracesToH2dConsole = function(c) {
+	haxe_Log.trace = function(m,pos) {
+		if(pos != null && pos.customParams == null) {
+			pos.customParams = ["debug"];
+		}
+		c.log(pos.fileName + "(" + pos.lineNumber + ") : " + Std.string(m));
+	};
+};
+var dn_TType = $hxEnums["dn.TType"] = { __ename__ : true, __constructs__ : ["TLinear","TLoop","TLoopEaseIn","TLoopEaseOut","TEase","TEaseIn","TEaseOut","TBurn","TBurnIn","TBurnOut","TZigZag","TRand","TShake","TShakeBoth","TJump","TElasticEnd","TBackOut"]
+	,TLinear: {_hx_index:0,__enum__:"dn.TType",toString:$estr}
+	,TLoop: {_hx_index:1,__enum__:"dn.TType",toString:$estr}
+	,TLoopEaseIn: {_hx_index:2,__enum__:"dn.TType",toString:$estr}
+	,TLoopEaseOut: {_hx_index:3,__enum__:"dn.TType",toString:$estr}
+	,TEase: {_hx_index:4,__enum__:"dn.TType",toString:$estr}
+	,TEaseIn: {_hx_index:5,__enum__:"dn.TType",toString:$estr}
+	,TEaseOut: {_hx_index:6,__enum__:"dn.TType",toString:$estr}
+	,TBurn: {_hx_index:7,__enum__:"dn.TType",toString:$estr}
+	,TBurnIn: {_hx_index:8,__enum__:"dn.TType",toString:$estr}
+	,TBurnOut: {_hx_index:9,__enum__:"dn.TType",toString:$estr}
+	,TZigZag: {_hx_index:10,__enum__:"dn.TType",toString:$estr}
+	,TRand: {_hx_index:11,__enum__:"dn.TType",toString:$estr}
+	,TShake: {_hx_index:12,__enum__:"dn.TType",toString:$estr}
+	,TShakeBoth: {_hx_index:13,__enum__:"dn.TType",toString:$estr}
+	,TJump: {_hx_index:14,__enum__:"dn.TType",toString:$estr}
+	,TElasticEnd: {_hx_index:15,__enum__:"dn.TType",toString:$estr}
+	,TBackOut: {_hx_index:16,__enum__:"dn.TType",toString:$estr}
+};
+dn_TType.__empty_constructs__ = [dn_TType.TLinear,dn_TType.TLoop,dn_TType.TLoopEaseIn,dn_TType.TLoopEaseOut,dn_TType.TEase,dn_TType.TEaseIn,dn_TType.TEaseOut,dn_TType.TBurn,dn_TType.TBurnIn,dn_TType.TBurnOut,dn_TType.TZigZag,dn_TType.TRand,dn_TType.TShake,dn_TType.TShakeBoth,dn_TType.TJump,dn_TType.TElasticEnd,dn_TType.TBackOut];
+var dn_Tween = function(tw) {
+	this.tw = tw;
+	this.paused = false;
+	this.done = false;
+	this.n = this.ln = 0;
+	this.delay = 0;
+	this.speed = 1;
+	this.set_type(dn_TType.TEase);
+	this.plays = 1;
+	this.pixelSnap = false;
+};
+$hxClasses["dn.Tween"] = dn_Tween;
+dn_Tween.__name__ = "dn.Tween";
+dn_Tween.prototype = {
+	set_type: function(t) {
+		var _gthis = this;
+		this.type = t;
+		var tmp;
+		switch(this.type._hx_index) {
+		case 0:
+			tmp = function(step) {
+				return step;
+			};
+			break;
+		case 1:
+			tmp = function(step1) {
+				var n = 1 - step1;
+				var n1 = 1 - step1;
+				return n * n * n * 0 + 3 * step1 * (n1 * n1) * 1.33 + 3 * (step1 * step1) * (1 - step1) * 1.33 + step1 * step1 * step1 * 0;
+			};
+			break;
+		case 2:
+			tmp = function(step2) {
+				var n2 = 1 - step2;
+				var n3 = 1 - step2;
+				return n2 * n2 * n2 * 0 + 3 * step2 * (n3 * n3) * 0 + 3 * (step2 * step2) * (1 - step2) * 2.25 + step2 * step2 * step2 * 0;
+			};
+			break;
+		case 3:
+			tmp = function(step3) {
+				var n4 = 1 - step3;
+				var n5 = 1 - step3;
+				return n4 * n4 * n4 * 0 + 3 * step3 * (n5 * n5) * 2.25 + 3 * (step3 * step3) * (1 - step3) * 0 + step3 * step3 * step3 * 0;
+			};
+			break;
+		case 4:
+			tmp = function(step4) {
+				var n6 = 1 - step4;
+				var n7 = 1 - step4;
+				return n6 * n6 * n6 * 0 + 3 * step4 * (n7 * n7) * 0 + 3 * (step4 * step4) * (1 - step4) + step4 * step4 * step4;
+			};
+			break;
+		case 5:
+			tmp = function(step5) {
+				var n8 = 1 - step5;
+				var n9 = 1 - step5;
+				return n8 * n8 * n8 * 0 + 3 * step5 * (n9 * n9) * 0 + 3 * (step5 * step5) * (1 - step5) * 0.5 + step5 * step5 * step5;
+			};
+			break;
+		case 6:
+			tmp = function(step6) {
+				var n10 = 1 - step6;
+				var n11 = 1 - step6;
+				return n10 * n10 * n10 * 0 + 3 * step6 * (n11 * n11) * 0.5 + 3 * (step6 * step6) * (1 - step6) + step6 * step6 * step6;
+			};
+			break;
+		case 7:
+			tmp = function(step7) {
+				var n12 = 1 - step7;
+				var n13 = 1 - step7;
+				return n12 * n12 * n12 * 0 + 3 * step7 * (n13 * n13) + 3 * (step7 * step7) * (1 - step7) * 0 + step7 * step7 * step7;
+			};
+			break;
+		case 8:
+			tmp = function(step8) {
+				var n14 = 1 - step8;
+				var n15 = 1 - step8;
+				return n14 * n14 * n14 * 0 + 3 * step8 * (n15 * n15) + 3 * (step8 * step8) * (1 - step8) + step8 * step8 * step8;
+			};
+			break;
+		case 9:
+			tmp = function(step9) {
+				var n16 = 1 - step9;
+				var n17 = 1 - step9;
+				return n16 * n16 * n16 * 0 + 3 * step9 * (n17 * n17) * 0 + 3 * (step9 * step9) * (1 - step9) * 0 + step9 * step9 * step9;
+			};
+			break;
+		case 10:
+			tmp = function(step10) {
+				var n18 = 1 - step10;
+				var n19 = 1 - step10;
+				return n18 * n18 * n18 * 0 + 3 * step10 * (n19 * n19) * 2.5 + 3 * (step10 * step10) * (1 - step10) * -1.5 + step10 * step10 * step10;
+			};
+			break;
+		case 11:
+			tmp = function(step11) {
+				return step11;
+			};
+			break;
+		case 12:
+			tmp = function(step12) {
+				var n20 = 1 - step12;
+				var n21 = 1 - step12;
+				return n20 * n20 * n20 * 0.5 + 3 * step12 * (n21 * n21) * 1.22 + 3 * (step12 * step12) * (1 - step12) * 1.25 + step12 * step12 * step12 * 0;
+			};
+			break;
+		case 13:
+			tmp = function(step13) {
+				var n22 = 1 - step13;
+				var n23 = 1 - step13;
+				return n22 * n22 * n22 * 0.5 + 3 * step13 * (n23 * n23) * 1.22 + 3 * (step13 * step13) * (1 - step13) * 1.25 + step13 * step13 * step13 * 0;
+			};
+			break;
+		case 14:
+			tmp = function(step14) {
+				var n24 = 1 - step14;
+				var n25 = 1 - step14;
+				return n24 * n24 * n24 * 0 + 3 * step14 * (n25 * n25) * 2 + 3 * (step14 * step14) * (1 - step14) * 2.79 + step14 * step14 * step14;
+			};
+			break;
+		case 15:
+			tmp = function(step15) {
+				var n26 = 1 - step15;
+				var n27 = 1 - step15;
+				return n26 * n26 * n26 * 0 + 3 * step15 * (n27 * n27) * 0.7 + 3 * (step15 * step15) * (1 - step15) * 1.5 + step15 * step15 * step15;
+			};
+			break;
+		case 16:
+			tmp = function(step16) {
+				var s = 1.70158;
+				step16 = step16 / 1 - 1;
+				return step16 * step16 * ((s + 1) * step16 + s) + 1;
+			};
+			break;
+		}
+		this.interpolate = tmp;
+		return this.type;
+	}
+	,onUpdate: function() {
+	}
+	,onUpdateT: function(t) {
+	}
+	,onEnd: function() {
+	}
+	,onStart: function() {
+	}
+	,end: function(cb) {
+		this.onEnd = cb;
+		return this;
+	}
+	,chainedEvent: function() {
+	}
+	,interpolate: function(v) {
+		return v;
+	}
+	,endWithoutCallbacks: function() {
+		this.done = true;
+	}
+	,complete: function(fl_allowLoop) {
+		if(fl_allowLoop == null) {
+			fl_allowLoop = false;
+		}
+		var v = this.from + (this.to - this.from) * this.interpolate(1);
+		if(this.pixelSnap) {
+			v = (v > 0 ? v + .5 : v < 0 ? v - .5 : 0) | 0;
+		}
+		this.setter(v);
+		this.onUpdate();
+		this.onUpdateT(1);
+		this.onEnd();
+		this.chainedEvent();
+		if(fl_allowLoop && (this.plays == -1 || this.plays > 1)) {
+			if(this.plays != -1) {
+				this.plays--;
+			}
+			this.n = this.ln = 0;
+		} else {
+			this.done = true;
+		}
+	}
+	,internalUpdate: function(dt) {
+		if(this.done) {
+			return true;
+		}
+		if(this.paused) {
+			return false;
+		}
+		if(this.delay > 0) {
+			this.delay--;
+			return false;
+		}
+		if(this.onStart != null) {
+			var cb = $bind(this,this.onStart);
+			this.onStart = null;
+			cb();
+		}
+		var dist = this.to - this.from;
+		if(this.type == dn_TType.TRand) {
+			this.ln += Std.random(100) < 33 ? this.speed * dt : 0;
+		} else {
+			this.ln += this.speed * dt;
+		}
+		this.n = this.interpolate(this.ln);
+		if(this.ln < 1) {
+			var val;
+			if(this.type != dn_TType.TShake && this.type != dn_TType.TShakeBoth) {
+				val = this.from + this.n * dist;
+			} else if(this.type == dn_TType.TShake) {
+				var val1 = this.from;
+				var val2 = Math.random();
+				var x = this.n * dist;
+				val = val1 + val2 * (x < 0 ? -x : x) * (dist > 0 ? 1 : -1);
+			} else {
+				val = this.from + Math.random() * this.n * dist * (Std.random(2) * 2 - 1);
+			}
+			if(this.pixelSnap) {
+				val = (val > 0 ? val + .5 : val < 0 ? val - .5 : 0) | 0;
+			}
+			this.setter(val);
+			this.onUpdate();
+			this.onUpdateT(this.ln);
+		} else {
+			this.complete(true);
+		}
+		return this.done;
+	}
+	,__class__: dn_Tween
+};
+var dn_Tweenie = function(fps) {
+	this.baseFps = fps;
+	this.tlist = [];
+};
+$hxClasses["dn.Tweenie"] = dn_Tweenie;
+dn_Tweenie.__name__ = "dn.Tweenie";
+dn_Tweenie.prototype = {
+	terminate_: function(getter,setter,withCallbacks) {
+		if(this.tlist == null) {
+			return;
+		}
+		var v = getter();
+		var _g = 0;
+		var _g1 = this.tlist;
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			if(t.done) {
+				continue;
+			}
+			var old = t.getter();
+			t.setter(old + 1);
+			if(getter() != v) {
+				t.setter(old);
+				if(withCallbacks) {
+					t.ln = 1;
+					t.complete(false);
+				} else {
+					t.endWithoutCallbacks();
+				}
+			} else {
+				t.setter(old);
+			}
+		}
+	}
+	,create_: function(getter,setter,from,to,tp,duration_ms,allowDuplicates) {
+		if(allowDuplicates == null) {
+			allowDuplicates = false;
+		}
+		if(duration_ms == null) {
+			duration_ms = dn_Tweenie.DEFAULT_DURATION;
+		}
+		if(!allowDuplicates) {
+			this.terminate_(getter,setter,false);
+		}
+		var t = new dn_Tween(this);
+		t.getter = getter;
+		t.setter = setter;
+		t.from = from == null ? getter() : from;
+		t.speed = 1 / (duration_ms * this.baseFps / 1000);
+		t.to = to;
+		if(tp != null) {
+			t.set_type(tp);
+		}
+		if(from != null) {
+			setter(from);
+		}
+		this.tlist.push(t);
+		return t;
+	}
+	,destroy: function() {
+		this.tlist = null;
+	}
+	,update: function(dt) {
+		if(dt == null) {
+			dt = 1.0;
+		}
+		var _g = 0;
+		var _g1 = this.tlist;
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			if(t.internalUpdate(dt)) {
+				HxOverrides.remove(this.tlist,t);
+			}
+		}
+	}
+	,__class__: dn_Tweenie
+};
+var dn_heaps_Mode = $hxEnums["dn.heaps.Mode"] = { __ename__ : true, __constructs__ : ["Keyboard","Pad"]
+	,Keyboard: {_hx_index:0,__enum__:"dn.heaps.Mode",toString:$estr}
+	,Pad: {_hx_index:1,__enum__:"dn.heaps.Mode",toString:$estr}
+};
+dn_heaps_Mode.__empty_constructs__ = [dn_heaps_Mode.Keyboard,dn_heaps_Mode.Pad];
+var dn_heaps_Controller = function(s2d) {
+	this.hasAnyPress = false;
+	this.longPressLock = new haxe_ds_IntMap();
+	this.framePresses = new Array(28);
+	this.pressTimers = new Array(28);
+	this.third = new haxe_ds_IntMap();
+	this.secondary = new haxe_ds_IntMap();
+	this.primary = new haxe_ds_IntMap();
+	this.allowAutoSwitch = true;
+	this.isLocked = false;
+	this.suspendTimer = 0.;
+	this.exclusiveId = null;
+	this.mode = dn_heaps_Mode.Keyboard;
+	var _gthis = this;
+	dn_heaps_Controller.ALL.push(this);
+	this.gc = new dn_heaps_GamePad(0.4);
+	s2d.addEventListener(function(e) {
+		if(_gthis.allowAutoSwitch && e.kind == hxd_EventKind.EMove && _gthis.mode != dn_heaps_Mode.Keyboard) {
+			_gthis.mode = dn_heaps_Mode.Keyboard;
+		}
+	});
+	var _g = 0;
+	var _g1 = this.pressTimers.length;
+	while(_g < _g1) {
+		var idx = _g++;
+		this.pressTimers[idx] = -1;
+	}
+	var _g2 = 0;
+	var _g3 = this.framePresses.length;
+	while(_g2 < _g3) {
+		var idx1 = _g2++;
+		this.framePresses[idx1] = -1;
+	}
+};
+$hxClasses["dn.heaps.Controller"] = dn_heaps_Controller;
+dn_heaps_Controller.__name__ = "dn.heaps.Controller";
+dn_heaps_Controller.beforeUpdate = function() {
+	dn_heaps_GamePad.update();
+	var _g = 0;
+	var _g1 = dn_heaps_Controller.ALL;
+	while(_g < _g1.length) {
+		var c = _g1[_g];
+		++_g;
+		if(c.gc != null) {
+			if(c.hasAnyPress) {
+				c.hasAnyPress = false;
+				var _g2 = 0;
+				var _g11 = c.framePresses.length;
+				while(_g2 < _g11) {
+					var idx = _g2++;
+					c.framePresses[idx] = -1;
+				}
+			}
+			c.updateLongPress(0);
+			c.updateLongPress(1);
+			c.updateLongPress(2);
+			c.updateLongPress(3);
+			c.updateLongPress(5);
+			c.updateLongPress(13);
+		}
+	}
+};
+dn_heaps_Controller.prototype = {
+	bind: function(k,keyboardKey,alternate1,alternate2) {
+		this.primary.h[k] = keyboardKey;
+		if(alternate1 != null) {
+			this.secondary.h[k] = alternate1;
+		}
+		if(alternate2 != null) {
+			this.third.h[k] = alternate2;
+		}
+	}
+	,createAccess: function(id,exclusive) {
+		if(exclusive == null) {
+			exclusive = false;
+		}
+		return new dn_heaps_ControllerAccess(this,id,exclusive);
+	}
+	,updateLongPress: function(k) {
+		var idx = k;
+		var _this = this.gc;
+		if(_this.device != null && _this.toggles[k] > 0 || hxd_Key.isDown(this.primary.h[k]) || hxd_Key.isDown(this.secondary.h[k]) || hxd_Key.isDown(this.third.h[k])) {
+			if(this.pressTimers[idx] == -1) {
+				this.pressTimers[idx] = Date.now() / 1000;
+			}
+			if(Date.now() / 1000 - this.pressTimers[idx] >= dn_heaps_Controller.LONG_PRESS) {
+				if(!this.longPressLock.h.hasOwnProperty(idx)) {
+					this.framePresses[idx] = 2;
+					this.hasAnyPress = true;
+					this.longPressLock.h[idx] = true;
+				}
+			}
+		} else {
+			if(this.longPressLock.h.hasOwnProperty(idx)) {
+				this.longPressLock.remove(idx);
+			}
+			if(this.pressTimers[idx] != -1) {
+				if(this.framePresses[idx] < 0) {
+					if(Date.now() / 1000 - this.pressTimers[idx] <= dn_heaps_Controller.SHORT_PRESS) {
+						this.hasAnyPress = true;
+						this.framePresses[idx] = 1;
+					}
+				}
+				this.pressTimers[idx] = -1;
+			}
+		}
+	}
+	,__class__: dn_heaps_Controller
+};
+var dn_heaps_ControllerAccess = function(parent,id,exclusive) {
+	if(exclusive == null) {
+		exclusive = false;
+	}
+	this.manualLock = false;
+	this.parent = parent;
+	this.id = id + dn_heaps_Controller.UNIQ_ID++;
+	parent.suspendTimer = Date.now() / 1000 + 0.1;
+	if(exclusive) {
+		this.parent.exclusiveId = this.id;
+	}
+};
+$hxClasses["dn.heaps.ControllerAccess"] = dn_heaps_ControllerAccess;
+dn_heaps_ControllerAccess.__name__ = "dn.heaps.ControllerAccess";
+dn_heaps_ControllerAccess.prototype = {
+	__class__: dn_heaps_ControllerAccess
+};
+var dn_heaps_GameFocusHelper = function(s,font) {
+	this.oldSprLibTmod = 1.0;
+	this.showIntro = false;
+	this.suspended = false;
+	dn_Process.call(this);
+	this.font = font;
+	this.scene = s;
+	this.createRoot(this.scene);
+	this.root.set_visible(false);
+	this.showIntro = true;
+	this.suspendGame();
+	hxd_snd_NativeChannel.stopInput(null);
+};
+$hxClasses["dn.heaps.GameFocusHelper"] = dn_heaps_GameFocusHelper;
+dn_heaps_GameFocusHelper.__name__ = "dn.heaps.GameFocusHelper";
+dn_heaps_GameFocusHelper.__super__ = dn_Process;
+dn_heaps_GameFocusHelper.prototype = $extend(dn_Process.prototype,{
+	suspendGame: function() {
+		var _gthis = this;
+		if(this.suspended) {
+			return;
+		}
+		this.suspended = true;
+		this.oldSprLibTmod = dn_heaps_slib_SpriteLib.TMOD;
+		dn_heaps_slib_SpriteLib.TMOD = 0;
+		var _g = 0;
+		var _g1 = dn_Process.ROOTS;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			if(p != this) {
+				p.pause();
+			}
+		}
+		this.root.set_visible(true);
+		this.root.removeChildren();
+		var bg = new h2d_Bitmap(h2d_Tile.fromColor(this.showIntro ? 2436675 : 0,1,1,this.showIntro ? 1 : 0.6),this.root);
+		var i = new h2d_Interactive(1,1,this.root);
+		var tf = new h2d_Text(this.font,this.root);
+		if(this.showIntro) {
+			tf.set_text("Click anywhere to start");
+		} else {
+			tf.set_text("PAUSED - click anywhere to resume");
+		}
+		this.createChildProcess(function(c) {
+			var y = Math.floor((dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) * 0.35 / tf.get_textWidth());
+			var v = 1 > y ? 1 : y;
+			tf.posChanged = true;
+			tf.scaleX = v;
+			tf.posChanged = true;
+			tf.scaleY = v;
+			var v1 = (dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) * 0.5 - tf.get_textWidth() * tf.scaleX * 0.5 | 0;
+			tf.posChanged = true;
+			tf.x = v1;
+			var v2 = (dn_Process.CUSTOM_STAGE_HEIGHT > 0 ? dn_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) * 0.5 - tf.get_textHeight() * tf.scaleY * 0.5 | 0;
+			tf.posChanged = true;
+			tf.y = v2;
+			var tmp = dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width();
+			i.width = tmp + 1;
+			var tmp1 = dn_Process.CUSTOM_STAGE_HEIGHT > 0 ? dn_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height();
+			i.height = tmp1 + 1;
+			var v3 = dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width();
+			bg.posChanged = true;
+			bg.scaleX = v3 + 1;
+			var v4 = dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width();
+			bg.posChanged = true;
+			bg.scaleY = v4 + 1;
+			if(!_gthis.suspended) {
+				c.destroyed = true;
+			}
+		},null,true);
+		var loadingMsg = this.showIntro;
+		i.onPush = function(_) {
+			if(loadingMsg) {
+				tf.set_text("Loading, please wait...");
+				var v5 = (dn_Process.CUSTOM_STAGE_WIDTH > 0 ? dn_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) * 0.5 - tf.get_textWidth() * tf.scaleX * 0.5 | 0;
+				tf.posChanged = true;
+				tf.x = v5;
+				var v6 = (dn_Process.CUSTOM_STAGE_HEIGHT > 0 ? dn_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) * 0.5 - tf.get_textHeight() * tf.scaleY * 0.5 | 0;
+				tf.posChanged = true;
+				tf.y = v6;
+				_gthis.delayer.addS(null,$bind(_gthis,_gthis.resumeGame),1);
+			} else {
+				_gthis.resumeGame();
+			}
+			if(i != null && i.parent != null) {
+				i.parent.removeChild(i);
+			}
+		};
+		this.showIntro = false;
+	}
+	,resumeGame: function() {
+		var _gthis = this;
+		if(!this.suspended) {
+			return;
+		}
+		dn_heaps_slib_SpriteLib.TMOD = this.oldSprLibTmod;
+		this.delayer.addF(null,function() {
+			_gthis.root.set_visible(false);
+			_gthis.root.removeChildren();
+		},1);
+		this.suspended = false;
+		var _g = 0;
+		var _g1 = dn_Process.ROOTS;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			if(p != this) {
+				p.resume();
+			}
+		}
+	}
+	,update: function() {
+		dn_Process.prototype.update.call(this);
+		if(this.suspended) {
+			this.scene.over(this.root);
+		}
+		var _this = this.cd;
+		var frames = 0.2 * this.cd.baseFps;
+		var tmp;
+		if(_this.fastCheck.h.hasOwnProperty(184549376)) {
+			tmp = true;
+		} else {
+			var frames1 = frames;
+			frames1 = Math.floor(frames1 * 1000) / 1000;
+			var cur = _this._getCdObject(184549376);
+			if(!(cur != null && frames1 < cur.frames && false)) {
+				if(frames1 <= 0) {
+					if(cur != null) {
+						HxOverrides.remove(_this.cdList,cur);
+						cur.frames = 0;
+						cur.cb = null;
+						_this.fastCheck.remove(cur.k);
+					}
+				} else {
+					_this.fastCheck.h[184549376] = true;
+					if(cur != null) {
+						cur.frames = frames1;
+					} else {
+						_this.cdList.push(new dn__$Cooldown_CdInst(184549376,frames1));
+					}
+				}
+			}
+			tmp = false;
+		}
+		if(!tmp) {
+			var w = hxd_Window.getInstance();
+			if(!w.get_isFocused() && !this.suspended) {
+				this.suspendGame();
+			}
+		}
+	}
+	,__class__: dn_heaps_GameFocusHelper
+});
+var hxd_Pad = function() {
+	this.prevButtons = [];
+	this.values = [];
+	this.buttons = [];
+	this.yAxis = 0.;
+	this.xAxis = 0.;
+	this.index = -1;
+	this.connected = true;
+};
+$hxClasses["hxd.Pad"] = hxd_Pad;
+hxd_Pad.__name__ = "hxd.Pad";
+hxd_Pad.wait = function(onPad) {
+	hxd_Pad.waitPad = onPad;
+	if(!hxd_Pad.initDone) {
+		hxd_Pad.initDone = true;
+		window.addEventListener("gamepadconnected",function(p) {
+			var pad = new hxd_Pad();
+			pad.d = p.gamepad;
+			pad.index = pad.d.index;
+			hxd_Pad.pads.h[pad.d.index] = pad;
+			hxd_Pad.waitPad(pad);
+		});
+		window.addEventListener("gamepaddisconnected",function(p1) {
+			var pad1 = hxd_Pad.pads.h[p1.gamepad.index];
+			if(pad1 == null) {
+				return;
+			}
+			hxd_Pad.pads.remove(p1.gamepad.index);
+			pad1.connected = false;
+			pad1.onDisconnect();
+		});
+		haxe_MainLoop.add(hxd_Pad.syncPads);
+	}
+};
+hxd_Pad.syncPads = function() {
+	try {
+		window.navigator.getGamepads();
+	} catch( e ) {
+		var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
+	}
+	var p = hxd_Pad.pads.iterator();
+	while(p.hasNext()) {
+		var p1 = p.next();
+		var _g1 = 0;
+		var _g2 = p1.d.buttons.length;
+		while(_g1 < _g2) {
+			var i = _g1++;
+			p1.prevButtons[i] = p1.buttons[i];
+			p1.buttons[i] = p1.d.buttons[i].pressed;
+			p1.values[i] = p1.d.buttons[i].value;
+		}
+		var _g3 = 0;
+		var _g4 = p1.d.axes.length >> 1;
+		while(_g3 < _g4) {
+			var i1 = _g3++;
+			var x = p1.d.axes[i1 << 1];
+			var y = p1.d.axes[(i1 << 1) + 1];
+			p1.values[(i1 << 1) + p1.d.buttons.length] = x;
+			p1.values[(i1 << 1) + p1.d.buttons.length + 1] = -y;
+			if(i1 == 0) {
+				p1.xAxis = x;
+				p1.yAxis = y;
+			}
+		}
+	}
+};
+hxd_Pad.prototype = {
+	onDisconnect: function() {
+	}
+	,__class__: hxd_Pad
+};
+var dn_heaps_GamePad = function(deadZone,onEnable) {
+	this.axisAsButtonDeadZone = 0.70;
+	this.deadZone = 0.18;
+	dn_heaps_GamePad.ALL.push(this);
+	this.toggles = [];
+	if(deadZone != null) {
+		this.deadZone = deadZone;
+	}
+	if(onEnable != null) {
+		this.onEnable = onEnable;
+	}
+	if(dn_heaps_GamePad.AVAILABLE_DEVICES == null) {
+		dn_heaps_GamePad.AVAILABLE_DEVICES = [];
+		hxd_Pad.wait(dn_heaps_GamePad.onDevice);
+	} else if(dn_heaps_GamePad.AVAILABLE_DEVICES.length > 0) {
+		this.enableDevice(dn_heaps_GamePad.AVAILABLE_DEVICES[0]);
+	}
+	this.lastActivity = Date.now() / 1000;
+};
+$hxClasses["dn.heaps.GamePad"] = dn_heaps_GamePad;
+dn_heaps_GamePad.__name__ = "dn.heaps.GamePad";
+dn_heaps_GamePad.onDevice = function(p) {
+	var _g = 0;
+	var _g1 = dn_heaps_GamePad.ALL;
+	while(_g < _g1.length) {
+		var i = _g1[_g];
+		++_g;
+		if(i.device == null) {
+			i.enableDevice(p);
+			return;
+		}
+	}
+	dn_heaps_GamePad.AVAILABLE_DEVICES.push(p);
+	p.onDisconnect = function() {
+		HxOverrides.remove(dn_heaps_GamePad.AVAILABLE_DEVICES,p);
+	};
+};
+dn_heaps_GamePad.update = function() {
+	var _g = 0;
+	var _g1 = dn_heaps_GamePad.ALL;
+	while(_g < _g1.length) {
+		var e = _g1[_g];
+		++_g;
+		var hasToggle = false;
+		if(e.device != null) {
+			var _g2 = 0;
+			while(_g2 < 28) {
+				var i = _g2++;
+				var this1 = i;
+				var k = this1;
+				var tmp;
+				switch(k) {
+				case 18:case 21:case 24:case 27:
+					var overrideDeadZone = e.axisAsButtonDeadZone;
+					var tmp1;
+					if(e.device != null) {
+						var idx = dn_heaps_GamePad.MAPPING[k];
+						var v = idx > -1 && idx < e.device.values.length ? e.device.values[idx] : 0;
+						var dz = overrideDeadZone < 0. ? e.deadZone : overrideDeadZone;
+						tmp1 = v < -dz ? -1. : v > dz ? 1. : 0.;
+					} else {
+						tmp1 = 0.;
+					}
+					tmp = tmp1 > 0;
+					break;
+				case 17:case 20:case 23:case 26:
+					var overrideDeadZone1 = e.axisAsButtonDeadZone;
+					var tmp2;
+					if(e.device != null) {
+						var idx1 = dn_heaps_GamePad.MAPPING[k];
+						var v1 = idx1 > -1 && idx1 < e.device.values.length ? e.device.values[idx1] : 0;
+						var dz1 = overrideDeadZone1 < 0. ? e.deadZone : overrideDeadZone1;
+						tmp2 = v1 < -dz1 ? -1. : v1 > dz1 ? 1. : 0.;
+					} else {
+						tmp2 = 0.;
+					}
+					tmp = tmp2 < 0;
+					break;
+				default:
+					var tmp3;
+					if(e.device != null) {
+						var idx2 = dn_heaps_GamePad.MAPPING[k];
+						var v2 = idx2 > -1 && idx2 < e.device.values.length ? e.device.values[idx2] : 0;
+						var dz2 = e.deadZone;
+						tmp3 = v2 < -dz2 ? -1. : v2 > dz2 ? 1. : 0.;
+					} else {
+						tmp3 = 0.;
+					}
+					tmp = tmp3 != 0;
+				}
+				if(tmp) {
+					hasToggle = true;
+					if(e.toggles[i] >= 1) {
+						e.toggles[i] = 2;
+					} else {
+						e.toggles[i] = 1;
+					}
+				} else {
+					e.toggles[i] = 0;
+				}
+			}
+		}
+		if(hasToggle) {
+			e.lastActivity = Date.now() / 1000;
+		}
+	}
+};
+dn_heaps_GamePad.prototype = {
+	onEnable: function(pad) {
+	}
+	,onDisable: function(pad) {
+	}
+	,enableDevice: function(p) {
+		var _gthis = this;
+		if(this.device == null) {
+			HxOverrides.remove(dn_heaps_GamePad.AVAILABLE_DEVICES,p);
+			p.onDisconnect = function() {
+				_gthis.disable();
+			};
+			this.device = p;
+			this.onEnable(this);
+		}
+	}
+	,disable: function() {
+		if(this.device != null) {
+			this.device = null;
+			this.onDisable(this);
+		}
+	}
+	,isPressed: function(k) {
+		if(this.device != null) {
+			return this.toggles[k] == 1;
+		} else {
+			return false;
+		}
+	}
+	,__class__: dn_heaps_GamePad
+};
+var dn_heaps_ParticlePool = function(tile,count,fps) {
+	var this1 = new Array(count);
+	this.all = this1;
+	this.nalloc = 0;
+	var _g = 0;
+	var _g1 = count;
+	while(_g < _g1) {
+		var i = _g++;
+		var p = new dn_heaps_HParticle(this,tile.clone(),fps);
+		this.all[i] = p;
+		p.kill();
+	}
+};
+$hxClasses["dn.heaps.ParticlePool"] = dn_heaps_ParticlePool;
+dn_heaps_ParticlePool.__name__ = "dn.heaps.ParticlePool";
+dn_heaps_ParticlePool.prototype = {
+	free: function(kp) {
+		if(this.all == null) {
+			return;
+		}
+		if(this.nalloc > 1) {
+			var idx = kp.poolIdx;
+			var tmp = this.all[idx];
+			this.all[idx] = this.all[this.nalloc - 1];
+			this.all[idx].poolIdx = idx;
+			this.all[this.nalloc - 1] = tmp;
+			this.nalloc--;
+		} else {
+			this.nalloc = 0;
+		}
+	}
+	,dispose: function() {
+		var _g = 0;
+		var _g1 = this.all;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			p.dispose();
+		}
+		this.all = null;
+	}
+	,update: function(tmod,updateCb) {
+		var i = 0;
+		while(i < this.nalloc) {
+			var p = this.all[i];
+			var tmod1 = tmod;
+			if(p.customTmod != null) {
+				tmod1 = p.customTmod();
+			}
+			var _g = p;
+			var d = _g.delayF - tmod1;
+			d = 0 > d ? 0 : d;
+			_g.visible = !_g.killed && d <= 0;
+			_g.delayF = d;
+			if(p.delayF <= 0 && !p.killed) {
+				if(p.onStart != null) {
+					var cb = p.onStart;
+					p.onStart = null;
+					cb();
+				}
+				if(p.animId != null) {
+					var _this = p.animLib;
+					var k = p.animId;
+					var f;
+					if(k == null) {
+						f = _this.currentGroup;
+					} else {
+						var _this1 = _this.groups;
+						f = __map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k];
+					}
+					var f1 = f.anim[p.animCursor | 0];
+					var _this2 = p.animLib;
+					var k1 = p.animId;
+					var g;
+					if(k1 == null) {
+						g = _this2.currentGroup;
+					} else {
+						var _this3 = _this2.groups;
+						g = __map_reserved[k1] != null ? _this3.getReserved(k1) : _this3.h[k1];
+					}
+					var fd = g == null ? null : g.frames[f1];
+					var tile = p.animLib.getTile(p.animId,f1);
+					p.t.setPosition(tile.x,tile.y);
+					p.t.setSize(tile.width,tile.height);
+					p.t.dx = -(fd.realWid * p.animXr + fd.realX | 0);
+					p.t.dy = -(fd.realHei * p.animYr + fd.realY | 0);
+					var p1 = p.animCursor += p.animSpd * tmod1;
+					var _this4 = p.animLib;
+					var k2 = p.animId;
+					var tmp;
+					if(k2 == null) {
+						tmp = _this4.currentGroup;
+					} else {
+						var _this5 = _this4.groups;
+						tmp = __map_reserved[k2] != null ? _this5.getReserved(k2) : _this5.h[k2];
+					}
+					if(p1 >= tmp.anim.length) {
+						if(p.animLoop) {
+							var p2 = p;
+							var p3 = p2.animCursor;
+							var _this6 = p.animLib;
+							var k3 = p.animId;
+							var tmp1;
+							if(k3 == null) {
+								tmp1 = _this6.currentGroup;
+							} else {
+								var _this7 = _this6.groups;
+								tmp1 = __map_reserved[k3] != null ? _this7.getReserved(k3) : _this7.h[k3];
+							}
+							p2.animCursor = p3 - tmp1.anim.length;
+						} else if(p.animStop) {
+							p.animId = null;
+							p.animLib = null;
+						} else {
+							p.animId = null;
+							p.animLib = null;
+							p.animCursor = 0;
+							p.kill();
+						}
+					}
+				}
+				if(!p.killed) {
+					p.dx += p.gx * tmod1;
+					p.dy += p.gy * tmod1;
+					p.x += p.dx * tmod1;
+					p.y += p.dy * tmod1;
+					if(p.frictX == p.frictY) {
+						var v = p.frictX;
+						var frictTmod = tmod1 == 1 || v == 0 || v == 1 ? v : Math.pow(v,tmod1);
+						p.dx *= frictTmod;
+						p.dy *= frictTmod;
+					} else {
+						var v1 = p.frictX;
+						p.dx *= tmod1 == 1 || v1 == 0 || v1 == 1 ? v1 : Math.pow(v1,tmod1);
+						var v2 = p.frictY;
+						p.dy *= tmod1 == 1 || v2 == 0 || v2 == 1 ? v2 : Math.pow(v2,tmod1);
+					}
+					if(p.groundY != null && p.dy > 0 && p.y >= p.groundY) {
+						p.dy = -p.dy * p.bounceMul;
+						p.y = p.groundY - 1;
+						if(p.onBounce != null) {
+							p.onBounce();
+						}
+					}
+					if(!p.killed) {
+						p.rotation += p.dr * tmod1;
+						p.scaleX += (p.ds + p.dsX) * tmod1;
+						p.scaleY += (p.ds + p.dsY) * tmod1;
+						var v3 = p.scaleMul;
+						var scaleMulTmod = tmod1 == 1 || v3 == 0 || v3 == 1 ? v3 : Math.pow(v3,tmod1);
+						p.scaleX *= scaleMulTmod;
+						var v4 = p.scaleXMul;
+						p.scaleX *= tmod1 == 1 || v4 == 0 || v4 == 1 ? v4 : Math.pow(v4,tmod1);
+						p.scaleY *= scaleMulTmod;
+						var v5 = p.scaleYMul;
+						p.scaleY *= tmod1 == 1 || v5 == 0 || v5 == 1 ? v5 : Math.pow(v5,tmod1);
+						var v6 = p.dsFrict;
+						p.ds *= tmod1 == 1 || v6 == 0 || v6 == 1 ? v6 : Math.pow(v6,tmod1);
+						var v7 = p.dsFrict;
+						p.dsX *= tmod1 == 1 || v7 == 0 || v7 == 1 ? v7 : Math.pow(v7,tmod1);
+						var v8 = p.dsFrict;
+						p.dsY *= tmod1 == 1 || v8 == 0 || v8 == 1 ? v8 : Math.pow(v8,tmod1);
+						if(!isNaN(p.rColor)) {
+							var x = p.rColor + p.dColor * tmod1;
+							p.rColor = x < 0 ? 0 : x > 1 ? 1 : x;
+							var from = p.fromColor;
+							var to = p.toColor;
+							var ratio = p.rColor;
+							var a = _$UInt_UInt_$Impl_$.toFloat(from >>> 16);
+							var x1 = a + (_$UInt_UInt_$Impl_$.toFloat(to >>> 16) - a) * ratio;
+							var a1 = _$UInt_UInt_$Impl_$.toFloat(from >>> 8 & 255);
+							var x2 = a1 + (_$UInt_UInt_$Impl_$.toFloat(to >>> 8 & 255) - a1) * ratio;
+							var a2 = _$UInt_UInt_$Impl_$.toFloat(from & 255);
+							var x3 = a2 + (_$UInt_UInt_$Impl_$.toFloat(to & 255) - a2) * ratio;
+							var c = ((x1 > 0 ? x1 + .5 : x1 < 0 ? x1 - .5 : 0) | 0) << 16 | ((x2 > 0 ? x2 + .5 : x2 < 0 ? x2 - .5 : 0) | 0) << 8 | ((x3 > 0 ? x3 + .5 : x3 < 0 ? x3 - .5 : 0) | 0);
+							var a3 = _$UInt_UInt_$Impl_$.toFloat(16777215 >>> 16);
+							var x4 = a3 + (_$UInt_UInt_$Impl_$.toFloat(c >>> 16) - a3);
+							p.r = ((x4 > 0 ? x4 + .5 : x4 < 0 ? x4 - .5 : 0) | 0) / 255;
+							var a4 = _$UInt_UInt_$Impl_$.toFloat(16777215 >>> 8 & 255);
+							var x5 = a4 + (_$UInt_UInt_$Impl_$.toFloat(c >>> 8 & 255) - a4);
+							p.g = ((x5 > 0 ? x5 + .5 : x5 < 0 ? x5 - .5 : 0) | 0) / 255;
+							var a5 = _$UInt_UInt_$Impl_$.toFloat(16777215 & 255);
+							var x6 = a5 + (_$UInt_UInt_$Impl_$.toFloat(c & 255) - a5);
+							p.b = ((x6 > 0 ? x6 + .5 : x6 < 0 ? x6 - .5 : 0) | 0) / 255;
+						}
+						if(p.rLifeF > 0 && p.da != 0) {
+							p.a += p.da * tmod1;
+							if(p.a > p.maxAlpha) {
+								p.da = 0;
+								p.a = p.maxAlpha;
+							}
+						}
+						p.rLifeF -= tmod1;
+						if(p.rLifeF <= 0) {
+							p.a -= p.fadeOutSpeed * tmod1;
+						} else if(p.alphaFlicker > 0) {
+							var max = p.alphaFlicker;
+							var x7 = p.a + Math.random() * max * (Std.random(2) * 2 - 1);
+							var max1 = p.maxAlpha;
+							p.a = x7 < 0 ? 0 : x7 > max1 ? max1 : x7;
+						}
+						if(p.rLifeF <= 0 && (p.a <= 0 || p.killOnLifeOut) || p.bounds != null && !(p.x >= p.bounds.xMin && p.x < p.bounds.xMax && p.y >= p.bounds.yMin && p.y < p.bounds.yMax)) {
+							p.kill();
+						} else if(p.onUpdate != null) {
+							p.onUpdate(p);
+						}
+					}
+				}
+			}
+			if(!p.killed) {
+				if(updateCb != null) {
+					updateCb(p);
+				}
+				++i;
+			}
+		}
+	}
+	,__class__: dn_heaps_ParticlePool
+};
+var h2d_BatchElement = function(t) {
+	this.x = 0;
+	this.y = 0;
+	this.r = 1;
+	this.g = 1;
+	this.b = 1;
+	this.a = 1;
+	this.rotation = 0;
+	this.scaleX = this.scaleY = 1;
+	this.visible = true;
+	this.t = t;
+};
+$hxClasses["h2d.BatchElement"] = h2d_BatchElement;
+h2d_BatchElement.__name__ = "h2d.BatchElement";
+h2d_BatchElement.prototype = {
+	update: function(et) {
+		return true;
+	}
+	,remove: function() {
+		if(this.batch != null) {
+			this.batch["delete"](this);
+		}
+	}
+	,__class__: h2d_BatchElement
+};
+var dn_heaps_HParticle = function(p,tile,fps,x,y) {
+	if(y == null) {
+		y = 0.;
+	}
+	if(x == null) {
+		x = 0.;
+	}
+	h2d_BatchElement.call(this,tile);
+	this.fps = fps;
+	this.pool = p;
+	this.poolIdx = -1;
+	this.reset(null,null,x,y);
+};
+$hxClasses["dn.heaps.HParticle"] = dn_heaps_HParticle;
+dn_heaps_HParticle.__name__ = "dn.heaps.HParticle";
+dn_heaps_HParticle.__super__ = h2d_BatchElement;
+dn_heaps_HParticle.prototype = $extend(h2d_BatchElement.prototype,{
+	playAnimAndKill: function(lib,k,spd) {
+		if(spd == null) {
+			spd = 1.0;
+		}
+		this.animLib = lib;
+		this.animId = k;
+		this.animCursor = 0;
+		this.animLoop = false;
+		this.animSpd = spd;
+		var _this = this.animLib;
+		var k1 = this.animId;
+		var f;
+		if(k1 == null) {
+			f = _this.currentGroup;
+		} else {
+			var _this1 = _this.groups;
+			f = __map_reserved[k1] != null ? _this1.getReserved(k1) : _this1.h[k1];
+		}
+		var f1 = f.anim[this.animCursor | 0];
+		var _this2 = this.animLib;
+		var k2 = this.animId;
+		var g;
+		if(k2 == null) {
+			g = _this2.currentGroup;
+		} else {
+			var _this3 = _this2.groups;
+			g = __map_reserved[k2] != null ? _this3.getReserved(k2) : _this3.h[k2];
+		}
+		var fd = g == null ? null : g.frames[f1];
+		var tile = this.animLib.getTile(this.animId,f1);
+		this.t.setPosition(tile.x,tile.y);
+		this.t.setSize(tile.width,tile.height);
+		this.t.dx = -(fd.realWid * this.animXr + fd.realX | 0);
+		this.t.dy = -(fd.realHei * this.animYr + fd.realY | 0);
+	}
+	,playAnimLoop: function(lib,k,spd) {
+		if(spd == null) {
+			spd = 1.0;
+		}
+		this.animLib = lib;
+		this.animId = k;
+		this.animCursor = 0;
+		this.animLoop = true;
+		this.animSpd = spd;
+		var _this = this.animLib;
+		var k1 = this.animId;
+		var f;
+		if(k1 == null) {
+			f = _this.currentGroup;
+		} else {
+			var _this1 = _this.groups;
+			f = __map_reserved[k1] != null ? _this1.getReserved(k1) : _this1.h[k1];
+		}
+		var f1 = f.anim[this.animCursor | 0];
+		var _this2 = this.animLib;
+		var k2 = this.animId;
+		var g;
+		if(k2 == null) {
+			g = _this2.currentGroup;
+		} else {
+			var _this3 = _this2.groups;
+			g = __map_reserved[k2] != null ? _this3.getReserved(k2) : _this3.h[k2];
+		}
+		var fd = g == null ? null : g.frames[f1];
+		var tile = this.animLib.getTile(this.animId,f1);
+		this.t.setPosition(tile.x,tile.y);
+		this.t.setSize(tile.width,tile.height);
+		this.t.dx = -(fd.realWid * this.animXr + fd.realX | 0);
+		this.t.dy = -(fd.realHei * this.animYr + fd.realY | 0);
+	}
+	,reset: function(sb,tile,x,y) {
+		if(y == null) {
+			y = 0.;
+		}
+		if(x == null) {
+			x = 0.;
+		}
+		if(tile != null) {
+			this.t.x = tile.x;
+			this.t.y = tile.y;
+			this.t.width = tile.width;
+			this.t.height = tile.height;
+			this.t.dx = tile.dx;
+			this.t.dy = tile.dy;
+			this.t.innerTex = tile.innerTex;
+			this.t.u = tile.u;
+			this.t.u2 = tile.u2;
+			this.t.v = tile.v;
+			this.t.v2 = tile.v2;
+		}
+		this.x = x;
+		this.y = y;
+		if(this.batch != sb) {
+			if(this.batch != null) {
+				this.remove();
+			}
+			if(sb != null) {
+				sb.add(this);
+			}
+		}
+		this.data0 = this.data1 = this.data2 = this.data3 = this.data4 = this.data5 = this.data6 = this.data7 = NaN;
+		this.customTmod = null;
+		this.animId = null;
+		this.animLib = null;
+		this.r = this.g = this.b = 1;
+		this.visible = true;
+		this.rotation = 0;
+		this.scaleX = this.scaleY = 1;
+		this.a = 1;
+		this.scaleMul = 1;
+		this.scaleXMul = this.scaleYMul = 1;
+		this.dsFrict = 1;
+		this.alphaFlicker = 0;
+		this.fromColor = 0;
+		this.dColor = this.rColor = NaN;
+		this.stamp = Date.now() / 1000;
+		var _this = this.t;
+		_this.dx = -(0.5 * _this.width | 0);
+		_this.dy = -(0.5 * _this.height | 0);
+		this.animXr = 0.5;
+		this.animYr = 0.5;
+		this.killed = false;
+		if(this.a > 1) {
+			this.a = 1;
+		}
+		this.maxAlpha = 1;
+		this.dx = this.dy = this.da = this.dr = this.ds = this.dsX = this.dsY = 0;
+		this.gx = this.gy = 0;
+		this.frictX = this.frictY = 1;
+		this.fadeOutSpeed = 0.1;
+		this.bounceMul = 0.85;
+		var d = 0 * this.fps;
+		d = 0 > d ? 0 : d;
+		this.visible = !this.killed && d <= 0;
+		this.delayF = d;
+		this.set_lifeS(1);
+		this.pixel = false;
+		this.bounds = dn_heaps_HParticle.DEFAULT_BOUNDS;
+		this.killOnLifeOut = false;
+		this.groundY = null;
+		this.groupId = null;
+		this.onStart = null;
+		this.onKill = null;
+		this.onBounce = null;
+		this.onUpdate = null;
+	}
+	,setFadeS: function(targetAlpha,fadeInDurationS,fadeOutDurationS) {
+		this.a = 0;
+		if(this.a > targetAlpha) {
+			this.a = targetAlpha;
+		}
+		this.maxAlpha = targetAlpha;
+		if(fadeInDurationS <= 0) {
+			this.a = this.maxAlpha;
+		} else {
+			this.da = targetAlpha / (fadeInDurationS * this.fps);
+		}
+		if(fadeOutDurationS <= 0) {
+			this.fadeOutSpeed = 99;
+		} else {
+			this.fadeOutSpeed = targetAlpha / (fadeOutDurationS * this.fps);
+		}
+	}
+	,set_lifeS: function(v) {
+		var x = this.fps * v;
+		this.rLifeF = this.maxLifeF = x > 0 ? x : 0;
+		return v;
+	}
+	,kill: function() {
+		if(this.killed) {
+			return;
+		}
+		if(this.onKill != null) {
+			var cb = this.onKill;
+			this.onKill = null;
+			cb();
+		}
+		this.a = 0;
+		this.set_lifeS(0);
+		var d = 0 * this.fps;
+		d = 0 > d ? 0 : d;
+		this.visible = !this.killed && d <= 0;
+		this.delayF = d;
+		this.killed = true;
+		this.visible = false;
+		this.pool.free(this);
+	}
+	,dispose: function() {
+		this.remove();
+		this.bounds = null;
+	}
+	,__class__: dn_heaps_HParticle
+});
+var dn_heaps_slib__$AnimManager_AnimInstance = function(s,g) {
+	this.reverse = false;
+	this.speed = 1.0;
+	this.stopOnLastFrame = false;
+	this.killAfterPlay = false;
+	this.isStateAnim = false;
+	this.paused = false;
+	this.playDuration = -1.;
+	this.plays = 1;
+	this.curFrameCpt = 0.0;
+	this.animCursor = 0;
+	this.frames = [];
+	this.spr = s;
+	this.group = g;
+	var _this = this.spr.lib;
+	var k = this.group;
+	var tmp;
+	var tmp1;
+	if(k != null) {
+		var _this1 = _this.groups;
+		tmp1 = __map_reserved[k] != null ? _this1.existsReserved(k) : _this1.h.hasOwnProperty(k);
+	} else {
+		tmp1 = false;
+	}
+	if(tmp1) {
+		var _this2 = _this.groups;
+		tmp = (__map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k]).frames.length > 0;
+	} else {
+		tmp = false;
+	}
+	if(!tmp) {
+		throw new js__$Boot_HaxeError("unknown group " + this.group);
+	}
+	var _this3 = this.spr.lib;
+	var k1 = this.group;
+	var tmp2;
+	if(k1 == null) {
+		tmp2 = _this3.currentGroup;
+	} else {
+		var _this4 = _this3.groups;
+		tmp2 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+	}
+	this.frames = tmp2.anim;
+};
+$hxClasses["dn.heaps.slib._AnimManager.AnimInstance"] = dn_heaps_slib__$AnimManager_AnimInstance;
+dn_heaps_slib__$AnimManager_AnimInstance.__name__ = "dn.heaps.slib._AnimManager.AnimInstance";
+dn_heaps_slib__$AnimManager_AnimInstance.prototype = {
+	onEnd: function() {
+	}
+	,onEachLoop: function() {
+	}
+	,__class__: dn_heaps_slib__$AnimManager_AnimInstance
+};
+var dn_heaps_slib__$AnimManager_StateAnim = function(g,cb) {
+	this.group = g;
+	this.priority = 0;
+	this.cond = cb;
+	this.spd = 1.0;
+};
+$hxClasses["dn.heaps.slib._AnimManager.StateAnim"] = dn_heaps_slib__$AnimManager_StateAnim;
+dn_heaps_slib__$AnimManager_StateAnim.__name__ = "dn.heaps.slib._AnimManager.StateAnim";
+dn_heaps_slib__$AnimManager_StateAnim.prototype = {
+	__class__: dn_heaps_slib__$AnimManager_StateAnim
+};
+var dn_heaps_slib__$AnimManager_Transition = function(f,t,a,cb) {
+	this.from = f;
+	this.to = t;
+	this.anim = a;
+	this.cond = cb;
+	this.spd = 1.0;
+	this.reverse = false;
+};
+$hxClasses["dn.heaps.slib._AnimManager.Transition"] = dn_heaps_slib__$AnimManager_Transition;
+dn_heaps_slib__$AnimManager_Transition.__name__ = "dn.heaps.slib._AnimManager.Transition";
+dn_heaps_slib__$AnimManager_Transition.prototype = {
+	__class__: dn_heaps_slib__$AnimManager_Transition
+};
+var dn_heaps_slib_AnimManager = function(spr) {
+	this.S_STAR = "*";
+	this.suspendF = 0.;
+	this.suspended = false;
+	this.destroyed = false;
+	this.needUpdates = false;
+	this.genSpeed = 1.0;
+	this.stateAnimsActive = true;
+	this.transitions = [];
+	this.stateAnims = [];
+	this.stack = [];
+	this.spr = spr;
+};
+$hxClasses["dn.heaps.slib.AnimManager"] = dn_heaps_slib_AnimManager;
+dn_heaps_slib_AnimManager.__name__ = "dn.heaps.slib.AnimManager";
+dn_heaps_slib_AnimManager.prototype = {
+	destroy: function() {
+		this.destroyed = true;
+		this.stopWithoutStateAnims();
+		this.needUpdates = false;
+		this.stateAnims = null;
+		this.stack = null;
+		this.spr = null;
+	}
+	,play: function(group,plays,queueAnim) {
+		if(queueAnim == null) {
+			queueAnim = false;
+		}
+		if(plays == null) {
+			plays = 1;
+		}
+		var _this = this.spr.lib;
+		var g;
+		if(group == null) {
+			g = _this.currentGroup;
+		} else {
+			var _this1 = _this.groups;
+			g = __map_reserved[group] != null ? _this1.getReserved(group) : _this1.h[group];
+		}
+		if(g == null) {
+			return this;
+		}
+		if(g.anim == null || g.anim.length == 0) {
+			return this;
+		}
+		if(!queueAnim && (!this.destroyed && this.stack.length > 0)) {
+			this.stack = [];
+		}
+		var a = new dn_heaps_slib__$AnimManager_AnimInstance(this.spr,group);
+		this.stack.push(a);
+		a.plays = plays;
+		this.needUpdates = true;
+		if(!queueAnim) {
+			var t = this.getTransition(this.spr.groupName,this.stack[0].group);
+			if(t != null && t.anim != this.spr.groupName) {
+				var _this2 = this.spr.lib;
+				var k = t.anim;
+				var tmp;
+				var tmp1;
+				if(k != null) {
+					var _this3 = _this2.groups;
+					tmp1 = __map_reserved[k] != null ? _this3.existsReserved(k) : _this3.h.hasOwnProperty(k);
+				} else {
+					tmp1 = false;
+				}
+				if(tmp1) {
+					var _this4 = _this2.groups;
+					tmp = (__map_reserved[k] != null ? _this4.getReserved(k) : _this4.h[k]).frames.length > 0;
+				} else {
+					tmp = false;
+				}
+				if(tmp) {
+					var a1 = new dn_heaps_slib__$AnimManager_AnimInstance(this.spr,t.anim);
+					this.stack.splice(0,0,a1);
+					a1.speed = t.spd;
+					a1.reverse = t.reverse;
+				}
+			}
+			var _this5 = this.stack[0];
+			var f = _this5.frames[_this5.reverse ? _this5.frames.length - 1 - _this5.animCursor : _this5.animCursor];
+			if(_this5.spr.get_anim().onEnterFrame != null && _this5.lastFrame != f) {
+				_this5.spr.get_anim().onEnterFrame(f);
+			}
+			if(_this5.spr.groupName != _this5.group) {
+				_this5.spr.set(null,_this5.group,f);
+			} else if(_this5.spr.frame != f) {
+				_this5.spr.setFrame(f);
+			}
+			_this5.lastFrame = f;
+		}
+		return this;
+	}
+	,loop: function() {
+		if(!this.destroyed && this.stack.length > 0) {
+			this.stack[this.stack.length - 1].plays = 999999;
+		}
+		return this;
+	}
+	,stopWithStateAnims: function() {
+		this.stateAnimsActive = true;
+		this.stack = [];
+		this.applyStateAnims();
+	}
+	,stopWithoutStateAnims: function(k,frame) {
+		this.stateAnimsActive = false;
+		this.stack = [];
+		if(k != null) {
+			this.spr.set(null,k,frame != null ? frame : 0);
+		} else if(frame != null) {
+			this.spr.setFrame(frame);
+		}
+	}
+	,unsuspend: function() {
+		this.suspended = false;
+		this.suspendF = 0;
+	}
+	,getTransition: function(from,to) {
+		var _g = 0;
+		var _g1 = this.transitions;
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			if((t.from == this.S_STAR || t.from == from) && (t.to == this.S_STAR || t.to == to) && t.cond()) {
+				return t;
+			}
+		}
+		return null;
+	}
+	,registerStateAnim: function(group,priority,spd,condition) {
+		if(spd == null) {
+			spd = 1.0;
+		}
+		if(condition == null) {
+			condition = function() {
+				return true;
+			};
+		}
+		this.removeStateAnim(group,priority);
+		var s = new dn_heaps_slib__$AnimManager_StateAnim(group,condition);
+		s.priority = priority;
+		s.spd = spd;
+		this.stateAnims.push(s);
+		this.stateAnims.sort(function(a,b) {
+			return -Reflect.compare(a.priority,b.priority);
+		});
+		this.applyStateAnims();
+	}
+	,removeStateAnim: function(group,priority) {
+		var i = 0;
+		while(i < this.stateAnims.length) if(this.stateAnims[i].group == group && this.stateAnims[i].priority == priority) {
+			this.stateAnims.splice(i,1);
+		} else {
+			++i;
+		}
+	}
+	,applyStateAnims: function() {
+		if(!this.stateAnimsActive) {
+			return;
+		}
+		if(!this.destroyed && this.stack.length > 0 && !this.stack[0].isStateAnim) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.stateAnims;
+		while(_g < _g1.length) {
+			var sa = _g1[_g];
+			++_g;
+			if(sa.cond()) {
+				if(!this.destroyed && this.stack.length > 0 && this.stack[0].group == sa.group) {
+					break;
+				}
+				var _this = this.play(sa.group).loop();
+				if(!_this.destroyed && _this.stack.length > 0) {
+					_this.stack[_this.stack.length - 1].speed = sa.spd;
+				}
+				if(!this.destroyed && this.stack.length > 0) {
+					this.stack[this.stack.length - 1].isStateAnim = true;
+				}
+				break;
+			}
+		}
+	}
+	,_update: function(dt) {
+		if(this.suspended) {
+			this.suspendF -= dt;
+			if(this.suspendF <= 0) {
+				this.unsuspend();
+			}
+			return;
+		}
+		this.applyStateAnims();
+		var a = this.stack[0];
+		if(a != null && !a.paused) {
+			a.curFrameCpt += dt * this.genSpeed * a.speed;
+			if(a.playDuration > 0) {
+				a.playDuration -= dt;
+				if(a.playDuration <= 0) {
+					a.plays = 0;
+					a.animCursor = a.frames.length;
+					a.curFrameCpt = 1;
+				}
+			}
+			while(a.curFrameCpt > 1) {
+				a.curFrameCpt--;
+				a.animCursor++;
+				if(a.animCursor < a.frames.length) {
+					var f = a.frames[a.reverse ? a.frames.length - 1 - a.animCursor : a.animCursor];
+					if(a.spr.get_anim().onEnterFrame != null && a.lastFrame != f) {
+						a.spr.get_anim().onEnterFrame(f);
+					}
+					if(a.spr.groupName != a.group) {
+						a.spr.set(null,a.group,f);
+					} else if(a.spr.frame != f) {
+						a.spr.setFrame(f);
+					}
+					a.lastFrame = f;
+					continue;
+				}
+				a.animCursor = 0;
+				a.plays--;
+				if(a.plays > 0 || a.playDuration > 0) {
+					a.onEachLoop();
+					a = this.stack[0];
+					var f1 = a.frames[a.reverse ? a.frames.length - 1 - a.animCursor : a.animCursor];
+					if(a.spr.get_anim().onEnterFrame != null && a.lastFrame != f1) {
+						a.spr.get_anim().onEnterFrame(f1);
+					}
+					if(a.spr.groupName != a.group) {
+						a.spr.set(null,a.group,f1);
+					} else if(a.spr.frame != f1) {
+						a.spr.setFrame(f1);
+					}
+					a.lastFrame = f1;
+					continue;
+				}
+				if(a.stopOnLastFrame) {
+					this.stopWithoutStateAnims();
+				}
+				a.onEnd();
+				if(a.killAfterPlay) {
+					this.spr.remove();
+					break;
+				}
+				if(!this.destroyed && this.stack.length > 0) {
+					this.stack.shift();
+					if(this.stack.length == 0) {
+						this.stopWithStateAnims();
+					} else {
+						var t = this.getTransition(this.spr.groupName,this.stack[0].group);
+						if(t != null && t.anim != this.spr.groupName) {
+							var _this = this.spr.lib;
+							var k = t.anim;
+							var tmp;
+							var tmp1;
+							if(k != null) {
+								var _this1 = _this.groups;
+								tmp1 = __map_reserved[k] != null ? _this1.existsReserved(k) : _this1.h.hasOwnProperty(k);
+							} else {
+								tmp1 = false;
+							}
+							if(tmp1) {
+								var _this2 = _this.groups;
+								tmp = (__map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k]).frames.length > 0;
+							} else {
+								tmp = false;
+							}
+							if(tmp) {
+								var a1 = new dn_heaps_slib__$AnimManager_AnimInstance(this.spr,t.anim);
+								this.stack.splice(0,0,a1);
+								a1.speed = t.spd;
+								a1.reverse = t.reverse;
+							}
+						}
+						var _this3 = this.stack[0];
+						var f2 = _this3.frames[_this3.reverse ? _this3.frames.length - 1 - _this3.animCursor : _this3.animCursor];
+						if(_this3.spr.get_anim().onEnterFrame != null && _this3.lastFrame != f2) {
+							_this3.spr.get_anim().onEnterFrame(f2);
+						}
+						if(_this3.spr.groupName != _this3.group) {
+							_this3.spr.set(null,_this3.group,f2);
+						} else if(_this3.spr.frame != f2) {
+							_this3.spr.setFrame(f2);
+						}
+						_this3.lastFrame = f2;
+					}
+					a = this.stack[0];
+				}
+				if(!(!this.destroyed && this.stack.length > 0)) {
+					break;
+				}
+			}
+		}
+		if(this.overlap != null && !this.spr.destroyed) {
+			this.overlap.curFrameCpt += dt * this.genSpeed * this.overlap.speed;
+			while(this.overlap.curFrameCpt > 1) {
+				this.overlap.curFrameCpt--;
+				this.overlap.animCursor++;
+				var _this4 = this.overlap;
+				if(_this4.animCursor >= _this4.frames.length) {
+					this.overlap = null;
+					if(this.stack[0] != null) {
+						var _this5 = this.stack[0];
+						var f3 = _this5.frames[_this5.reverse ? _this5.frames.length - 1 - _this5.animCursor : _this5.animCursor];
+						if(_this5.spr.get_anim().onEnterFrame != null && _this5.lastFrame != f3) {
+							_this5.spr.get_anim().onEnterFrame(f3);
+						}
+						if(_this5.spr.groupName != _this5.group) {
+							_this5.spr.set(null,_this5.group,f3);
+						} else if(_this5.spr.frame != f3) {
+							_this5.spr.setFrame(f3);
+						}
+						_this5.lastFrame = f3;
+					}
+					break;
+				}
+			}
+			if(this.overlap != null) {
+				var _this6 = this.overlap;
+				var f4 = _this6.frames[_this6.reverse ? _this6.frames.length - 1 - _this6.animCursor : _this6.animCursor];
+				if(_this6.spr.get_anim().onEnterFrame != null && _this6.lastFrame != f4) {
+					_this6.spr.get_anim().onEnterFrame(f4);
+				}
+				if(_this6.spr.groupName != _this6.group) {
+					_this6.spr.set(null,_this6.group,f4);
+				} else if(_this6.spr.frame != f4) {
+					_this6.spr.setFrame(f4);
+				}
+				_this6.lastFrame = f4;
+			}
+		}
+		if(!this.destroyed && !(!this.destroyed && this.stack.length > 0) && this.overlap == null) {
+			this.needUpdates = false;
+		}
+	}
+	,__class__: dn_heaps_slib_AnimManager
+};
+var h2d_Drawable = function(parent) {
+	h2d_Object.call(this,parent);
+	this.color = new h3d_Vector(1,1,1,1);
+};
+$hxClasses["h2d.Drawable"] = h2d_Drawable;
+h2d_Drawable.__name__ = "h2d.Drawable";
+h2d_Drawable.__super__ = h2d_Object;
+h2d_Drawable.prototype = $extend(h2d_Object.prototype,{
+	set_colorMatrix: function(m) {
+		var s = this.getShader(h3d_shader_ColorMatrix);
+		if(s == null) {
+			if(m != null) {
+				s = this.addShader(new h3d_shader_ColorMatrix());
+				s.matrix__ = m;
+			}
+		} else if(m == null) {
+			this.removeShader(s);
+		} else {
+			s.matrix__ = m;
+		}
+		return m;
+	}
+	,getShader: function(stype) {
+		if(this.shaders != null) {
+			var _g_l = this.shaders;
+			var _g_last = null;
+			while(_g_l != _g_last) {
+				var s = _g_l.s;
+				_g_l = _g_l.next;
+				var s1 = s;
+				var s2 = ((s1) instanceof stype) ? s1 : null;
+				if(s2 != null) {
+					return s2;
+				}
+			}
+		}
+		return null;
+	}
+	,addShader: function(s) {
+		if(s == null) {
+			throw new js__$Boot_HaxeError("Can't add null shader");
+		}
+		this.shaders = hxsl_ShaderList.addSort(s,this.shaders);
+		return s;
+	}
+	,removeShader: function(s) {
+		var prev = null;
+		var cur = this.shaders;
+		while(cur != null) {
+			if(cur.s == s) {
+				if(prev == null) {
+					this.shaders = cur.next;
+				} else {
+					prev.next = cur.next;
+				}
+				return true;
+			}
+			prev = cur;
+			cur = cur.next;
+		}
+		return false;
+	}
+	,emitTile: function(ctx,tile) {
+		if(tile == null) {
+			tile = new h2d_Tile(null,0,0,5,5);
+		}
+		if(!ctx.drawTile(this,tile)) {
+			return;
+		}
+		return;
+	}
+	,__class__: h2d_Drawable
+});
+var dn_heaps_slib_SpriteInterface = function() { };
+$hxClasses["dn.heaps.slib.SpriteInterface"] = dn_heaps_slib_SpriteInterface;
+dn_heaps_slib_SpriteInterface.__name__ = "dn.heaps.slib.SpriteInterface";
+dn_heaps_slib_SpriteInterface.prototype = {
+	__class__: dn_heaps_slib_SpriteInterface
+};
+var dn_heaps_slib_HSprite = function(l,g,f,parent) {
+	if(f == null) {
+		f = 0;
+	}
+	h2d_Drawable.call(this,parent);
+	this.destroyed = false;
+	this.pivot = new dn_heaps_slib_SpritePivot();
+	this.lastPage = -1;
+	if(l != null) {
+		if(l != null) {
+			if(l.pages == null || l.pages.length == 0) {
+				throw new js__$Boot_HaxeError("sprite sheet has no backing texture, please generate one");
+			}
+			if(g == null) {
+				this.groupName = null;
+				this.group = null;
+				this.frameData = null;
+			}
+			if(this.allocated && this.lib != null) {
+				this.lib.removeChild(this);
+			}
+			this.lib = l;
+			if(this.allocated) {
+				this.lib.addChild(this);
+			}
+			if(this.pivot.isUndefined) {
+				var _this = this.pivot;
+				_this.centerFactorX = this.lib.defaultCenterX;
+				_this.centerFactorY = this.lib.defaultCenterY;
+				_this.usingFactor = true;
+				_this.isUndefined = false;
+			}
+		}
+		if(g != null && g != this.groupName) {
+			this.groupName = g;
+		}
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var _this1 = this.lib;
+			var k = this.groupName;
+			var tmp;
+			if(k == null) {
+				tmp = _this1.currentGroup;
+			} else {
+				var _this2 = _this1.groups;
+				tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+			}
+			this.group = tmp;
+			var _this3 = this.lib;
+			var k1 = this.groupName;
+			var g1;
+			if(k1 == null) {
+				g1 = _this3.currentGroup;
+			} else {
+				var _this4 = _this3.groups;
+				g1 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+			}
+			this.frameData = g1 == null ? null : g1.frames[f];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + f + ")");
+			}
+			if(this.rawTile == null) {
+				this.rawTile = this.lib.pages[this.frameData.page].clone();
+			} else {
+				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
+			}
+			this.lastPage = this.frameData.page;
+			this.setFrame(f);
+		} else {
+			this.setEmptyTexture();
+		}
+	} else {
+		this.setEmptyTexture();
+	}
+};
+$hxClasses["dn.heaps.slib.HSprite"] = dn_heaps_slib_HSprite;
+dn_heaps_slib_HSprite.__name__ = "dn.heaps.slib.HSprite";
+dn_heaps_slib_HSprite.__interfaces__ = [dn_heaps_slib_SpriteInterface];
+dn_heaps_slib_HSprite.__super__ = h2d_Drawable;
+dn_heaps_slib_HSprite.prototype = $extend(h2d_Drawable.prototype,{
+	toString: function() {
+		return "HSprite_" + this.groupName + "[" + this.frame + "]";
+	}
+	,get_anim: function() {
+		if(this._animManager == null) {
+			this._animManager = new dn_heaps_slib_AnimManager(this);
+			if(this.onAnimManAlloc != null) {
+				this.onAnimManAlloc(this._animManager);
+			}
+		}
+		return this._animManager;
+	}
+	,setEmptyTexture: function() {
+		this.rawTile = h2d_Tile.fromColor(8453888,4,4);
+	}
+	,set: function(l,g,frame,stopAllAnims) {
+		if(stopAllAnims == null) {
+			stopAllAnims = false;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		if(l != null) {
+			if(l.pages == null || l.pages.length == 0) {
+				throw new js__$Boot_HaxeError("sprite sheet has no backing texture, please generate one");
+			}
+			if(g == null) {
+				this.groupName = null;
+				this.group = null;
+				this.frameData = null;
+			}
+			if(this.allocated && this.lib != null) {
+				this.lib.removeChild(this);
+			}
+			this.lib = l;
+			if(this.allocated) {
+				this.lib.addChild(this);
+			}
+			if(this.pivot.isUndefined) {
+				var _this = this.pivot;
+				_this.centerFactorX = this.lib.defaultCenterX;
+				_this.centerFactorY = this.lib.defaultCenterY;
+				_this.usingFactor = true;
+				_this.isUndefined = false;
+			}
+		}
+		if(g != null && g != this.groupName) {
+			this.groupName = g;
+		}
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			if(stopAllAnims && this._animManager != null) {
+				if(this._animManager == null) {
+					this._animManager = new dn_heaps_slib_AnimManager(this);
+					if(this.onAnimManAlloc != null) {
+						this.onAnimManAlloc(this._animManager);
+					}
+				}
+				this._animManager.stopWithoutStateAnims();
+			}
+			var _this1 = this.lib;
+			var k = this.groupName;
+			var tmp;
+			if(k == null) {
+				tmp = _this1.currentGroup;
+			} else {
+				var _this2 = _this1.groups;
+				tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+			}
+			this.group = tmp;
+			var _this3 = this.lib;
+			var k1 = this.groupName;
+			var g1;
+			if(k1 == null) {
+				g1 = _this3.currentGroup;
+			} else {
+				var _this4 = _this3.groups;
+				g1 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
+			}
+			this.frameData = g1 == null ? null : g1.frames[frame];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + frame + ")");
+			}
+			if(this.rawTile == null) {
+				this.rawTile = this.lib.pages[this.frameData.page].clone();
+			} else {
+				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
+			}
+			this.lastPage = this.frameData.page;
+			this.setFrame(frame);
+		} else {
+			this.setEmptyTexture();
+		}
+	}
+	,setFrame: function(f) {
+		var old = this.frame;
+		this.frame = f;
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var prev = this.frameData;
+			var _this = this.lib;
+			var k = this.groupName;
+			var frame = this.frame;
+			var g;
+			if(k == null) {
+				g = _this.currentGroup;
+			} else {
+				var _this1 = _this.groups;
+				g = __map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k];
+			}
+			this.frameData = g == null ? null : g.frames[frame];
+			if(this.frameData == null) {
+				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + this.frame + ")");
+			}
+			if(this.lastFrame != this.frameData.page) {
+				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
+				this.lastPage = this.frameData.page;
+			}
+			if(this.onFrameChange != null) {
+				this.onFrameChange();
+			}
+		}
+	}
+	,onAdd: function() {
+		h2d_Drawable.prototype.onAdd.call(this);
+		this.destroyed = false;
+		if(this.lib != null) {
+			this.lib.addChild(this);
+		}
+	}
+	,onRemove: function() {
+		h2d_Drawable.prototype.onRemove.call(this);
+		this.destroyed = true;
+		if(this.lib != null) {
+			this.lib.removeChild(this);
+		}
+		if(this._animManager != null) {
+			this._animManager.destroy();
+			this._animManager = null;
+		}
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd = this.frameData;
+			this.rawTile.setPosition(fd.x,fd.y);
+			this.rawTile.setSize(fd.wid,fd.hei);
+			var _this = this.pivot;
+			if(!_this.isUndefined && !_this.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd.realY | 0);
+			} else {
+				var _this1 = this.pivot;
+				if(!_this1.isUndefined && _this1.usingFactor) {
+					this.rawTile.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
+					this.rawTile.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
+				}
+			}
+		} else {
+			var _this2 = this.pivot;
+			if(!_this2.isUndefined && !_this2.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this3 = this.pivot;
+				if(!_this3.isUndefined && _this3.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		var tmp = this.rawTile.dx;
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd1 = this.frameData;
+			this.rawTile.setPosition(fd1.x,fd1.y);
+			this.rawTile.setSize(fd1.wid,fd1.hei);
+			var _this4 = this.pivot;
+			if(!_this4.isUndefined && !_this4.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd1.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd1.realY | 0);
+			} else {
+				var _this5 = this.pivot;
+				if(!_this5.isUndefined && _this5.usingFactor) {
+					this.rawTile.dx = -(fd1.realWid * this.pivot.centerFactorX + fd1.realX | 0);
+					this.rawTile.dy = -(fd1.realHei * this.pivot.centerFactorY + fd1.realY | 0);
+				}
+			}
+		} else {
+			var _this6 = this.pivot;
+			if(!_this6.isUndefined && !_this6.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this7 = this.pivot;
+				if(!_this7.isUndefined && _this7.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		var tmp1 = this.rawTile.dy;
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd2 = this.frameData;
+			this.rawTile.setPosition(fd2.x,fd2.y);
+			this.rawTile.setSize(fd2.wid,fd2.hei);
+			var _this8 = this.pivot;
+			if(!_this8.isUndefined && !_this8.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd2.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd2.realY | 0);
+			} else {
+				var _this9 = this.pivot;
+				if(!_this9.isUndefined && _this9.usingFactor) {
+					this.rawTile.dx = -(fd2.realWid * this.pivot.centerFactorX + fd2.realX | 0);
+					this.rawTile.dy = -(fd2.realHei * this.pivot.centerFactorY + fd2.realY | 0);
+				}
+			}
+		} else {
+			var _this10 = this.pivot;
+			if(!_this10.isUndefined && !_this10.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this11 = this.pivot;
+				if(!_this11.isUndefined && _this11.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		var tmp2 = this.rawTile.width;
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd3 = this.frameData;
+			this.rawTile.setPosition(fd3.x,fd3.y);
+			this.rawTile.setSize(fd3.wid,fd3.hei);
+			var _this12 = this.pivot;
+			if(!_this12.isUndefined && !_this12.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd3.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd3.realY | 0);
+			} else {
+				var _this13 = this.pivot;
+				if(!_this13.isUndefined && _this13.usingFactor) {
+					this.rawTile.dx = -(fd3.realWid * this.pivot.centerFactorX + fd3.realX | 0);
+					this.rawTile.dy = -(fd3.realHei * this.pivot.centerFactorY + fd3.realY | 0);
+				}
+			}
+		} else {
+			var _this14 = this.pivot;
+			if(!_this14.isUndefined && !_this14.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this15 = this.pivot;
+				if(!_this15.isUndefined && _this15.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		this.addBounds(relativeTo,out,tmp,tmp1,tmp2,this.rawTile.height);
+	}
+	,draw: function(ctx) {
+		if(!this.destroyed && this.lib != null && this.groupName != null) {
+			var fd = this.frameData;
+			this.rawTile.setPosition(fd.x,fd.y);
+			this.rawTile.setSize(fd.wid,fd.hei);
+			var _this = this.pivot;
+			if(!_this.isUndefined && !_this.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX + fd.realX | 0);
+				this.rawTile.dy = -(this.pivot.coordY + fd.realY | 0);
+			} else {
+				var _this1 = this.pivot;
+				if(!_this1.isUndefined && _this1.usingFactor) {
+					this.rawTile.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
+					this.rawTile.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
+				}
+			}
+		} else {
+			var _this2 = this.pivot;
+			if(!_this2.isUndefined && !_this2.usingFactor) {
+				this.rawTile.dx = -(this.pivot.coordX | 0);
+				this.rawTile.dy = -(this.pivot.coordY | 0);
+			} else {
+				var _this3 = this.pivot;
+				if(!_this3.isUndefined && _this3.usingFactor) {
+					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
+					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
+				}
+			}
+		}
+		this.emitTile(ctx,this.rawTile);
+	}
+	,sync: function(ctx) {
+		h2d_Drawable.prototype.sync.call(this,ctx);
+		if(this._animManager != null) {
+			if(this._animManager == null) {
+				this._animManager = new dn_heaps_slib_AnimManager(this);
+				if(this.onAnimManAlloc != null) {
+					this.onAnimManAlloc(this._animManager);
+				}
+			}
+			var _this = this._animManager;
+			var dt = !isNaN(dn_heaps_slib_SpriteLib.TMOD) ? dn_heaps_slib_SpriteLib.TMOD : ctx.elapsedTime * hxd_Timer.wantedFPS;
+			if(_this.needUpdates) {
+				_this._update(dt);
+			}
+		}
+	}
+	,__class__: dn_heaps_slib_HSprite
+});
+var h2d_SpriteBatch = function(t,parent) {
+	h2d_Drawable.call(this,parent);
+	this.tile = t;
+};
+$hxClasses["h2d.SpriteBatch"] = h2d_SpriteBatch;
+h2d_SpriteBatch.__name__ = "h2d.SpriteBatch";
+h2d_SpriteBatch.__super__ = h2d_Drawable;
+h2d_SpriteBatch.prototype = $extend(h2d_Drawable.prototype,{
+	add: function(e,before) {
+		if(before == null) {
+			before = false;
+		}
+		e.batch = this;
+		if(this.first == null) {
+			this.first = this.last = e;
+			e.prev = e.next = null;
+		} else if(before) {
+			e.prev = null;
+			e.next = this.first;
+			this.first.prev = e;
+			this.first = e;
+		} else {
+			this.last.next = e;
+			e.prev = this.last;
+			e.next = null;
+			this.last = e;
+		}
+		return e;
+	}
+	,'delete': function(e) {
+		if(e.prev == null) {
+			if(this.first == e) {
+				this.first = e.next;
+			}
+		} else {
+			e.prev.next = e.next;
+		}
+		if(e.next == null) {
+			if(this.last == e) {
+				this.last = e.prev;
+			}
+		} else {
+			e.next.prev = e.prev;
+		}
+		e.batch = null;
+	}
+	,sync: function(ctx) {
+		h2d_Drawable.prototype.sync.call(this,ctx);
+		if(this.hasUpdate) {
+			var e = this.first;
+			while(e != null) {
+				if(!e.update(ctx.elapsedTime)) {
+					e.remove();
+				}
+				e = e.next;
+			}
+		}
+		this.flush();
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		var e = this.first;
+		while(e != null) {
+			var t = e.t;
+			if(this.hasRotationScale) {
+				var ca = Math.cos(e.rotation);
+				var sa = Math.sin(e.rotation);
+				var hx = t.width;
+				var hy = t.height;
+				var px = t.dx * e.scaleX;
+				var py = t.dy * e.scaleY;
+				var x = px * ca - py * sa + e.x;
+				var y = py * ca + px * sa + e.y;
+				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
+				var px1 = (t.dx + hx) * e.scaleX;
+				var py1 = t.dy * e.scaleY;
+				x = px1 * ca - py1 * sa + e.x;
+				y = py1 * ca + px1 * sa + e.y;
+				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
+				var px2 = t.dx * e.scaleX;
+				var py2 = (t.dy + hy) * e.scaleY;
+				x = px2 * ca - py2 * sa + e.x;
+				y = py2 * ca + px2 * sa + e.y;
+				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
+				var px3 = (t.dx + hx) * e.scaleX;
+				var py3 = (t.dy + hy) * e.scaleY;
+				x = px3 * ca - py3 * sa + e.x;
+				y = py3 * ca + px3 * sa + e.y;
+				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
+			} else {
+				this.addBounds(relativeTo,out,e.x + t.dx,e.y + t.dy,t.width,t.height);
+			}
+			e = e.next;
+		}
+	}
+	,flush: function() {
+		if(this.first == null) {
+			this.bufferVertices = 0;
+			return;
+		}
+		if(this.tmpBuf == null) {
+			var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+			this.tmpBuf = this1;
+		}
+		var pos = 0;
+		var e = this.first;
+		var tmp = this.tmpBuf;
+		while(e != null) {
+			if(!e.visible) {
+				e = e.next;
+				continue;
+			}
+			var t = e.t;
+			var _g = tmp.pos;
+			var _g1 = pos + 32;
+			while(_g < _g1) {
+				var i = _g++;
+				if(tmp.pos == tmp.array.length) {
+					var newSize = tmp.array.length << 1;
+					if(newSize < 128) {
+						newSize = 128;
+					}
+					var newArray = new Float32Array(newSize);
+					newArray.set(tmp.array);
+					tmp.array = newArray;
+				}
+				tmp.array[tmp.pos++] = 0.;
+			}
+			var r = e.r;
+			var g = e.g;
+			var b = e.b;
+			var a = e.a;
+			var u = t.u;
+			var v = t.v;
+			var u2 = t.u2;
+			var v2 = t.v2;
+			if(this.hasRotationScale) {
+				var ca = Math.cos(e.rotation);
+				var sa = Math.sin(e.rotation);
+				var hx = t.width;
+				var hy = t.height;
+				var px = t.dx * e.scaleX;
+				var py = t.dy * e.scaleY;
+				tmp.array[pos++] = px * ca - py * sa + e.x;
+				tmp.array[pos++] = py * ca + px * sa + e.y;
+				tmp.array[pos++] = u;
+				tmp.array[pos++] = v;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				var px1 = (t.dx + hx) * e.scaleX;
+				var py1 = t.dy * e.scaleY;
+				tmp.array[pos++] = px1 * ca - py1 * sa + e.x;
+				tmp.array[pos++] = py1 * ca + px1 * sa + e.y;
+				tmp.array[pos++] = u2;
+				tmp.array[pos++] = v;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				var px2 = t.dx * e.scaleX;
+				var py2 = (t.dy + hy) * e.scaleY;
+				tmp.array[pos++] = px2 * ca - py2 * sa + e.x;
+				tmp.array[pos++] = py2 * ca + px2 * sa + e.y;
+				tmp.array[pos++] = u;
+				tmp.array[pos++] = v2;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				var px3 = (t.dx + hx) * e.scaleX;
+				var py3 = (t.dy + hy) * e.scaleY;
+				tmp.array[pos++] = px3 * ca - py3 * sa + e.x;
+				tmp.array[pos++] = py3 * ca + px3 * sa + e.y;
+				tmp.array[pos++] = u2;
+				tmp.array[pos++] = v2;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+			} else {
+				var sx = e.x + t.dx;
+				var sy = e.y + t.dy;
+				tmp.array[pos++] = sx;
+				tmp.array[pos++] = sy;
+				tmp.array[pos++] = u;
+				tmp.array[pos++] = v;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				tmp.array[pos++] = sx + t.width + 0.1;
+				tmp.array[pos++] = sy;
+				tmp.array[pos++] = u2;
+				tmp.array[pos++] = v;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				tmp.array[pos++] = sx;
+				tmp.array[pos++] = sy + t.height + 0.1;
+				tmp.array[pos++] = u;
+				tmp.array[pos++] = v2;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+				tmp.array[pos++] = sx + t.width + 0.1;
+				tmp.array[pos++] = sy + t.height + 0.1;
+				tmp.array[pos++] = u2;
+				tmp.array[pos++] = v2;
+				tmp.array[pos++] = r;
+				tmp.array[pos++] = g;
+				tmp.array[pos++] = b;
+				tmp.array[pos++] = a;
+			}
+			e = e.next;
+		}
+		this.bufferVertices = pos >> 3;
+		if(this.buffer != null && !this.buffer.isDisposed()) {
+			if(this.buffer.vertices >= this.bufferVertices) {
+				this.buffer.uploadVector(this.tmpBuf,0,this.bufferVertices);
+				return;
+			}
+			this.buffer.dispose();
+			this.buffer = null;
+		}
+		if(this.bufferVertices > 0) {
+			this.buffer = h3d_Buffer.ofSubFloats(this.tmpBuf,8,this.bufferVertices,[h3d_BufferFlag.Dynamic,h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat]);
+		}
+	}
+	,draw: function(ctx) {
+		this.drawWith(ctx,this);
+	}
+	,drawWith: function(ctx,obj) {
+		if(this.first == null || this.buffer == null || this.buffer.isDisposed() || this.bufferVertices == 0) {
+			return;
+		}
+		if(!ctx.beginDrawObject(obj,this.tile.innerTex)) {
+			return;
+		}
+		var _this = ctx.engine;
+		_this.renderBuffer(this.buffer,_this.mem.quadIndexes,2,0,this.bufferVertices >> 1);
+	}
+	,onRemove: function() {
+		h2d_Drawable.prototype.onRemove.call(this);
+		if(this.buffer != null) {
+			this.buffer.dispose();
+			this.buffer = null;
+		}
+	}
+	,__class__: h2d_SpriteBatch
+});
+var dn_heaps_slib_FrameData = function(page,x,y,wid,hei,realX,realY,realWid,realHei,tile) {
+	this.page = page;
+	this.x = x;
+	this.y = y;
+	this.wid = wid;
+	this.hei = hei;
+	this.realX = realX;
+	this.realY = realY;
+	this.realWid = realWid;
+	this.realHei = realHei;
+	this.tile = tile;
+};
+$hxClasses["dn.heaps.slib.FrameData"] = dn_heaps_slib_FrameData;
+dn_heaps_slib_FrameData.__name__ = "dn.heaps.slib.FrameData";
+dn_heaps_slib_FrameData.prototype = {
+	__class__: dn_heaps_slib_FrameData
+};
+var dn_heaps_slib_LibGroup = function(id,maxWid,maxHei,frames,anim) {
+	this.id = id;
+	this.maxWid = maxWid;
+	this.maxHei = maxHei;
+	this.frames = frames;
+	this.anim = anim;
+};
+$hxClasses["dn.heaps.slib.LibGroup"] = dn_heaps_slib_LibGroup;
+dn_heaps_slib_LibGroup.__name__ = "dn.heaps.slib.LibGroup";
+dn_heaps_slib_LibGroup.prototype = {
+	__class__: dn_heaps_slib_LibGroup
+};
+var dn_heaps_slib_SLBError = $hxEnums["dn.heaps.slib.SLBError"] = { __ename__ : true, __constructs__ : ["NoGroupSelected","GroupAlreadyExists","InvalidFrameDuration","EndFrameLower","InvalidFrames","NoCurrentGroup","AnimFrameExceeds","AssetImportFailed","NotSameSLBFromBatch"]
+	,NoGroupSelected: {_hx_index:0,__enum__:"dn.heaps.slib.SLBError",toString:$estr}
+	,GroupAlreadyExists: ($_=function(g) { return {_hx_index:1,g:g,__enum__:"dn.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["g"],$_)
+	,InvalidFrameDuration: ($_=function(s) { return {_hx_index:2,s:s,__enum__:"dn.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,EndFrameLower: ($_=function(s) { return {_hx_index:3,s:s,__enum__:"dn.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,InvalidFrames: ($_=function(s) { return {_hx_index:4,s:s,__enum__:"dn.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,NoCurrentGroup: {_hx_index:5,__enum__:"dn.heaps.slib.SLBError",toString:$estr}
+	,AnimFrameExceeds: ($_=function(id,anim,frame) { return {_hx_index:6,id:id,anim:anim,frame:frame,__enum__:"dn.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["id","anim","frame"],$_)
+	,AssetImportFailed: ($_=function(e) { return {_hx_index:7,e:e,__enum__:"dn.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["e"],$_)
+	,NotSameSLBFromBatch: {_hx_index:8,__enum__:"dn.heaps.slib.SLBError",toString:$estr}
+};
+dn_heaps_slib_SLBError.__empty_constructs__ = [dn_heaps_slib_SLBError.NoGroupSelected,dn_heaps_slib_SLBError.NoCurrentGroup,dn_heaps_slib_SLBError.NotSameSLBFromBatch];
+var dn_heaps_slib_SpriteLib = function(pages,normalPages) {
+	this.groups = new haxe_ds_StringMap();
+	this.defaultCenterX = 0;
+	this.defaultCenterY = 0;
+	this.gridX = this.gridY = 16;
+	this.children = [];
+	this.pages = pages;
+	this.normalPages = normalPages;
+};
+$hxClasses["dn.heaps.slib.SpriteLib"] = dn_heaps_slib_SpriteLib;
+dn_heaps_slib_SpriteLib.__name__ = "dn.heaps.slib.SpriteLib";
+dn_heaps_slib_SpriteLib.prototype = {
+	createGroup: function(k) {
+		var _this = this.groups;
+		if(__map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k)) {
+			throw new js__$Boot_HaxeError(dn_heaps_slib_SLBError.GroupAlreadyExists(k));
+		}
+		var this1 = this.groups;
+		var value = new dn_heaps_slib_LibGroup(k,0,0,[],[]);
+		var _this1 = this1;
+		if(__map_reserved[k] != null) {
+			_this1.setReserved(k,value);
+		} else {
+			_this1.h[k] = value;
+		}
+		var tmp;
+		if(k == null) {
+			tmp = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
+		}
+		this.currentGroup = tmp;
+		return this.currentGroup;
+	}
+	,sliceCustom: function(groupName,page,frame,x,y,wid,hei,realX,realY,realWid,realHei) {
+		var g;
+		var g1;
+		var g2;
+		if(groupName != null) {
+			var _this = this.groups;
+			g2 = __map_reserved[groupName] != null ? _this.existsReserved(groupName) : _this.h.hasOwnProperty(groupName);
+		} else {
+			g2 = false;
+		}
+		if(g2) {
+			var _this1 = this.groups;
+			g1 = (__map_reserved[groupName] != null ? _this1.getReserved(groupName) : _this1.h[groupName]).frames.length > 0;
+		} else {
+			g1 = false;
+		}
+		if(g1) {
+			if(groupName == null) {
+				g = this.currentGroup;
+			} else {
+				var _this2 = this.groups;
+				g = __map_reserved[groupName] != null ? _this2.getReserved(groupName) : _this2.h[groupName];
+			}
+		} else {
+			g = this.createGroup(groupName);
+		}
+		var x1 = g.maxWid;
+		g.maxWid = x1 > wid ? x1 : wid;
+		var x2 = g.maxHei;
+		g.maxHei = x2 > hei ? x2 : hei;
+		var fd = new dn_heaps_slib_FrameData(page,x,y,wid,hei,realX,realY,realWid,realHei,null);
+		g.frames[frame] = fd;
+		return fd;
+	}
+	,resliceCustom: function(groupName,frame,fd) {
+		var g;
+		var g1;
+		var g2;
+		if(groupName != null) {
+			var _this = this.groups;
+			g2 = __map_reserved[groupName] != null ? _this.existsReserved(groupName) : _this.h.hasOwnProperty(groupName);
+		} else {
+			g2 = false;
+		}
+		if(g2) {
+			var _this1 = this.groups;
+			g1 = (__map_reserved[groupName] != null ? _this1.getReserved(groupName) : _this1.h[groupName]).frames.length > 0;
+		} else {
+			g1 = false;
+		}
+		if(g1) {
+			if(groupName == null) {
+				g = this.currentGroup;
+			} else {
+				var _this2 = this.groups;
+				g = __map_reserved[groupName] != null ? _this2.getReserved(groupName) : _this2.h[groupName];
+			}
+		} else {
+			g = this.createGroup(groupName);
+		}
+		var x = g.maxWid;
+		var y = fd.wid;
+		g.maxWid = x > y ? x : y;
+		var x1 = g.maxHei;
+		var y1 = fd.hei;
+		g.maxHei = x1 > y1 ? x1 : y1;
+		g.frames[frame] = fd;
+		return fd;
+	}
+	,toString: function() {
+		var l = [];
+		var k = this.groups.keys();
+		while(k.hasNext()) {
+			var k1 = k.next();
+			var g;
+			if(k1 == null) {
+				g = this.currentGroup;
+			} else {
+				var _this = this.groups;
+				g = __map_reserved[k1] != null ? _this.getReserved(k1) : _this.h[k1];
+			}
+			l.push(k1 + " (" + g.maxWid + "x" + g.maxHei + ")" + (g.frames.length > 1 ? " " + g.frames.length + "f" : "") + (g.anim.length > 1 ? " animated(" + g.anim.length + "f)" : ""));
+		}
+		l.sort(function(a,b) {
+			return Reflect.compare(a,b);
+		});
+		return "| " + l.join("\n| ");
+	}
+	,addChild: function(s) {
+		this.children.push(s);
+	}
+	,removeChild: function(s) {
+		HxOverrides.remove(this.children,s);
+	}
+	,getTile: function(g,frame,px,py) {
+		if(py == null) {
+			py = 0.0;
+		}
+		if(px == null) {
+			px = 0.0;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		var g1;
+		if(g == null) {
+			g1 = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			g1 = __map_reserved[g] != null ? _this.getReserved(g) : _this.h[g];
+		}
+		var fd = g1 == null ? null : g1.frames[frame];
+		if(fd == null) {
+			throw new js__$Boot_HaxeError("Unknown group " + g + "#" + frame + "!");
+		}
+		var t = this.pages[fd.page].clone();
+		return this.updTile(t,g,frame,px,py);
+	}
+	,updTile: function(t,g,frame,px,py) {
+		if(py == null) {
+			py = 0.0;
+		}
+		if(px == null) {
+			px = 0.0;
+		}
+		if(frame == null) {
+			frame = 0;
+		}
+		var g1;
+		if(g == null) {
+			g1 = this.currentGroup;
+		} else {
+			var _this = this.groups;
+			g1 = __map_reserved[g] != null ? _this.getReserved(g) : _this.h[g];
+		}
+		var fd = g1 == null ? null : g1.frames[frame];
+		if(fd == null) {
+			throw new js__$Boot_HaxeError("Unknown group " + g + "#" + frame + "!");
+		}
+		t.setPosition(fd.x,fd.y);
+		t.setSize(fd.wid,fd.hei);
+		t.dx = -(fd.realWid * px + fd.realX | 0);
+		t.dy = -(fd.realHei * py + fd.realY | 0);
+		return t;
+	}
+	,getTileRandom: function(g,px,py,rndFunc) {
+		if(py == null) {
+			py = 0.0;
+		}
+		if(px == null) {
+			px = 0.0;
+		}
+		var tmp;
+		var tmp1;
+		if(g != null) {
+			var _this = this.groups;
+			tmp1 = __map_reserved[g] != null ? _this.existsReserved(g) : _this.h.hasOwnProperty(g);
+		} else {
+			tmp1 = false;
+		}
+		if(tmp1) {
+			var _this1 = this.groups;
+			tmp = (__map_reserved[g] != null ? _this1.getReserved(g) : _this1.h[g]).frames.length > 0;
+		} else {
+			tmp = false;
+		}
+		if(!tmp) {
+			throw new js__$Boot_HaxeError("Unknown group " + g);
+		}
+		var tmp2;
+		if(g == null) {
+			tmp2 = this.currentGroup;
+		} else {
+			var _this2 = this.groups;
+			tmp2 = __map_reserved[g] != null ? _this2.getReserved(g) : _this2.h[g];
+		}
+		return this.getTile(g,(rndFunc == null ? Std.random : rndFunc)(tmp2.frames.length),px,py);
+	}
+	,__defineAnim: function(group,anim) {
+		if(this.currentGroup == null && group == null) {
+			throw new js__$Boot_HaxeError(dn_heaps_slib_SLBError.NoCurrentGroup);
+		}
+		if(group != null) {
+			var tmp;
+			if(group == null) {
+				tmp = this.currentGroup;
+			} else {
+				var _this = this.groups;
+				tmp = __map_reserved[group] != null ? _this.getReserved(group) : _this.h[group];
+			}
+			this.currentGroup = tmp;
+		}
+		var _g = 0;
+		while(_g < anim.length) {
+			var f = anim[_g];
+			++_g;
+			if(f >= this.currentGroup.frames.length) {
+				throw new js__$Boot_HaxeError(dn_heaps_slib_SLBError.AnimFrameExceeds(this.currentGroup.id,"[" + anim.join(",") + "] " + this.currentGroup.frames.length,f));
+			}
+		}
+		this.currentGroup.anim = anim;
+	}
+	,__class__: dn_heaps_slib_SpriteLib
+};
+var dn_heaps_slib_SpritePivot = function() {
+	this.isUndefined = true;
+};
+$hxClasses["dn.heaps.slib.SpritePivot"] = dn_heaps_slib_SpritePivot;
+dn_heaps_slib_SpritePivot.__name__ = "dn.heaps.slib.SpritePivot";
+dn_heaps_slib_SpritePivot.prototype = {
+	__class__: dn_heaps_slib_SpritePivot
+};
+var dn_heaps_slib_assets_Atlas = function() { };
+$hxClasses["dn.heaps.slib.assets.Atlas"] = dn_heaps_slib_assets_Atlas;
+dn_heaps_slib_assets_Atlas.__name__ = "dn.heaps.slib.assets.Atlas";
+dn_heaps_slib_assets_Atlas.ltick = function() {
+	if(dn_heaps_slib_assets_Atlas.LOADING_TICK_FUN != null) {
+		dn_heaps_slib_assets_Atlas.LOADING_TICK_FUN();
+	}
+};
+dn_heaps_slib_assets_Atlas.load = function(atlasPath,onReload,notZeroBaseds,properties) {
+	var notZeroMap = new haxe_ds_StringMap();
+	if(notZeroBaseds != null) {
+		var _g = 0;
+		while(_g < notZeroBaseds.length) {
+			var id = notZeroBaseds[_g];
+			++_g;
+			if(__map_reserved[id] != null) {
+				notZeroMap.setReserved(id,true);
+			} else {
+				notZeroMap.h[id] = true;
+			}
+		}
+	}
+	var propertiesMap = new haxe_ds_StringMap();
+	if(properties != null) {
+		var _g1 = 0;
+		var _g11 = properties.length;
+		while(_g1 < _g11) {
+			var i = _g1++;
+			var value = properties.length - 1 - i;
+			var key = properties[i];
+			if(__map_reserved[key] != null) {
+				propertiesMap.setReserved(key,value);
+			} else {
+				propertiesMap.h[key] = value;
+			}
+		}
+	}
+	var res = hxd_Res.load(atlasPath);
+	var basePath = atlasPath.indexOf("/") < 0 ? "" : HxOverrides.substr(atlasPath,0,atlasPath.lastIndexOf("/") + 1);
+	var atlas = res.to(hxd_res_Atlas);
+	var lib = dn_heaps_slib_assets_Atlas.convertToSlib(atlas,notZeroMap,propertiesMap,atlasPath);
+	res.watch(function() {
+		dn_heaps_slib_assets_Atlas.convertToSlib(atlas,notZeroMap,propertiesMap,atlasPath);
+		if(onReload != null) {
+			onReload();
+		}
+	});
+	return lib;
+};
+dn_heaps_slib_assets_Atlas.convertToSlib = function(atlas,notZeroBaseds,properties,atlasName) {
+	dn_heaps_slib_assets_Atlas.ltick();
+	var contents = atlas.getContents();
+	dn_heaps_slib_assets_Atlas.ltick();
+	var bestVariants = new haxe_ds_StringMap();
+	var propertiesReg = new EReg("(.*)((\\.[a-z_\\-]+)+)$","gi");
+	var rawName = contents.keys();
+	while(rawName.hasNext()) {
+		var rawName1 = rawName.next();
+		var groupName = rawName1;
+		var groupProps = [];
+		if(propertiesReg.match(rawName1)) {
+			var str = HxOverrides.substr(propertiesReg.matched(2),1,null);
+			groupProps = str.split(".");
+			groupName = propertiesReg.matched(1);
+		}
+		var score = 0;
+		if(groupProps.length > 0) {
+			var _g = 0;
+			var _g1 = groupProps.length;
+			while(_g < _g1) {
+				var i = _g++;
+				var key = groupProps[i];
+				var prio = __map_reserved[key] != null ? properties.getReserved(key) : properties.h[key];
+				if(prio != null) {
+					score |= 1 << prio;
+				}
+			}
+			if(score == 0) {
+				continue;
+			}
+		}
+		var e = __map_reserved[groupName] != null ? bestVariants.getReserved(groupName) : bestVariants.h[groupName];
+		if(e == null) {
+			var value = { rawName : rawName1, score : score};
+			if(__map_reserved[groupName] != null) {
+				bestVariants.setReserved(groupName,value);
+			} else {
+				bestVariants.h[groupName] = value;
+			}
+		} else if(score > e.score) {
+			e.rawName = rawName1;
+			e.score = score;
+		}
+	}
+	var pageMap = new haxe_ds_ObjectMap();
+	var pages = [];
+	var group = new haxe_ds__$StringMap_StringMapIterator(contents,contents.arrayKeys());
+	while(group.hasNext()) {
+		var group1 = group.next();
+		var _g11 = 0;
+		while(_g11 < group1.length) {
+			var frame = group1[_g11];
+			++_g11;
+			var tex = frame.t.innerTex;
+			var page = pageMap.h[tex.__id__];
+			if(page == null) {
+				pageMap.set(tex,pages.length);
+				dn_heaps_slib_assets_Atlas.ltick();
+				pages.push(h2d_Tile.fromTexture(tex));
+				dn_heaps_slib_assets_Atlas.ltick();
+			}
+		}
+	}
+	var nrmPages = [];
+	var _g2 = 0;
+	var _g12 = pages.length;
+	while(_g2 < _g12) {
+		var i1 = _g2++;
+		var name = pages[i1].innerTex.name;
+		var nrmName = HxOverrides.substr(name,0,name.length - 4) + "_n.png";
+		dn_heaps_slib_assets_Atlas.ltick();
+		nrmPages[i1] = hxd_res_Loader.currentInstance.exists(nrmName) ? h2d_Tile.fromTexture(hxd_Res.load(nrmName).toTexture()) : null;
+		dn_heaps_slib_assets_Atlas.ltick();
+	}
+	var lib = new dn_heaps_slib_SpriteLib(pages,nrmPages);
+	var frameReg = new EReg("(.*?)(_?)([0-9]+)$","gi");
+	var numReg = new EReg("^[0-9]+$","");
+	var groupName1 = bestVariants.keys();
+	while(groupName1.hasNext()) {
+		var groupName2 = groupName1.next();
+		var rawName2 = (__map_reserved[groupName2] != null ? bestVariants.getReserved(groupName2) : bestVariants.h[groupName2]).rawName;
+		var content = __map_reserved[rawName2] != null ? contents.getReserved(rawName2) : contents.h[rawName2];
+		if(content.length == 1) {
+			var e1 = content[0];
+			var page1 = pageMap.h[e1.t.innerTex.__id__];
+			var k = groupName2;
+			var f = 0;
+			var regBoth = false;
+			if(frameReg.match(k)) {
+				k = frameReg.matched(1);
+				f = Std.parseInt(frameReg.matched(3));
+				if(__map_reserved[k] != null ? notZeroBaseds.existsReserved(k) : notZeroBaseds.h.hasOwnProperty(k)) {
+					--f;
+				}
+				if(frameReg.matched(2).length == 0) {
+					regBoth = true;
+				}
+			}
+			var fd = lib.sliceCustom(k,page1,f,e1.t.x,e1.t.y,e1.t.width,e1.t.height,-e1.t.dx,-e1.t.dy,e1.width,e1.height);
+			if(regBoth) {
+				lib.resliceCustom(groupName2,0,fd);
+			}
+		} else {
+			var k1 = groupName2;
+			if(k1.indexOf("/") >= 0) {
+				k1 = HxOverrides.substr(k1,k1.lastIndexOf("/") + 1,null);
+			}
+			var _g21 = 0;
+			var _g3 = content.length;
+			while(_g21 < _g3) {
+				var i2 = _g21++;
+				var e2 = content[i2];
+				var page2 = pageMap.h[e2.t.innerTex.__id__];
+				lib.sliceCustom(k1,page2,i2,e2.t.x,e2.t.y,e2.t.width,e2.t.height,-e2.t.dx,-e2.t.dy,e2.width,e2.height);
+			}
+		}
+	}
+	dn_heaps_slib_assets_Atlas.ltick();
+	var id = lib.groups.keys();
+	while(id.hasNext()) {
+		var id1 = id.next();
+		var tmp;
+		var tmp1;
+		if(id1 != null) {
+			var _this = lib.groups;
+			tmp1 = __map_reserved[id1] != null ? _this.existsReserved(id1) : _this.h.hasOwnProperty(id1);
+		} else {
+			tmp1 = false;
+		}
+		if(tmp1) {
+			var _this1 = lib.groups;
+			tmp = (__map_reserved[id1] != null ? _this1.getReserved(id1) : _this1.h[id1]).frames.length > 0;
+		} else {
+			tmp = false;
+		}
+		if(!tmp) {
+			throw new js__$Boot_HaxeError("Unknown group " + id1);
+		}
+		var nframes;
+		if(id1 == null) {
+			nframes = lib.currentGroup;
+		} else {
+			var _this2 = lib.groups;
+			nframes = __map_reserved[id1] != null ? _this2.getReserved(id1) : _this2.h[id1];
+		}
+		var nframes1 = nframes.frames.length;
+		var a = dn_heaps_slib_assets_Atlas.CACHE_ANIMS[nframes1];
+		if(a == null) {
+			var _g22 = [];
+			var _g31 = 0;
+			var _g4 = nframes1;
+			while(_g31 < _g4) {
+				var i3 = _g31++;
+				_g22.push(i3);
+			}
+			a = _g22;
+			if(nframes1 < 256) {
+				dn_heaps_slib_assets_Atlas.CACHE_ANIMS[nframes1] = a;
+			}
+		}
+		lib.__defineAnim(id1,a);
+		var p = id1.lastIndexOf("/");
+		if(p >= 0) {
+			var id2 = HxOverrides.substr(id1,p + 1,null);
+			if(id2 != null && id2.length > 0 && !numReg.match(id2)) {
+				var _this3 = lib.groups;
+				if(__map_reserved[id2] != null ? _this3.existsReserved(id2) : _this3.h.hasOwnProperty(id2)) {
+					haxe_Log.trace("Warning, duplicate short name: " + id2 + " in " + atlasName + ":" + id1,{ fileName : "dn/heaps/slib/assets/Atlas.hx", lineNumber : 187, className : "dn.heaps.slib.assets.Atlas", methodName : "convertToSlib"});
+				}
+				var this1 = lib.groups;
+				var _this4 = lib.groups;
+				var value1 = __map_reserved[id1] != null ? _this4.getReserved(id1) : _this4.h[id1];
+				var _this5 = this1;
+				if(__map_reserved[id2] != null) {
+					_this5.setReserved(id2,value1);
+				} else {
+					_this5.h[id2] = value1;
+				}
+			}
+		}
+	}
+	dn_heaps_slib_assets_Atlas.ltick();
+	return lib;
+};
 var en_Cadaver = function(e) {
 	Entity.call(this,0,0);
 	en_Cadaver.ALL.push(this);
@@ -6044,7 +9328,7 @@ var en_Hero = function(x,y) {
 	Entity.call(this,x,y);
 	en_Hero.ALL.push(this);
 	this.lifter = true;
-	var s = new mt_heaps_slib_HSprite(Assets.gameElements,"wings",0);
+	var s = new dn_heaps_slib_HSprite(Assets.gameElements,"wings",0);
 	var _this = s.pivot;
 	_this.centerFactorX = 0.5;
 	_this.centerFactorY = 1;
@@ -6059,13 +9343,13 @@ var en_Hero = function(x,y) {
 	_this1.y = (this.cy + this.yr) * Const.GRID;
 	var _this2 = this.wings;
 	if(_this2._animManager == null) {
-		_this2._animManager = new mt_heaps_slib_AnimManager(_this2);
+		_this2._animManager = new dn_heaps_slib_AnimManager(_this2);
 		if(_this2.onAnimManAlloc != null) {
 			_this2.onAnimManAlloc(_this2._animManager);
 		}
 	}
 	_this2._animManager.registerStateAnim("wings",0);
-	var s1 = new mt_heaps_slib_HSprite(Assets.gameElements,"angelRing",0);
+	var s1 = new dn_heaps_slib_HSprite(Assets.gameElements,"angelRing",0);
 	var _this3 = s1.pivot;
 	_this3.centerFactorX = 0.5;
 	_this3.centerFactorY = 1;
@@ -6081,7 +9365,7 @@ var en_Hero = function(x,y) {
 	this.ring.blendMode = h2d_BlendMode.Add;
 	var _this5 = this.spr;
 	if(_this5._animManager == null) {
-		_this5._animManager = new mt_heaps_slib_AnimManager(_this5);
+		_this5._animManager = new dn_heaps_slib_AnimManager(_this5);
 		if(_this5.onAnimManAlloc != null) {
 			_this5.onAnimManAlloc(_this5._animManager);
 		}
@@ -6091,7 +9375,7 @@ var en_Hero = function(x,y) {
 	});
 	var _this6 = this.spr;
 	if(_this6._animManager == null) {
-		_this6._animManager = new mt_heaps_slib_AnimManager(_this6);
+		_this6._animManager = new dn_heaps_slib_AnimManager(_this6);
 		if(_this6.onAnimManAlloc != null) {
 			_this6.onAnimManAlloc(_this6._animManager);
 		}
@@ -6105,7 +9389,7 @@ var en_Hero = function(x,y) {
 	});
 	var _this7 = this.spr;
 	if(_this7._animManager == null) {
-		_this7._animManager = new mt_heaps_slib_AnimManager(_this7);
+		_this7._animManager = new dn_heaps_slib_AnimManager(_this7);
 		if(_this7.onAnimManAlloc != null) {
 			_this7.onAnimManAlloc(_this7._animManager);
 		}
@@ -6119,7 +9403,7 @@ var en_Hero = function(x,y) {
 	});
 	var _this8 = this.spr;
 	if(_this8._animManager == null) {
-		_this8._animManager = new mt_heaps_slib_AnimManager(_this8);
+		_this8._animManager = new dn_heaps_slib_AnimManager(_this8);
 		if(_this8.onAnimManAlloc != null) {
 			_this8.onAnimManAlloc(_this8._animManager);
 		}
@@ -6134,7 +9418,7 @@ var en_Hero = function(x,y) {
 	});
 	var _this9 = this.spr;
 	if(_this9._animManager == null) {
-		_this9._animManager = new mt_heaps_slib_AnimManager(_this9);
+		_this9._animManager = new dn_heaps_slib_AnimManager(_this9);
 		if(_this9.onAnimManAlloc != null) {
 			_this9.onAnimManAlloc(_this9._animManager);
 		}
@@ -6186,7 +9470,7 @@ en_Hero.prototype = $extend(Entity.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this.cdList.push(new mt__$Cooldown_CdInst(92274688,frames));
+					_this.cdList.push(new dn__$Cooldown_CdInst(92274688,frames));
 				}
 			}
 		}
@@ -6294,7 +9578,7 @@ en_Hero.prototype = $extend(Entity.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this3.cdList.push(new mt__$Cooldown_CdInst(92274688,frames));
+					_this3.cdList.push(new dn__$Cooldown_CdInst(92274688,frames));
 				}
 			}
 		}
@@ -6338,14 +9622,14 @@ en_Hero.prototype = $extend(Entity.prototype,{
 				}
 				if(tmp) {
 					var tmp3;
-					if(Game.ME.ca.parent.mode == mt_heaps_Mode.Pad) {
+					if(Game.ME.ca.parent.mode == dn_heaps_Mode.Pad) {
 						var _this2 = Game.ME.ca;
 						var _this3 = _this2.parent.gc;
 						var x = _this2.leftDeadZone;
 						var overrideDeadZone = x < 0 ? 0 : x > 1 ? 1 : x;
 						var tmp4;
 						if(_this3.device != null) {
-							var idx = mt_heaps_GamePad.MAPPING[18];
+							var idx = dn_heaps_GamePad.MAPPING[18];
 							var v = idx > -1 && idx < _this3.device.values.length ? _this3.device.values[idx] : 0;
 							var dz = overrideDeadZone < 0. ? _this3.deadZone : overrideDeadZone;
 							tmp4 = v > -dz && v < dz ? 0. : v;
@@ -6389,13 +9673,13 @@ en_Hero.prototype = $extend(Entity.prototype,{
 				}
 				if(tmp5) {
 					var tmp8;
-					if(Game.ME.ca.parent.mode == mt_heaps_Mode.Pad) {
+					if(Game.ME.ca.parent.mode == dn_heaps_Mode.Pad) {
 						var _this6 = Game.ME.ca;
 						var _this7 = _this6.parent.gc;
 						var x1 = _this6.leftDeadZone;
 						var overrideDeadZone1 = x1 < 0 ? 0 : x1 > 1 ? 1 : x1;
 						if(_this7.device != null) {
-							var idx1 = mt_heaps_GamePad.MAPPING[18];
+							var idx1 = dn_heaps_GamePad.MAPPING[18];
 							var v1 = idx1 > -1 && idx1 < _this7.device.values.length ? _this7.device.values[idx1] : 0;
 							var dz1 = overrideDeadZone1 < 0. ? _this7.deadZone : overrideDeadZone1;
 							tmp8 = v1 > -dz1 && v1 < dz1 ? 0. : v1;
@@ -6530,7 +9814,7 @@ en_Hero.prototype = $extend(Entity.prototype,{
 							if(cur != null) {
 								cur.frames = frames1;
 							} else {
-								_this23.cdList.push(new mt__$Cooldown_CdInst(96468992,frames1));
+								_this23.cdList.push(new dn__$Cooldown_CdInst(96468992,frames1));
 							}
 						}
 					}
@@ -6588,7 +9872,7 @@ en_Hero.prototype = $extend(Entity.prototype,{
 							if(cur1 != null) {
 								cur1.frames = frames3;
 							} else {
-								_this27.cdList.push(new mt__$Cooldown_CdInst(96468992,frames3));
+								_this27.cdList.push(new dn__$Cooldown_CdInst(96468992,frames3));
 							}
 						}
 					}
@@ -6707,13 +9991,13 @@ en_Hero.prototype = $extend(Entity.prototype,{
 						if(cur2 != null) {
 							cur2.frames = frames4;
 						} else {
-							_this36.cdList.push(new mt__$Cooldown_CdInst(100663296,frames4));
+							_this36.cdList.push(new dn__$Cooldown_CdInst(100663296,frames4));
 						}
 					}
 				}
 				var _this37 = this.wings;
 				if(_this37._animManager == null) {
-					_this37._animManager = new mt_heaps_slib_AnimManager(_this37);
+					_this37._animManager = new dn_heaps_slib_AnimManager(_this37);
 					if(_this37.onAnimManAlloc != null) {
 						_this37.onAnimManAlloc(_this37._animManager);
 					}
@@ -6824,7 +10108,7 @@ en_Hero.prototype = $extend(Entity.prototype,{
 							if(cur3 != null) {
 								cur3.frames = frames5;
 							} else {
-								_this43.cdList.push(new mt__$Cooldown_CdInst(104857600,frames5));
+								_this43.cdList.push(new dn__$Cooldown_CdInst(104857600,frames5));
 							}
 						}
 					}
@@ -7034,7 +10318,7 @@ en_Hero.prototype = $extend(Entity.prototype,{
 							if(cur4 != null) {
 								cur4.frames = frames7;
 							} else {
-								_this54.cdList.push(new mt__$Cooldown_CdInst(109051904,frames7));
+								_this54.cdList.push(new dn__$Cooldown_CdInst(109051904,frames7));
 							}
 						}
 					}
@@ -7047,7 +10331,7 @@ en_Hero.prototype = $extend(Entity.prototype,{
 			if(tmp42) {
 				var _this55 = this.spr;
 				if(_this55._animManager == null) {
-					_this55._animManager = new mt_heaps_slib_AnimManager(_this55);
+					_this55._animManager = new dn_heaps_slib_AnimManager(_this55);
 					if(_this55.onAnimManAlloc != null) {
 						_this55.onAnimManAlloc(_this55._animManager);
 					}
@@ -7147,7 +10431,7 @@ var en_Light = function(x,y,r) {
 	this.hasColl = false;
 	this.radius = r;
 	this.hei = Const.GRID;
-	var s = new mt_heaps_slib_HSprite(Assets.gameElements,"pixel",0);
+	var s = new dn_heaps_slib_HSprite(Assets.gameElements,"pixel",0);
 	var _this = s.pivot;
 	_this.centerFactorX = 0.;
 	_this.centerFactorY = 0.;
@@ -7157,7 +10441,7 @@ var en_Light = function(x,y,r) {
 	Game.ME.scroller.addChildAt(this.halo,Const.DP_FX_TOP);
 	var _this1 = this.spr;
 	if(_this1._animManager == null) {
-		_this1._animManager = new mt_heaps_slib_AnimManager(_this1);
+		_this1._animManager = new dn_heaps_slib_AnimManager(_this1);
 		if(_this1.onAnimManAlloc != null) {
 			_this1.onAnimManAlloc(_this1._animManager);
 		}
@@ -7167,7 +10451,7 @@ var en_Light = function(x,y,r) {
 	});
 	var _this2 = this.spr;
 	if(_this2._animManager == null) {
-		_this2._animManager = new mt_heaps_slib_AnimManager(_this2);
+		_this2._animManager = new dn_heaps_slib_AnimManager(_this2);
 		if(_this2.onAnimManAlloc != null) {
 			_this2.onAnimManAlloc(_this2._animManager);
 		}
@@ -7225,7 +10509,7 @@ en_Light.prototype = $extend(Entity.prototype,{
 						if(cur != null) {
 							cur.frames = frames1;
 						} else {
-							_this2.cdList.push(new mt__$Cooldown_CdInst(121634816,frames1));
+							_this2.cdList.push(new dn__$Cooldown_CdInst(121634816,frames1));
 						}
 					}
 				}
@@ -7262,7 +10546,7 @@ en_Light.prototype = $extend(Entity.prototype,{
 						if(cur1 != null) {
 							cur1.frames = frames3;
 						} else {
-							_this3.cdList.push(new mt__$Cooldown_CdInst(121634816,frames3));
+							_this3.cdList.push(new dn__$Cooldown_CdInst(121634816,frames3));
 						}
 					}
 				}
@@ -7341,7 +10625,7 @@ en_Light.prototype = $extend(Entity.prototype,{
 						if(cur != null) {
 							cur.frames = frames1;
 						} else {
-							_this.cdList.push(new mt__$Cooldown_CdInst(125829120,frames1));
+							_this.cdList.push(new dn__$Cooldown_CdInst(125829120,frames1));
 						}
 					}
 				}
@@ -7382,7 +10666,7 @@ en_Light.prototype = $extend(Entity.prototype,{
 							if(cur1 != null) {
 								cur1.frames = frames2;
 							} else {
-								_this1.cdList.push(new mt__$Cooldown_CdInst(58720256,frames2));
+								_this1.cdList.push(new dn__$Cooldown_CdInst(58720256,frames2));
 							}
 						}
 					}
@@ -7410,7 +10694,7 @@ en_Light.prototype = $extend(Entity.prototype,{
 									if(cur2 != null) {
 										cur2.frames = frames4;
 									} else {
-										_this2.cdList.push(new mt__$Cooldown_CdInst(130023424,frames4));
+										_this2.cdList.push(new dn__$Cooldown_CdInst(130023424,frames4));
 									}
 								}
 							}
@@ -7457,7 +10741,7 @@ var en_Mob = function(x,y) {
 			if(cur != null) {
 				cur.frames = frames;
 			} else {
-				_this.cdList.push(new mt__$Cooldown_CdInst(16777216,frames));
+				_this.cdList.push(new dn__$Cooldown_CdInst(16777216,frames));
 			}
 		}
 	}
@@ -7541,7 +10825,7 @@ en_Mob.prototype = $extend(Entity.prototype,{
 						if(cur != null) {
 							cur.frames = frames1;
 						} else {
-							_this.cdList.push(new mt__$Cooldown_CdInst(16777216,frames1));
+							_this.cdList.push(new dn__$Cooldown_CdInst(16777216,frames1));
 						}
 					}
 				}
@@ -7586,7 +10870,7 @@ var en_Peon = function(x,y) {
 			if(cur != null) {
 				cur.frames = frames;
 			} else {
-				_this.cdList.push(new mt__$Cooldown_CdInst(4194304,frames));
+				_this.cdList.push(new dn__$Cooldown_CdInst(4194304,frames));
 			}
 		}
 	}
@@ -7601,7 +10885,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		var skinId = this.job != null && !this.job.destroyed ? "worker" : "peon";
 		var _this = this.spr;
 		if(_this._animManager == null) {
-			_this._animManager = new mt_heaps_slib_AnimManager(_this);
+			_this._animManager = new dn_heaps_slib_AnimManager(_this);
 			if(_this.onAnimManAlloc != null) {
 				_this.onAnimManAlloc(_this._animManager);
 			}
@@ -7611,7 +10895,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		});
 		var _this1 = this.spr;
 		if(_this1._animManager == null) {
-			_this1._animManager = new mt_heaps_slib_AnimManager(_this1);
+			_this1._animManager = new dn_heaps_slib_AnimManager(_this1);
 			if(_this1.onAnimManAlloc != null) {
 				_this1.onAnimManAlloc(_this1._animManager);
 			}
@@ -7621,7 +10905,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		});
 		var _this2 = this.spr;
 		if(_this2._animManager == null) {
-			_this2._animManager = new mt_heaps_slib_AnimManager(_this2);
+			_this2._animManager = new dn_heaps_slib_AnimManager(_this2);
 			if(_this2.onAnimManAlloc != null) {
 				_this2.onAnimManAlloc(_this2._animManager);
 			}
@@ -7636,7 +10920,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		});
 		var _this3 = this.spr;
 		if(_this3._animManager == null) {
-			_this3._animManager = new mt_heaps_slib_AnimManager(_this3);
+			_this3._animManager = new dn_heaps_slib_AnimManager(_this3);
 			if(_this3.onAnimManAlloc != null) {
 				_this3.onAnimManAlloc(_this3._animManager);
 			}
@@ -7650,7 +10934,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		});
 		var _this4 = this.spr;
 		if(_this4._animManager == null) {
-			_this4._animManager = new mt_heaps_slib_AnimManager(_this4);
+			_this4._animManager = new dn_heaps_slib_AnimManager(_this4);
 			if(_this4.onAnimManAlloc != null) {
 				_this4.onAnimManAlloc(_this4._animManager);
 			}
@@ -7660,7 +10944,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		});
 		var _this5 = this.spr;
 		if(_this5._animManager == null) {
-			_this5._animManager = new mt_heaps_slib_AnimManager(_this5);
+			_this5._animManager = new dn_heaps_slib_AnimManager(_this5);
 			if(_this5.onAnimManAlloc != null) {
 				_this5.onAnimManAlloc(_this5._animManager);
 			}
@@ -7674,7 +10958,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		});
 		var _this6 = this.spr;
 		if(_this6._animManager == null) {
-			_this6._animManager = new mt_heaps_slib_AnimManager(_this6);
+			_this6._animManager = new dn_heaps_slib_AnimManager(_this6);
 			if(_this6.onAnimManAlloc != null) {
 				_this6.onAnimManAlloc(_this6._animManager);
 			}
@@ -7688,7 +10972,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		});
 		var _this7 = this.spr;
 		if(_this7._animManager == null) {
-			_this7._animManager = new mt_heaps_slib_AnimManager(_this7);
+			_this7._animManager = new dn_heaps_slib_AnimManager(_this7);
 			if(_this7.onAnimManAlloc != null) {
 				_this7.onAnimManAlloc(_this7._animManager);
 			}
@@ -7703,7 +10987,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		});
 		var _this8 = this.spr;
 		if(_this8._animManager == null) {
-			_this8._animManager = new mt_heaps_slib_AnimManager(_this8);
+			_this8._animManager = new dn_heaps_slib_AnimManager(_this8);
 			if(_this8.onAnimManAlloc != null) {
 				_this8.onAnimManAlloc(_this8._animManager);
 			}
@@ -7766,7 +11050,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this3.cdList.push(new mt__$Cooldown_CdInst(134217728,frames));
+					_this3.cdList.push(new dn__$Cooldown_CdInst(134217728,frames));
 				}
 			}
 		}
@@ -7808,7 +11092,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this.cdList.push(new mt__$Cooldown_CdInst(46137344,frames));
+					_this.cdList.push(new dn__$Cooldown_CdInst(46137344,frames));
 				}
 			}
 		}
@@ -7830,7 +11114,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 				if(cur1 != null) {
 					cur1.frames = frames1;
 				} else {
-					_this1.cdList.push(new mt__$Cooldown_CdInst(8388608,frames1));
+					_this1.cdList.push(new dn__$Cooldown_CdInst(8388608,frames1));
 				}
 			}
 		}
@@ -7865,7 +11149,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this.cdList.push(new mt__$Cooldown_CdInst(8388608,frames));
+					_this.cdList.push(new dn__$Cooldown_CdInst(8388608,frames));
 				}
 			}
 		}
@@ -7886,7 +11170,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 				if(cur1 != null) {
 					cur1.frames = frames1;
 				} else {
-					_this2.cdList.push(new mt__$Cooldown_CdInst(142606336,frames1));
+					_this2.cdList.push(new dn__$Cooldown_CdInst(142606336,frames1));
 				}
 			}
 		}
@@ -7909,7 +11193,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 				if(cur2 != null) {
 					cur2.frames = frames2;
 				} else {
-					_this3.cdList.push(new mt__$Cooldown_CdInst(71303168,frames2));
+					_this3.cdList.push(new dn__$Cooldown_CdInst(71303168,frames2));
 				}
 			}
 		}
@@ -7951,7 +11235,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 		}
 		var nextLight = dh.getBest();
 		if(nextLight != null) {
-			var dh1 = new DecisionHelper(mt_deepnight_Bresenham.getDisc(nextLight.cx,nextLight.cy,nextLight.radius / Const.GRID | 0));
+			var dh1 = new DecisionHelper(dn_Bresenham.getDisc(nextLight.cx,nextLight.cy,nextLight.radius / Const.GRID | 0));
 			var _g3 = 0;
 			var _g12 = dh1.all;
 			while(_g3 < _g12.length) {
@@ -8057,7 +11341,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 						if(cur != null) {
 							cur.frames = frames1;
 						} else {
-							_this.cdList.push(new mt__$Cooldown_CdInst(146800640,frames1));
+							_this.cdList.push(new dn__$Cooldown_CdInst(146800640,frames1));
 						}
 					}
 				}
@@ -8094,7 +11378,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 						if(cur1 != null) {
 							cur1.frames = frames3;
 						} else {
-							_this1.cdList.push(new mt__$Cooldown_CdInst(150994944,frames3));
+							_this1.cdList.push(new dn__$Cooldown_CdInst(150994944,frames3));
 						}
 					}
 				}
@@ -8216,7 +11500,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 						if(cur2 != null) {
 							cur2.frames = frames4;
 						} else {
-							_this2.cdList.push(new mt__$Cooldown_CdInst(155189248,frames4));
+							_this2.cdList.push(new dn__$Cooldown_CdInst(155189248,frames4));
 						}
 					}
 				}
@@ -8238,7 +11522,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 						if(cur3 != null) {
 							cur3.frames = frames5;
 						} else {
-							_this4.cdList.push(new mt__$Cooldown_CdInst(4194304,frames5));
+							_this4.cdList.push(new dn__$Cooldown_CdInst(4194304,frames5));
 						}
 					}
 				}
@@ -8280,7 +11564,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 							if(cur4 != null) {
 								cur4.frames = frames7;
 							} else {
-								_this6.cdList.push(new mt__$Cooldown_CdInst(41943040,frames7));
+								_this6.cdList.push(new dn__$Cooldown_CdInst(41943040,frames7));
 							}
 						}
 					}
@@ -8320,7 +11604,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 								if(cur5 != null) {
 									cur5.frames = frames9;
 								} else {
-									_this8.cdList.push(new mt__$Cooldown_CdInst(41943040,frames9));
+									_this8.cdList.push(new dn__$Cooldown_CdInst(41943040,frames9));
 								}
 							}
 						}
@@ -8373,7 +11657,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 								if(cur6 != null) {
 									cur6.frames = frames11;
 								} else {
-									_this11.cdList.push(new mt__$Cooldown_CdInst(41943040,frames11));
+									_this11.cdList.push(new dn__$Cooldown_CdInst(41943040,frames11));
 								}
 							}
 						}
@@ -8414,7 +11698,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 							if(cur7 != null) {
 								cur7.frames = frames12;
 							} else {
-								_this13.cdList.push(new mt__$Cooldown_CdInst(159383552,frames12));
+								_this13.cdList.push(new dn__$Cooldown_CdInst(159383552,frames12));
 							}
 						}
 					}
@@ -8462,7 +11746,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 						if(cur8 != null) {
 							cur8.frames = frames14;
 						} else {
-							_this14.cdList.push(new mt__$Cooldown_CdInst(163577856,frames14));
+							_this14.cdList.push(new dn__$Cooldown_CdInst(163577856,frames14));
 						}
 					}
 				}
@@ -8567,7 +11851,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 						if(cur9 != null) {
 							cur9.frames = frames16;
 						} else {
-							_this22.cdList.push(new mt__$Cooldown_CdInst(167772160,frames16));
+							_this22.cdList.push(new dn__$Cooldown_CdInst(167772160,frames16));
 						}
 					}
 				}
@@ -8578,7 +11862,7 @@ en_Peon.prototype = $extend(Entity.prototype,{
 			tmp17 = false;
 		}
 		if(tmp17) {
-			var dh = new DecisionHelper(mt_deepnight_Bresenham.getDisc(this.cx,this.cy,3));
+			var dh = new DecisionHelper(dn_Bresenham.getDisc(this.cx,this.cy,3));
 			var _g5 = 0;
 			var _g14 = dh.all;
 			while(_g5 < _g14.length) {
@@ -8805,7 +12089,7 @@ var en_m_Bomber = function(x,y) {
 	en_Mob.call(this,x,y);
 	var _this = this.spr;
 	if(_this._animManager == null) {
-		_this._animManager = new mt_heaps_slib_AnimManager(_this);
+		_this._animManager = new dn_heaps_slib_AnimManager(_this);
 		if(_this.onAnimManAlloc != null) {
 			_this.onAnimManAlloc(_this._animManager);
 		}
@@ -8815,7 +12099,7 @@ var en_m_Bomber = function(x,y) {
 	});
 	var _this1 = this.spr;
 	if(_this1._animManager == null) {
-		_this1._animManager = new mt_heaps_slib_AnimManager(_this1);
+		_this1._animManager = new dn_heaps_slib_AnimManager(_this1);
 		if(_this1.onAnimManAlloc != null) {
 			_this1.onAnimManAlloc(_this1._animManager);
 		}
@@ -8999,7 +12283,7 @@ en_m_Bomber.prototype = $extend(en_Mob.prototype,{
 								if(cur != null) {
 									cur.frames = frames1;
 								} else {
-									_this.cdList.push(new mt__$Cooldown_CdInst(41943040,frames1));
+									_this.cdList.push(new dn__$Cooldown_CdInst(41943040,frames1));
 								}
 							}
 						}
@@ -9053,7 +12337,7 @@ en_m_Bomber.prototype = $extend(en_Mob.prototype,{
 							if(cur1 != null) {
 								cur1.frames = frames2;
 							} else {
-								_this1.cdList.push(new mt__$Cooldown_CdInst(50331648,frames2));
+								_this1.cdList.push(new dn__$Cooldown_CdInst(50331648,frames2));
 							}
 						}
 					}
@@ -9074,7 +12358,7 @@ en_m_Bomber.prototype = $extend(en_Mob.prototype,{
 							if(cur2 != null) {
 								cur2.frames = frames3;
 							} else {
-								_this2.cdList.push(new mt__$Cooldown_CdInst(20971520,frames3));
+								_this2.cdList.push(new dn__$Cooldown_CdInst(20971520,frames3));
 							}
 						}
 					}
@@ -9148,7 +12432,7 @@ var en_m_Demon = function(x,y) {
 	this.hasGravity = false;
 	this.hasColl = false;
 	this.frict = 0.94;
-	var s = new mt_heaps_slib_HSprite(Assets.gameElements,"wings",0);
+	var s = new dn_heaps_slib_HSprite(Assets.gameElements,"wings",0);
 	var _this = s.pivot;
 	_this.centerFactorX = 0.5;
 	_this.centerFactorY = 1;
@@ -9163,7 +12447,7 @@ var en_m_Demon = function(x,y) {
 	_this1.y = (this.cy + this.yr) * Const.GRID;
 	var _this2 = this.wings;
 	if(_this2._animManager == null) {
-		_this2._animManager = new mt_heaps_slib_AnimManager(_this2);
+		_this2._animManager = new dn_heaps_slib_AnimManager(_this2);
 		if(_this2.onAnimManAlloc != null) {
 			_this2.onAnimManAlloc(_this2._animManager);
 		}
@@ -9345,7 +12629,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 					if(cur != null) {
 						cur.frames = frames;
 					} else {
-						_this.cdList.push(new mt__$Cooldown_CdInst(75497472,frames));
+						_this.cdList.push(new dn__$Cooldown_CdInst(75497472,frames));
 					}
 				}
 			}
@@ -9367,7 +12651,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 					if(cur1 != null) {
 						cur1.frames = frames1;
 					} else {
-						_this2.cdList.push(new mt__$Cooldown_CdInst(62914560,frames1));
+						_this2.cdList.push(new dn__$Cooldown_CdInst(62914560,frames1));
 					}
 				}
 			}
@@ -9394,7 +12678,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 				if(cur != null) {
 					cur.frames = frames;
 				} else {
-					_this.cdList.push(new mt__$Cooldown_CdInst(8388608,frames));
+					_this.cdList.push(new dn__$Cooldown_CdInst(8388608,frames));
 				}
 			}
 		}
@@ -9448,7 +12732,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 							if(cur != null) {
 								cur.frames = frames1;
 							} else {
-								_this.cdList.push(new mt__$Cooldown_CdInst(79691776,frames1));
+								_this.cdList.push(new dn__$Cooldown_CdInst(79691776,frames1));
 							}
 						}
 					}
@@ -9473,7 +12757,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 							if(cur1 != null) {
 								cur1.frames = frames2;
 							} else {
-								_this2.cdList.push(new mt__$Cooldown_CdInst(12582912,frames2));
+								_this2.cdList.push(new dn__$Cooldown_CdInst(12582912,frames2));
 							}
 						}
 					}
@@ -9510,7 +12794,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 							if(cur2 != null) {
 								cur2.frames = frames4;
 							} else {
-								_this5.cdList.push(new mt__$Cooldown_CdInst(88080384,frames4));
+								_this5.cdList.push(new dn__$Cooldown_CdInst(88080384,frames4));
 							}
 						}
 					}
@@ -9561,7 +12845,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 							if(cur3 != null) {
 								cur3.frames = frames5;
 							} else {
-								_this11.cdList.push(new mt__$Cooldown_CdInst(67108864,frames5));
+								_this11.cdList.push(new dn__$Cooldown_CdInst(67108864,frames5));
 							}
 						}
 					}
@@ -9582,7 +12866,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 							if(cur4 != null) {
 								cur4.frames = frames6;
 							} else {
-								_this13.cdList.push(new mt__$Cooldown_CdInst(12582912,frames6));
+								_this13.cdList.push(new dn__$Cooldown_CdInst(12582912,frames6));
 							}
 						}
 					}
@@ -9603,7 +12887,7 @@ en_m_Demon.prototype = $extend(en_Mob.prototype,{
 							if(cur5 != null) {
 								cur5.frames = frames7;
 							} else {
-								_this14.cdList.push(new mt__$Cooldown_CdInst(83886080,frames7));
+								_this14.cdList.push(new dn__$Cooldown_CdInst(83886080,frames7));
 							}
 						}
 					}
@@ -11263,79 +14547,6 @@ format_tools_Inflate.__name__ = "format.tools.Inflate";
 format_tools_Inflate.run = function(bytes) {
 	return haxe_zip_Uncompress.run(bytes);
 };
-var h2d_Drawable = function(parent) {
-	h2d_Object.call(this,parent);
-	this.color = new h3d_Vector(1,1,1,1);
-};
-$hxClasses["h2d.Drawable"] = h2d_Drawable;
-h2d_Drawable.__name__ = "h2d.Drawable";
-h2d_Drawable.__super__ = h2d_Object;
-h2d_Drawable.prototype = $extend(h2d_Object.prototype,{
-	set_colorMatrix: function(m) {
-		var s = this.getShader(h3d_shader_ColorMatrix);
-		if(s == null) {
-			if(m != null) {
-				s = this.addShader(new h3d_shader_ColorMatrix());
-				s.matrix__ = m;
-			}
-		} else if(m == null) {
-			this.removeShader(s);
-		} else {
-			s.matrix__ = m;
-		}
-		return m;
-	}
-	,getShader: function(stype) {
-		if(this.shaders != null) {
-			var _g_l = this.shaders;
-			var _g_last = null;
-			while(_g_l != _g_last) {
-				var s = _g_l.s;
-				_g_l = _g_l.next;
-				var s1 = s;
-				var s2 = ((s1) instanceof stype) ? s1 : null;
-				if(s2 != null) {
-					return s2;
-				}
-			}
-		}
-		return null;
-	}
-	,addShader: function(s) {
-		if(s == null) {
-			throw new js__$Boot_HaxeError("Can't add null shader");
-		}
-		this.shaders = hxsl_ShaderList.addSort(s,this.shaders);
-		return s;
-	}
-	,removeShader: function(s) {
-		var prev = null;
-		var cur = this.shaders;
-		while(cur != null) {
-			if(cur.s == s) {
-				if(prev == null) {
-					this.shaders = cur.next;
-				} else {
-					prev.next = cur.next;
-				}
-				return true;
-			}
-			prev = cur;
-			cur = cur.next;
-		}
-		return false;
-	}
-	,emitTile: function(ctx,tile) {
-		if(tile == null) {
-			tile = new h2d_Tile(null,0,0,5,5);
-		}
-		if(!ctx.drawTile(this,tile)) {
-			return;
-		}
-		return;
-	}
-	,__class__: h2d_Drawable
-});
 var h2d_Bitmap = function(tile,parent) {
 	h2d_Drawable.call(this,parent);
 	this.tile = tile;
@@ -16107,285 +19318,6 @@ h2d_Scene.prototype = $extend(h2d_Layers.prototype,{
 		h2d_Layers.prototype.sync.call(this,ctx);
 	}
 	,__class__: h2d_Scene
-});
-var h2d_BatchElement = function(t) {
-	this.x = 0;
-	this.y = 0;
-	this.r = 1;
-	this.g = 1;
-	this.b = 1;
-	this.a = 1;
-	this.rotation = 0;
-	this.scaleX = this.scaleY = 1;
-	this.visible = true;
-	this.t = t;
-};
-$hxClasses["h2d.BatchElement"] = h2d_BatchElement;
-h2d_BatchElement.__name__ = "h2d.BatchElement";
-h2d_BatchElement.prototype = {
-	update: function(et) {
-		return true;
-	}
-	,remove: function() {
-		if(this.batch != null) {
-			this.batch["delete"](this);
-		}
-	}
-	,__class__: h2d_BatchElement
-};
-var h2d_SpriteBatch = function(t,parent) {
-	h2d_Drawable.call(this,parent);
-	this.tile = t;
-};
-$hxClasses["h2d.SpriteBatch"] = h2d_SpriteBatch;
-h2d_SpriteBatch.__name__ = "h2d.SpriteBatch";
-h2d_SpriteBatch.__super__ = h2d_Drawable;
-h2d_SpriteBatch.prototype = $extend(h2d_Drawable.prototype,{
-	add: function(e,before) {
-		if(before == null) {
-			before = false;
-		}
-		e.batch = this;
-		if(this.first == null) {
-			this.first = this.last = e;
-			e.prev = e.next = null;
-		} else if(before) {
-			e.prev = null;
-			e.next = this.first;
-			this.first.prev = e;
-			this.first = e;
-		} else {
-			this.last.next = e;
-			e.prev = this.last;
-			e.next = null;
-			this.last = e;
-		}
-		return e;
-	}
-	,'delete': function(e) {
-		if(e.prev == null) {
-			if(this.first == e) {
-				this.first = e.next;
-			}
-		} else {
-			e.prev.next = e.next;
-		}
-		if(e.next == null) {
-			if(this.last == e) {
-				this.last = e.prev;
-			}
-		} else {
-			e.next.prev = e.prev;
-		}
-		e.batch = null;
-	}
-	,sync: function(ctx) {
-		h2d_Drawable.prototype.sync.call(this,ctx);
-		if(this.hasUpdate) {
-			var e = this.first;
-			while(e != null) {
-				if(!e.update(ctx.elapsedTime)) {
-					e.remove();
-				}
-				e = e.next;
-			}
-		}
-		this.flush();
-	}
-	,getBoundsRec: function(relativeTo,out,forSize) {
-		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
-		var e = this.first;
-		while(e != null) {
-			var t = e.t;
-			if(this.hasRotationScale) {
-				var ca = Math.cos(e.rotation);
-				var sa = Math.sin(e.rotation);
-				var hx = t.width;
-				var hy = t.height;
-				var px = t.dx * e.scaleX;
-				var py = t.dy * e.scaleY;
-				var x = px * ca - py * sa + e.x;
-				var y = py * ca + px * sa + e.y;
-				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
-				var px1 = (t.dx + hx) * e.scaleX;
-				var py1 = t.dy * e.scaleY;
-				x = px1 * ca - py1 * sa + e.x;
-				y = py1 * ca + px1 * sa + e.y;
-				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
-				var px2 = t.dx * e.scaleX;
-				var py2 = (t.dy + hy) * e.scaleY;
-				x = px2 * ca - py2 * sa + e.x;
-				y = py2 * ca + px2 * sa + e.y;
-				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
-				var px3 = (t.dx + hx) * e.scaleX;
-				var py3 = (t.dy + hy) * e.scaleY;
-				x = px3 * ca - py3 * sa + e.x;
-				y = py3 * ca + px3 * sa + e.y;
-				this.addBounds(relativeTo,out,x,y,1e-10,1e-10);
-			} else {
-				this.addBounds(relativeTo,out,e.x + t.dx,e.y + t.dy,t.width,t.height);
-			}
-			e = e.next;
-		}
-	}
-	,flush: function() {
-		if(this.first == null) {
-			this.bufferVertices = 0;
-			return;
-		}
-		if(this.tmpBuf == null) {
-			var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
-			this.tmpBuf = this1;
-		}
-		var pos = 0;
-		var e = this.first;
-		var tmp = this.tmpBuf;
-		while(e != null) {
-			if(!e.visible) {
-				e = e.next;
-				continue;
-			}
-			var t = e.t;
-			var _g = tmp.pos;
-			var _g1 = pos + 32;
-			while(_g < _g1) {
-				var i = _g++;
-				if(tmp.pos == tmp.array.length) {
-					var newSize = tmp.array.length << 1;
-					if(newSize < 128) {
-						newSize = 128;
-					}
-					var newArray = new Float32Array(newSize);
-					newArray.set(tmp.array);
-					tmp.array = newArray;
-				}
-				tmp.array[tmp.pos++] = 0.;
-			}
-			var r = e.r;
-			var g = e.g;
-			var b = e.b;
-			var a = e.a;
-			var u = t.u;
-			var v = t.v;
-			var u2 = t.u2;
-			var v2 = t.v2;
-			if(this.hasRotationScale) {
-				var ca = Math.cos(e.rotation);
-				var sa = Math.sin(e.rotation);
-				var hx = t.width;
-				var hy = t.height;
-				var px = t.dx * e.scaleX;
-				var py = t.dy * e.scaleY;
-				tmp.array[pos++] = px * ca - py * sa + e.x;
-				tmp.array[pos++] = py * ca + px * sa + e.y;
-				tmp.array[pos++] = u;
-				tmp.array[pos++] = v;
-				tmp.array[pos++] = r;
-				tmp.array[pos++] = g;
-				tmp.array[pos++] = b;
-				tmp.array[pos++] = a;
-				var px1 = (t.dx + hx) * e.scaleX;
-				var py1 = t.dy * e.scaleY;
-				tmp.array[pos++] = px1 * ca - py1 * sa + e.x;
-				tmp.array[pos++] = py1 * ca + px1 * sa + e.y;
-				tmp.array[pos++] = u2;
-				tmp.array[pos++] = v;
-				tmp.array[pos++] = r;
-				tmp.array[pos++] = g;
-				tmp.array[pos++] = b;
-				tmp.array[pos++] = a;
-				var px2 = t.dx * e.scaleX;
-				var py2 = (t.dy + hy) * e.scaleY;
-				tmp.array[pos++] = px2 * ca - py2 * sa + e.x;
-				tmp.array[pos++] = py2 * ca + px2 * sa + e.y;
-				tmp.array[pos++] = u;
-				tmp.array[pos++] = v2;
-				tmp.array[pos++] = r;
-				tmp.array[pos++] = g;
-				tmp.array[pos++] = b;
-				tmp.array[pos++] = a;
-				var px3 = (t.dx + hx) * e.scaleX;
-				var py3 = (t.dy + hy) * e.scaleY;
-				tmp.array[pos++] = px3 * ca - py3 * sa + e.x;
-				tmp.array[pos++] = py3 * ca + px3 * sa + e.y;
-				tmp.array[pos++] = u2;
-				tmp.array[pos++] = v2;
-				tmp.array[pos++] = r;
-				tmp.array[pos++] = g;
-				tmp.array[pos++] = b;
-				tmp.array[pos++] = a;
-			} else {
-				var sx = e.x + t.dx;
-				var sy = e.y + t.dy;
-				tmp.array[pos++] = sx;
-				tmp.array[pos++] = sy;
-				tmp.array[pos++] = u;
-				tmp.array[pos++] = v;
-				tmp.array[pos++] = r;
-				tmp.array[pos++] = g;
-				tmp.array[pos++] = b;
-				tmp.array[pos++] = a;
-				tmp.array[pos++] = sx + t.width + 0.1;
-				tmp.array[pos++] = sy;
-				tmp.array[pos++] = u2;
-				tmp.array[pos++] = v;
-				tmp.array[pos++] = r;
-				tmp.array[pos++] = g;
-				tmp.array[pos++] = b;
-				tmp.array[pos++] = a;
-				tmp.array[pos++] = sx;
-				tmp.array[pos++] = sy + t.height + 0.1;
-				tmp.array[pos++] = u;
-				tmp.array[pos++] = v2;
-				tmp.array[pos++] = r;
-				tmp.array[pos++] = g;
-				tmp.array[pos++] = b;
-				tmp.array[pos++] = a;
-				tmp.array[pos++] = sx + t.width + 0.1;
-				tmp.array[pos++] = sy + t.height + 0.1;
-				tmp.array[pos++] = u2;
-				tmp.array[pos++] = v2;
-				tmp.array[pos++] = r;
-				tmp.array[pos++] = g;
-				tmp.array[pos++] = b;
-				tmp.array[pos++] = a;
-			}
-			e = e.next;
-		}
-		this.bufferVertices = pos >> 3;
-		if(this.buffer != null && !this.buffer.isDisposed()) {
-			if(this.buffer.vertices >= this.bufferVertices) {
-				this.buffer.uploadVector(this.tmpBuf,0,this.bufferVertices);
-				return;
-			}
-			this.buffer.dispose();
-			this.buffer = null;
-		}
-		if(this.bufferVertices > 0) {
-			this.buffer = h3d_Buffer.ofSubFloats(this.tmpBuf,8,this.bufferVertices,[h3d_BufferFlag.Dynamic,h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat]);
-		}
-	}
-	,draw: function(ctx) {
-		this.drawWith(ctx,this);
-	}
-	,drawWith: function(ctx,obj) {
-		if(this.first == null || this.buffer == null || this.buffer.isDisposed() || this.bufferVertices == 0) {
-			return;
-		}
-		if(!ctx.beginDrawObject(obj,this.tile.innerTex)) {
-			return;
-		}
-		var _this = ctx.engine;
-		_this.renderBuffer(this.buffer,_this.mem.quadIndexes,2,0,this.bufferVertices >> 1);
-	}
-	,onRemove: function() {
-		h2d_Drawable.prototype.onRemove.call(this);
-		if(this.buffer != null) {
-			this.buffer.dispose();
-			this.buffer = null;
-		}
-	}
-	,__class__: h2d_SpriteBatch
 });
 var h2d_Align = $hxEnums["h2d.Align"] = { __ename__ : true, __constructs__ : ["Left","Right","Center","MultilineRight","MultilineCenter"]
 	,Left: {_hx_index:0,__enum__:"h2d.Align",toString:$estr}
@@ -28233,9 +31165,6 @@ haxe_ds_List.prototype = {
 		}
 		return false;
 	}
-	,iterator: function() {
-		return new haxe_ds__$List_ListIterator(this.h);
-	}
 	,__class__: haxe_ds_List
 };
 var haxe_ds__$List_ListNode = function(item,next) {
@@ -28246,22 +31175,6 @@ $hxClasses["haxe.ds._List.ListNode"] = haxe_ds__$List_ListNode;
 haxe_ds__$List_ListNode.__name__ = "haxe.ds._List.ListNode";
 haxe_ds__$List_ListNode.prototype = {
 	__class__: haxe_ds__$List_ListNode
-};
-var haxe_ds__$List_ListIterator = function(head) {
-	this.head = head;
-};
-$hxClasses["haxe.ds._List.ListIterator"] = haxe_ds__$List_ListIterator;
-haxe_ds__$List_ListIterator.__name__ = "haxe.ds._List.ListIterator";
-haxe_ds__$List_ListIterator.prototype = {
-	hasNext: function() {
-		return this.head != null;
-	}
-	,next: function() {
-		var val = this.head.item;
-		this.head = this.head.next;
-		return val;
-	}
-	,__class__: haxe_ds__$List_ListIterator
 };
 var haxe_ds_ObjectMap = function() {
 	this.h = { __keys__ : { }};
@@ -30370,77 +33283,6 @@ hxd_Key.onEvent = function(e) {
 		break;
 	default:
 	}
-};
-var hxd_Pad = function() {
-	this.prevButtons = [];
-	this.values = [];
-	this.buttons = [];
-	this.yAxis = 0.;
-	this.xAxis = 0.;
-	this.index = -1;
-	this.connected = true;
-};
-$hxClasses["hxd.Pad"] = hxd_Pad;
-hxd_Pad.__name__ = "hxd.Pad";
-hxd_Pad.wait = function(onPad) {
-	hxd_Pad.waitPad = onPad;
-	if(!hxd_Pad.initDone) {
-		hxd_Pad.initDone = true;
-		window.addEventListener("gamepadconnected",function(p) {
-			var pad = new hxd_Pad();
-			pad.d = p.gamepad;
-			pad.index = pad.d.index;
-			hxd_Pad.pads.h[pad.d.index] = pad;
-			hxd_Pad.waitPad(pad);
-		});
-		window.addEventListener("gamepaddisconnected",function(p1) {
-			var pad1 = hxd_Pad.pads.h[p1.gamepad.index];
-			if(pad1 == null) {
-				return;
-			}
-			hxd_Pad.pads.remove(p1.gamepad.index);
-			pad1.connected = false;
-			pad1.onDisconnect();
-		});
-		haxe_MainLoop.add(hxd_Pad.syncPads);
-	}
-};
-hxd_Pad.syncPads = function() {
-	try {
-		window.navigator.getGamepads();
-	} catch( e ) {
-		var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
-	}
-	var p = hxd_Pad.pads.iterator();
-	while(p.hasNext()) {
-		var p1 = p.next();
-		var _g1 = 0;
-		var _g2 = p1.d.buttons.length;
-		while(_g1 < _g2) {
-			var i = _g1++;
-			p1.prevButtons[i] = p1.buttons[i];
-			p1.buttons[i] = p1.d.buttons[i].pressed;
-			p1.values[i] = p1.d.buttons[i].value;
-		}
-		var _g3 = 0;
-		var _g4 = p1.d.axes.length >> 1;
-		while(_g3 < _g4) {
-			var i1 = _g3++;
-			var x = p1.d.axes[i1 << 1];
-			var y = p1.d.axes[(i1 << 1) + 1];
-			p1.values[(i1 << 1) + p1.d.buttons.length] = x;
-			p1.values[(i1 << 1) + p1.d.buttons.length + 1] = -y;
-			if(i1 == 0) {
-				p1.xAxis = x;
-				p1.yAxis = y;
-			}
-		}
-	}
-};
-hxd_Pad.prototype = {
-	onDisconnect: function() {
-	}
-	,__class__: hxd_Pad
 };
 var hxd_Flags = $hxEnums["hxd.Flags"] = { __ename__ : true, __constructs__ : ["ReadOnly","AlphaPremultiplied","FlipY"]
 	,ReadOnly: {_hx_index:0,__enum__:"hxd.Flags",toString:$estr}
@@ -43206,2856 +46048,6 @@ js_html__$CanvasElement_CanvasUtil.getContextWebGL = function(canvas,attribs) {
 	}
 	return null;
 };
-var mt__$Cooldown_CdInst = function(k,f) {
-	this.k = k;
-	this.frames = f;
-	this.initial = f;
-};
-$hxClasses["mt._Cooldown.CdInst"] = mt__$Cooldown_CdInst;
-mt__$Cooldown_CdInst.__name__ = "mt._Cooldown.CdInst";
-mt__$Cooldown_CdInst.prototype = {
-	__class__: mt__$Cooldown_CdInst
-};
-var mt_Cooldown = function(fps) {
-	if(mt_Cooldown.INDEXES == null) {
-		if(haxe_rtti_Meta.getType(mt_Cooldown).indexes != null) {
-			var _g = [];
-			var _g1 = 0;
-			var _g2 = haxe_rtti_Meta.getType(mt_Cooldown).indexes;
-			while(_g1 < _g2.length) {
-				var str = _g2[_g1];
-				++_g1;
-				_g.push(Std.string(str));
-			}
-			mt_Cooldown.INDEXES = _g;
-		}
-	}
-	this.cdList = [];
-	this.fastCheck = new haxe_ds_IntMap();
-	this.baseFps = fps;
-};
-$hxClasses["mt.Cooldown"] = mt_Cooldown;
-mt_Cooldown.__name__ = "mt.Cooldown";
-mt_Cooldown.prototype = {
-	destroy: function() {
-		this.cdList = null;
-		this.fastCheck = null;
-	}
-	,_getRatio: function(k) {
-		var cd = this._getCdObject(k);
-		var max = cd == null ? 0 : cd.initial;
-		if(max <= 0) {
-			return 0;
-		} else {
-			var cd1 = this._getCdObject(k);
-			return (cd1 == null ? 0 : cd1.frames) / max;
-		}
-	}
-	,_getCdObject: function(k) {
-		var _g = 0;
-		var _g1 = this.cdList;
-		while(_g < _g1.length) {
-			var cd = _g1[_g];
-			++_g;
-			if(cd.k == k) {
-				return cd;
-			}
-		}
-		return null;
-	}
-	,update: function(dt) {
-		var i = 0;
-		while(i < this.cdList.length) {
-			var cd = this.cdList[i];
-			cd.frames = Math.floor((cd.frames - dt) * 1000) / 1000;
-			if(cd.frames <= 0) {
-				var cb = cd.cb;
-				HxOverrides.remove(this.cdList,cd);
-				cd.frames = 0;
-				cd.cb = null;
-				this.fastCheck.remove(cd.k);
-				if(cb != null) {
-					cb();
-				}
-			} else {
-				++i;
-			}
-		}
-	}
-	,__class__: mt_Cooldown
-};
-var mt__$Delayer_Task = function(id,t,cb) {
-	this.t = t;
-	this.cb = cb;
-	this.id = id;
-};
-$hxClasses["mt._Delayer.Task"] = mt__$Delayer_Task;
-mt__$Delayer_Task.__name__ = "mt._Delayer.Task";
-mt__$Delayer_Task.prototype = {
-	__class__: mt__$Delayer_Task
-};
-var mt_Delayer = function(fps) {
-	this.now = 0;
-	this.fps = fps;
-	this.delays = [];
-};
-$hxClasses["mt.Delayer"] = mt_Delayer;
-mt_Delayer.__name__ = "mt.Delayer";
-mt_Delayer.prototype = {
-	destroy: function() {
-		this.delays = null;
-	}
-	,cmp: function(a,b) {
-		if(a.t < b.t) {
-			return -1;
-		} else if(a.t > b.t) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-	,addS: function(id,cb,sec) {
-		this.delays.push(new mt__$Delayer_Task(id,this.now + sec * this.fps,cb));
-		haxe_ds_ArraySort.sort(this.delays,$bind(this,this.cmp));
-	}
-	,addF: function(id,cb,frames) {
-		this.delays.push(new mt__$Delayer_Task(id,this.now + frames,cb));
-		haxe_ds_ArraySort.sort(this.delays,$bind(this,this.cmp));
-	}
-	,update: function(dt) {
-		while(this.delays.length > 0 && this.delays[0].t <= this.now) {
-			var d = this.delays.shift();
-			d.cb();
-			d.cb = null;
-		}
-		this.now += dt;
-	}
-	,__class__: mt_Delayer
-};
-var mt_deepnight_Bresenham = function() { };
-$hxClasses["mt.deepnight.Bresenham"] = mt_deepnight_Bresenham;
-mt_deepnight_Bresenham.__name__ = "mt.deepnight.Bresenham";
-mt_deepnight_Bresenham.getDisc = function(x0,y0,radius) {
-	var pts = [];
-	mt_deepnight_Bresenham.iterateDisc(x0,y0,radius,function(x,y) {
-		pts.push({ x : x, y : y});
-	});
-	return pts;
-};
-mt_deepnight_Bresenham.iterateDisc = function(x0,y0,radius,cb) {
-	var x = radius;
-	var y = 0;
-	var radiusError = 1 - x;
-	while(x >= y) {
-		var fy = y + y0;
-		var _g = -x + x0;
-		var _g1 = x + x0 + 1;
-		while(_g < _g1) {
-			var x1 = _g++;
-			cb(x1,fy);
-		}
-		if((radius <= 1 || x != y && y != 0) && radiusError >= 0) {
-			var fy1 = x + y0;
-			var _g2 = -y + x0;
-			var _g11 = y + x0 + 1;
-			while(_g2 < _g11) {
-				var x2 = _g2++;
-				cb(x2,fy1);
-			}
-		}
-		if(y != 0) {
-			var fy2 = -y + y0;
-			var _g3 = -x + x0;
-			var _g12 = x + x0 + 1;
-			while(_g3 < _g12) {
-				var x3 = _g3++;
-				cb(x3,fy2);
-			}
-		}
-		if((radius <= 1 || x != y && y != 0) && radiusError >= 0) {
-			var fy3 = -x + y0;
-			var _g4 = -y + x0;
-			var _g13 = y + x0 + 1;
-			while(_g4 < _g13) {
-				var x4 = _g4++;
-				cb(x4,fy3);
-			}
-		}
-		++y;
-		if(radiusError < 0) {
-			radiusError += 2 * y + 1;
-		} else {
-			--x;
-			radiusError += 2 * (y - x + 1);
-		}
-	}
-};
-var mt_deepnight_CdbHelper = function() { };
-$hxClasses["mt.deepnight.CdbHelper"] = mt_deepnight_CdbHelper;
-mt_deepnight_CdbHelper.__name__ = "mt.deepnight.CdbHelper";
-mt_deepnight_CdbHelper.getLayerTiles = function(l,sheet,levelWid,tileSetProps) {
-	var lContent = cdb__$Types_TileLayerData_$Impl_$.decode(l.data);
-	var tiles = [];
-	if(lContent[0] == 65535) {
-		lContent.shift();
-		var _g = 0;
-		var _g1 = lContent.length / 3 | 0;
-		while(_g < _g1) {
-			var i = _g++;
-			var x = lContent[i * 3];
-			var y = lContent[i * 3 + 1];
-			var id = lContent[i * 3 + 2];
-			tiles.push({ cx : x / l.size | 0, cy : y / l.size | 0, x : x, y : y, t : mt_deepnight_CdbHelper.getObjectTile(sheet,l.size,tileSetProps,id)});
-		}
-	} else {
-		var _g2 = 0;
-		var _g11 = lContent.length;
-		while(_g2 < _g11) {
-			var i1 = _g2++;
-			if(lContent[i1] > 0) {
-				var pt_x = i1 - (i1 / levelWid | 0) * levelWid;
-				var pt_y = i1 / levelWid | 0;
-				tiles.push({ cx : pt_x, cy : pt_y, x : pt_x * l.size, y : pt_y * l.size, t : mt_deepnight_CdbHelper.getTile(sheet,l.size,lContent[i1] - 1)});
-			}
-		}
-	}
-	return tiles;
-};
-mt_deepnight_CdbHelper.getLayerPoints = function(l,levelWid) {
-	var lContent = cdb__$Types_TileLayerData_$Impl_$.decode(l.data);
-	var tiles = [];
-	if(lContent[0] != 65535) {
-		var _g = 0;
-		var _g1 = lContent.length;
-		while(_g < _g1) {
-			var i = _g++;
-			if(lContent[i] > 0) {
-				var pt_x = i - (i / levelWid | 0) * levelWid;
-				var pt_y = i / levelWid | 0;
-				tiles.push({ cx : pt_x, cy : pt_y, x : pt_x * l.size, y : pt_y * l.size, t : null});
-			}
-		}
-	}
-	return tiles;
-};
-mt_deepnight_CdbHelper.getTile = function(sheet,tileSize,idx) {
-	var line = sheet.width / tileSize | 0;
-	var y = idx / line | 0;
-	return sheet.sub((idx - y * line) * tileSize,y * tileSize,tileSize,tileSize);
-};
-mt_deepnight_CdbHelper.getObjectTile = function(source,tileSize,props,idx) {
-	var flip = false;
-	if((idx & 32768) != 0) {
-		idx -= 32768;
-		flip = true;
-	}
-	var line = source.width / tileSize | 0;
-	var y = idx / line | 0;
-	var x = idx - y * line;
-	var t = source.sub(x * tileSize,y * tileSize,tileSize,tileSize);
-	var _g = 0;
-	var _g1 = props.sets;
-	while(_g < _g1.length) {
-		var s = _g1[_g];
-		++_g;
-		if(s.x == x && s.y == y) {
-			t.setSize(s.w * tileSize,s.h * tileSize);
-			break;
-		}
-	}
-	if(flip) {
-		t.flipX();
-		t.dx += t.width;
-	}
-	return t;
-};
-var mt_deepnight_Cinematic = function(fps) {
-	this.fps = fps;
-	this.turbo = false;
-	this.queues = [];
-	this.persistSignals = new haxe_ds_StringMap();
-};
-$hxClasses["mt.deepnight.Cinematic"] = mt_deepnight_Cinematic;
-mt_deepnight_Cinematic.__name__ = "mt.deepnight.Cinematic";
-mt_deepnight_Cinematic.prototype = {
-	destroy: function() {
-		this.queues = null;
-		this.curQueue = null;
-		this.onAllComplete = null;
-	}
-	,signal: function(s) {
-		if(this.queues == null) {
-			return;
-		}
-		var _g = 0;
-		var _g1 = this.queues;
-		while(_g < _g1.length) {
-			var q = _g1[_g];
-			++_g;
-			if(q.length > 0 && (q[0].s == s || q[0].s == "")) {
-				this.runEvent(q.splice(0,1)[0]);
-			}
-		}
-	}
-	,__add: function(cb,t,signal) {
-		this.curQueue.push({ f : cb, t : this.fps * t / 1000, s : signal});
-	}
-	,__beginNewQueue: function() {
-		this.curQueue = [];
-		this.queues.push(this.curQueue);
-	}
-	,runEvent: function(e) {
-		if(e.s != null) {
-			this.persistSignals.remove(e.s);
-		}
-		e.f();
-	}
-	,update: function(dt) {
-		var i = 0;
-		while(i < this.queues.length) {
-			var q = this.queues[i];
-			if(q.length > 0) {
-				q[0].t -= dt;
-				while(true) {
-					var tmp;
-					if(q.length > 0 && q[0].t <= 0) {
-						if(!(this.turbo || q[0].s == null)) {
-							var key = q[0].s;
-							var _this = this.persistSignals;
-							tmp = __map_reserved[key] != null ? _this.getReserved(key) : _this.h[key];
-						} else {
-							tmp = true;
-						}
-					} else {
-						tmp = false;
-					}
-					if(!tmp) {
-						break;
-					}
-					this.runEvent(q.splice(0,1)[0]);
-				}
-			}
-			if(q.length == 0) {
-				this.queues.splice(i,1);
-				if(this.queues.length == 0 && this.onAllComplete != null) {
-					this.onAllComplete();
-				}
-			} else {
-				++i;
-			}
-		}
-		if(this.curQueue != null && this.curQueue.length == 0) {
-			this.curQueue = null;
-		}
-	}
-	,__class__: mt_deepnight_Cinematic
-};
-var mt_deepnight_GameFocusHelper = function(s,font) {
-	this.oldSprLibTmod = 1.0;
-	this.showIntro = false;
-	this.suspended = false;
-	mt_Process.call(this);
-	this.font = font;
-	this.scene = s;
-	this.createRoot(this.scene);
-	this.root.set_visible(false);
-	this.showIntro = true;
-	this.suspendGame();
-	hxd_snd_NativeChannel.stopInput(null);
-};
-$hxClasses["mt.deepnight.GameFocusHelper"] = mt_deepnight_GameFocusHelper;
-mt_deepnight_GameFocusHelper.__name__ = "mt.deepnight.GameFocusHelper";
-mt_deepnight_GameFocusHelper.__super__ = mt_Process;
-mt_deepnight_GameFocusHelper.prototype = $extend(mt_Process.prototype,{
-	suspendGame: function() {
-		var _gthis = this;
-		if(this.suspended) {
-			return;
-		}
-		this.suspended = true;
-		this.oldSprLibTmod = mt_heaps_slib_SpriteLib.TMOD;
-		mt_heaps_slib_SpriteLib.TMOD = 0;
-		var _g = 0;
-		var _g1 = mt_Process.ROOTS;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			if(p != this) {
-				p.pause();
-			}
-		}
-		this.root.set_visible(true);
-		this.root.removeChildren();
-		var bg = new h2d_Bitmap(h2d_Tile.fromColor(this.showIntro ? 2436675 : 0,1,1,this.showIntro ? 1 : 0.6),this.root);
-		var i = new h2d_Interactive(1,1,this.root);
-		var tf = new h2d_Text(this.font,this.root);
-		if(this.showIntro) {
-			tf.set_text("Click anywhere to start");
-		} else {
-			tf.set_text("PAUSED - click anywhere to resume");
-		}
-		this.createChildProcess(function(c) {
-			var y = Math.floor((mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) * 0.35 / tf.get_textWidth());
-			var v = 1 > y ? 1 : y;
-			tf.posChanged = true;
-			tf.scaleX = v;
-			tf.posChanged = true;
-			tf.scaleY = v;
-			var v1 = (mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) * 0.5 - tf.get_textWidth() * tf.scaleX * 0.5 | 0;
-			tf.posChanged = true;
-			tf.x = v1;
-			var v2 = (mt_Process.CUSTOM_STAGE_HEIGHT > 0 ? mt_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) * 0.5 - tf.get_textHeight() * tf.scaleY * 0.5 | 0;
-			tf.posChanged = true;
-			tf.y = v2;
-			var tmp = mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width();
-			i.width = tmp + 1;
-			var tmp1 = mt_Process.CUSTOM_STAGE_HEIGHT > 0 ? mt_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height();
-			i.height = tmp1 + 1;
-			var v3 = mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width();
-			bg.posChanged = true;
-			bg.scaleX = v3 + 1;
-			var v4 = mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width();
-			bg.posChanged = true;
-			bg.scaleY = v4 + 1;
-			if(!_gthis.suspended) {
-				c.destroyed = true;
-			}
-		},null,true);
-		var loadingMsg = this.showIntro;
-		i.onPush = function(_) {
-			if(loadingMsg) {
-				tf.set_text("Loading, please wait...");
-				var v5 = (mt_Process.CUSTOM_STAGE_WIDTH > 0 ? mt_Process.CUSTOM_STAGE_WIDTH : hxd_Window.getInstance().get_width()) * 0.5 - tf.get_textWidth() * tf.scaleX * 0.5 | 0;
-				tf.posChanged = true;
-				tf.x = v5;
-				var v6 = (mt_Process.CUSTOM_STAGE_HEIGHT > 0 ? mt_Process.CUSTOM_STAGE_HEIGHT : hxd_Window.getInstance().get_height()) * 0.5 - tf.get_textHeight() * tf.scaleY * 0.5 | 0;
-				tf.posChanged = true;
-				tf.y = v6;
-				_gthis.delayer.addS(null,$bind(_gthis,_gthis.resumeGame),1);
-			} else {
-				_gthis.resumeGame();
-			}
-			if(i != null && i.parent != null) {
-				i.parent.removeChild(i);
-			}
-		};
-		this.showIntro = false;
-	}
-	,resumeGame: function() {
-		var _gthis = this;
-		if(!this.suspended) {
-			return;
-		}
-		mt_heaps_slib_SpriteLib.TMOD = this.oldSprLibTmod;
-		this.delayer.addF(null,function() {
-			_gthis.root.set_visible(false);
-			_gthis.root.removeChildren();
-		},1);
-		this.suspended = false;
-		var _g = 0;
-		var _g1 = mt_Process.ROOTS;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			if(p != this) {
-				p.resume();
-			}
-		}
-	}
-	,update: function() {
-		mt_Process.prototype.update.call(this);
-		if(this.suspended) {
-			this.scene.over(this.root);
-		}
-		var _this = this.cd;
-		var frames = 0.2 * this.cd.baseFps;
-		var tmp;
-		if(_this.fastCheck.h.hasOwnProperty(184549376)) {
-			tmp = true;
-		} else {
-			var frames1 = frames;
-			frames1 = Math.floor(frames1 * 1000) / 1000;
-			var cur = _this._getCdObject(184549376);
-			if(!(cur != null && frames1 < cur.frames && false)) {
-				if(frames1 <= 0) {
-					if(cur != null) {
-						HxOverrides.remove(_this.cdList,cur);
-						cur.frames = 0;
-						cur.cb = null;
-						_this.fastCheck.remove(cur.k);
-					}
-				} else {
-					_this.fastCheck.h[184549376] = true;
-					if(cur != null) {
-						cur.frames = frames1;
-					} else {
-						_this.cdList.push(new mt__$Cooldown_CdInst(184549376,frames1));
-					}
-				}
-			}
-			tmp = false;
-		}
-		if(!tmp) {
-			var w = hxd_Window.getInstance();
-			if(!w.get_isFocused() && !this.suspended) {
-				this.suspendGame();
-			}
-		}
-	}
-	,__class__: mt_deepnight_GameFocusHelper
-});
-var mt_deepnight_Lib = function() { };
-$hxClasses["mt.deepnight.Lib"] = mt_deepnight_Lib;
-mt_deepnight_Lib.__name__ = "mt.deepnight.Lib";
-mt_deepnight_Lib.redirectTracesToH2dConsole = function(c) {
-	haxe_Log.trace = function(m,pos) {
-		if(pos != null && pos.customParams == null) {
-			pos.customParams = ["debug"];
-		}
-		c.log(pos.fileName + "(" + pos.lineNumber + ") : " + Std.string(m));
-	};
-};
-var mt_deepnight_TType = $hxEnums["mt.deepnight.TType"] = { __ename__ : true, __constructs__ : ["TLinear","TLoop","TLoopEaseIn","TLoopEaseOut","TEase","TEaseIn","TEaseOut","TBurn","TBurnIn","TBurnOut","TZigZag","TRand","TShake","TShakeBoth","TJump","TElasticEnd","TBackOut"]
-	,TLinear: {_hx_index:0,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TLoop: {_hx_index:1,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TLoopEaseIn: {_hx_index:2,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TLoopEaseOut: {_hx_index:3,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TEase: {_hx_index:4,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TEaseIn: {_hx_index:5,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TEaseOut: {_hx_index:6,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TBurn: {_hx_index:7,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TBurnIn: {_hx_index:8,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TBurnOut: {_hx_index:9,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TZigZag: {_hx_index:10,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TRand: {_hx_index:11,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TShake: {_hx_index:12,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TShakeBoth: {_hx_index:13,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TJump: {_hx_index:14,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TElasticEnd: {_hx_index:15,__enum__:"mt.deepnight.TType",toString:$estr}
-	,TBackOut: {_hx_index:16,__enum__:"mt.deepnight.TType",toString:$estr}
-};
-mt_deepnight_TType.__empty_constructs__ = [mt_deepnight_TType.TLinear,mt_deepnight_TType.TLoop,mt_deepnight_TType.TLoopEaseIn,mt_deepnight_TType.TLoopEaseOut,mt_deepnight_TType.TEase,mt_deepnight_TType.TEaseIn,mt_deepnight_TType.TEaseOut,mt_deepnight_TType.TBurn,mt_deepnight_TType.TBurnIn,mt_deepnight_TType.TBurnOut,mt_deepnight_TType.TZigZag,mt_deepnight_TType.TRand,mt_deepnight_TType.TShake,mt_deepnight_TType.TShakeBoth,mt_deepnight_TType.TJump,mt_deepnight_TType.TElasticEnd,mt_deepnight_TType.TBackOut];
-var mt_deepnight_Tween = function(tw) {
-	this.tw = tw;
-	this.paused = false;
-	this.done = false;
-	this.n = this.ln = 0;
-	this.delay = 0;
-	this.speed = 1;
-	this.set_type(mt_deepnight_TType.TEase);
-	this.plays = 1;
-	this.pixelSnap = false;
-};
-$hxClasses["mt.deepnight.Tween"] = mt_deepnight_Tween;
-mt_deepnight_Tween.__name__ = "mt.deepnight.Tween";
-mt_deepnight_Tween.prototype = {
-	set_type: function(t) {
-		var _gthis = this;
-		this.type = t;
-		var tmp;
-		switch(this.type._hx_index) {
-		case 0:
-			tmp = function(step) {
-				return step;
-			};
-			break;
-		case 1:
-			tmp = function(step1) {
-				var n = 1 - step1;
-				var n1 = 1 - step1;
-				return n * n * n * 0 + 3 * step1 * (n1 * n1) * 1.33 + 3 * (step1 * step1) * (1 - step1) * 1.33 + step1 * step1 * step1 * 0;
-			};
-			break;
-		case 2:
-			tmp = function(step2) {
-				var n2 = 1 - step2;
-				var n3 = 1 - step2;
-				return n2 * n2 * n2 * 0 + 3 * step2 * (n3 * n3) * 0 + 3 * (step2 * step2) * (1 - step2) * 2.25 + step2 * step2 * step2 * 0;
-			};
-			break;
-		case 3:
-			tmp = function(step3) {
-				var n4 = 1 - step3;
-				var n5 = 1 - step3;
-				return n4 * n4 * n4 * 0 + 3 * step3 * (n5 * n5) * 2.25 + 3 * (step3 * step3) * (1 - step3) * 0 + step3 * step3 * step3 * 0;
-			};
-			break;
-		case 4:
-			tmp = function(step4) {
-				var n6 = 1 - step4;
-				var n7 = 1 - step4;
-				return n6 * n6 * n6 * 0 + 3 * step4 * (n7 * n7) * 0 + 3 * (step4 * step4) * (1 - step4) + step4 * step4 * step4;
-			};
-			break;
-		case 5:
-			tmp = function(step5) {
-				var n8 = 1 - step5;
-				var n9 = 1 - step5;
-				return n8 * n8 * n8 * 0 + 3 * step5 * (n9 * n9) * 0 + 3 * (step5 * step5) * (1 - step5) * 0.5 + step5 * step5 * step5;
-			};
-			break;
-		case 6:
-			tmp = function(step6) {
-				var n10 = 1 - step6;
-				var n11 = 1 - step6;
-				return n10 * n10 * n10 * 0 + 3 * step6 * (n11 * n11) * 0.5 + 3 * (step6 * step6) * (1 - step6) + step6 * step6 * step6;
-			};
-			break;
-		case 7:
-			tmp = function(step7) {
-				var n12 = 1 - step7;
-				var n13 = 1 - step7;
-				return n12 * n12 * n12 * 0 + 3 * step7 * (n13 * n13) + 3 * (step7 * step7) * (1 - step7) * 0 + step7 * step7 * step7;
-			};
-			break;
-		case 8:
-			tmp = function(step8) {
-				var n14 = 1 - step8;
-				var n15 = 1 - step8;
-				return n14 * n14 * n14 * 0 + 3 * step8 * (n15 * n15) + 3 * (step8 * step8) * (1 - step8) + step8 * step8 * step8;
-			};
-			break;
-		case 9:
-			tmp = function(step9) {
-				var n16 = 1 - step9;
-				var n17 = 1 - step9;
-				return n16 * n16 * n16 * 0 + 3 * step9 * (n17 * n17) * 0 + 3 * (step9 * step9) * (1 - step9) * 0 + step9 * step9 * step9;
-			};
-			break;
-		case 10:
-			tmp = function(step10) {
-				var n18 = 1 - step10;
-				var n19 = 1 - step10;
-				return n18 * n18 * n18 * 0 + 3 * step10 * (n19 * n19) * 2.5 + 3 * (step10 * step10) * (1 - step10) * -1.5 + step10 * step10 * step10;
-			};
-			break;
-		case 11:
-			tmp = function(step11) {
-				return step11;
-			};
-			break;
-		case 12:
-			tmp = function(step12) {
-				var n20 = 1 - step12;
-				var n21 = 1 - step12;
-				return n20 * n20 * n20 * 0.5 + 3 * step12 * (n21 * n21) * 1.22 + 3 * (step12 * step12) * (1 - step12) * 1.25 + step12 * step12 * step12 * 0;
-			};
-			break;
-		case 13:
-			tmp = function(step13) {
-				var n22 = 1 - step13;
-				var n23 = 1 - step13;
-				return n22 * n22 * n22 * 0.5 + 3 * step13 * (n23 * n23) * 1.22 + 3 * (step13 * step13) * (1 - step13) * 1.25 + step13 * step13 * step13 * 0;
-			};
-			break;
-		case 14:
-			tmp = function(step14) {
-				var n24 = 1 - step14;
-				var n25 = 1 - step14;
-				return n24 * n24 * n24 * 0 + 3 * step14 * (n25 * n25) * 2 + 3 * (step14 * step14) * (1 - step14) * 2.79 + step14 * step14 * step14;
-			};
-			break;
-		case 15:
-			tmp = function(step15) {
-				var n26 = 1 - step15;
-				var n27 = 1 - step15;
-				return n26 * n26 * n26 * 0 + 3 * step15 * (n27 * n27) * 0.7 + 3 * (step15 * step15) * (1 - step15) * 1.5 + step15 * step15 * step15;
-			};
-			break;
-		case 16:
-			tmp = function(step16) {
-				var s = 1.70158;
-				step16 = step16 / 1 - 1;
-				return step16 * step16 * ((s + 1) * step16 + s) + 1;
-			};
-			break;
-		}
-		this.interpolate = tmp;
-		return this.type;
-	}
-	,onUpdate: function() {
-	}
-	,onUpdateT: function(t) {
-	}
-	,onEnd: function() {
-	}
-	,onStart: function() {
-	}
-	,end: function(cb) {
-		this.onEnd = cb;
-		return this;
-	}
-	,chainedEvent: function() {
-	}
-	,interpolate: function(v) {
-		return v;
-	}
-	,endWithoutCallbacks: function() {
-		this.done = true;
-	}
-	,complete: function(fl_allowLoop) {
-		if(fl_allowLoop == null) {
-			fl_allowLoop = false;
-		}
-		var v = this.from + (this.to - this.from) * this.interpolate(1);
-		if(this.pixelSnap) {
-			v = (v > 0 ? v + .5 : v < 0 ? v - .5 : 0) | 0;
-		}
-		this.setter(v);
-		this.onUpdate();
-		this.onUpdateT(1);
-		this.onEnd();
-		this.chainedEvent();
-		if(fl_allowLoop && (this.plays == -1 || this.plays > 1)) {
-			if(this.plays != -1) {
-				this.plays--;
-			}
-			this.n = this.ln = 0;
-		} else {
-			this.done = true;
-		}
-	}
-	,internalUpdate: function(dt) {
-		if(this.done) {
-			return true;
-		}
-		if(this.paused) {
-			return false;
-		}
-		if(this.delay > 0) {
-			this.delay--;
-			return false;
-		}
-		if(this.onStart != null) {
-			var cb = $bind(this,this.onStart);
-			this.onStart = null;
-			cb();
-		}
-		var dist = this.to - this.from;
-		if(this.type == mt_deepnight_TType.TRand) {
-			this.ln += Std.random(100) < 33 ? this.speed * dt : 0;
-		} else {
-			this.ln += this.speed * dt;
-		}
-		this.n = this.interpolate(this.ln);
-		if(this.ln < 1) {
-			var val;
-			if(this.type != mt_deepnight_TType.TShake && this.type != mt_deepnight_TType.TShakeBoth) {
-				val = this.from + this.n * dist;
-			} else if(this.type == mt_deepnight_TType.TShake) {
-				var val1 = this.from;
-				var val2 = Math.random();
-				var x = this.n * dist;
-				val = val1 + val2 * (x < 0 ? -x : x) * (dist > 0 ? 1 : -1);
-			} else {
-				val = this.from + Math.random() * this.n * dist * (Std.random(2) * 2 - 1);
-			}
-			if(this.pixelSnap) {
-				val = (val > 0 ? val + .5 : val < 0 ? val - .5 : 0) | 0;
-			}
-			this.setter(val);
-			this.onUpdate();
-			this.onUpdateT(this.ln);
-		} else {
-			this.complete(true);
-		}
-		return this.done;
-	}
-	,__class__: mt_deepnight_Tween
-};
-var mt_deepnight_Tweenie = function(fps) {
-	this.baseFps = fps;
-	this.tlist = [];
-};
-$hxClasses["mt.deepnight.Tweenie"] = mt_deepnight_Tweenie;
-mt_deepnight_Tweenie.__name__ = "mt.deepnight.Tweenie";
-mt_deepnight_Tweenie.prototype = {
-	terminate_: function(getter,setter,withCallbacks) {
-		if(this.tlist == null) {
-			return;
-		}
-		var v = getter();
-		var _g = 0;
-		var _g1 = this.tlist;
-		while(_g < _g1.length) {
-			var t = _g1[_g];
-			++_g;
-			if(t.done) {
-				continue;
-			}
-			var old = t.getter();
-			t.setter(old + 1);
-			if(getter() != v) {
-				t.setter(old);
-				if(withCallbacks) {
-					t.ln = 1;
-					t.complete(false);
-				} else {
-					t.endWithoutCallbacks();
-				}
-			} else {
-				t.setter(old);
-			}
-		}
-	}
-	,create_: function(getter,setter,from,to,tp,duration_ms,allowDuplicates) {
-		if(allowDuplicates == null) {
-			allowDuplicates = false;
-		}
-		if(duration_ms == null) {
-			duration_ms = mt_deepnight_Tweenie.DEFAULT_DURATION;
-		}
-		if(!allowDuplicates) {
-			this.terminate_(getter,setter,false);
-		}
-		var t = new mt_deepnight_Tween(this);
-		t.getter = getter;
-		t.setter = setter;
-		t.from = from == null ? getter() : from;
-		t.speed = 1 / (duration_ms * this.baseFps / 1000);
-		t.to = to;
-		if(tp != null) {
-			t.set_type(tp);
-		}
-		if(from != null) {
-			setter(from);
-		}
-		this.tlist.push(t);
-		return t;
-	}
-	,destroy: function() {
-		this.tlist = null;
-	}
-	,update: function(dt) {
-		if(dt == null) {
-			dt = 1.0;
-		}
-		var _g = 0;
-		var _g1 = this.tlist;
-		while(_g < _g1.length) {
-			var t = _g1[_g];
-			++_g;
-			if(t.internalUpdate(dt)) {
-				HxOverrides.remove(this.tlist,t);
-			}
-		}
-	}
-	,__class__: mt_deepnight_Tweenie
-};
-var mt_heaps_Mode = $hxEnums["mt.heaps.Mode"] = { __ename__ : true, __constructs__ : ["Keyboard","Pad"]
-	,Keyboard: {_hx_index:0,__enum__:"mt.heaps.Mode",toString:$estr}
-	,Pad: {_hx_index:1,__enum__:"mt.heaps.Mode",toString:$estr}
-};
-mt_heaps_Mode.__empty_constructs__ = [mt_heaps_Mode.Keyboard,mt_heaps_Mode.Pad];
-var mt_heaps_Controller = function(s2d) {
-	this.hasAnyPress = false;
-	this.longPressLock = new haxe_ds_IntMap();
-	this.framePresses = new Array(28);
-	this.pressTimers = new Array(28);
-	this.third = new haxe_ds_IntMap();
-	this.secondary = new haxe_ds_IntMap();
-	this.primary = new haxe_ds_IntMap();
-	this.allowAutoSwitch = true;
-	this.isLocked = false;
-	this.suspendTimer = 0.;
-	this.exclusiveId = null;
-	this.mode = mt_heaps_Mode.Keyboard;
-	var _gthis = this;
-	mt_heaps_Controller.ALL.push(this);
-	this.gc = new mt_heaps_GamePad(0.4);
-	s2d.addEventListener(function(e) {
-		if(_gthis.allowAutoSwitch && e.kind == hxd_EventKind.EMove && _gthis.mode != mt_heaps_Mode.Keyboard) {
-			_gthis.mode = mt_heaps_Mode.Keyboard;
-		}
-	});
-	var _g = 0;
-	var _g1 = this.pressTimers.length;
-	while(_g < _g1) {
-		var idx = _g++;
-		this.pressTimers[idx] = -1;
-	}
-	var _g2 = 0;
-	var _g3 = this.framePresses.length;
-	while(_g2 < _g3) {
-		var idx1 = _g2++;
-		this.framePresses[idx1] = -1;
-	}
-};
-$hxClasses["mt.heaps.Controller"] = mt_heaps_Controller;
-mt_heaps_Controller.__name__ = "mt.heaps.Controller";
-mt_heaps_Controller.beforeUpdate = function() {
-	mt_heaps_GamePad.update();
-	var _g = 0;
-	var _g1 = mt_heaps_Controller.ALL;
-	while(_g < _g1.length) {
-		var c = _g1[_g];
-		++_g;
-		if(c.gc != null) {
-			if(c.hasAnyPress) {
-				c.hasAnyPress = false;
-				var _g2 = 0;
-				var _g11 = c.framePresses.length;
-				while(_g2 < _g11) {
-					var idx = _g2++;
-					c.framePresses[idx] = -1;
-				}
-			}
-			c.updateLongPress(0);
-			c.updateLongPress(1);
-			c.updateLongPress(2);
-			c.updateLongPress(3);
-			c.updateLongPress(5);
-			c.updateLongPress(13);
-		}
-	}
-};
-mt_heaps_Controller.prototype = {
-	bind: function(k,keyboardKey,alternate1,alternate2) {
-		this.primary.h[k] = keyboardKey;
-		if(alternate1 != null) {
-			this.secondary.h[k] = alternate1;
-		}
-		if(alternate2 != null) {
-			this.third.h[k] = alternate2;
-		}
-	}
-	,createAccess: function(id,exclusive) {
-		if(exclusive == null) {
-			exclusive = false;
-		}
-		return new mt_heaps_ControllerAccess(this,id,exclusive);
-	}
-	,updateLongPress: function(k) {
-		var idx = k;
-		var _this = this.gc;
-		if(_this.device != null && _this.toggles[k] > 0 || hxd_Key.isDown(this.primary.h[k]) || hxd_Key.isDown(this.secondary.h[k]) || hxd_Key.isDown(this.third.h[k])) {
-			if(this.pressTimers[idx] == -1) {
-				this.pressTimers[idx] = Date.now() / 1000;
-			}
-			if(Date.now() / 1000 - this.pressTimers[idx] >= mt_heaps_Controller.LONG_PRESS) {
-				if(!this.longPressLock.h.hasOwnProperty(idx)) {
-					this.framePresses[idx] = 2;
-					this.hasAnyPress = true;
-					this.longPressLock.h[idx] = true;
-				}
-			}
-		} else {
-			if(this.longPressLock.h.hasOwnProperty(idx)) {
-				this.longPressLock.remove(idx);
-			}
-			if(this.pressTimers[idx] != -1) {
-				if(this.framePresses[idx] < 0) {
-					if(Date.now() / 1000 - this.pressTimers[idx] <= mt_heaps_Controller.SHORT_PRESS) {
-						this.hasAnyPress = true;
-						this.framePresses[idx] = 1;
-					}
-				}
-				this.pressTimers[idx] = -1;
-			}
-		}
-	}
-	,__class__: mt_heaps_Controller
-};
-var mt_heaps_ControllerAccess = function(parent,id,exclusive) {
-	if(exclusive == null) {
-		exclusive = false;
-	}
-	this.manualLock = false;
-	this.parent = parent;
-	this.id = id + mt_heaps_Controller.UNIQ_ID++;
-	parent.suspendTimer = Date.now() / 1000 + 0.1;
-	if(exclusive) {
-		this.parent.exclusiveId = this.id;
-	}
-};
-$hxClasses["mt.heaps.ControllerAccess"] = mt_heaps_ControllerAccess;
-mt_heaps_ControllerAccess.__name__ = "mt.heaps.ControllerAccess";
-mt_heaps_ControllerAccess.prototype = {
-	__class__: mt_heaps_ControllerAccess
-};
-var mt_heaps_GamePad = function(deadZone,onEnable) {
-	this.axisAsButtonDeadZone = 0.70;
-	this.deadZone = 0.18;
-	mt_heaps_GamePad.ALL.push(this);
-	this.toggles = [];
-	if(deadZone != null) {
-		this.deadZone = deadZone;
-	}
-	if(onEnable != null) {
-		this.onEnable = onEnable;
-	}
-	if(mt_heaps_GamePad.AVAILABLE_DEVICES == null) {
-		mt_heaps_GamePad.AVAILABLE_DEVICES = [];
-		hxd_Pad.wait(mt_heaps_GamePad.onDevice);
-	} else if(mt_heaps_GamePad.AVAILABLE_DEVICES.length > 0) {
-		this.enableDevice(mt_heaps_GamePad.AVAILABLE_DEVICES[0]);
-	}
-	this.lastActivity = Date.now() / 1000;
-};
-$hxClasses["mt.heaps.GamePad"] = mt_heaps_GamePad;
-mt_heaps_GamePad.__name__ = "mt.heaps.GamePad";
-mt_heaps_GamePad.onDevice = function(p) {
-	var _g = 0;
-	var _g1 = mt_heaps_GamePad.ALL;
-	while(_g < _g1.length) {
-		var i = _g1[_g];
-		++_g;
-		if(i.device == null) {
-			i.enableDevice(p);
-			return;
-		}
-	}
-	mt_heaps_GamePad.AVAILABLE_DEVICES.push(p);
-	p.onDisconnect = function() {
-		HxOverrides.remove(mt_heaps_GamePad.AVAILABLE_DEVICES,p);
-	};
-};
-mt_heaps_GamePad.update = function() {
-	var _g = 0;
-	var _g1 = mt_heaps_GamePad.ALL;
-	while(_g < _g1.length) {
-		var e = _g1[_g];
-		++_g;
-		var hasToggle = false;
-		if(e.device != null) {
-			var _g2 = 0;
-			while(_g2 < 28) {
-				var i = _g2++;
-				var this1 = i;
-				var k = this1;
-				var tmp;
-				switch(k) {
-				case 18:case 21:case 24:case 27:
-					var overrideDeadZone = e.axisAsButtonDeadZone;
-					var tmp1;
-					if(e.device != null) {
-						var idx = mt_heaps_GamePad.MAPPING[k];
-						var v = idx > -1 && idx < e.device.values.length ? e.device.values[idx] : 0;
-						var dz = overrideDeadZone < 0. ? e.deadZone : overrideDeadZone;
-						tmp1 = v < -dz ? -1. : v > dz ? 1. : 0.;
-					} else {
-						tmp1 = 0.;
-					}
-					tmp = tmp1 > 0;
-					break;
-				case 17:case 20:case 23:case 26:
-					var overrideDeadZone1 = e.axisAsButtonDeadZone;
-					var tmp2;
-					if(e.device != null) {
-						var idx1 = mt_heaps_GamePad.MAPPING[k];
-						var v1 = idx1 > -1 && idx1 < e.device.values.length ? e.device.values[idx1] : 0;
-						var dz1 = overrideDeadZone1 < 0. ? e.deadZone : overrideDeadZone1;
-						tmp2 = v1 < -dz1 ? -1. : v1 > dz1 ? 1. : 0.;
-					} else {
-						tmp2 = 0.;
-					}
-					tmp = tmp2 < 0;
-					break;
-				default:
-					var tmp3;
-					if(e.device != null) {
-						var idx2 = mt_heaps_GamePad.MAPPING[k];
-						var v2 = idx2 > -1 && idx2 < e.device.values.length ? e.device.values[idx2] : 0;
-						var dz2 = e.deadZone;
-						tmp3 = v2 < -dz2 ? -1. : v2 > dz2 ? 1. : 0.;
-					} else {
-						tmp3 = 0.;
-					}
-					tmp = tmp3 != 0;
-				}
-				if(tmp) {
-					hasToggle = true;
-					if(e.toggles[i] >= 1) {
-						e.toggles[i] = 2;
-					} else {
-						e.toggles[i] = 1;
-					}
-				} else {
-					e.toggles[i] = 0;
-				}
-			}
-		}
-		if(hasToggle) {
-			e.lastActivity = Date.now() / 1000;
-		}
-	}
-};
-mt_heaps_GamePad.prototype = {
-	onEnable: function(pad) {
-	}
-	,onDisable: function(pad) {
-	}
-	,enableDevice: function(p) {
-		var _gthis = this;
-		if(this.device == null) {
-			HxOverrides.remove(mt_heaps_GamePad.AVAILABLE_DEVICES,p);
-			p.onDisconnect = function() {
-				_gthis.disable();
-			};
-			this.device = p;
-			this.onEnable(this);
-		}
-	}
-	,disable: function() {
-		if(this.device != null) {
-			this.device = null;
-			this.onDisable(this);
-		}
-	}
-	,isPressed: function(k) {
-		if(this.device != null) {
-			return this.toggles[k] == 1;
-		} else {
-			return false;
-		}
-	}
-	,__class__: mt_heaps_GamePad
-};
-var mt_heaps_ParticlePool = function(tile,count,fps) {
-	var this1 = new Array(count);
-	this.all = this1;
-	this.nalloc = 0;
-	var _g = 0;
-	var _g1 = count;
-	while(_g < _g1) {
-		var i = _g++;
-		var p = new mt_heaps_HParticle(this,tile.clone(),fps);
-		this.all[i] = p;
-		p.kill();
-	}
-};
-$hxClasses["mt.heaps.ParticlePool"] = mt_heaps_ParticlePool;
-mt_heaps_ParticlePool.__name__ = "mt.heaps.ParticlePool";
-mt_heaps_ParticlePool.prototype = {
-	free: function(kp) {
-		if(this.all == null) {
-			return;
-		}
-		if(this.nalloc > 1) {
-			var idx = kp.poolIdx;
-			var tmp = this.all[idx];
-			this.all[idx] = this.all[this.nalloc - 1];
-			this.all[idx].poolIdx = idx;
-			this.all[this.nalloc - 1] = tmp;
-			this.nalloc--;
-		} else {
-			this.nalloc = 0;
-		}
-	}
-	,dispose: function() {
-		var _g = 0;
-		var _g1 = this.all;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			p.dispose();
-		}
-		this.all = null;
-	}
-	,update: function(dt,updateCb) {
-		var _g = 0;
-		var _g1 = this.nalloc;
-		while(_g < _g1) {
-			var i = _g++;
-			var _this = this.all[i];
-			var _g2 = _this;
-			var d = _g2.delayF - dt;
-			d = 0 > d ? 0 : d;
-			_g2.visible = d <= 0;
-			_g2.delayF = d;
-			if(_this.delayF <= 0 && !_this.killed) {
-				if(_this.onStart != null) {
-					var cb = _this.onStart;
-					_this.onStart = null;
-					cb();
-				}
-				if(_this.animId != null) {
-					var _this1 = _this.animLib;
-					var k = _this.animId;
-					var f;
-					if(k == null) {
-						f = _this1.currentGroup;
-					} else {
-						var _this2 = _this1.groups;
-						f = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
-					}
-					var f1 = f.anim[_this.animCursor | 0];
-					var _this3 = _this.animLib;
-					var k1 = _this.animId;
-					var g;
-					if(k1 == null) {
-						g = _this3.currentGroup;
-					} else {
-						var _this4 = _this3.groups;
-						g = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
-					}
-					var fd = g == null ? null : g.frames[f1];
-					var tile = _this.animLib.getTile(_this.animId,f1);
-					_this.t.setPosition(tile.x,tile.y);
-					_this.t.setSize(tile.width,tile.height);
-					_this.t.dx = -(fd.realWid * _this.animXr + fd.realX | 0);
-					_this.t.dy = -(fd.realHei * _this.animYr + fd.realY | 0);
-					var _this5 = _this.animCursor += _this.animSpd * dt;
-					var _this6 = _this.animLib;
-					var k2 = _this.animId;
-					var tmp;
-					if(k2 == null) {
-						tmp = _this6.currentGroup;
-					} else {
-						var _this7 = _this6.groups;
-						tmp = __map_reserved[k2] != null ? _this7.getReserved(k2) : _this7.h[k2];
-					}
-					if(_this5 >= tmp.anim.length) {
-						if(_this.animLoop) {
-							var _this8 = _this;
-							var _this9 = _this8.animCursor;
-							var _this10 = _this.animLib;
-							var k3 = _this.animId;
-							var tmp1;
-							if(k3 == null) {
-								tmp1 = _this10.currentGroup;
-							} else {
-								var _this11 = _this10.groups;
-								tmp1 = __map_reserved[k3] != null ? _this11.getReserved(k3) : _this11.h[k3];
-							}
-							_this8.animCursor = _this9 - tmp1.anim.length;
-						} else if(_this.animStop) {
-							_this.animId = null;
-							_this.animLib = null;
-						} else {
-							_this.animId = null;
-							_this.animLib = null;
-							_this.animCursor = 0;
-							_this.kill();
-						}
-					}
-				}
-				if(!_this.killed) {
-					_this.dx += _this.gx * dt;
-					_this.dy += _this.gy * dt;
-					_this.x += _this.dx * dt;
-					_this.y += _this.dy * dt;
-					if(_this.frictX == _this.frictY) {
-						var v = _this.frictX;
-						var frictDT = dt == 1 || v == 0 || v == 1 ? v : Math.pow(v,dt);
-						_this.dx *= frictDT;
-						_this.dy *= frictDT;
-					} else {
-						var v1 = _this.frictX;
-						_this.dx *= dt == 1 || v1 == 0 || v1 == 1 ? v1 : Math.pow(v1,dt);
-						var v2 = _this.frictY;
-						_this.dy *= dt == 1 || v2 == 0 || v2 == 1 ? v2 : Math.pow(v2,dt);
-					}
-					if(_this.groundY != null && _this.dy > 0 && _this.y >= _this.groundY) {
-						_this.dy = -_this.dy * _this.bounceMul;
-						_this.y = _this.groundY - 1;
-						if(_this.onBounce != null) {
-							_this.onBounce();
-						}
-					}
-					if(!_this.killed) {
-						_this.rotation += _this.dr * dt;
-						_this.scaleX += (_this.ds + _this.dsX) * dt;
-						_this.scaleY += (_this.ds + _this.dsY) * dt;
-						var v3 = _this.scaleMul;
-						var scaleMulDT = dt == 1 || v3 == 0 || v3 == 1 ? v3 : Math.pow(v3,dt);
-						_this.scaleX *= scaleMulDT;
-						var v4 = _this.scaleXMul;
-						_this.scaleX *= dt == 1 || v4 == 0 || v4 == 1 ? v4 : Math.pow(v4,dt);
-						_this.scaleY *= scaleMulDT;
-						var v5 = _this.scaleYMul;
-						_this.scaleY *= dt == 1 || v5 == 0 || v5 == 1 ? v5 : Math.pow(v5,dt);
-						var v6 = _this.dsFrict;
-						_this.ds *= dt == 1 || v6 == 0 || v6 == 1 ? v6 : Math.pow(v6,dt);
-						var v7 = _this.dsFrict;
-						_this.dsX *= dt == 1 || v7 == 0 || v7 == 1 ? v7 : Math.pow(v7,dt);
-						var v8 = _this.dsFrict;
-						_this.dsY *= dt == 1 || v8 == 0 || v8 == 1 ? v8 : Math.pow(v8,dt);
-						if(!isNaN(_this.rColor)) {
-							var x = _this.rColor + _this.dColor * dt;
-							_this.rColor = x < 0 ? 0 : x > 1 ? 1 : x;
-							var from = _this.fromColor;
-							var to = _this.toColor;
-							var ratio = _this.rColor;
-							var a = _$UInt_UInt_$Impl_$.toFloat(from >>> 16);
-							var x1 = a + (_$UInt_UInt_$Impl_$.toFloat(to >>> 16) - a) * ratio;
-							var a1 = _$UInt_UInt_$Impl_$.toFloat(from >>> 8 & 255);
-							var x2 = a1 + (_$UInt_UInt_$Impl_$.toFloat(to >>> 8 & 255) - a1) * ratio;
-							var a2 = _$UInt_UInt_$Impl_$.toFloat(from & 255);
-							var x3 = a2 + (_$UInt_UInt_$Impl_$.toFloat(to & 255) - a2) * ratio;
-							var c = ((x1 > 0 ? x1 + .5 : x1 < 0 ? x1 - .5 : 0) | 0) << 16 | ((x2 > 0 ? x2 + .5 : x2 < 0 ? x2 - .5 : 0) | 0) << 8 | ((x3 > 0 ? x3 + .5 : x3 < 0 ? x3 - .5 : 0) | 0);
-							var a3 = _$UInt_UInt_$Impl_$.toFloat(16777215 >>> 16);
-							var x4 = a3 + (_$UInt_UInt_$Impl_$.toFloat(c >>> 16) - a3);
-							_this.r = ((x4 > 0 ? x4 + .5 : x4 < 0 ? x4 - .5 : 0) | 0) / 255;
-							var a4 = _$UInt_UInt_$Impl_$.toFloat(16777215 >>> 8 & 255);
-							var x5 = a4 + (_$UInt_UInt_$Impl_$.toFloat(c >>> 8 & 255) - a4);
-							_this.g = ((x5 > 0 ? x5 + .5 : x5 < 0 ? x5 - .5 : 0) | 0) / 255;
-							var a5 = _$UInt_UInt_$Impl_$.toFloat(16777215 & 255);
-							var x6 = a5 + (_$UInt_UInt_$Impl_$.toFloat(c & 255) - a5);
-							_this.b = ((x6 > 0 ? x6 + .5 : x6 < 0 ? x6 - .5 : 0) | 0) / 255;
-						}
-						if(_this.rLifeF > 0 && _this.da != 0) {
-							_this.a += _this.da * dt;
-							if(_this.a > _this.maxAlpha) {
-								_this.da = 0;
-								_this.a = _this.maxAlpha;
-							}
-						}
-						_this.rLifeF -= dt;
-						if(_this.rLifeF <= 0) {
-							_this.a -= _this.fadeOutSpeed * dt;
-						} else if(_this.alphaFlicker > 0) {
-							var max = _this.alphaFlicker;
-							var x7 = _this.a + Math.random() * max * (Std.random(2) * 2 - 1);
-							var max1 = _this.maxAlpha;
-							_this.a = x7 < 0 ? 0 : x7 > max1 ? max1 : x7;
-						}
-						if(_this.rLifeF <= 0 && (_this.a <= 0 || _this.killOnLifeOut) || _this.bounds != null && !(_this.x >= _this.bounds.xMin && _this.x < _this.bounds.xMax && _this.y >= _this.bounds.yMin && _this.y < _this.bounds.yMax)) {
-							_this.kill();
-						} else if(_this.onUpdate != null) {
-							_this.onUpdate(_this);
-						}
-					}
-				}
-			}
-			if(updateCb != null) {
-				updateCb(this.all[i]);
-			}
-		}
-	}
-	,__class__: mt_heaps_ParticlePool
-};
-var mt_heaps_HParticle = function(p,tile,fps,x,y) {
-	if(y == null) {
-		y = 0.;
-	}
-	if(x == null) {
-		x = 0.;
-	}
-	h2d_BatchElement.call(this,tile);
-	this.fps = fps;
-	this.pool = p;
-	this.poolIdx = -1;
-	this.reset(null,null,x,y);
-};
-$hxClasses["mt.heaps.HParticle"] = mt_heaps_HParticle;
-mt_heaps_HParticle.__name__ = "mt.heaps.HParticle";
-mt_heaps_HParticle.__super__ = h2d_BatchElement;
-mt_heaps_HParticle.prototype = $extend(h2d_BatchElement.prototype,{
-	playAnimAndKill: function(lib,k,spd) {
-		if(spd == null) {
-			spd = 1.0;
-		}
-		this.animLib = lib;
-		this.animId = k;
-		this.animCursor = 0;
-		this.animLoop = false;
-		this.animSpd = spd;
-		var _this = this.animLib;
-		var k1 = this.animId;
-		var f;
-		if(k1 == null) {
-			f = _this.currentGroup;
-		} else {
-			var _this1 = _this.groups;
-			f = __map_reserved[k1] != null ? _this1.getReserved(k1) : _this1.h[k1];
-		}
-		var f1 = f.anim[this.animCursor | 0];
-		var _this2 = this.animLib;
-		var k2 = this.animId;
-		var g;
-		if(k2 == null) {
-			g = _this2.currentGroup;
-		} else {
-			var _this3 = _this2.groups;
-			g = __map_reserved[k2] != null ? _this3.getReserved(k2) : _this3.h[k2];
-		}
-		var fd = g == null ? null : g.frames[f1];
-		var tile = this.animLib.getTile(this.animId,f1);
-		this.t.setPosition(tile.x,tile.y);
-		this.t.setSize(tile.width,tile.height);
-		this.t.dx = -(fd.realWid * this.animXr + fd.realX | 0);
-		this.t.dy = -(fd.realHei * this.animYr + fd.realY | 0);
-	}
-	,playAnimLoop: function(lib,k,spd) {
-		if(spd == null) {
-			spd = 1.0;
-		}
-		this.animLib = lib;
-		this.animId = k;
-		this.animCursor = 0;
-		this.animLoop = true;
-		this.animSpd = spd;
-		var _this = this.animLib;
-		var k1 = this.animId;
-		var f;
-		if(k1 == null) {
-			f = _this.currentGroup;
-		} else {
-			var _this1 = _this.groups;
-			f = __map_reserved[k1] != null ? _this1.getReserved(k1) : _this1.h[k1];
-		}
-		var f1 = f.anim[this.animCursor | 0];
-		var _this2 = this.animLib;
-		var k2 = this.animId;
-		var g;
-		if(k2 == null) {
-			g = _this2.currentGroup;
-		} else {
-			var _this3 = _this2.groups;
-			g = __map_reserved[k2] != null ? _this3.getReserved(k2) : _this3.h[k2];
-		}
-		var fd = g == null ? null : g.frames[f1];
-		var tile = this.animLib.getTile(this.animId,f1);
-		this.t.setPosition(tile.x,tile.y);
-		this.t.setSize(tile.width,tile.height);
-		this.t.dx = -(fd.realWid * this.animXr + fd.realX | 0);
-		this.t.dy = -(fd.realHei * this.animYr + fd.realY | 0);
-	}
-	,reset: function(sb,tile,x,y) {
-		if(y == null) {
-			y = 0.;
-		}
-		if(x == null) {
-			x = 0.;
-		}
-		if(tile != null) {
-			this.t.x = tile.x;
-			this.t.y = tile.y;
-			this.t.width = tile.width;
-			this.t.height = tile.height;
-			this.t.dx = tile.dx;
-			this.t.dy = tile.dy;
-			this.t.innerTex = tile.innerTex;
-			this.t.u = tile.u;
-			this.t.u2 = tile.u2;
-			this.t.v = tile.v;
-			this.t.v2 = tile.v2;
-		}
-		this.x = x;
-		this.y = y;
-		if(this.batch != sb) {
-			if(this.batch != null) {
-				this.remove();
-			}
-			if(sb != null) {
-				sb.add(this);
-			}
-		}
-		this.data0 = this.data1 = this.data2 = this.data3 = this.data4 = this.data5 = this.data6 = this.data7 = NaN;
-		this.animId = null;
-		this.animLib = null;
-		this.r = this.g = this.b = 1;
-		this.visible = true;
-		this.rotation = 0;
-		this.scaleX = this.scaleY = 1;
-		this.a = 1;
-		this.scaleMul = 1;
-		this.scaleXMul = this.scaleYMul = 1;
-		this.dsFrict = 1;
-		this.alphaFlicker = 0;
-		this.fromColor = 0;
-		this.dColor = this.rColor = NaN;
-		this.stamp = Date.now() / 1000;
-		var _this = this.t;
-		_this.dx = -(0.5 * _this.width | 0);
-		_this.dy = -(0.5 * _this.height | 0);
-		this.animXr = 0.5;
-		this.animYr = 0.5;
-		this.killed = false;
-		if(this.a > 1) {
-			this.a = 1;
-		}
-		this.maxAlpha = 1;
-		this.dx = this.dy = this.da = this.dr = this.ds = this.dsX = this.dsY = 0;
-		this.gx = this.gy = 0;
-		this.frictX = this.frictY = 1;
-		this.fadeOutSpeed = 0.1;
-		this.bounceMul = 0.85;
-		var d = 0 * this.fps;
-		d = 0 > d ? 0 : d;
-		this.visible = d <= 0;
-		this.delayF = d;
-		this.set_lifeS(1);
-		this.pixel = false;
-		this.bounds = mt_heaps_HParticle.DEFAULT_BOUNDS;
-		this.killOnLifeOut = false;
-		this.groundY = null;
-		this.groupId = null;
-		this.onStart = null;
-		this.onKill = null;
-		this.onBounce = null;
-		this.onUpdate = null;
-	}
-	,setFadeS: function(targetAlpha,fadeInDurationS,fadeOutDurationS) {
-		this.a = 0;
-		if(this.a > targetAlpha) {
-			this.a = targetAlpha;
-		}
-		this.maxAlpha = targetAlpha;
-		if(fadeInDurationS <= 0) {
-			this.a = this.maxAlpha;
-		} else {
-			this.da = targetAlpha / (fadeInDurationS * this.fps);
-		}
-		if(fadeOutDurationS <= 0) {
-			this.fadeOutSpeed = 99;
-		} else {
-			this.fadeOutSpeed = targetAlpha / (fadeOutDurationS * this.fps);
-		}
-	}
-	,set_lifeS: function(v) {
-		var x = this.fps * v;
-		this.rLifeF = this.maxLifeF = x > 0 ? x : 0;
-		return v;
-	}
-	,kill: function() {
-		if(this.killed) {
-			return;
-		}
-		if(this.onKill != null) {
-			var cb = this.onKill;
-			this.onKill = null;
-			cb();
-		}
-		this.a = 0;
-		this.set_lifeS(0);
-		var d = 0 * this.fps;
-		d = 0 > d ? 0 : d;
-		this.visible = d <= 0;
-		this.delayF = d;
-		this.killed = true;
-		this.visible = false;
-		this.pool.free(this);
-	}
-	,dispose: function() {
-		this.remove();
-		this.bounds = null;
-	}
-	,__class__: mt_heaps_HParticle
-});
-var mt_heaps_slib__$AnimManager_AnimInstance = function(s,g) {
-	this.reverse = false;
-	this.speed = 1.0;
-	this.stopOnLastFrame = false;
-	this.killAfterPlay = false;
-	this.isStateAnim = false;
-	this.paused = false;
-	this.playDuration = -1.;
-	this.plays = 1;
-	this.curFrameCpt = 0.0;
-	this.animCursor = 0;
-	this.frames = [];
-	this.spr = s;
-	this.group = g;
-	var _this = this.spr.lib;
-	var k = this.group;
-	var tmp;
-	var tmp1;
-	if(k != null) {
-		var _this1 = _this.groups;
-		tmp1 = __map_reserved[k] != null ? _this1.existsReserved(k) : _this1.h.hasOwnProperty(k);
-	} else {
-		tmp1 = false;
-	}
-	if(tmp1) {
-		var _this2 = _this.groups;
-		tmp = (__map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k]).frames.length > 0;
-	} else {
-		tmp = false;
-	}
-	if(!tmp) {
-		throw new js__$Boot_HaxeError("unknown group " + this.group);
-	}
-	var _this3 = this.spr.lib;
-	var k1 = this.group;
-	var tmp2;
-	if(k1 == null) {
-		tmp2 = _this3.currentGroup;
-	} else {
-		var _this4 = _this3.groups;
-		tmp2 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
-	}
-	this.frames = tmp2.anim;
-};
-$hxClasses["mt.heaps.slib._AnimManager.AnimInstance"] = mt_heaps_slib__$AnimManager_AnimInstance;
-mt_heaps_slib__$AnimManager_AnimInstance.__name__ = "mt.heaps.slib._AnimManager.AnimInstance";
-mt_heaps_slib__$AnimManager_AnimInstance.prototype = {
-	onEnd: function() {
-	}
-	,onEachLoop: function() {
-	}
-	,__class__: mt_heaps_slib__$AnimManager_AnimInstance
-};
-var mt_heaps_slib__$AnimManager_StateAnim = function(g,cb) {
-	this.group = g;
-	this.priority = 0;
-	this.cond = cb;
-	this.spd = 1.0;
-};
-$hxClasses["mt.heaps.slib._AnimManager.StateAnim"] = mt_heaps_slib__$AnimManager_StateAnim;
-mt_heaps_slib__$AnimManager_StateAnim.__name__ = "mt.heaps.slib._AnimManager.StateAnim";
-mt_heaps_slib__$AnimManager_StateAnim.prototype = {
-	__class__: mt_heaps_slib__$AnimManager_StateAnim
-};
-var mt_heaps_slib__$AnimManager_Transition = function(f,t,a,cb) {
-	this.from = f;
-	this.to = t;
-	this.anim = a;
-	this.cond = cb;
-	this.spd = 1.0;
-	this.reverse = false;
-};
-$hxClasses["mt.heaps.slib._AnimManager.Transition"] = mt_heaps_slib__$AnimManager_Transition;
-mt_heaps_slib__$AnimManager_Transition.__name__ = "mt.heaps.slib._AnimManager.Transition";
-mt_heaps_slib__$AnimManager_Transition.prototype = {
-	__class__: mt_heaps_slib__$AnimManager_Transition
-};
-var mt_heaps_slib_AnimManager = function(spr) {
-	this.S_STAR = "*";
-	this.suspendF = 0.;
-	this.suspended = false;
-	this.destroyed = false;
-	this.needUpdates = false;
-	this.genSpeed = 1.0;
-	this.transitions = [];
-	this.stateAnims = [];
-	this.stack = [];
-	this.spr = spr;
-};
-$hxClasses["mt.heaps.slib.AnimManager"] = mt_heaps_slib_AnimManager;
-mt_heaps_slib_AnimManager.__name__ = "mt.heaps.slib.AnimManager";
-mt_heaps_slib_AnimManager.prototype = {
-	destroy: function() {
-		this.destroyed = true;
-		this.stopWithoutStateAnims();
-		this.needUpdates = false;
-		this.stateAnims = null;
-		this.stack = null;
-		this.spr = null;
-	}
-	,play: function(group,plays,queueAnim) {
-		if(queueAnim == null) {
-			queueAnim = false;
-		}
-		if(plays == null) {
-			plays = 1;
-		}
-		var _this = this.spr.lib;
-		var g;
-		if(group == null) {
-			g = _this.currentGroup;
-		} else {
-			var _this1 = _this.groups;
-			g = __map_reserved[group] != null ? _this1.getReserved(group) : _this1.h[group];
-		}
-		if(g == null) {
-			return this;
-		}
-		if(g.anim == null || g.anim.length == 0) {
-			return this;
-		}
-		if(!queueAnim && (!this.destroyed && this.stack.length > 0)) {
-			this.stopWithoutStateAnims();
-		}
-		var a = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,group);
-		this.stack.push(a);
-		a.plays = plays;
-		this.needUpdates = true;
-		if(!queueAnim) {
-			var t = this.getTransition(this.spr.groupName,this.stack[0].group);
-			if(t != null && t.anim != this.spr.groupName) {
-				var _this2 = this.spr.lib;
-				var k = t.anim;
-				var tmp;
-				var tmp1;
-				if(k != null) {
-					var _this3 = _this2.groups;
-					tmp1 = __map_reserved[k] != null ? _this3.existsReserved(k) : _this3.h.hasOwnProperty(k);
-				} else {
-					tmp1 = false;
-				}
-				if(tmp1) {
-					var _this4 = _this2.groups;
-					tmp = (__map_reserved[k] != null ? _this4.getReserved(k) : _this4.h[k]).frames.length > 0;
-				} else {
-					tmp = false;
-				}
-				if(tmp) {
-					var a1 = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,t.anim);
-					this.stack.splice(0,0,a1);
-					a1.speed = t.spd;
-					a1.reverse = t.reverse;
-				}
-			}
-			var _this5 = this.stack[0];
-			var f = _this5.frames[_this5.reverse ? _this5.frames.length - 1 - _this5.animCursor : _this5.animCursor];
-			if(_this5.spr.get_anim().onEnterFrame != null && _this5.lastFrame != f) {
-				_this5.spr.get_anim().onEnterFrame(f);
-			}
-			if(_this5.spr.groupName != _this5.group) {
-				_this5.spr.set(null,_this5.group,f);
-			} else if(_this5.spr.frame != f) {
-				_this5.spr.setFrame(f);
-			}
-			_this5.lastFrame = f;
-		}
-		return this;
-	}
-	,loop: function() {
-		if(!this.destroyed && this.stack.length > 0) {
-			this.stack[this.stack.length - 1].plays = 999999;
-		}
-		return this;
-	}
-	,stopWithStateAnims: function() {
-		this.stack = [];
-		this.applyStateAnims();
-	}
-	,stopWithoutStateAnims: function(k,frame) {
-		this.stack = [];
-		if(k != null) {
-			this.spr.set(null,k,frame != null ? frame : 0);
-		} else if(frame != null) {
-			this.spr.setFrame(frame);
-		}
-	}
-	,unsuspend: function() {
-		this.suspended = false;
-		this.suspendF = 0;
-	}
-	,getTransition: function(from,to) {
-		var _g = 0;
-		var _g1 = this.transitions;
-		while(_g < _g1.length) {
-			var t = _g1[_g];
-			++_g;
-			if((t.from == this.S_STAR || t.from == from) && (t.to == this.S_STAR || t.to == to) && t.cond()) {
-				return t;
-			}
-		}
-		return null;
-	}
-	,registerStateAnim: function(group,priority,spd,condition) {
-		if(spd == null) {
-			spd = 1.0;
-		}
-		if(condition == null) {
-			condition = function() {
-				return true;
-			};
-		}
-		this.removeStateAnim(group,priority);
-		var s = new mt_heaps_slib__$AnimManager_StateAnim(group,condition);
-		s.priority = priority;
-		s.spd = spd;
-		this.stateAnims.push(s);
-		this.stateAnims.sort(function(a,b) {
-			return -Reflect.compare(a.priority,b.priority);
-		});
-		this.applyStateAnims();
-	}
-	,removeStateAnim: function(group,priority) {
-		var i = 0;
-		while(i < this.stateAnims.length) if(this.stateAnims[i].group == group && this.stateAnims[i].priority == priority) {
-			this.stateAnims.splice(i,1);
-		} else {
-			++i;
-		}
-	}
-	,applyStateAnims: function() {
-		if(!this.destroyed && this.stack.length > 0 && !this.stack[0].isStateAnim) {
-			return;
-		}
-		var _g = 0;
-		var _g1 = this.stateAnims;
-		while(_g < _g1.length) {
-			var sa = _g1[_g];
-			++_g;
-			if(sa.cond()) {
-				if(!this.destroyed && this.stack.length > 0 && this.stack[0].group == sa.group) {
-					break;
-				}
-				var _this = this.play(sa.group).loop();
-				if(!_this.destroyed && _this.stack.length > 0) {
-					_this.stack[_this.stack.length - 1].speed = sa.spd;
-				}
-				if(!this.destroyed && this.stack.length > 0) {
-					this.stack[this.stack.length - 1].isStateAnim = true;
-				}
-				break;
-			}
-		}
-	}
-	,_update: function(dt) {
-		if(this.suspended) {
-			this.suspendF -= dt;
-			if(this.suspendF <= 0) {
-				this.unsuspend();
-			}
-			return;
-		}
-		this.applyStateAnims();
-		var a = this.stack[0];
-		if(a != null && !a.paused) {
-			a.curFrameCpt += dt * this.genSpeed * a.speed;
-			if(a.playDuration > 0) {
-				a.playDuration -= dt;
-				if(a.playDuration <= 0) {
-					a.plays = 0;
-					a.animCursor = a.frames.length;
-					a.curFrameCpt = 1;
-				}
-			}
-			while(a.curFrameCpt > 1) {
-				a.curFrameCpt--;
-				a.animCursor++;
-				if(a.animCursor < a.frames.length) {
-					var f = a.frames[a.reverse ? a.frames.length - 1 - a.animCursor : a.animCursor];
-					if(a.spr.get_anim().onEnterFrame != null && a.lastFrame != f) {
-						a.spr.get_anim().onEnterFrame(f);
-					}
-					if(a.spr.groupName != a.group) {
-						a.spr.set(null,a.group,f);
-					} else if(a.spr.frame != f) {
-						a.spr.setFrame(f);
-					}
-					a.lastFrame = f;
-					continue;
-				}
-				a.animCursor = 0;
-				a.plays--;
-				if(a.plays > 0 || a.playDuration > 0) {
-					a.onEachLoop();
-					a = this.stack[0];
-					var f1 = a.frames[a.reverse ? a.frames.length - 1 - a.animCursor : a.animCursor];
-					if(a.spr.get_anim().onEnterFrame != null && a.lastFrame != f1) {
-						a.spr.get_anim().onEnterFrame(f1);
-					}
-					if(a.spr.groupName != a.group) {
-						a.spr.set(null,a.group,f1);
-					} else if(a.spr.frame != f1) {
-						a.spr.setFrame(f1);
-					}
-					a.lastFrame = f1;
-					continue;
-				}
-				if(a.stopOnLastFrame) {
-					this.stopWithoutStateAnims();
-				}
-				a.onEnd();
-				if(a.killAfterPlay) {
-					this.spr.remove();
-					break;
-				}
-				if(!this.destroyed && this.stack.length > 0) {
-					this.stack.shift();
-					if(this.stack.length == 0) {
-						this.stopWithStateAnims();
-					} else {
-						var t = this.getTransition(this.spr.groupName,this.stack[0].group);
-						if(t != null && t.anim != this.spr.groupName) {
-							var _this = this.spr.lib;
-							var k = t.anim;
-							var tmp;
-							var tmp1;
-							if(k != null) {
-								var _this1 = _this.groups;
-								tmp1 = __map_reserved[k] != null ? _this1.existsReserved(k) : _this1.h.hasOwnProperty(k);
-							} else {
-								tmp1 = false;
-							}
-							if(tmp1) {
-								var _this2 = _this.groups;
-								tmp = (__map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k]).frames.length > 0;
-							} else {
-								tmp = false;
-							}
-							if(tmp) {
-								var a1 = new mt_heaps_slib__$AnimManager_AnimInstance(this.spr,t.anim);
-								this.stack.splice(0,0,a1);
-								a1.speed = t.spd;
-								a1.reverse = t.reverse;
-							}
-						}
-						var _this3 = this.stack[0];
-						var f2 = _this3.frames[_this3.reverse ? _this3.frames.length - 1 - _this3.animCursor : _this3.animCursor];
-						if(_this3.spr.get_anim().onEnterFrame != null && _this3.lastFrame != f2) {
-							_this3.spr.get_anim().onEnterFrame(f2);
-						}
-						if(_this3.spr.groupName != _this3.group) {
-							_this3.spr.set(null,_this3.group,f2);
-						} else if(_this3.spr.frame != f2) {
-							_this3.spr.setFrame(f2);
-						}
-						_this3.lastFrame = f2;
-					}
-					a = this.stack[0];
-				}
-				if(!(!this.destroyed && this.stack.length > 0)) {
-					break;
-				}
-			}
-		}
-		if(this.overlap != null && !this.spr.destroyed) {
-			this.overlap.curFrameCpt += dt * this.genSpeed * this.overlap.speed;
-			while(this.overlap.curFrameCpt > 1) {
-				this.overlap.curFrameCpt--;
-				this.overlap.animCursor++;
-				var _this4 = this.overlap;
-				if(_this4.animCursor >= _this4.frames.length) {
-					this.overlap = null;
-					if(this.stack[0] != null) {
-						var _this5 = this.stack[0];
-						var f3 = _this5.frames[_this5.reverse ? _this5.frames.length - 1 - _this5.animCursor : _this5.animCursor];
-						if(_this5.spr.get_anim().onEnterFrame != null && _this5.lastFrame != f3) {
-							_this5.spr.get_anim().onEnterFrame(f3);
-						}
-						if(_this5.spr.groupName != _this5.group) {
-							_this5.spr.set(null,_this5.group,f3);
-						} else if(_this5.spr.frame != f3) {
-							_this5.spr.setFrame(f3);
-						}
-						_this5.lastFrame = f3;
-					}
-					break;
-				}
-			}
-			if(this.overlap != null) {
-				var _this6 = this.overlap;
-				var f4 = _this6.frames[_this6.reverse ? _this6.frames.length - 1 - _this6.animCursor : _this6.animCursor];
-				if(_this6.spr.get_anim().onEnterFrame != null && _this6.lastFrame != f4) {
-					_this6.spr.get_anim().onEnterFrame(f4);
-				}
-				if(_this6.spr.groupName != _this6.group) {
-					_this6.spr.set(null,_this6.group,f4);
-				} else if(_this6.spr.frame != f4) {
-					_this6.spr.setFrame(f4);
-				}
-				_this6.lastFrame = f4;
-			}
-		}
-		if(!this.destroyed && !(!this.destroyed && this.stack.length > 0) && this.overlap == null) {
-			this.needUpdates = false;
-		}
-	}
-	,__class__: mt_heaps_slib_AnimManager
-};
-var mt_heaps_slib_SpriteInterface = function() { };
-$hxClasses["mt.heaps.slib.SpriteInterface"] = mt_heaps_slib_SpriteInterface;
-mt_heaps_slib_SpriteInterface.__name__ = "mt.heaps.slib.SpriteInterface";
-mt_heaps_slib_SpriteInterface.prototype = {
-	__class__: mt_heaps_slib_SpriteInterface
-};
-var mt_heaps_slib_HSprite = function(l,g,f,parent) {
-	if(f == null) {
-		f = 0;
-	}
-	h2d_Drawable.call(this,parent);
-	this.destroyed = false;
-	this.pivot = new mt_heaps_slib_SpritePivot();
-	this.lastPage = -1;
-	if(l != null) {
-		if(l != null) {
-			if(l.pages == null || l.pages.length == 0) {
-				throw new js__$Boot_HaxeError("sprite sheet has no backing texture, please generate one");
-			}
-			if(g == null) {
-				this.groupName = null;
-				this.group = null;
-				this.frameData = null;
-			}
-			if(this.allocated && this.lib != null) {
-				this.lib.removeChild(this);
-			}
-			this.lib = l;
-			if(this.allocated) {
-				this.lib.addChild(this);
-			}
-			if(this.pivot.isUndefined) {
-				var _this = this.pivot;
-				_this.centerFactorX = this.lib.defaultCenterX;
-				_this.centerFactorY = this.lib.defaultCenterY;
-				_this.usingFactor = true;
-				_this.isUndefined = false;
-			}
-		}
-		if(g != null && g != this.groupName) {
-			this.groupName = g;
-		}
-		if(!this.destroyed && this.lib != null && this.groupName != null) {
-			var _this1 = this.lib;
-			var k = this.groupName;
-			var tmp;
-			if(k == null) {
-				tmp = _this1.currentGroup;
-			} else {
-				var _this2 = _this1.groups;
-				tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
-			}
-			this.group = tmp;
-			var _this3 = this.lib;
-			var k1 = this.groupName;
-			var g1;
-			if(k1 == null) {
-				g1 = _this3.currentGroup;
-			} else {
-				var _this4 = _this3.groups;
-				g1 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
-			}
-			this.frameData = g1 == null ? null : g1.frames[f];
-			if(this.frameData == null) {
-				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + f + ")");
-			}
-			if(this.rawTile == null) {
-				this.rawTile = this.lib.pages[this.frameData.page].clone();
-			} else {
-				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
-			}
-			this.lastPage = this.frameData.page;
-			this.setFrame(f);
-		} else {
-			this.setEmptyTexture();
-		}
-	} else {
-		this.setEmptyTexture();
-	}
-};
-$hxClasses["mt.heaps.slib.HSprite"] = mt_heaps_slib_HSprite;
-mt_heaps_slib_HSprite.__name__ = "mt.heaps.slib.HSprite";
-mt_heaps_slib_HSprite.__interfaces__ = [mt_heaps_slib_SpriteInterface];
-mt_heaps_slib_HSprite.__super__ = h2d_Drawable;
-mt_heaps_slib_HSprite.prototype = $extend(h2d_Drawable.prototype,{
-	toString: function() {
-		return "HSprite_" + this.groupName + "[" + this.frame + "]";
-	}
-	,get_anim: function() {
-		if(this._animManager == null) {
-			this._animManager = new mt_heaps_slib_AnimManager(this);
-			if(this.onAnimManAlloc != null) {
-				this.onAnimManAlloc(this._animManager);
-			}
-		}
-		return this._animManager;
-	}
-	,setEmptyTexture: function() {
-		this.rawTile = h2d_Tile.fromColor(8453888,4,4);
-	}
-	,set: function(l,g,frame,stopAllAnims) {
-		if(stopAllAnims == null) {
-			stopAllAnims = false;
-		}
-		if(frame == null) {
-			frame = 0;
-		}
-		if(l != null) {
-			if(l.pages == null || l.pages.length == 0) {
-				throw new js__$Boot_HaxeError("sprite sheet has no backing texture, please generate one");
-			}
-			if(g == null) {
-				this.groupName = null;
-				this.group = null;
-				this.frameData = null;
-			}
-			if(this.allocated && this.lib != null) {
-				this.lib.removeChild(this);
-			}
-			this.lib = l;
-			if(this.allocated) {
-				this.lib.addChild(this);
-			}
-			if(this.pivot.isUndefined) {
-				var _this = this.pivot;
-				_this.centerFactorX = this.lib.defaultCenterX;
-				_this.centerFactorY = this.lib.defaultCenterY;
-				_this.usingFactor = true;
-				_this.isUndefined = false;
-			}
-		}
-		if(g != null && g != this.groupName) {
-			this.groupName = g;
-		}
-		if(!this.destroyed && this.lib != null && this.groupName != null) {
-			if(stopAllAnims && this._animManager != null) {
-				if(this._animManager == null) {
-					this._animManager = new mt_heaps_slib_AnimManager(this);
-					if(this.onAnimManAlloc != null) {
-						this.onAnimManAlloc(this._animManager);
-					}
-				}
-				this._animManager.stopWithoutStateAnims();
-			}
-			var _this1 = this.lib;
-			var k = this.groupName;
-			var tmp;
-			if(k == null) {
-				tmp = _this1.currentGroup;
-			} else {
-				var _this2 = _this1.groups;
-				tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
-			}
-			this.group = tmp;
-			var _this3 = this.lib;
-			var k1 = this.groupName;
-			var g1;
-			if(k1 == null) {
-				g1 = _this3.currentGroup;
-			} else {
-				var _this4 = _this3.groups;
-				g1 = __map_reserved[k1] != null ? _this4.getReserved(k1) : _this4.h[k1];
-			}
-			this.frameData = g1 == null ? null : g1.frames[frame];
-			if(this.frameData == null) {
-				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + frame + ")");
-			}
-			if(this.rawTile == null) {
-				this.rawTile = this.lib.pages[this.frameData.page].clone();
-			} else {
-				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
-			}
-			this.lastPage = this.frameData.page;
-			this.setFrame(frame);
-		} else {
-			this.setEmptyTexture();
-		}
-	}
-	,setFrame: function(f) {
-		var old = this.frame;
-		this.frame = f;
-		if(!this.destroyed && this.lib != null && this.groupName != null) {
-			var prev = this.frameData;
-			var _this = this.lib;
-			var k = this.groupName;
-			var frame = this.frame;
-			var g;
-			if(k == null) {
-				g = _this.currentGroup;
-			} else {
-				var _this1 = _this.groups;
-				g = __map_reserved[k] != null ? _this1.getReserved(k) : _this1.h[k];
-			}
-			this.frameData = g == null ? null : g.frames[frame];
-			if(this.frameData == null) {
-				throw new js__$Boot_HaxeError("Unknown frame: " + this.groupName + "(" + this.frame + ")");
-			}
-			if(this.lastFrame != this.frameData.page) {
-				this.rawTile.setTexture(this.lib.pages[this.frameData.page].innerTex);
-				this.lastPage = this.frameData.page;
-			}
-			if(this.onFrameChange != null) {
-				this.onFrameChange();
-			}
-		}
-	}
-	,onAdd: function() {
-		h2d_Drawable.prototype.onAdd.call(this);
-		if(this.lib != null) {
-			this.lib.addChild(this);
-		}
-	}
-	,onRemove: function() {
-		h2d_Drawable.prototype.onRemove.call(this);
-		if(!this.destroyed) {
-			this.destroyed = true;
-			if(this.lib != null) {
-				this.lib.removeChild(this);
-			}
-			if(this._animManager != null) {
-				this._animManager.destroy();
-				this._animManager = null;
-			}
-		}
-	}
-	,getBoundsRec: function(relativeTo,out,forSize) {
-		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
-		if(!this.destroyed && this.lib != null && this.groupName != null) {
-			var fd = this.frameData;
-			this.rawTile.setPosition(fd.x,fd.y);
-			this.rawTile.setSize(fd.wid,fd.hei);
-			var _this = this.pivot;
-			if(!_this.isUndefined && !_this.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX + fd.realX | 0);
-				this.rawTile.dy = -(this.pivot.coordY + fd.realY | 0);
-			} else {
-				var _this1 = this.pivot;
-				if(!_this1.isUndefined && _this1.usingFactor) {
-					this.rawTile.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
-					this.rawTile.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
-				}
-			}
-		} else {
-			var _this2 = this.pivot;
-			if(!_this2.isUndefined && !_this2.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX | 0);
-				this.rawTile.dy = -(this.pivot.coordY | 0);
-			} else {
-				var _this3 = this.pivot;
-				if(!_this3.isUndefined && _this3.usingFactor) {
-					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
-					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
-				}
-			}
-		}
-		var tmp = this.rawTile.dx;
-		if(!this.destroyed && this.lib != null && this.groupName != null) {
-			var fd1 = this.frameData;
-			this.rawTile.setPosition(fd1.x,fd1.y);
-			this.rawTile.setSize(fd1.wid,fd1.hei);
-			var _this4 = this.pivot;
-			if(!_this4.isUndefined && !_this4.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX + fd1.realX | 0);
-				this.rawTile.dy = -(this.pivot.coordY + fd1.realY | 0);
-			} else {
-				var _this5 = this.pivot;
-				if(!_this5.isUndefined && _this5.usingFactor) {
-					this.rawTile.dx = -(fd1.realWid * this.pivot.centerFactorX + fd1.realX | 0);
-					this.rawTile.dy = -(fd1.realHei * this.pivot.centerFactorY + fd1.realY | 0);
-				}
-			}
-		} else {
-			var _this6 = this.pivot;
-			if(!_this6.isUndefined && !_this6.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX | 0);
-				this.rawTile.dy = -(this.pivot.coordY | 0);
-			} else {
-				var _this7 = this.pivot;
-				if(!_this7.isUndefined && _this7.usingFactor) {
-					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
-					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
-				}
-			}
-		}
-		var tmp1 = this.rawTile.dy;
-		if(!this.destroyed && this.lib != null && this.groupName != null) {
-			var fd2 = this.frameData;
-			this.rawTile.setPosition(fd2.x,fd2.y);
-			this.rawTile.setSize(fd2.wid,fd2.hei);
-			var _this8 = this.pivot;
-			if(!_this8.isUndefined && !_this8.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX + fd2.realX | 0);
-				this.rawTile.dy = -(this.pivot.coordY + fd2.realY | 0);
-			} else {
-				var _this9 = this.pivot;
-				if(!_this9.isUndefined && _this9.usingFactor) {
-					this.rawTile.dx = -(fd2.realWid * this.pivot.centerFactorX + fd2.realX | 0);
-					this.rawTile.dy = -(fd2.realHei * this.pivot.centerFactorY + fd2.realY | 0);
-				}
-			}
-		} else {
-			var _this10 = this.pivot;
-			if(!_this10.isUndefined && !_this10.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX | 0);
-				this.rawTile.dy = -(this.pivot.coordY | 0);
-			} else {
-				var _this11 = this.pivot;
-				if(!_this11.isUndefined && _this11.usingFactor) {
-					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
-					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
-				}
-			}
-		}
-		var tmp2 = this.rawTile.width;
-		if(!this.destroyed && this.lib != null && this.groupName != null) {
-			var fd3 = this.frameData;
-			this.rawTile.setPosition(fd3.x,fd3.y);
-			this.rawTile.setSize(fd3.wid,fd3.hei);
-			var _this12 = this.pivot;
-			if(!_this12.isUndefined && !_this12.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX + fd3.realX | 0);
-				this.rawTile.dy = -(this.pivot.coordY + fd3.realY | 0);
-			} else {
-				var _this13 = this.pivot;
-				if(!_this13.isUndefined && _this13.usingFactor) {
-					this.rawTile.dx = -(fd3.realWid * this.pivot.centerFactorX + fd3.realX | 0);
-					this.rawTile.dy = -(fd3.realHei * this.pivot.centerFactorY + fd3.realY | 0);
-				}
-			}
-		} else {
-			var _this14 = this.pivot;
-			if(!_this14.isUndefined && !_this14.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX | 0);
-				this.rawTile.dy = -(this.pivot.coordY | 0);
-			} else {
-				var _this15 = this.pivot;
-				if(!_this15.isUndefined && _this15.usingFactor) {
-					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
-					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
-				}
-			}
-		}
-		this.addBounds(relativeTo,out,tmp,tmp1,tmp2,this.rawTile.height);
-	}
-	,draw: function(ctx) {
-		if(!this.destroyed && this.lib != null && this.groupName != null) {
-			var fd = this.frameData;
-			this.rawTile.setPosition(fd.x,fd.y);
-			this.rawTile.setSize(fd.wid,fd.hei);
-			var _this = this.pivot;
-			if(!_this.isUndefined && !_this.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX + fd.realX | 0);
-				this.rawTile.dy = -(this.pivot.coordY + fd.realY | 0);
-			} else {
-				var _this1 = this.pivot;
-				if(!_this1.isUndefined && _this1.usingFactor) {
-					this.rawTile.dx = -(fd.realWid * this.pivot.centerFactorX + fd.realX | 0);
-					this.rawTile.dy = -(fd.realHei * this.pivot.centerFactorY + fd.realY | 0);
-				}
-			}
-		} else {
-			var _this2 = this.pivot;
-			if(!_this2.isUndefined && !_this2.usingFactor) {
-				this.rawTile.dx = -(this.pivot.coordX | 0);
-				this.rawTile.dy = -(this.pivot.coordY | 0);
-			} else {
-				var _this3 = this.pivot;
-				if(!_this3.isUndefined && _this3.usingFactor) {
-					this.rawTile.dx = -(this.rawTile.width * this.pivot.centerFactorX | 0);
-					this.rawTile.dy = -(this.rawTile.height * this.pivot.centerFactorY | 0);
-				}
-			}
-		}
-		this.emitTile(ctx,this.rawTile);
-	}
-	,sync: function(ctx) {
-		h2d_Drawable.prototype.sync.call(this,ctx);
-		if(this._animManager != null) {
-			if(this._animManager == null) {
-				this._animManager = new mt_heaps_slib_AnimManager(this);
-				if(this.onAnimManAlloc != null) {
-					this.onAnimManAlloc(this._animManager);
-				}
-			}
-			var _this = this._animManager;
-			var dt = !isNaN(mt_heaps_slib_SpriteLib.TMOD) ? mt_heaps_slib_SpriteLib.TMOD : ctx.elapsedTime * hxd_Timer.wantedFPS;
-			if(_this.needUpdates) {
-				_this._update(dt);
-			}
-		}
-	}
-	,__class__: mt_heaps_slib_HSprite
-});
-var mt_heaps_slib_FrameData = function(page,x,y,wid,hei,realX,realY,realWid,realHei,tile) {
-	this.page = page;
-	this.x = x;
-	this.y = y;
-	this.wid = wid;
-	this.hei = hei;
-	this.realX = realX;
-	this.realY = realY;
-	this.realWid = realWid;
-	this.realHei = realHei;
-	this.tile = tile;
-};
-$hxClasses["mt.heaps.slib.FrameData"] = mt_heaps_slib_FrameData;
-mt_heaps_slib_FrameData.__name__ = "mt.heaps.slib.FrameData";
-mt_heaps_slib_FrameData.prototype = {
-	__class__: mt_heaps_slib_FrameData
-};
-var mt_heaps_slib_LibGroup = function(id,maxWid,maxHei,frames,anim) {
-	this.id = id;
-	this.maxWid = maxWid;
-	this.maxHei = maxHei;
-	this.frames = frames;
-	this.anim = anim;
-};
-$hxClasses["mt.heaps.slib.LibGroup"] = mt_heaps_slib_LibGroup;
-mt_heaps_slib_LibGroup.__name__ = "mt.heaps.slib.LibGroup";
-mt_heaps_slib_LibGroup.prototype = {
-	__class__: mt_heaps_slib_LibGroup
-};
-var mt_heaps_slib_SLBError = $hxEnums["mt.heaps.slib.SLBError"] = { __ename__ : true, __constructs__ : ["NoGroupSelected","GroupAlreadyExists","InvalidFrameDuration","EndFrameLower","InvalidFrames","NoCurrentGroup","AnimFrameExceeds","AssetImportFailed","NotSameSLBFromBatch"]
-	,NoGroupSelected: {_hx_index:0,__enum__:"mt.heaps.slib.SLBError",toString:$estr}
-	,GroupAlreadyExists: ($_=function(g) { return {_hx_index:1,g:g,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["g"],$_)
-	,InvalidFrameDuration: ($_=function(s) { return {_hx_index:2,s:s,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
-	,EndFrameLower: ($_=function(s) { return {_hx_index:3,s:s,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
-	,InvalidFrames: ($_=function(s) { return {_hx_index:4,s:s,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["s"],$_)
-	,NoCurrentGroup: {_hx_index:5,__enum__:"mt.heaps.slib.SLBError",toString:$estr}
-	,AnimFrameExceeds: ($_=function(id,anim,frame) { return {_hx_index:6,id:id,anim:anim,frame:frame,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["id","anim","frame"],$_)
-	,AssetImportFailed: ($_=function(e) { return {_hx_index:7,e:e,__enum__:"mt.heaps.slib.SLBError",toString:$estr}; },$_.__params__ = ["e"],$_)
-	,NotSameSLBFromBatch: {_hx_index:8,__enum__:"mt.heaps.slib.SLBError",toString:$estr}
-};
-mt_heaps_slib_SLBError.__empty_constructs__ = [mt_heaps_slib_SLBError.NoGroupSelected,mt_heaps_slib_SLBError.NoCurrentGroup,mt_heaps_slib_SLBError.NotSameSLBFromBatch];
-var mt_heaps_slib_SpriteLib = function(pages,normalPages) {
-	this.groups = new haxe_ds_StringMap();
-	this.defaultCenterX = 0;
-	this.defaultCenterY = 0;
-	this.gridX = this.gridY = 16;
-	this.children = [];
-	this.pages = pages;
-	this.normalPages = normalPages;
-};
-$hxClasses["mt.heaps.slib.SpriteLib"] = mt_heaps_slib_SpriteLib;
-mt_heaps_slib_SpriteLib.__name__ = "mt.heaps.slib.SpriteLib";
-mt_heaps_slib_SpriteLib.prototype = {
-	createGroup: function(k) {
-		var _this = this.groups;
-		if(__map_reserved[k] != null ? _this.existsReserved(k) : _this.h.hasOwnProperty(k)) {
-			throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.GroupAlreadyExists(k));
-		}
-		var this1 = this.groups;
-		var value = new mt_heaps_slib_LibGroup(k,0,0,[],[]);
-		var _this1 = this1;
-		if(__map_reserved[k] != null) {
-			_this1.setReserved(k,value);
-		} else {
-			_this1.h[k] = value;
-		}
-		var tmp;
-		if(k == null) {
-			tmp = this.currentGroup;
-		} else {
-			var _this2 = this.groups;
-			tmp = __map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k];
-		}
-		this.currentGroup = tmp;
-		return this.currentGroup;
-	}
-	,sliceCustom: function(groupName,page,frame,x,y,wid,hei,realX,realY,realWid,realHei) {
-		var g;
-		var g1;
-		var g2;
-		if(groupName != null) {
-			var _this = this.groups;
-			g2 = __map_reserved[groupName] != null ? _this.existsReserved(groupName) : _this.h.hasOwnProperty(groupName);
-		} else {
-			g2 = false;
-		}
-		if(g2) {
-			var _this1 = this.groups;
-			g1 = (__map_reserved[groupName] != null ? _this1.getReserved(groupName) : _this1.h[groupName]).frames.length > 0;
-		} else {
-			g1 = false;
-		}
-		if(g1) {
-			if(groupName == null) {
-				g = this.currentGroup;
-			} else {
-				var _this2 = this.groups;
-				g = __map_reserved[groupName] != null ? _this2.getReserved(groupName) : _this2.h[groupName];
-			}
-		} else {
-			g = this.createGroup(groupName);
-		}
-		var x1 = g.maxWid;
-		g.maxWid = x1 > wid ? x1 : wid;
-		var x2 = g.maxHei;
-		g.maxHei = x2 > hei ? x2 : hei;
-		var fd = new mt_heaps_slib_FrameData(page,x,y,wid,hei,realX,realY,realWid,realHei,null);
-		g.frames[frame] = fd;
-		return fd;
-	}
-	,resliceCustom: function(groupName,frame,fd) {
-		var g;
-		var g1;
-		var g2;
-		if(groupName != null) {
-			var _this = this.groups;
-			g2 = __map_reserved[groupName] != null ? _this.existsReserved(groupName) : _this.h.hasOwnProperty(groupName);
-		} else {
-			g2 = false;
-		}
-		if(g2) {
-			var _this1 = this.groups;
-			g1 = (__map_reserved[groupName] != null ? _this1.getReserved(groupName) : _this1.h[groupName]).frames.length > 0;
-		} else {
-			g1 = false;
-		}
-		if(g1) {
-			if(groupName == null) {
-				g = this.currentGroup;
-			} else {
-				var _this2 = this.groups;
-				g = __map_reserved[groupName] != null ? _this2.getReserved(groupName) : _this2.h[groupName];
-			}
-		} else {
-			g = this.createGroup(groupName);
-		}
-		var x = g.maxWid;
-		var y = fd.wid;
-		g.maxWid = x > y ? x : y;
-		var x1 = g.maxHei;
-		var y1 = fd.hei;
-		g.maxHei = x1 > y1 ? x1 : y1;
-		g.frames[frame] = fd;
-		return fd;
-	}
-	,toString: function() {
-		var l = [];
-		var k = this.groups.keys();
-		while(k.hasNext()) {
-			var k1 = k.next();
-			var g;
-			if(k1 == null) {
-				g = this.currentGroup;
-			} else {
-				var _this = this.groups;
-				g = __map_reserved[k1] != null ? _this.getReserved(k1) : _this.h[k1];
-			}
-			l.push(k1 + " (" + g.maxWid + "x" + g.maxHei + ")" + (g.frames.length > 1 ? " " + g.frames.length + "f" : "") + (g.anim.length > 1 ? " animated(" + g.anim.length + "f)" : ""));
-		}
-		l.sort(function(a,b) {
-			return Reflect.compare(a,b);
-		});
-		return "| " + l.join("\n| ");
-	}
-	,addChild: function(s) {
-		this.children.push(s);
-	}
-	,removeChild: function(s) {
-		HxOverrides.remove(this.children,s);
-	}
-	,getTile: function(g,frame,px,py) {
-		if(py == null) {
-			py = 0.0;
-		}
-		if(px == null) {
-			px = 0.0;
-		}
-		if(frame == null) {
-			frame = 0;
-		}
-		var g1;
-		if(g == null) {
-			g1 = this.currentGroup;
-		} else {
-			var _this = this.groups;
-			g1 = __map_reserved[g] != null ? _this.getReserved(g) : _this.h[g];
-		}
-		var fd = g1 == null ? null : g1.frames[frame];
-		if(fd == null) {
-			throw new js__$Boot_HaxeError("Unknown group " + g + "#" + frame + "!");
-		}
-		var t = this.pages[fd.page].clone();
-		return this.updTile(t,g,frame,px,py);
-	}
-	,updTile: function(t,g,frame,px,py) {
-		if(py == null) {
-			py = 0.0;
-		}
-		if(px == null) {
-			px = 0.0;
-		}
-		if(frame == null) {
-			frame = 0;
-		}
-		var g1;
-		if(g == null) {
-			g1 = this.currentGroup;
-		} else {
-			var _this = this.groups;
-			g1 = __map_reserved[g] != null ? _this.getReserved(g) : _this.h[g];
-		}
-		var fd = g1 == null ? null : g1.frames[frame];
-		if(fd == null) {
-			throw new js__$Boot_HaxeError("Unknown group " + g + "#" + frame + "!");
-		}
-		t.setPosition(fd.x,fd.y);
-		t.setSize(fd.wid,fd.hei);
-		t.dx = -(fd.realWid * px + fd.realX | 0);
-		t.dy = -(fd.realHei * py + fd.realY | 0);
-		return t;
-	}
-	,getTileRandom: function(g,px,py,rndFunc) {
-		if(py == null) {
-			py = 0.0;
-		}
-		if(px == null) {
-			px = 0.0;
-		}
-		var tmp;
-		var tmp1;
-		if(g != null) {
-			var _this = this.groups;
-			tmp1 = __map_reserved[g] != null ? _this.existsReserved(g) : _this.h.hasOwnProperty(g);
-		} else {
-			tmp1 = false;
-		}
-		if(tmp1) {
-			var _this1 = this.groups;
-			tmp = (__map_reserved[g] != null ? _this1.getReserved(g) : _this1.h[g]).frames.length > 0;
-		} else {
-			tmp = false;
-		}
-		if(!tmp) {
-			throw new js__$Boot_HaxeError("Unknown group " + g);
-		}
-		var tmp2;
-		if(g == null) {
-			tmp2 = this.currentGroup;
-		} else {
-			var _this2 = this.groups;
-			tmp2 = __map_reserved[g] != null ? _this2.getReserved(g) : _this2.h[g];
-		}
-		return this.getTile(g,(rndFunc == null ? Std.random : rndFunc)(tmp2.frames.length),px,py);
-	}
-	,__defineAnim: function(group,anim) {
-		if(this.currentGroup == null && group == null) {
-			throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.NoCurrentGroup);
-		}
-		if(group != null) {
-			var tmp;
-			if(group == null) {
-				tmp = this.currentGroup;
-			} else {
-				var _this = this.groups;
-				tmp = __map_reserved[group] != null ? _this.getReserved(group) : _this.h[group];
-			}
-			this.currentGroup = tmp;
-		}
-		var _g = 0;
-		while(_g < anim.length) {
-			var f = anim[_g];
-			++_g;
-			if(f >= this.currentGroup.frames.length) {
-				throw new js__$Boot_HaxeError(mt_heaps_slib_SLBError.AnimFrameExceeds(this.currentGroup.id,"[" + anim.join(",") + "] " + this.currentGroup.frames.length,f));
-			}
-		}
-		this.currentGroup.anim = anim;
-	}
-	,__class__: mt_heaps_slib_SpriteLib
-};
-var mt_heaps_slib_SpritePivot = function() {
-	this.isUndefined = true;
-};
-$hxClasses["mt.heaps.slib.SpritePivot"] = mt_heaps_slib_SpritePivot;
-mt_heaps_slib_SpritePivot.__name__ = "mt.heaps.slib.SpritePivot";
-mt_heaps_slib_SpritePivot.prototype = {
-	__class__: mt_heaps_slib_SpritePivot
-};
-var mt_heaps_slib_assets_Atlas = function() { };
-$hxClasses["mt.heaps.slib.assets.Atlas"] = mt_heaps_slib_assets_Atlas;
-mt_heaps_slib_assets_Atlas.__name__ = "mt.heaps.slib.assets.Atlas";
-mt_heaps_slib_assets_Atlas.ltick = function() {
-	if(mt_heaps_slib_assets_Atlas.LOADING_TICK_FUN != null) {
-		mt_heaps_slib_assets_Atlas.LOADING_TICK_FUN();
-	}
-};
-mt_heaps_slib_assets_Atlas.load = function(atlasPath,onReload,notZeroBaseds,properties) {
-	var notZeroMap = new haxe_ds_StringMap();
-	if(notZeroBaseds != null) {
-		var _g = 0;
-		while(_g < notZeroBaseds.length) {
-			var id = notZeroBaseds[_g];
-			++_g;
-			if(__map_reserved[id] != null) {
-				notZeroMap.setReserved(id,true);
-			} else {
-				notZeroMap.h[id] = true;
-			}
-		}
-	}
-	var propertiesMap = new haxe_ds_StringMap();
-	if(properties != null) {
-		var _g1 = 0;
-		var _g11 = properties.length;
-		while(_g1 < _g11) {
-			var i = _g1++;
-			var value = properties.length - 1 - i;
-			var key = properties[i];
-			if(__map_reserved[key] != null) {
-				propertiesMap.setReserved(key,value);
-			} else {
-				propertiesMap.h[key] = value;
-			}
-		}
-	}
-	var res = hxd_Res.load(atlasPath);
-	var basePath = atlasPath.indexOf("/") < 0 ? "" : HxOverrides.substr(atlasPath,0,atlasPath.lastIndexOf("/") + 1);
-	var atlas = res.to(hxd_res_Atlas);
-	var lib = mt_heaps_slib_assets_Atlas.convertToSlib(atlas,notZeroMap,propertiesMap,atlasPath);
-	res.watch(function() {
-		mt_heaps_slib_assets_Atlas.convertToSlib(atlas,notZeroMap,propertiesMap,atlasPath);
-		if(onReload != null) {
-			onReload();
-		}
-	});
-	return lib;
-};
-mt_heaps_slib_assets_Atlas.convertToSlib = function(atlas,notZeroBaseds,properties,atlasName) {
-	mt_heaps_slib_assets_Atlas.ltick();
-	var contents = atlas.getContents();
-	mt_heaps_slib_assets_Atlas.ltick();
-	var bestVariants = new haxe_ds_StringMap();
-	var propertiesReg = new EReg("(.*)((\\.[a-z_\\-]+)+)$","gi");
-	var rawName = contents.keys();
-	while(rawName.hasNext()) {
-		var rawName1 = rawName.next();
-		var groupName = rawName1;
-		var groupProps = [];
-		if(propertiesReg.match(rawName1)) {
-			var str = HxOverrides.substr(propertiesReg.matched(2),1,null);
-			groupProps = str.split(".");
-			groupName = propertiesReg.matched(1);
-		}
-		var score = 0;
-		if(groupProps.length > 0) {
-			var _g = 0;
-			var _g1 = groupProps.length;
-			while(_g < _g1) {
-				var i = _g++;
-				var key = groupProps[i];
-				var prio = __map_reserved[key] != null ? properties.getReserved(key) : properties.h[key];
-				if(prio != null) {
-					score |= 1 << prio;
-				}
-			}
-			if(score == 0) {
-				continue;
-			}
-		}
-		var e = __map_reserved[groupName] != null ? bestVariants.getReserved(groupName) : bestVariants.h[groupName];
-		if(e == null) {
-			var value = { rawName : rawName1, score : score};
-			if(__map_reserved[groupName] != null) {
-				bestVariants.setReserved(groupName,value);
-			} else {
-				bestVariants.h[groupName] = value;
-			}
-		} else if(score > e.score) {
-			e.rawName = rawName1;
-			e.score = score;
-		}
-	}
-	var pageMap = new haxe_ds_ObjectMap();
-	var pages = [];
-	var group = new haxe_ds__$StringMap_StringMapIterator(contents,contents.arrayKeys());
-	while(group.hasNext()) {
-		var group1 = group.next();
-		var _g11 = 0;
-		while(_g11 < group1.length) {
-			var frame = group1[_g11];
-			++_g11;
-			var tex = frame.t.innerTex;
-			var page = pageMap.h[tex.__id__];
-			if(page == null) {
-				pageMap.set(tex,pages.length);
-				mt_heaps_slib_assets_Atlas.ltick();
-				pages.push(h2d_Tile.fromTexture(tex));
-				mt_heaps_slib_assets_Atlas.ltick();
-			}
-		}
-	}
-	var nrmPages = [];
-	var _g2 = 0;
-	var _g12 = pages.length;
-	while(_g2 < _g12) {
-		var i1 = _g2++;
-		var name = pages[i1].innerTex.name;
-		var nrmName = HxOverrides.substr(name,0,name.length - 4) + "_n.png";
-		mt_heaps_slib_assets_Atlas.ltick();
-		nrmPages[i1] = hxd_res_Loader.currentInstance.exists(nrmName) ? h2d_Tile.fromTexture(hxd_Res.load(nrmName).toTexture()) : null;
-		mt_heaps_slib_assets_Atlas.ltick();
-	}
-	var lib = new mt_heaps_slib_SpriteLib(pages,nrmPages);
-	var frameReg = new EReg("(.*?)(_?)([0-9]+)$","gi");
-	var numReg = new EReg("^[0-9]+$","");
-	var groupName1 = bestVariants.keys();
-	while(groupName1.hasNext()) {
-		var groupName2 = groupName1.next();
-		var rawName2 = (__map_reserved[groupName2] != null ? bestVariants.getReserved(groupName2) : bestVariants.h[groupName2]).rawName;
-		var content = __map_reserved[rawName2] != null ? contents.getReserved(rawName2) : contents.h[rawName2];
-		if(content.length == 1) {
-			var e1 = content[0];
-			var page1 = pageMap.h[e1.t.innerTex.__id__];
-			var k = groupName2;
-			var f = 0;
-			var regBoth = false;
-			if(frameReg.match(k)) {
-				k = frameReg.matched(1);
-				f = Std.parseInt(frameReg.matched(3));
-				if(__map_reserved[k] != null ? notZeroBaseds.existsReserved(k) : notZeroBaseds.h.hasOwnProperty(k)) {
-					--f;
-				}
-				if(frameReg.matched(2).length == 0) {
-					regBoth = true;
-				}
-			}
-			var fd = lib.sliceCustom(k,page1,f,e1.t.x,e1.t.y,e1.t.width,e1.t.height,-e1.t.dx,-e1.t.dy,e1.width,e1.height);
-			if(regBoth) {
-				lib.resliceCustom(groupName2,0,fd);
-			}
-		} else {
-			var k1 = groupName2;
-			if(k1.indexOf("/") >= 0) {
-				k1 = HxOverrides.substr(k1,k1.lastIndexOf("/") + 1,null);
-			}
-			var _g21 = 0;
-			var _g3 = content.length;
-			while(_g21 < _g3) {
-				var i2 = _g21++;
-				var e2 = content[i2];
-				var page2 = pageMap.h[e2.t.innerTex.__id__];
-				lib.sliceCustom(k1,page2,i2,e2.t.x,e2.t.y,e2.t.width,e2.t.height,-e2.t.dx,-e2.t.dy,e2.width,e2.height);
-			}
-		}
-	}
-	mt_heaps_slib_assets_Atlas.ltick();
-	var id = lib.groups.keys();
-	while(id.hasNext()) {
-		var id1 = id.next();
-		var tmp;
-		var tmp1;
-		if(id1 != null) {
-			var _this = lib.groups;
-			tmp1 = __map_reserved[id1] != null ? _this.existsReserved(id1) : _this.h.hasOwnProperty(id1);
-		} else {
-			tmp1 = false;
-		}
-		if(tmp1) {
-			var _this1 = lib.groups;
-			tmp = (__map_reserved[id1] != null ? _this1.getReserved(id1) : _this1.h[id1]).frames.length > 0;
-		} else {
-			tmp = false;
-		}
-		if(!tmp) {
-			throw new js__$Boot_HaxeError("Unknown group " + id1);
-		}
-		var nframes;
-		if(id1 == null) {
-			nframes = lib.currentGroup;
-		} else {
-			var _this2 = lib.groups;
-			nframes = __map_reserved[id1] != null ? _this2.getReserved(id1) : _this2.h[id1];
-		}
-		var nframes1 = nframes.frames.length;
-		var a = mt_heaps_slib_assets_Atlas.CACHE_ANIMS[nframes1];
-		if(a == null) {
-			var _g22 = [];
-			var _g31 = 0;
-			var _g4 = nframes1;
-			while(_g31 < _g4) {
-				var i3 = _g31++;
-				_g22.push(i3);
-			}
-			a = _g22;
-			if(nframes1 < 256) {
-				mt_heaps_slib_assets_Atlas.CACHE_ANIMS[nframes1] = a;
-			}
-		}
-		lib.__defineAnim(id1,a);
-		var p = id1.lastIndexOf("/");
-		if(p >= 0) {
-			var id2 = HxOverrides.substr(id1,p + 1,null);
-			if(id2 != null && id2.length > 0 && !numReg.match(id2)) {
-				var _this3 = lib.groups;
-				if(__map_reserved[id2] != null ? _this3.existsReserved(id2) : _this3.h.hasOwnProperty(id2)) {
-					haxe_Log.trace("Warning, duplicate short name: " + id2 + " in " + atlasName + ":" + id1,{ fileName : "mt/heaps/slib/assets/Atlas.hx", lineNumber : 187, className : "mt.heaps.slib.assets.Atlas", methodName : "convertToSlib"});
-				}
-				var this1 = lib.groups;
-				var _this4 = lib.groups;
-				var value1 = __map_reserved[id1] != null ? _this4.getReserved(id1) : _this4.h[id1];
-				var _this5 = this1;
-				if(__map_reserved[id2] != null) {
-					_this5.setReserved(id2,value1);
-				} else {
-					_this5.h[id2] = value1;
-				}
-			}
-		}
-	}
-	mt_heaps_slib_assets_Atlas.ltick();
-	return lib;
-};
 function $getIterator(o) { if( o instanceof Array ) return HxOverrides.iter(o); else return o.iterator(); }
 var $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
@@ -46099,10 +46091,10 @@ Const.DP_FX_TOP = Const._inc++;
 Const.DP_UI = Const._inc++;
 Entity.ALL = [];
 Entity.GC = [];
-mt_Process.CUSTOM_STAGE_WIDTH = -1;
-mt_Process.CUSTOM_STAGE_HEIGHT = -1;
-mt_Process.UNIQ_ID = 0;
-mt_Process.ROOTS = [];
+dn_Process.CUSTOM_STAGE_WIDTH = -1;
+dn_Process.CUSTOM_STAGE_HEIGHT = -1;
+dn_Process.UNIQ_ID = 0;
+dn_Process.ROOTS = [];
 GameCinematic.ALL = [];
 Lang.CUR = "??";
 Xml.Element = 0;
@@ -46112,6 +46104,20 @@ Xml.Comment = 3;
 Xml.DocType = 4;
 Xml.ProcessingInstruction = 5;
 Xml.Document = 6;
+dn_Cooldown.__meta__ = { obj : { indexes : ["lifted","turboLock","stun","aiLock","targetPickLock","suiciding","skipLock","gameEndLock","onGroundRecently","lifting","jump","catchImmunity","trigger","shaking","lighten","aggro","stillInteresting","targetPrio","keepTarget","flyUpLock","slowFlyStart","wanderAroundLock","jumpLock","hopLimit","doubleJumpLock","extendJump","kick","emitterLife","emitterTick","fx","tick","lightPush","maintainGrab","kickLock-","kickLock","pickLightTarget","exitCheck","turbo","walkLock","wander","stuckWallLimit","scrollLock","keepText","exitWarn","check"]}};
+dn_Tweenie.DEFAULT_DURATION = 1000.0;
+dn_heaps_Controller.UNIQ_ID = 0;
+dn_heaps_Controller.LONG_PRESS = 0.35;
+dn_heaps_Controller.SHORT_PRESS = 0.17;
+dn_heaps_Controller.ALL = [];
+hxd_Pad.CONFIG_JS_STD = { A : 0, B : 1, X : 2, Y : 3, LB : 4, RB : 5, LT : 6, RT : 7, back : 8, start : 9, analogClick : 10, ranalogClick : 11, dpadUp : 12, dpadDown : 13, dpadLeft : 14, dpadRight : 15, analogX : 17, analogY : 18, ranalogX : 19, ranalogY : 20, names : ["A","B","X","Y","LB","RB","LT","RT","Select","Start","LCLK","RCLK","DUp","DDown","DLeft","DRight","LX","LY","RX","RY"]};
+hxd_Pad.DEFAULT_CONFIG = hxd_Pad.CONFIG_JS_STD;
+hxd_Pad.initDone = false;
+hxd_Pad.pads = new haxe_ds_IntMap();
+dn_heaps_GamePad.ALL = [];
+dn_heaps_GamePad.MAPPING = [hxd_Pad.DEFAULT_CONFIG.A,hxd_Pad.DEFAULT_CONFIG.B,hxd_Pad.DEFAULT_CONFIG.X,hxd_Pad.DEFAULT_CONFIG.Y,hxd_Pad.DEFAULT_CONFIG.back,hxd_Pad.DEFAULT_CONFIG.start,hxd_Pad.DEFAULT_CONFIG.LT,hxd_Pad.DEFAULT_CONFIG.RT,hxd_Pad.DEFAULT_CONFIG.LB,hxd_Pad.DEFAULT_CONFIG.RB,hxd_Pad.DEFAULT_CONFIG.analogClick,hxd_Pad.DEFAULT_CONFIG.ranalogClick,hxd_Pad.DEFAULT_CONFIG.dpadUp,hxd_Pad.DEFAULT_CONFIG.dpadDown,hxd_Pad.DEFAULT_CONFIG.dpadLeft,hxd_Pad.DEFAULT_CONFIG.dpadRight,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogY,hxd_Pad.DEFAULT_CONFIG.ranalogY,hxd_Pad.DEFAULT_CONFIG.ranalogY];
+dn_heaps_slib_SpriteLib.TMOD = NaN;
+dn_heaps_slib_assets_Atlas.CACHE_ANIMS = [];
 en_Cadaver.ALL = [];
 en_CinematicTrigger.ALL = [];
 en_Door.ALL = [];
@@ -46233,10 +46239,6 @@ haxe_zip_InflateImpl.CODE_LENGTHS_POS = [16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,
 hxd_Key.initDone = false;
 hxd_Key.keyPressed = [];
 hxd_Key.ALLOW_KEY_REPEAT = false;
-hxd_Pad.CONFIG_JS_STD = { A : 0, B : 1, X : 2, Y : 3, LB : 4, RB : 5, LT : 6, RT : 7, back : 8, start : 9, analogClick : 10, ranalogClick : 11, dpadUp : 12, dpadDown : 13, dpadLeft : 14, dpadRight : 15, analogX : 17, analogY : 18, ranalogX : 19, ranalogY : 20, names : ["A","B","X","Y","LB","RB","LT","RT","Select","Start","LCLK","RCLK","DUp","DDown","DLeft","DRight","LX","LY","RX","RY"]};
-hxd_Pad.DEFAULT_CONFIG = hxd_Pad.CONFIG_JS_STD;
-hxd_Pad.initDone = false;
-hxd_Pad.pads = new haxe_ds_IntMap();
 hxd_Timer.wantedFPS = 60.;
 hxd_Timer.maxDeltaTime = 0.5;
 hxd_Timer.smoothFactor = 0.95;
@@ -46321,16 +46323,6 @@ hxsl__$Linker_ShaderInfos.UID = 0;
 hxsl_Printer.SWIZ = ["x","y","z","w"];
 hxsl_RuntimeShader.UID = 0;
 hxsl_SharedShader.UNROLL_LOOPS = false;
-mt_Cooldown.__meta__ = { obj : { indexes : ["lifted","turboLock","stun","aiLock","targetPickLock","suiciding","skipLock","gameEndLock","onGroundRecently","lifting","jump","catchImmunity","trigger","shaking","lighten","aggro","stillInteresting","targetPrio","keepTarget","flyUpLock","slowFlyStart","wanderAroundLock","jumpLock","hopLimit","doubleJumpLock","extendJump","kick","emitterLife","emitterTick","fx","tick","lightPush","maintainGrab","kickLock-","kickLock","pickLightTarget","exitCheck","turbo","walkLock","wander","stuckWallLimit","scrollLock","keepText","exitWarn","check"]}};
-mt_deepnight_Tweenie.DEFAULT_DURATION = 1000.0;
-mt_heaps_Controller.UNIQ_ID = 0;
-mt_heaps_Controller.LONG_PRESS = 0.35;
-mt_heaps_Controller.SHORT_PRESS = 0.17;
-mt_heaps_Controller.ALL = [];
-mt_heaps_GamePad.ALL = [];
-mt_heaps_GamePad.MAPPING = [hxd_Pad.DEFAULT_CONFIG.A,hxd_Pad.DEFAULT_CONFIG.B,hxd_Pad.DEFAULT_CONFIG.X,hxd_Pad.DEFAULT_CONFIG.Y,hxd_Pad.DEFAULT_CONFIG.back,hxd_Pad.DEFAULT_CONFIG.start,hxd_Pad.DEFAULT_CONFIG.LT,hxd_Pad.DEFAULT_CONFIG.RT,hxd_Pad.DEFAULT_CONFIG.LB,hxd_Pad.DEFAULT_CONFIG.RB,hxd_Pad.DEFAULT_CONFIG.analogClick,hxd_Pad.DEFAULT_CONFIG.ranalogClick,hxd_Pad.DEFAULT_CONFIG.dpadUp,hxd_Pad.DEFAULT_CONFIG.dpadDown,hxd_Pad.DEFAULT_CONFIG.dpadLeft,hxd_Pad.DEFAULT_CONFIG.dpadRight,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogX,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.analogY,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogX,hxd_Pad.DEFAULT_CONFIG.ranalogY,hxd_Pad.DEFAULT_CONFIG.ranalogY,hxd_Pad.DEFAULT_CONFIG.ranalogY];
-mt_heaps_slib_SpriteLib.TMOD = NaN;
-mt_heaps_slib_assets_Atlas.CACHE_ANIMS = [];
 {
 	Boot.main();
 	haxe_EntryPoint.run();
