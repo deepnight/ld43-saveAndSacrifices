@@ -45,7 +45,7 @@ class Main extends dn.Process {
 		Lang.init("en");
 		Assets.init();
 		Data.load( hxd.Res.data.entry.getText() );
-		new dn.GameFocusHelper(Boot.ME.s2d, Assets.font);
+		new dn.heaps.GameFocusHelper(Boot.ME.s2d, Assets.font);
 
 		// Console
 		new Console(Assets.font, s);
