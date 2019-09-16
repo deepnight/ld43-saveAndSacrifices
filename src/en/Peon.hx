@@ -32,7 +32,7 @@ class Peon extends Entity {
         spr.anim.registerStateAnim(skinId+"StunGround",3, function() return cd.has("stun"));
         spr.anim.registerStateAnim(skinId+"JumpUp",2, function() return !onGround && dy<0 );
         spr.anim.registerStateAnim(skinId+"JumpDown",2, function() return !onGround && dy>0 );
-        spr.anim.registerStateAnim(skinId+"Run",1, function() return target!=null && !grabbing && !Mob.anyoneHolds(this) && !aiLocked() && MLib.fabs(dx)>=0.03*speed );
+        spr.anim.registerStateAnim(skinId+"Run",1, function() return target!=null && !grabbing && !Mob.anyoneHolds(this) && !aiLocked() && M.fabs(dx)>=0.03*speed );
         spr.anim.registerStateAnim(skinId+"Idle",0);
     }
 
@@ -116,7 +116,7 @@ class Peon extends Entity {
         dh.score(function(e) return -e.cx);
         var nextLight = dh.getBest();
         if( nextLight!=null ) {
-            var dh = new DecisionHelper(mt.deepnight.Bresenham.getDisc(nextLight.cx, nextLight.cy, Std.int(nextLight.radius/Const.GRID)));
+            var dh = new DecisionHelper(dn.Bresenham.getDisc(nextLight.cx, nextLight.cy, Std.int(nextLight.radius/Const.GRID)));
             dh.keepOnly( function(pt) return !level.hasColl(pt.x,pt.y) && level.hasColl(pt.x,pt.y+1) );
             dh.score( function(pt) return -Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)*0.25 );
             dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)<=2 ? -4 : 0 );
@@ -187,7 +187,7 @@ class Peon extends Entity {
                 if( onGround && target.cy<cy-1 && ( dir==1 && xr>=0.6 || dir==-1 && xr<=0.4 ) && !cd.hasSetS("jump",rnd(0.3,0.8)) ) {
                     dy = -jumpPow;
                     dir = target.cx<cx ? -1 : 1;
-                    if( target.cy==cy-1 && MLib.fabs(xr-0.5)<=0.2 )
+                    if( target.cy==cy-1 && M.fabs(xr-0.5)<=0.2 )
                         dx = dir*0.1;
                     cd.setS("walkLock", 1);
                 }
@@ -198,7 +198,7 @@ class Peon extends Entity {
                 target = null;
 
             // Pick next point in path
-            if( target!=null && cx==target.cx && cy==target.cy && MLib.fabs(xr-0.5)<=0.1 ) {
+            if( target!=null && cx==target.cx && cy==target.cy && M.fabs(xr-0.5)<=0.1 ) {
                 if( path.length==0 )
                     target = null;
                 else {
@@ -219,7 +219,7 @@ class Peon extends Entity {
             if( isLiftingSomeone() )
                 targetXr = xr;
              var s = speed * 0.004 * (onGround?1:0.5);
-            if( MLib.fabs(xr-targetXr)>=0.1 ) {
+            if( M.fabs(xr-targetXr)>=0.1 ) {
                 if( targetXr>xr ) {
                     dir = 1;
                     dx+=s*tmod;
@@ -263,7 +263,7 @@ class Peon extends Entity {
 
         // Stuck in wall
         if( level.hasColl(cx,cy) && !Mob.anyoneHolds(this) && !cd.hasSetS("stuckWallLimit",0.5) ) {
-            var dh = new DecisionHelper( mt.deepnight.Bresenham.getDisc(cx,cy,3) );
+            var dh = new DecisionHelper( dn.Bresenham.getDisc(cx,cy,3) );
             dh.keepOnly( function(pt) return !level.hasColl(pt.x,pt.y) && level.hasColl(pt.x,pt.y+1) );
             dh.score( function(pt) return -Lib.distance(cx,cy,pt.x,pt.y) );
             var pt = dh.getBest();

@@ -11,12 +11,12 @@ class Boot extends hxd.App {
 		ME = this;
 		hxd.Timer.wantedFPS = Const.FPS;
 		new Main(s2d);
-		mt.Process.resizeAll();
+		dn.Process.resizeAll();
 	}
 
 	override function onResize() {
 		super.onResize();
-		mt.Process.resizeAll();
+		dn.Process.resizeAll();
 	}
 
 	var speed = 1.0;
@@ -33,8 +33,8 @@ class Boot extends hxd.App {
 		#if debug
 		tmod *= hxd.Key.isDown(hxd.Key.NUMPAD_ADD) || Main.ME!=null && Main.ME.ca.ltDown() ? 5 : 1;
 		#end
-		mt.heaps.Controller.beforeUpdate();
-		mt.Process.updateAll(tmod);
+		dn.heaps.Controller.beforeUpdate();
+		dn.Process.updateAll(tmod);
 	}
 }
 

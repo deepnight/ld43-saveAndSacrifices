@@ -1,12 +1,10 @@
-import mt.Process;
-import mt.MLib;
-import mt.deepnight.CdbHelper;
+import dn.CdbHelper;
 import hxd.Key;
 
-class Game extends mt.Process {
+class Game extends dn.Process {
 	public static var ME : Game;
 
-	public var ca : mt.heaps.Controller.ControllerAccess;
+	public var ca : dn.heaps.Controller.ControllerAccess;
 	public var hero : en.h.Ghost;
 	public var level : Level;
 	public var fx : Fx;
@@ -65,8 +63,8 @@ class Game extends mt.Process {
 	function renderBg() {
 		bg.clear();
 		var t = Assets.gameElements.getTile("gradient");
-		var nx = MLib.ceil( w()/Const.SCALE / t.width );
-		var ny = MLib.ceil( h()/Const.SCALE / t.height );
+		var nx = M.ceil( w()/Const.SCALE / t.width );
+		var ny = M.ceil( h()/Const.SCALE / t.height );
 		for(x in 0...nx)
 		for(y in 0...ny)
 			bg.add(x*t.width, y*t.height, t);
@@ -104,7 +102,7 @@ class Game extends mt.Process {
 
         var bg = new h2d.ScaleGrid(Assets.gameElements.getTile("dialog"), 4,4, f);
         f.getProperties(bg).isAbsolute = true;
-        bg.colorMatrix = mt.deepnight.Color.getColorizeMatrixH2d(c);
+        bg.colorMatrix = dn.Color.getColorizeMatrixH2d(c);
 
         f.onAfterReflow = function() {
             bg.width = f.outerWidth;

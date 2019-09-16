@@ -1,12 +1,10 @@
-import mt.Process;
-import mt.MLib;
 import Data;
 import hxd.Key;
 
-class Main extends mt.Process {
+class Main extends dn.Process {
 	public static var ME : Main;
-	public var controller : mt.heaps.Controller;
-	public var ca : mt.heaps.Controller.ControllerAccess;
+	public var controller : dn.heaps.Controller;
+	public var ca : dn.heaps.Controller.ControllerAccess;
 
 	public function new(s:h2d.Scene) {
 		super();
@@ -47,13 +45,13 @@ class Main extends mt.Process {
 		Lang.init("en");
 		Assets.init();
 		Data.load( hxd.Res.data.entry.getText() );
-		new mt.deepnight.GameFocusHelper(Boot.ME.s2d, Assets.font);
+		new dn.GameFocusHelper(Boot.ME.s2d, Assets.font);
 
 		// Console
 		new Console(Assets.font, s);
 
 		// Game controller
-		controller = new mt.heaps.Controller(s);
+		controller = new dn.heaps.Controller(s);
 		ca = controller.createAccess("main");
 		controller.bind(AXIS_LEFT_X_NEG, Key.LEFT, Key.Q, Key.A);
 		controller.bind(AXIS_LEFT_X_POS, Key.RIGHT, Key.D);
@@ -83,7 +81,7 @@ class Main extends mt.Process {
 
 		// Auto scaling
 		if( Const.AUTO_SCALE_TARGET_HEIGHT>0 )
-			Const.SCALE = MLib.ceil( h()/Const.AUTO_SCALE_TARGET_HEIGHT );
+			Const.SCALE = M.ceil( h()/Const.AUTO_SCALE_TARGET_HEIGHT );
 		root.setScale(Const.SCALE);
 	}
 

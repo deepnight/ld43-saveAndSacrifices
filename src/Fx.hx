@@ -1,12 +1,12 @@
 import h2d.Sprite;
-import mt.heaps.HParticle;
-import mt.deepnight.Lib;
-import mt.deepnight.Color;
-import mt.deepnight.Tweenie;
-import mt.MLib;
+import dn.heaps.HParticle;
+import dn.Lib;
+import dn.Color;
+import dn.Tweenie;
 
 
-class Fx extends mt.Process {
+
+class Fx extends dn.Process {
 	public var pool : ParticlePool;
 
 	public var bgAddSb    : h2d.SpriteBatch;
@@ -357,7 +357,7 @@ class Fx extends mt.Process {
 
 	public function showCoord(cx:Int, cy:Int, ?sec=6.0, ?c=0x2fb2e3) {
 		var freq = 0.4;
-		var n = MLib.ceil(sec/freq);
+		var n = M.ceil(sec/freq);
 		for(i in 0...n) {
 			var p = allocTopAdd(getTile("square"), (cx+0.5)*Const.GRID, (cy+0.5)*Const.GRID);
 			p.colorize(c);
@@ -382,7 +382,7 @@ class Fx extends mt.Process {
 	public function gibs(x:Float, y:Float) {
 		for(i in 0...20) {
 			var p = allocBgNormal(getTile("gib"), x+rnd(0,10,true), y+rnd(0,5,true));
-			p.colorize(mt.deepnight.Color.interpolateInt(0x6f0d0d, 0xaf3030, rnd(0,1)));
+			p.colorize(dn.Color.interpolateInt(0x6f0d0d, 0xaf3030, rnd(0,1)));
 			p.setFadeS(rnd(0.7,1),0,rnd(3,5));
 			p.dx = rnd(0,1,true);
 			p.dy = -rnd(2,5);

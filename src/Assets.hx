@@ -1,5 +1,5 @@
-import mt.heaps.slib.*;
-// import mt.deepnight.Sfx;
+import dn.heaps.slib.*;
+// import dn.Sfx;
 
 class Assets {
 	// public static var SFX = Sfx.importDirectory("sfx");
@@ -24,7 +24,7 @@ class Assets {
 		// Sfx.toggleMuteGroup(1);
 		// #end
 
-		gameElements = mt.heaps.slib.assets.Atlas.load("gameElements.atlas");
+		gameElements = dn.heaps.slib.assets.Atlas.load("gameElements.atlas");
 		gameElements.defineAnim("peonTaken", "0-1(6)");
 		gameElements.defineAnim("peonRun", "0(4),1(10),0(4),2(7)");
 		gameElements.defineAnim("peonStunRise", "0(7),1(7)");

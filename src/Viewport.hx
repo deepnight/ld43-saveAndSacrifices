@@ -1,7 +1,7 @@
-import mt.deepnight.Lib;
-import mt.MLib;
+import dn.Lib;
 
-class Viewport extends mt.Process {
+
+class Viewport extends dn.Process {
 	var game(get,never) : Game; inline function get_game() return Game.ME;
 	var level(get,never) : Level; inline function get_level() return Game.ME.level;
 
@@ -26,11 +26,11 @@ class Viewport extends mt.Process {
 	inline function get_screenHei() return Boot.ME.s2d.height;
 
 	inline function get_wid() {
-		return MLib.ceil( Boot.ME.s2d.width / Const.SCALE );
+		return M.ceil( Boot.ME.s2d.width / Const.SCALE );
 	}
 
 	inline function get_hei() {
-		return MLib.ceil( Boot.ME.s2d.height / Const.SCALE );
+		return M.ceil( Boot.ME.s2d.height / Const.SCALE );
 	}
 
 
@@ -56,12 +56,12 @@ class Viewport extends mt.Process {
 		var ty = target.centerY + offY + debugOffY;
 
 		var a = Math.atan2(ty-y, tx-x);
-		var d = mt.deepnight.Lib.distance(x, y, tx, ty);
+		var d = dn.Lib.distance(x, y, tx, ty);
 		var deadZoneX = 60;
 		var deadZoneY = 30;
-		if( MLib.fabs(x-tx)>=deadZoneX || MLib.fabs(y-ty)>=deadZoneY ) {
-			var s = 0.5 * MLib.fclamp((d-deadZoneY)/200,0,1);
-			// var s = 0.5 * MLib.fclamp((d-deadZone)/200,0,1);
+		if( M.fabs(x-tx)>=deadZoneX || M.fabs(y-ty)>=deadZoneY ) {
+			var s = 0.5 * M.fclamp((d-deadZoneY)/200,0,1);
+			// var s = 0.5 * M.fclamp((d-deadZone)/200,0,1);
 			dx+=Math.cos(a)*s*dt;
 			dy+=Math.sin(a)*s*dt;
 		}
@@ -79,7 +79,7 @@ class Viewport extends mt.Process {
 		// 	dx*=0.7;
 		// 	dy*=0.7;
 		// }
-		//x = MLib.fclamp(x,-screenWid,0);
+		//x = M.fclamp(x,-screenWid,0);
 		var prioCenter = 0;
 		game.scroller.x = Std.int( -(x+prioCenter*level.wid*0.5*Const.GRID)/(1+prioCenter) + wid*0.5 );
 		game.scroller.y = Std.int( -(y+prioCenter*level.hei*0.5*Const.GRID)/(1+prioCenter) + hei*0.5 );
@@ -89,7 +89,7 @@ class Viewport extends mt.Process {
 			game.scroller.y += Math.sin(ftime*3.7)*3 * cd.getRatio("shaking") * shakePow;
 		}
 
-		game.scroller.x = MLib.fclamp(game.scroller.x, -level.wid*Const.GRID+wid, 0);
-		game.scroller.y = MLib.fclamp(game.scroller.y, -level.hei*Const.GRID+hei, 0);
+		game.scroller.x = M.fclamp(game.scroller.x, -level.wid*Const.GRID+wid, 0);
+		game.scroller.y = M.fclamp(game.scroller.y, -level.hei*Const.GRID+hei, 0);
 	}
 }

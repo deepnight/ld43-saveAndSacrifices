@@ -1,14 +1,14 @@
-class GameCinematic extends mt.Process {
+class GameCinematic extends dn.Process {
     public static var ALL : Array<GameCinematic> = [];
 	public var game(get,never) : Game; inline function get_game() return Game.ME;
 	public var level(get,never) : Level; inline function get_level() return Game.ME.level;
 	public var fx(get,never) : Fx; inline function get_fx() return Game.ME.fx;
-    var cm : mt.deepnight.Cinematic;
+    var cm : dn.Cinematic;
 
     public function new(cid:String) {
         super(game);
         ALL.push(this);
-        cm = new mt.deepnight.Cinematic(Const.FPS);
+        cm = new dn.Cinematic(Const.FPS);
 
         cd.setS("skipLock",0.6);
         var ctrlCol = 0x24976b;
@@ -177,7 +177,7 @@ class GameCinematic extends mt.Process {
 
         var bg = new h2d.ScaleGrid(Assets.gameElements.getTile("dialog"), 4,4, f);
         f.getProperties(bg).isAbsolute = true;
-        bg.colorMatrix = mt.deepnight.Color.getColorizeMatrixH2d(c);
+        bg.colorMatrix = dn.Color.getColorizeMatrixH2d(c);
 
         f.onAfterReflow = function() {
             bg.width = f.outerWidth;

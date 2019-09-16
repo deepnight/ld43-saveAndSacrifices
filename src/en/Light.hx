@@ -37,7 +37,7 @@ class Light extends Entity {
         halo.setPosition(centerX, centerY);
         halo.visible = active;
         if( !onGround )
-            spr.rotation += ( MLib.sign(dx)*0.22 - spr.rotation )*0.2;
+            spr.rotation += ( M.sign(dx)*0.22 - spr.rotation )*0.2;
         else
             spr.rotation = 0;
 

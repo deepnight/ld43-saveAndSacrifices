@@ -3,7 +3,7 @@ package en;
 class Hero extends Entity {
     public static var ALL : Array<Hero> = [];
 
-    var ca(get,never) : mt.heaps.Controller.ControllerAccess; inline function get_ca() return Game.ME.ca;
+    var ca(get,never) : dn.heaps.Controller.ControllerAccess; inline function get_ca() return Game.ME.ca;
     public var active = false;
     var horizontalControl = 1.0;
     var grabbing = false;
@@ -28,7 +28,7 @@ class Hero extends Entity {
         spr.anim.registerStateAnim("heroGrab",9, function() return grabbing);
         spr.anim.registerStateAnim("heroJumpUp",2, function() return !onGround && dy<0 );
         spr.anim.registerStateAnim("heroJumpDown",2, function() return !onGround && dy>0 );
-        spr.anim.registerStateAnim("heroRun",1, function() return !grabbing && MLib.fabs(dx)>=0.05 );
+        spr.anim.registerStateAnim("heroRun",1, function() return !grabbing && M.fabs(dx)>=0.05 );
         spr.anim.registerStateAnim("heroIdle",0);
     }
 
@@ -61,7 +61,7 @@ class Hero extends Entity {
     override function postUpdate() {
         super.postUpdate();
         wings.x += (footX-dir*2-wings.x)*0.4;
-        wings.y += (footY+4-wings.y)*0.4 + (MLib.fabs(dx)>=0.05 ? Math.cos(ftime*0.4)*0.5 : 0);
+        wings.y += (footY+4-wings.y)*0.4 + (M.fabs(dx)>=0.05 ? Math.cos(ftime*0.4)*0.5 : 0);
         wings.scaleX = 1+Math.cos(ftime*0.035)*0.1;
 
         ring.x += (headX+dir-dir*2-ring.x)*0.3 + Math.cos(ftime*0.027)*0.5;
@@ -125,17 +125,17 @@ class Hero extends Entity {
                 grabAt(cx,cy-1);
             // Ledge hopping
             if( !grabbing && level.hasSpot("grabLeft",cx,cy) && dx<0 && dy>0 && xr<=0.3 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {
-                // xr = MLib.fmin(xr, 0.1);
+                // xr = M.fmin(xr, 0.1);
                 xr = 0.1;
                 yr = 0.1;
-                dx = MLib.fmin(-0.15, dx);
+                dx = M.fmin(-0.15, dx);
                 dy = -0.25;
             }
             if( !grabbing && level.hasSpot("grabRight",cx,cy) && dx>0 && dy>0 && xr>=0.7 && yr<=0.3 && !cd.hasSetS("hopLimit",0.1) ) {
-                // xr = MLib.fmax(xr, 0.9);
+                // xr = M.fmax(xr, 0.9);
                 xr = 0.9;
                 yr = 0.1;
-                dx = MLib.fmax(0.15, dx);
+                dx = M.fmax(0.15, dx);
                 dy = -0.25;
             }
 

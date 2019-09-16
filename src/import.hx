@@ -1,3 +1,3 @@
-import mt.MLib;
-import mt.deepnight.Lib;
-import mt.heaps.slib.*;
+import dn.M;
+import dn.Lib;
+import dn.heaps.slib.*;

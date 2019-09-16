@@ -34,7 +34,7 @@ class Demon extends en.Mob {
         super.postUpdate();
         spr.y += Math.cos(ftime*0.07)*1;
         wings.x += (footX-dir-wings.x)*0.4;
-        wings.y += (footY-wings.y)*0.4 + (MLib.fabs(dx)>=0.05 ? Math.cos(ftime*0.4)*0.5 : 0);
+        wings.y += (footY-wings.y)*0.4 + (M.fabs(dx)>=0.05 ? Math.cos(ftime*0.4)*0.5 : 0);
         wings.scaleX = 0.6+Math.cos(ftime*0.035)*0.1;
         wings.scaleY = 0.6;
     }
