@@ -66,7 +66,7 @@ class Hero extends Entity {
 
         ring.x += (headX+dir-dir*2-ring.x)*0.3 + Math.cos(ftime*0.027)*0.5;
         ring.y += (headY-7-ring.y)*0.3 + Math.sin(ftime*0.021)*0.5;
-        ring.rotation += Lib.angularSubstractionRad( -dir*0.1, ring.rotation )*0.2;
+        ring.rotation += M.radSubstract( -dir*0.1, ring.rotation )*0.2;
 
         spr.alpha = active ? 1 : 0.5;
         if( isLiftingSomeone() || level.hasColl(cx,cy) || level.hasColl(cx,cy-1) )
