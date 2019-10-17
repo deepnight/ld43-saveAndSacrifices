@@ -23,7 +23,7 @@ class Main extends dn.Process {
 		#if debug
 		hxd.Res.initLocal();
         #else
-        hxd.Res.initEmbed({compressSounds:true});
+        hxd.Res.initEmbed();
         #end
 
         // Hot reloading
