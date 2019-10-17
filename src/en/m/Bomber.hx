@@ -9,7 +9,7 @@ class Bomber extends en.Mob {
 
     override function onKick(by:Hero) {
         super.onKick(by);
-        var p = 1 - Lib.distance(centerX,centerY, startPt.centerX, startPt.centerY) / (Const.GRID*2);
+        var p = 1 - M.dist(centerX,centerY, startPt.centerX, startPt.centerY) / (Const.GRID*2);
         if( cd.has("suiciding") )
             p = 0.3;
         dx *= 0.3*p;

@@ -172,7 +172,7 @@ class GameCinematic extends dn.Process {
         // f.backgroundTile = Assets.gameElements.getTile("dialog");
         f.borderWidth = 4;
         f.borderHeight = 4;
-        f.isVertical = true;
+        f.layout = Vertical;
         f.padding = 8;
 
         var bg = new h2d.ScaleGrid(Assets.gameElements.getTile("dialog"), 4,4, f);

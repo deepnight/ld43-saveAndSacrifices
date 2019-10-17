@@ -116,7 +116,7 @@ class PathFinder {
     inline function coordId(x:Int,y:Int) return level.coordId(x,y);
 
     inline function getHeuristicDist(n:Node, target:Node) {
-        return Lib.distanceSqr(n.cx, n.cy, target.cx, target.cy);
+        return M.distSqr(n.cx, n.cy, target.cx, target.cy);
     }
 
     public function getPath(fx:Int, fy:Int, tx:Int, ty:Int) {

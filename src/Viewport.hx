@@ -56,7 +56,7 @@ class Viewport extends dn.Process {
 		var ty = target.centerY + offY + debugOffY;
 
 		var a = Math.atan2(ty-y, tx-x);
-		var d = dn.Lib.distance(x, y, tx, ty);
+		var d = dn.M.dist(x, y, tx, ty);
 		var deadZoneX = 60;
 		var deadZoneY = 30;
 		if( M.fabs(x-tx)>=deadZoneX || M.fabs(y-ty)>=deadZoneY ) {
@@ -75,7 +75,7 @@ class Viewport extends dn.Process {
 			dx*=Math.pow(0.96,dt);
 			dy*=Math.pow(0.96,dt);
 		}
-		// if( Lib.distance(x,y,tx,ty)<=35 ) {
+		// if( M.dist(x,y,tx,ty)<=35 ) {
 		// 	dx*=0.7;
 		// 	dy*=0.7;
 		// }

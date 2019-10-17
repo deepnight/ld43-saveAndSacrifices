@@ -97,7 +97,7 @@ class Entity {
 	}
 
 	public function is<T:Entity>(c:Class<T>) return Std.is(this, c);
-	public function as<T:Entity>(c:Class<T>) : T return Std.instance(this, c);
+	public function as<T:Entity>(c:Class<T>) : T return Std.downcast(this, c);
 
 	public inline function rnd(min,max,?sign) return Lib.rnd(min,max,sign);
 	public inline function irnd(min,max,?sign) return Lib.irnd(min,max,sign);
@@ -113,15 +113,15 @@ class Entity {
 	public inline function dirTo(e:Entity) return e.centerX<centerX ? -1 : 1;
 
 	public inline function distCase(e:Entity) {
-		return Lib.distance(cx+xr, cy+yr, e.cx+e.xr, e.cy+e.yr);
+		return M.dist(cx+xr, cy+yr, e.cx+e.xr, e.cy+e.yr);
 	}
 
 	public inline function distPx(e:Entity) {
-		return Lib.distance(footX, footY, e.footX, e.footY);
+		return M.dist(footX, footY, e.footX, e.footY);
 	}
 
 	public inline function distPxFree(x:Float, y:Float) {
-		return Lib.distance(footX, footY, x, y);
+		return M.dist(footX, footY, x, y);
 	}
 
     public inline function destroy() {

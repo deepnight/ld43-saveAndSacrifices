@@ -118,9 +118,9 @@ class Peon extends Entity {
         if( nextLight!=null ) {
             var dh = new DecisionHelper(dn.Bresenham.getDisc(nextLight.cx, nextLight.cy, Std.int(nextLight.radius/Const.GRID)));
             dh.keepOnly( function(pt) return !level.hasColl(pt.x,pt.y) && level.hasColl(pt.x,pt.y+1) );
-            dh.score( function(pt) return -Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)*0.25 );
-            dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, pt.x, pt.y)<=2 ? -4 : 0 );
-            dh.score( function(pt) return Lib.distance(nextLight.cx, nextLight.cy, cx, cy)*0.05 );
+            dh.score( function(pt) return -M.dist(nextLight.cx, nextLight.cy, pt.x, pt.y)*0.25 );
+            dh.score( function(pt) return M.dist(nextLight.cx, nextLight.cy, pt.x, pt.y)<=2 ? -4 : 0 );
+            dh.score( function(pt) return M.dist(nextLight.cx, nextLight.cy, cx, cy)*0.05 );
             dh.score( function(pt) return rnd(0,1) );
             var pt = dh.getBest();
             goto(pt.x, pt.y);
@@ -265,7 +265,7 @@ class Peon extends Entity {
         if( level.hasColl(cx,cy) && !Mob.anyoneHolds(this) && !cd.hasSetS("stuckWallLimit",0.5) ) {
             var dh = new DecisionHelper( dn.Bresenham.getDisc(cx,cy,3) );
             dh.keepOnly( function(pt) return !level.hasColl(pt.x,pt.y) && level.hasColl(pt.x,pt.y+1) );
-            dh.score( function(pt) return -Lib.distance(cx,cy,pt.x,pt.y) );
+            dh.score( function(pt) return -M.dist(cx,cy,pt.x,pt.y) );
             var pt = dh.getBest();
             if( pt!=null )
                 setPosCase(pt.x, pt.y);
